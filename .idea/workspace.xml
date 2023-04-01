@@ -1,0 +1,196 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="AutoImportSettings">
+    <option name="autoReloadType" value="SELECTIVE" />
+  </component>
+  <component name="ChangeListManager">
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="">
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/resources/.env" beforeDir="false" />
+    </list>
+    <option name="SHOW_DIALOG" value="false" />
+    <option name="HIGHLIGHT_CONFLICTS" value="true" />
+    <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
+    <option name="LAST_RESOLUTION" value="IGNORE" />
+  </component>
+  <component name="ExternalProjectsData">
+    <projectState path="$PROJECT_DIR$">
+      <ProjectState />
+    </projectState>
+  </component>
+  <component name="ExternalProjectsManager">
+    <system id="GRADLE">
+      <state>
+        <task path="$PROJECT_DIR$">
+          <activation />
+        </task>
+        <projects_view>
+          <tree_state>
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="langtorch" type="f1a62948:ProjectNode" />
+              </path>
+            </expand>
+            <select />
+          </tree_state>
+        </projects_view>
+      </state>
+    </system>
+  </component>
+  <component name="FileTemplateManagerImpl">
+    <option name="RECENT_TEMPLATES">
+      <list>
+        <option value="Interface" />
+        <option value="Enum" />
+        <option value="Class" />
+      </list>
+    </option>
+  </component>
+  <component name="Git.Settings">
+    <option name="RECENT_GIT_ROOT_PATH" value="$PROJECT_DIR$" />
+  </component>
+  <component name="MarkdownSettingsMigration">
+    <option name="stateVersion" value="1" />
+  </component>
+  <component name="ProjectId" id="2Nlp0AsVttkAeWmVSHDxXcHCduR" />
+  <component name="ProjectLevelVcsManager" settingsEditedManually="true" />
+  <component name="ProjectViewState">
+    <option name="hideEmptyMiddlePackages" value="true" />
+    <option name="showLibraryContents" value="true" />
+  </component>
+  <component name="PropertiesComponent"><![CDATA[{
+  "keyToString": {
+    "RunOnceActivity.OpenProjectViewOnStart": "true",
+    "RunOnceActivity.ShowReadmeOnStart": "true",
+    "git-widget-placeholder": "master",
+    "jdk.selected.JAVA_MODULE": "adopt-11",
+    "last_opened_file_path": "/Users/weizhili/Desktop/gpt-flow/src/test/java",
+    "project.structure.last.edited": "Problems",
+    "project.structure.proportion": "0.15",
+    "project.structure.side.proportion": "0.2",
+    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  }
+}]]></component>
+  <component name="RecentsManager">
+    <key name="CreateClassDialog.RecentsKey">
+      <recent name="llm.openai" />
+    </key>
+    <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/java" />
+    </key>
+    <key name="MoveFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/main/java/tests/ai/knowly" />
+    </key>
+    <key name="MoveClassesOrPackagesDialog.RECENTS_KEY">
+      <recent name="tests.ai.knowly.llm" />
+    </key>
+    <key name="CopyClassDialog.RECENTS_KEY">
+      <recent name="tests.ai.knowly.prompt" />
+    </key>
+  </component>
+  <component name="RunManager" selected="JUnit.SequentialChainTest.testSequentialMChain">
+    <configuration name="LLMChainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.chain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.chain" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.chain.LLMChainTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OpenAIChatModelTest.testMessageWithMinimalSetup" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.llm.openai.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.llm.openai" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.llm.openai.OpenAIChatModelTest" />
+      <option name="METHOD_NAME" value="testMessageWithMinimalSetup" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="OpenAIModelTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.llm.openai.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.llm.openai" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.llm.openai.OpenAIModelTest" />
+      <option name="TEST_OBJECT" value="class" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="PromptTemplateTest.testPromptTemplate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.prompt.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.prompt" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.prompt.PromptTemplateTest" />
+      <option name="METHOD_NAME" value="testPromptTemplate" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="SequentialChainTest.testSequentialMChain" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.chain.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.chain" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.chain.SequentialChainTest" />
+      <option name="METHOD_NAME" value="testSequentialMChain" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <recent_temporary>
+      <list>
+        <item itemvalue="JUnit.SequentialChainTest.testSequentialMChain" />
+        <item itemvalue="JUnit.LLMChainTest" />
+        <item itemvalue="JUnit.OpenAIChatModelTest.testMessageWithMinimalSetup" />
+        <item itemvalue="JUnit.PromptTemplateTest.testPromptTemplate" />
+        <item itemvalue="JUnit.OpenAIModelTest" />
+      </list>
+    </recent_temporary>
+  </component>
+  <component name="SpellCheckerSettings" RuntimeDictionaries="0" Folders="0" CustomDictionaries="0" DefaultDictionary="application-level" UseSingleDictionary="true" transferred="true" />
+  <component name="TaskManager">
+    <task active="true" id="Default" summary="Default task">
+      <changelist id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="" />
+      <created>1680248298045</created>
+      <option name="number" value="Default" />
+      <option name="presentableId" value="Default" />
+      <updated>1680248298045</updated>
+    </task>
+    <servers />
+  </component>
+  <component name="XSLT-Support.FileAssociations.UIState">
+    <expand />
+    <select />
+  </component>
+</project>

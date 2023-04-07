@@ -4,9 +4,15 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="">
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add Tool.java">
+      <change afterPath="$PROJECT_DIR$/.idea/google-java-format.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/tool/ToolTest.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/resources/.env" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -26,12 +32,7 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand>
-              <path>
-                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
-                <item name="langtorch" type="f1a62948:ProjectNode" />
-              </path>
-            </expand>
+            <expand />
             <select />
           </tree_state>
         </projects_view>
@@ -63,6 +64,7 @@
   "keyToString": {
     "RunOnceActivity.OpenProjectViewOnStart": "true",
     "RunOnceActivity.ShowReadmeOnStart": "true",
+    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "adopt-11",
     "last_opened_file_path": "/Users/weizhili/Desktop/gpt-flow/src/test/java",
@@ -89,7 +91,7 @@
       <recent name="tests.ai.knowly.prompt" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.SequentialChainTest.testSequentialMChain">
+  <component name="RunManager" selected="JUnit.ToolTest.testTool_search2DMatrix">
     <configuration name="LLMChainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <extension name="coverage">
@@ -121,37 +123,6 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="OpenAIModelTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.llm.openai.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.llm.openai" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.llm.openai.OpenAIModelTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="PromptTemplateTest.testPromptTemplate" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.prompt.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.prompt" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.prompt.PromptTemplateTest" />
-      <option name="METHOD_NAME" value="testPromptTemplate" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <configuration name="SequentialChainTest.testSequentialMChain" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <extension name="coverage">
@@ -168,13 +139,45 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
+    <configuration name="ToolTest.testTool" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.tool.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.tool" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.tool.ToolTest" />
+      <option name="METHOD_NAME" value="testTool" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="ToolTest.testTool_search2DMatrix" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <extension name="coverage">
+        <pattern>
+          <option name="PATTERN" value="ai.knowly.tool.*" />
+          <option name="ENABLED" value="true" />
+        </pattern>
+      </extension>
+      <option name="PACKAGE_NAME" value="ai.knowly.tool" />
+      <option name="MAIN_CLASS_NAME" value="ai.knowly.tool.ToolTest" />
+      <option name="METHOD_NAME" value="testTool_search2DMatrix" />
+      <option name="TEST_OBJECT" value="method" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.ToolTest.testTool_search2DMatrix" />
+        <item itemvalue="JUnit.ToolTest.testTool" />
         <item itemvalue="JUnit.SequentialChainTest.testSequentialMChain" />
         <item itemvalue="JUnit.LLMChainTest" />
         <item itemvalue="JUnit.OpenAIChatModelTest.testMessageWithMinimalSetup" />
-        <item itemvalue="JUnit.PromptTemplateTest.testPromptTemplate" />
-        <item itemvalue="JUnit.OpenAIModelTest" />
       </list>
     </recent_temporary>
   </component>
@@ -188,6 +191,10 @@
       <updated>1680248298045</updated>
     </task>
     <servers />
+  </component>
+  <component name="VcsManagerConfiguration">
+    <MESSAGE value="Add Tool.java" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add Tool.java" />
   </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />

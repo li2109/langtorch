@@ -31,7 +31,7 @@ public final class LLMChain {
     String template = promptTemplate.getTemplate();
     Optional<String> variableName = extractVariableName(template);
     if (variableName.isEmpty()) {
-      throw new RuntimeException("Please provide at least one variable.");
+      throw new RuntimeException("There's no variable.");
     }
     return run(promptTemplate.addVariable(variableName.get(), variableValue));
   }

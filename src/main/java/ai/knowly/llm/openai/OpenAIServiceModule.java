@@ -7,8 +7,8 @@ import com.theokanning.openai.service.OpenAiService;
 import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Objects;
 
+/** A Guice module that provides the OpenAI service. */
 public class OpenAIServiceModule extends AbstractModule {
-
   @Provides
   @Singleton
   public OpenAiService provideOpenAIModel() {

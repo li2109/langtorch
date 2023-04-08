@@ -5,9 +5,18 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add the basic skeleton of capability">
+      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/Capability.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/Capability.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/CapabilityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/CapabilityConfig.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Completion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Completion.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Parameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Parameter.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -227,11 +236,6 @@
           <url>file://$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIChatModelTest.java</url>
           <line>21</line>
           <option name="timeStamp" value="7" />
-        </line-breakpoint>
-        <line-breakpoint enabled="true" type="java-line">
-          <url>file://$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java</url>
-          <line>13</line>
-          <option name="timeStamp" value="16" />
         </line-breakpoint>
       </breakpoints>
     </breakpoint-manager>

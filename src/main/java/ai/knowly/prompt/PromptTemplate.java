@@ -1,5 +1,6 @@
 package ai.knowly.prompt;
 
+import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Optional;
@@ -15,12 +16,12 @@ import lombok.Data;
 @Data
 @Builder(setterPrefix = "set")
 public class PromptTemplate {
-  public static final String VARIABLE_TEMPLATE_PATTERN = "\\{\\{\\$(\\w+)\\}\\}";
+  public static final String VARIABLE_TEMPLATE_PATTERN = "\\{\\{\\$([a-zA-Z0-9_]+)\\}\\}";
   private String template;
   // variable name must be one or more word characters (letters, digits, or underscores).
   private Map<String, String> variables;
 
-  public PromptTemplate addVariable(String variableName, String value) {
+  public PromptTemplate addVariableValuePair(String variableName, String value) {
     if (variables == null) {
       variables = new HashMap<>();
     }
@@ -47,22 +48,30 @@ public class PromptTemplate {
 
     StringBuilder outputBuffer = new StringBuilder();
     while (matcher.find()) {
-      String variableName =
-          matcher.group(
-              1); // Extract the variable name without the surrounding braces and dollar sign
-      String replacement =
-          variables.getOrDefault(
-              variableName,
-              ""); // Retrieve the replacement, or use an empty string if the variable name is not
+      // Extract the variable name without the surrounding braces and dollar sign
+      String variableName = matcher.group(1);
+      // Retrieve the replacement, or use an empty string if the variable name is not
+      String replacement = variables.getOrDefault(variableName, "");
       // found
       matcher.appendReplacement(
           outputBuffer,
-          Matcher.quoteReplacement(
-              replacement)); // Quote the replacement to avoid issues with special characters
+          // Quote the replacement to avoid issues with special characters
+          Matcher.quoteReplacement(replacement));
     }
     matcher.appendTail(outputBuffer);
 
     String result = outputBuffer.toString();
     return Optional.of(result);
+  }
+
+  public ImmutableList<String> extractVariableNames() {
+    ImmutableList.Builder<String> builder = ImmutableList.builder();
+    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
+    Matcher matcher = compiledPattern.matcher(template);
+
+    while (matcher.find()) {
+      builder.add(matcher.group(1));
+    }
+    return builder.build();
   }
 }

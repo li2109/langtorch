@@ -1,12 +1,10 @@
 package ai.knowly.chain;
 
-import static ai.knowly.prompt.PromptTemplate.VARIABLE_TEMPLATE_PATTERN;
-
 import ai.knowly.llm.base.BaseModel;
 import ai.knowly.prompt.PromptTemplate;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.Iterables;
 import java.util.Optional;
-import java.util.regex.Matcher;
-import java.util.regex.Pattern;
 
 public final class LLMChain {
 
@@ -18,23 +16,15 @@ public final class LLMChain {
     this.promptTemplate = promptTemplate;
   }
 
-  public static Optional<String> extractVariableName(String input) {
-    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
-    Matcher matcher = compiledPattern.matcher(input);
-
-    while (matcher.find()) {
-      return Optional.of(matcher.group(1));
-    }
-    return Optional.empty();
-  }
-
   public String simpleRun(String variableValue) {
-    String template = promptTemplate.getTemplate();
-    Optional<String> variableName = extractVariableName(template);
-    if (variableName.isEmpty()) {
-      throw new RuntimeException("There's no variable.");
+    ImmutableList<String> variableNames = promptTemplate.extractVariableNames();
+    if (variableNames.size() != 1) {
+      throw new RuntimeException(
+          "Prompt template should only contain one variable for simple run.");
     }
-    return run(promptTemplate.addVariable(variableName.get(), variableValue));
+    return run(
+        promptTemplate.addVariableValuePair(
+            Iterables.getOnlyElement(variableNames), variableValue));
   }
 
   public String run() {

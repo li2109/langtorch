@@ -26,7 +26,8 @@ public class LLMChainTest {
             .setTemplate("Write a creative name for a {{$area}} company.")
             .build();
     // Act.
-    LLMChain chain = new LLMChain(openAIChat, promptTemplate.addVariable("area", "search engine"));
+    LLMChain chain =
+        new LLMChain(openAIChat, promptTemplate.addVariableValuePair("area", "search engine"));
     String result = chain.run();
 
     // Assert.

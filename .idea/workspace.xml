@@ -4,19 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add the basic skeleton of capability">
-      <change afterPath="$PROJECT_DIR$/README.md" afterDir="false" />
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Adding comments for all public classes">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/Capability.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/Capability.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/CapabilityConfig.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/CapabilityConfig.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Completion.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Completion.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Parameter.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Parameter.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -50,7 +40,7 @@
                 <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
                 <item name="langtorch" type="f1a62948:ProjectNode" />
                 <item name="Tasks" type="e4a08cd1:TasksNode" />
-                <item name="verification" type="c8890929:TasksNode$1" />
+                <item name="publishing" type="c8890929:TasksNode$1" />
               </path>
             </expand>
             <select />
@@ -113,7 +103,51 @@
       <recent name="tests.ai.knowly.prompt" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.All in langtorch.test (2)">
+  <component name="RunManager" selected="Gradle.langtorch [publish]">
+    <configuration name="langtorch [publishToMavenLocal]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="publishToMavenLocal" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="langtorch [publish]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="publish" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
     <configuration name="All in langtorch.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <option name="PACKAGE_NAME" value="" />
@@ -123,14 +157,6 @@
       </method>
     </configuration>
     <configuration name="All in langtorch.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <option name="PACKAGE_NAME" value="" />
-      <option name="TEST_OBJECT" value="package" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="All in langtorch.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -153,29 +179,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="PromptTemplateTest.testVariableExtractor" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.prompt.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.prompt" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.prompt.PromptTemplateTest" />
-      <option name="METHOD_NAME" value="testVariableExtractor" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Gradle.langtorch [publish]" />
+        <item itemvalue="Gradle.langtorch [publishToMavenLocal]" />
         <item itemvalue="JUnit.All in langtorch.test (2)" />
         <item itemvalue="JUnit.All in langtorch.test (1)" />
         <item itemvalue="JUnit.PromptTemplateTest" />
-        <item itemvalue="JUnit.PromptTemplateTest.testVariableExtractor" />
-        <item itemvalue="JUnit.All in langtorch.test" />
       </list>
     </recent_temporary>
   </component>
@@ -209,7 +219,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680937223711</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="Adding comments for all public classes">
+      <created>1680970729408</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1680970729408</updated>
+    </task>
+    <option name="localTasksCounter" value="5" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -217,7 +234,8 @@
     <MESSAGE value="Write tests with deterministic: remove tests that depending on openai api." />
     <MESSAGE value="Update java format with github token&#10;&#10;Fixing permission issue" />
     <MESSAGE value="Add the basic skeleton of capability" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add the basic skeleton of capability" />
+    <MESSAGE value="Adding comments for all public classes" />
+    <option name="LAST_COMMIT_MESSAGE" value="Adding comments for all public classes" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

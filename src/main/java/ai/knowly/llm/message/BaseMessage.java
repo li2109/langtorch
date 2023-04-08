@@ -1,8 +1,6 @@
 package ai.knowly.llm.message;
 
-/**
- * A abstract class for a message.
- */
+/** A abstract class for a message. */
 public abstract class BaseMessage {
   public abstract String returnMessage();
 

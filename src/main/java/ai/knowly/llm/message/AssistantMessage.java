@@ -2,9 +2,7 @@ package ai.knowly.llm.message;
 
 import lombok.Builder;
 
-/**
- * A message from the assistant.
- */
+/** A message from the assistant. */
 @Builder(setterPrefix = "set")
 public final class AssistantMessage extends BaseChatMessage {
 

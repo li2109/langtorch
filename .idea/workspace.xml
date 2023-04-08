@@ -4,22 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Update java format with github token&#10;&#10;Fixing permission issue">
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/Capability.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/CapabilityConfig.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Completion.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Parameter.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/capability/config/CapabilityTest.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/capability/config/example/summarize/config.json" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/capability/config/example/summarize/prompt.txt" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/capability/config/v1/CapabilityConfigTest.java" afterDir="false" />
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add the basic skeleton of capability">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/capability/config/v1/Input.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -116,8 +104,8 @@
       <recent name="tests.ai.knowly.prompt" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.PromptTemplateTest">
-    <configuration name="All in langtorch.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.All in langtorch.test (2)">
+    <configuration name="All in langtorch.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <option name="PACKAGE_NAME" value="" />
       <option name="TEST_OBJECT" value="package" />
@@ -125,33 +113,18 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CapabilityTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="All in langtorch.test (2)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.capability.config.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.capability.config" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.capability.config.CapabilityTest" />
-      <option name="TEST_OBJECT" value="class" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="CapabilityTest.testParse" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+    <configuration name="All in langtorch.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.capability.config.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.capability.config" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.capability.config.CapabilityTest" />
-      <option name="METHOD_NAME" value="testParse" />
-      <option name="TEST_OBJECT" value="method" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
       <method v="2">
         <option name="Make" enabled="true" />
       </method>
@@ -189,11 +162,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="JUnit.All in langtorch.test (2)" />
+        <item itemvalue="JUnit.All in langtorch.test (1)" />
         <item itemvalue="JUnit.PromptTemplateTest" />
         <item itemvalue="JUnit.PromptTemplateTest.testVariableExtractor" />
         <item itemvalue="JUnit.All in langtorch.test" />
-        <item itemvalue="JUnit.CapabilityTest" />
-        <item itemvalue="JUnit.CapabilityTest.testParse" />
       </list>
     </recent_temporary>
   </component>
@@ -220,14 +193,22 @@
       <option name="project" value="LOCAL" />
       <updated>1680928097985</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="Add the basic skeleton of capability">
+      <created>1680937223711</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1680937223711</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add Tool.java" />
     <MESSAGE value="Write tests with deterministic: remove tests that depending on openai api." />
     <MESSAGE value="Update java format with github token&#10;&#10;Fixing permission issue" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update java format with github token&#10;&#10;Fixing permission issue" />
+    <MESSAGE value="Add the basic skeleton of capability" />
+    <option name="LAST_COMMIT_MESSAGE" value="Add the basic skeleton of capability" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

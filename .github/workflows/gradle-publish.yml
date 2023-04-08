@@ -8,8 +8,10 @@
 name: Gradle Package
 
 on:
-  release:
-    types: [created]
+  push:
+    branches: [ set-up-github-actions ]
+#  release:
+#    types: [created]
 
 jobs:
   build:

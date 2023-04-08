@@ -18,7 +18,7 @@ import java.util.List;
 import javax.inject.Inject;
 
 /** OpenAIChat is a chat model that uses the OpenAI API to generate text. */
-public final class OpenAIChat extends BaseChatModel {
+public class OpenAIChat extends BaseChatModel {
   private final OpenAiService openAiService;
   private final ChatCompletionRequestBuilder completionRequest;
 

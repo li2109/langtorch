@@ -1,6 +1,5 @@
 package ai.knowly.llm.message;
 
-
 /**
  * A abstract class for a message.
  */

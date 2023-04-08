@@ -17,8 +17,8 @@ public class PromptTemplateTest {
     String template =
         "This is a template for a prompt.\n"
             + "It can be used to test the prompt template.\n"
-            + "Name: {name}\n"
-            + "Age: {age}\n";
+            + "Name: {{$name}}\n"
+            + "Age: {{$age}}\n";
 
     // Act.
     Optional<String> actual =

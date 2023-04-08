@@ -1,53 +1,49 @@
 package ai.knowly.chain;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Mockito.when;
 
 import ai.knowly.llm.openai.OpenAIChat;
-import ai.knowly.llm.openai.OpenAIServiceModule;
 import ai.knowly.prompt.PromptTemplate;
-import com.google.acai.Acai;
 import com.google.common.collect.ImmutableList;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class SequentialChainTest {
-  @Rule public Acai acai = new Acai(MyTestModule.class);
-  @Inject OpenAIChat openAIChat;
+  @Mock OpenAIChat openAIChat;
 
   @Test
   public void testSequentialMChain() {
     // Arrange.
-    OpenAIChat model = openAIChat.setModel("gpt-3.5-turbo").setTemperature(0);
+    String prompt1 = "Write a creative company name if the product is Motorcycle.";
+    String companyName = "Awesome Motorcycle";
+    String prompt2 = "Write a slogan for a Awesome Motorcycle company.";
+    String slogan = "Awesome! Motorcycle!";
+
+    when(openAIChat.run(prompt1)).thenReturn(companyName);
+    when(openAIChat.run(prompt2)).thenReturn(slogan);
+
     PromptTemplate promptTemplate1 =
         PromptTemplate.builder()
-            .setTemplate("Write a creative company name if the product is {product}.")
+            .setTemplate("Write a creative company name if the product is {{$product}}.")
             .build();
     PromptTemplate promptTemplate2 =
         PromptTemplate.builder()
-            .setTemplate("Write a slogan for a {company name} company.")
+            .setTemplate("Write a slogan for a {{$company_name}} company.")
             .build();
-    LLMChain chain1 = new LLMChain(model, promptTemplate1);
-    LLMChain chain2 = new LLMChain(model, promptTemplate2);
+
+    LLMChain chain1 = new LLMChain(openAIChat, promptTemplate1);
+    LLMChain chain2 = new LLMChain(openAIChat, promptTemplate2);
     SequentialChain sequentialChain =
         SequentialChain.builder().setChains(ImmutableList.of(chain1, chain2)).build();
 
     // Act.
     String result = sequentialChain.run("Motorcycle");
-    System.out.println(result);
 
     // Assert.
-    assertThat(result).isNotEmpty();
-  }
-
-  private static class MyTestModule extends AbstractModule {
-    @Override
-    protected void configure() {
-      install(new OpenAIServiceModule());
-    }
+    assertThat(result).isEqualTo(slogan);
   }
 }

@@ -1,5 +1,7 @@
 package ai.knowly.chain;
 
+import static ai.knowly.prompt.PromptTemplate.VARIABLE_TEMPLATE_PATTERN;
+
 import ai.knowly.llm.base.BaseModel;
 import ai.knowly.prompt.PromptTemplate;
 import java.util.Optional;
@@ -17,8 +19,7 @@ public final class LLMChain {
   }
 
   public static Optional<String> extractVariableName(String input) {
-    String pattern = "\\{([^}]*)\\}";
-    Pattern compiledPattern = Pattern.compile(pattern);
+    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
     Matcher matcher = compiledPattern.matcher(input);
 
     while (matcher.find()) {

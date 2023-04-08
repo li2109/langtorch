@@ -5,14 +5,20 @@
   </component>
   <component name="ChangeListManager">
     <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add Tool.java">
-      <change afterPath="$PROJECT_DIR$/.idea/google-java-format.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/.idea/vcs.xml" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Function.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/tool/Tool.java" afterDir="false" />
-      <change afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/tool/ToolTest.java" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/base/chatmodel/BaseChatModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/base/chatmodel/BaseChatModel.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/message/BaseMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/message/BaseMessage.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIChat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIChat.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/SequentialChainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/SequentialChainTest.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIChatModelTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIModelTest.java" beforeDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -32,7 +38,23 @@
         </task>
         <projects_view>
           <tree_state>
-            <expand />
+            <expand>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="langtorch" type="f1a62948:ProjectNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="langtorch" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+              </path>
+              <path>
+                <item name="" type="6a2764b6:ExternalProjectsStructure$RootNode" />
+                <item name="langtorch" type="f1a62948:ProjectNode" />
+                <item name="Tasks" type="e4a08cd1:TasksNode" />
+                <item name="verification" type="c8890929:TasksNode$1" />
+              </path>
+            </expand>
             <select />
           </tree_state>
         </projects_view>
@@ -67,8 +89,8 @@
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
     "jdk.selected.JAVA_MODULE": "adopt-11",
-    "last_opened_file_path": "/Users/weizhili/Desktop/gpt-flow/src/test/java",
-    "project.structure.last.edited": "Problems",
+    "last_opened_file_path": "/Users/weizhili/Desktop/Knowly-trail/langtorch/src/test/resources",
+    "project.structure.last.edited": "Modules",
     "project.structure.proportion": "0.15",
     "project.structure.side.proportion": "0.2",
     "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
@@ -79,6 +101,7 @@
       <recent name="llm.openai" />
     </key>
     <key name="CopyFile.RECENT_KEYS">
+      <recent name="$PROJECT_DIR$/src/test/resources" />
       <recent name="$PROJECT_DIR$/src/test/java" />
     </key>
     <key name="MoveFile.RECENT_KEYS">
@@ -91,8 +114,46 @@
       <recent name="tests.ai.knowly.prompt" />
     </key>
   </component>
-  <component name="RunManager" selected="JUnit.ToolTest.testTool_search2DMatrix">
-    <configuration name="LLMChainTest" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+  <component name="RunManager" selected="JUnit.All in langtorch.test (1)">
+    <configuration name="langtorch [test]" type="GradleRunConfiguration" factoryName="Gradle" temporary="true">
+      <ExternalSystemSettings>
+        <option name="executionName" />
+        <option name="externalProjectPath" value="$PROJECT_DIR$" />
+        <option name="externalSystemIdString" value="GRADLE" />
+        <option name="scriptParameters" />
+        <option name="taskDescriptions">
+          <list />
+        </option>
+        <option name="taskNames">
+          <list>
+            <option value="test" />
+          </list>
+        </option>
+        <option name="vmOptions" />
+      </ExternalSystemSettings>
+      <ExternalSystemDebugServerProcess>true</ExternalSystemDebugServerProcess>
+      <ExternalSystemReattachDebugProcess>true</ExternalSystemReattachDebugProcess>
+      <DebugAllEnabled>false</DebugAllEnabled>
+      <ForceTestExec>false</ForceTestExec>
+      <method v="2" />
+    </configuration>
+    <configuration name="All in langtorch.test (1)" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="All in langtorch.test" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
+      <module name="langtorch.test" />
+      <option name="PACKAGE_NAME" value="" />
+      <option name="TEST_OBJECT" value="package" />
+      <method v="2">
+        <option name="Make" enabled="true" />
+      </method>
+    </configuration>
+    <configuration name="LLMChainTest.testSimpleLLMChain" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
       <module name="langtorch.test" />
       <extension name="coverage">
         <pattern>
@@ -102,22 +163,7 @@
       </extension>
       <option name="PACKAGE_NAME" value="ai.knowly.chain" />
       <option name="MAIN_CLASS_NAME" value="ai.knowly.chain.LLMChainTest" />
-      <option name="TEST_OBJECT" value="class" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="OpenAIChatModelTest.testMessageWithMinimalSetup" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.llm.openai.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.llm.openai" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.llm.openai.OpenAIChatModelTest" />
-      <option name="METHOD_NAME" value="testMessageWithMinimalSetup" />
+      <option name="METHOD_NAME" value="testSimpleLLMChain" />
       <option name="TEST_OBJECT" value="method" />
       <method v="2">
         <option name="Make" enabled="true" />
@@ -139,45 +185,13 @@
         <option name="Make" enabled="true" />
       </method>
     </configuration>
-    <configuration name="ToolTest.testTool" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.tool.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.tool" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.tool.ToolTest" />
-      <option name="METHOD_NAME" value="testTool" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
-    <configuration name="ToolTest.testTool_search2DMatrix" type="JUnit" factoryName="JUnit" temporary="true" nameIsGenerated="true">
-      <module name="langtorch.test" />
-      <extension name="coverage">
-        <pattern>
-          <option name="PATTERN" value="ai.knowly.tool.*" />
-          <option name="ENABLED" value="true" />
-        </pattern>
-      </extension>
-      <option name="PACKAGE_NAME" value="ai.knowly.tool" />
-      <option name="MAIN_CLASS_NAME" value="ai.knowly.tool.ToolTest" />
-      <option name="METHOD_NAME" value="testTool_search2DMatrix" />
-      <option name="TEST_OBJECT" value="method" />
-      <method v="2">
-        <option name="Make" enabled="true" />
-      </method>
-    </configuration>
     <recent_temporary>
       <list>
-        <item itemvalue="JUnit.ToolTest.testTool_search2DMatrix" />
-        <item itemvalue="JUnit.ToolTest.testTool" />
+        <item itemvalue="JUnit.All in langtorch.test (1)" />
+        <item itemvalue="JUnit.All in langtorch.test" />
+        <item itemvalue="Gradle.langtorch [test]" />
         <item itemvalue="JUnit.SequentialChainTest.testSequentialMChain" />
-        <item itemvalue="JUnit.LLMChainTest" />
-        <item itemvalue="JUnit.OpenAIChatModelTest.testMessageWithMinimalSetup" />
+        <item itemvalue="JUnit.LLMChainTest.testSimpleLLMChain" />
       </list>
     </recent_temporary>
   </component>
@@ -196,8 +210,37 @@
     <MESSAGE value="Add Tool.java" />
     <option name="LAST_COMMIT_MESSAGE" value="Add Tool.java" />
   </component>
+  <component name="XDebuggerManager">
+    <breakpoint-manager>
+      <breakpoints>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java</url>
+          <line>14</line>
+          <option name="timeStamp" value="2" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIServiceModule.java</url>
+          <line>15</line>
+          <option name="timeStamp" value="4" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIChatModelTest.java</url>
+          <line>21</line>
+          <option name="timeStamp" value="7" />
+        </line-breakpoint>
+        <line-breakpoint enabled="true" type="java-line">
+          <url>file://$PROJECT_DIR$/src/main/java/ai/knowly/chain/SequentialChain.java</url>
+          <line>13</line>
+          <option name="timeStamp" value="16" />
+        </line-breakpoint>
+      </breakpoints>
+    </breakpoint-manager>
+  </component>
   <component name="XSLT-Support.FileAssociations.UIState">
     <expand />
     <select />
+  </component>
+  <component name="com.intellij.coverage.CoverageDataManagerImpl">
+    <SUITE FILE_PATH="coverage/langtorch$PromptTemplateTest.ic" NAME="PromptTemplateTest Coverage Results" MODIFIED="1680909844744" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="idea" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" />
   </component>
 </project>

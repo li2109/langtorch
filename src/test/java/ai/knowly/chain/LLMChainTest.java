@@ -1,42 +1,36 @@
 package ai.knowly.chain;
 
 import static com.google.common.truth.Truth.assertThat;
+import static org.mockito.Matchers.anyString;
+import static org.mockito.Mockito.verify;
+import static org.mockito.Mockito.when;
 
 import ai.knowly.llm.openai.OpenAIChat;
-import ai.knowly.llm.openai.OpenAIServiceModule;
 import ai.knowly.prompt.PromptTemplate;
-import com.google.acai.Acai;
-import com.google.inject.AbstractModule;
-import com.google.inject.Inject;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class LLMChainTest {
-  @Rule public Acai acai = new Acai(MyTestModule.class);
-  @Inject OpenAIChat openAIChat;
+  @Mock OpenAIChat openAIChat;
 
   @Test
   public void testSimpleLLMChain() {
     // Arrange.
-    OpenAIChat model = openAIChat.setModel("gpt-3.5-turbo").setTemperature(0);
+    when(openAIChat.run(anyString())).thenReturn("Google");
+
     PromptTemplate promptTemplate =
-        PromptTemplate.builder().setTemplate("Write a creative name for a {area} company.").build();
+        PromptTemplate.builder()
+            .setTemplate("Write a creative name for a {{$area}} company.")
+            .build();
     // Act.
-    LLMChain chain = new LLMChain(model, promptTemplate.addVariable("area", "search engine"));
+    LLMChain chain = new LLMChain(openAIChat, promptTemplate.addVariable("area", "search engine"));
     String result = chain.run();
-    System.out.println(result);
 
     // Assert.
-    assertThat(result).isNotEmpty();
-  }
-
-  private static class MyTestModule extends AbstractModule {
-    @Override
-    protected void configure() {
-      install(new OpenAIServiceModule());
-    }
+    assertThat(result).isEqualTo("Google");
+    verify(openAIChat).run("Write a creative name for a search engine company.");
   }
 }

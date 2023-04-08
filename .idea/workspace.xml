@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Update the publish task to make it work with github packages">
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Update the gradle-publish.yml">
       <change beforePath="$PROJECT_DIR$/.github/workflows/gradle-publish.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/gradle-publish.yml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -75,21 +77,21 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "RunOnceActivity.OpenProjectViewOnStart": "true",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "set-up-github-actions",
-    "jdk.selected.JAVA_MODULE": "adopt-11",
-    "last_directory_selection": "/Users/weizhili/Desktop/Knowly-trail/langtorch/src/test/java/ai/knowly/capability/config",
-    "last_opened_file_path": "/Users/weizhili/Desktop/Knowly-trail/langtorch/src/test/resources",
-    "project.structure.last.edited": "Modules",
-    "project.structure.proportion": "0.15",
-    "project.structure.side.proportion": "0.2",
-    "settings.editor.selected.configurable": "reference.settingsdialog.project.gradle"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;RunOnceActivity.OpenProjectViewOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;set-up-github-actions&quot;,
+    &quot;jdk.selected.JAVA_MODULE&quot;: &quot;adopt-11&quot;,
+    &quot;last_directory_selection&quot;: &quot;/Users/weizhili/Desktop/Knowly-trail/langtorch/src/test/java/ai/knowly/capability/config&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/Users/weizhili/Desktop/Knowly-trail/langtorch/src/test/resources&quot;,
+    &quot;project.structure.last.edited&quot;: &quot;Modules&quot;,
+    &quot;project.structure.proportion&quot;: &quot;0.15&quot;,
+    &quot;project.structure.side.proportion&quot;: &quot;0.2&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;reference.settingsdialog.project.gradle&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="CreateClassDialog.RecentsKey">
       <recent name="llm.openai" />
@@ -259,7 +261,14 @@
       <option name="project" value="LOCAL" />
       <updated>1680997791140</updated>
     </task>
-    <option name="localTasksCounter" value="6" />
+    <task id="LOCAL-00006" summary="Update the gradle-publish.yml">
+      <created>1680998208122</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1680998208122</updated>
+    </task>
+    <option name="localTasksCounter" value="7" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
@@ -269,7 +278,8 @@
     <MESSAGE value="Add the basic skeleton of capability" />
     <MESSAGE value="Adding comments for all public classes" />
     <MESSAGE value="Update the publish task to make it work with github packages" />
-    <option name="LAST_COMMIT_MESSAGE" value="Update the publish task to make it work with github packages" />
+    <MESSAGE value="Update the gradle-publish.yml" />
+    <option name="LAST_COMMIT_MESSAGE" value="Update the gradle-publish.yml" />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

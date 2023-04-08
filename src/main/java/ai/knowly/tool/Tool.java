@@ -4,6 +4,7 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.Builder;
 
+/** A tool is configured with a set of related functions. */
 @Builder(setterPrefix = "set", toBuilder = true)
 public final class Tool {
   private String name;

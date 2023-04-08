@@ -8,6 +8,7 @@ import java.io.IOException;
 import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
+/** A class for the capability. */
 public class Capability {
   private static final String PROMPT_FILE_NAME = "prompt.txt";
   private static final String CONFIG_FILE_NAME = "config.json";

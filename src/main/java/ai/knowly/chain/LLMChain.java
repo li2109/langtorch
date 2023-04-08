@@ -6,6 +6,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import java.util.Optional;
 
+/**
+ * A class for the LLM chain. It contains a base model and a prompt template where formatted prompt
+ * is fed into the model.
+ */
 public final class LLMChain {
 
   private final BaseModel baseModel;

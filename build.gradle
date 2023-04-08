@@ -6,6 +6,9 @@ plugins {
 group 'ai.knowly'
 version '0.0.1'
 
+repositories {
+    mavenCentral()
+}
 
 publishing {
     publications {

@@ -77,7 +77,8 @@ public class CapabilityConfigTest {
         "{\n"
             + "  \"schema\": 1,\n"
             + "  \"type\": \"completion\",\n"
-            + "  \"description\": \"Given a scientific white paper abstract, rewrite it to make it more readable\",\n"
+            + "  \"description\": \"Given a scientific white paper abstract, rewrite it to make it"
+            + " more readable\",\n"
             + "  \"completion\": {\n"
             + "    \"max_tokens\": 4000,\n"
             + "    \"temperature\": 0.0,\n"
@@ -110,7 +111,9 @@ public class CapabilityConfigTest {
     String json =
         "{\n"
             + "  \"schema\": 1,\n"
-            + "  \"description\": \"Ask the AI for answers contextually relevant to you based on your name, address and pertinent information retrieved from your personal secondary memory\",\n"
+            + "  \"description\": \"Ask the AI for answers contextually relevant to you based on"
+            + " your name, address and pertinent information retrieved from your personal secondary"
+            + " memory\",\n"
             + "  \"type\": \"completion\",\n"
             + "  \"completion\": {\n"
             + "    \"max_tokens\": 256,\n"
@@ -131,7 +134,8 @@ public class CapabilityConfigTest {
     assertThat(personalInfoConfig.getSchema()).isEqualTo(1);
     assertThat(personalInfoConfig.getDescription())
         .isEqualTo(
-            "Ask the AI for answers contextually relevant to you based on your name, address and pertinent information retrieved from your personal secondary memory");
+            "Ask the AI for answers contextually relevant to you based on your name, address and"
+                + " pertinent information retrieved from your personal secondary memory");
     assertThat(personalInfoConfig.getType()).isEqualTo("completion");
 
     Completion completion = personalInfoConfig.getCompletion();

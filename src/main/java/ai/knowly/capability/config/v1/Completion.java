@@ -4,6 +4,7 @@ import com.google.gson.annotations.SerializedName;
 import java.util.List;
 import lombok.Data;
 
+/** A class for the embedded completion config. */
 @Data
 public class Completion {
   @SerializedName("max_tokens")

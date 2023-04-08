@@ -10,8 +10,10 @@ import lombok.Builder;
 import lombok.Data;
 
 /**
- * A template for a prompt. The template is a string with variables in the form of {variableName}.
- * The variables are replaced with the values in the variables map.
+ * A template for a prompt. The template is a string with variables in the form of {{$var}}. The
+ * variables are replaced with the values in the variables map.
+ *
+ * <p>Note: variables must be one or more word characters (letters, digits, or underscores).
  */
 @Data
 @Builder(setterPrefix = "set")

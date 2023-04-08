@@ -4,21 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Add Tool.java">
-      <change afterPath="$PROJECT_DIR$/.idea/uiDesigner.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/gradle.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/gradle.xml" afterDir="false" />
+    <list default="true" id="c6685519-c4b9-4e4d-ba1d-108d84b3193c" name="Changes" comment="Write tests with deterministic: remove tests that depending on openai api.">
+      <change beforePath="$PROJECT_DIR$/.github/workflows/google-java-format.yml" beforeDir="false" afterPath="$PROJECT_DIR$/.github/workflows/google-java-format.yml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/build.gradle" beforeDir="false" afterPath="$PROJECT_DIR$/build.gradle" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/chain/LLMChain.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/base/chatmodel/BaseChatModel.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/base/chatmodel/BaseChatModel.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/message/BaseMessage.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/message/BaseMessage.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIChat.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/llm/openai/OpenAIChat.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/ai/knowly/prompt/PromptTemplate.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/LLMChainTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/SequentialChainTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/chain/SequentialChainTest.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIChatModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/llm/openai/OpenAIModelTest.java" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/test/java/ai/knowly/prompt/PromptTemplateTest.java" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -204,11 +192,20 @@
       <option name="presentableId" value="Default" />
       <updated>1680248298045</updated>
     </task>
+    <task id="LOCAL-00001" summary="Write tests with deterministic: remove tests that depending on openai api.">
+      <created>1680926844905</created>
+      <option name="number" value="00001" />
+      <option name="presentableId" value="LOCAL-00001" />
+      <option name="project" value="LOCAL" />
+      <updated>1680926844905</updated>
+    </task>
+    <option name="localTasksCounter" value="2" />
     <servers />
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Add Tool.java" />
-    <option name="LAST_COMMIT_MESSAGE" value="Add Tool.java" />
+    <MESSAGE value="Write tests with deterministic: remove tests that depending on openai api." />
+    <option name="LAST_COMMIT_MESSAGE" value="Write tests with deterministic: remove tests that depending on openai api." />
   </component>
   <component name="XDebuggerManager">
     <breakpoint-manager>

@@ -57,7 +57,8 @@ public class PromptTemplateTest {
     assertThat(actual.get(1)).isEqualTo("age");
   }
 
-  @Test public void testExtractVariables_singleVariable() {
+  @Test
+  public void testExtractVariables_singleVariable() {
     // Arrange.
     String input = "I really love this {{$subject}}";
 
@@ -70,7 +71,8 @@ public class PromptTemplateTest {
     assertThat(actual.get(0)).isEqualTo("subject");
   }
 
-  @Test public void testExtractVariables_multipleVariables() {
+  @Test
+  public void testExtractVariables_multipleVariables() {
     // Arrange.
     String input = "I really love this {{$subject}} because the teacher is so {{$adj}}";
 
@@ -84,7 +86,8 @@ public class PromptTemplateTest {
     assertThat(actual.get(1)).isEqualTo("adj");
   }
 
-  @Test public void testExtractVariables_noVariables() {
+  @Test
+  public void testExtractVariables_noVariables() {
     // Arrange.
     String input = "I really love this subject";
 

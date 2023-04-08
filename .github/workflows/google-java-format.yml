@@ -14,4 +14,4 @@ jobs:
         with:
           args: "--skip-sorting-imports --replace"
           # Recommended if you use MacOS:
-          # github-token: ${{ secrets.GITHUB_TOKEN }}
+          github-token: ${{ secrets.GITHUB_TOKEN }}

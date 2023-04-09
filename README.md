@@ -43,9 +43,9 @@ https://jitpack.io/#Knowly-ai/langtorch
 
 #### Capability
 
-## Documentation
+## Documentation (still working on it)
 
-[Documentation](https://github.com/Knowly-ai/langtorch): TBD. Still working on it.
+[Documentation](https://knowly-ai.gitbook.io/langtorch/)
 
 
 ## Acknowledgements

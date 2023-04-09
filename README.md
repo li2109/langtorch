@@ -23,7 +23,7 @@ https://jitpack.io/#Knowly-ai/langtorch
 
 ## 📄 Documentation (still working on it)
 
-[Documentation](https://knowly-ai.gitbook.io/langtorch/)
+[Documentation](https://docs.knowly.ai/langtorch/)
 
 ## 🔩 Components
 

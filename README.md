@@ -22,7 +22,7 @@ The following depedency is based on [github package registry](https://docs.githu
 <dependency>
   <groupId>ai.knowly</groupId>
   <artifactId>langtorch</artifactId>
-  <version>0.0.1</version>
+  <version>VERSION</version>
 </dependency>
 ```
 Working on Maven central repo hosting.

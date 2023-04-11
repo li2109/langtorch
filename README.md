@@ -7,22 +7,13 @@
 
 Building composable LLM application with Java.
 
-
-
-
-
-# Langtorch
-
-Building composable LLM application with Java.
-
-
-# Getting started:
+# 🚀 Getting started:
 The following depedency is based on [github package registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package).
 ```
 <dependency>
   <groupId>ai.knowly</groupId>
   <artifactId>langtorch</artifactId>
-  <version>0.0.1</version>
+  <version>VERSION</version>
 </dependency>
 ```
 Working on Maven central repo hosting.
@@ -30,25 +21,25 @@ Working on Maven central repo hosting.
 Alternatively, you can use jitpack:
 https://jitpack.io/#Knowly-ai/langtorch
 
-## Components
+## 📄 Documentation (still working on it)
 
-#### LLM Service
-- OpenAI Service
+[Documentation](https://docs.knowly.ai/langtorch/)
 
-#### Prompt Template
+## 🔩 Components
 
-#### Chain
+#### 🤖 [Model](https://knowly-ai.gitbook.io/langtorch/model)
+- [OpenAI Service](https://knowly-ai.gitbook.io/langtorch/model/openai-and-openaichat)
 
-#### Tool
+#### 📝 [Prompt Template](https://knowly-ai.gitbook.io/langtorch/prompt-template)
 
-#### Capability
+#### 🔗 Chain
 
-## Documentation (still working on it)
+#### 🛠️ Tool
 
-[Documentation](https://knowly-ai.gitbook.io/langtorch/)
+#### 🎓 Capability
 
 
-## Acknowledgements
+## 🙏 Acknowledgements
 This library is inspired by the following libraries:
  - [langchain](https://github.com/hwchase17/langchain)
  - [semantic-kernel](https://github.com/microsoft/semantic-kernel)

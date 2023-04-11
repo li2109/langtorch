@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.llm.openai;
+package ai.knowly.langtoch.llm.providers.openai;
 
 import ai.knowly.langtoch.llm.base.BaseModel;
 import com.google.common.flogger.FluentLogger;
@@ -11,7 +11,7 @@ import java.util.Objects;
 import javax.inject.Inject;
 
 /** OpenAI is a model that uses the OpenAI API to generate text. */
-public final class OpenAI extends BaseModel {
+public class OpenAI extends BaseModel {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final String DEFAULT_MODEL = "text-davinci-003";

@@ -1,11 +1,11 @@
-package ai.knowly.langtoch.chain;
+package ai.knowly.langtoch.capability.unit;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.anyString;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.openai.OpenAIChat;
+import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
 import ai.knowly.langtoch.prompt.PromptTemplate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -13,22 +13,24 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class LLMChainTest {
+public class SimpleLLMCapabilityUnitTest {
   @Mock OpenAIChat openAIChat;
 
   @Test
-  public void testSimpleLLMChain() {
+  public void testSimpleLLMChain_defualtDirectOutputParser() {
     // Arrange.
     when(openAIChat.run(anyString())).thenReturn("Google");
 
     PromptTemplate promptTemplate =
         PromptTemplate.builder()
             .setTemplate("Write a creative name for a {{$area}} company.")
+            .addVariableValuePair("area", "search engine")
             .build();
+
+    SimpleLLMCapabilityUnit simpleLLMCapabilityUnit = new SimpleLLMCapabilityUnit(openAIChat);
+
     // Act.
-    LLMChain chain =
-        new LLMChain(openAIChat, promptTemplate.addVariableValuePair("area", "search engine"));
-    String result = chain.run();
+    String result = simpleLLMCapabilityUnit.run(promptTemplate);
 
     // Assert.
     assertThat(result).isEqualTo("Google");

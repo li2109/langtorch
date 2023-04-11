@@ -1,29 +1,25 @@
-package ai.knowly.langtoch.capability.config;
+package ai.knowly.langtoch.capability.unit.local.v1;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.capability.Capability;
-import ai.knowly.langtoch.capability.config.v1.CapabilityConfig;
-import ai.knowly.langtoch.capability.config.v1.Completion;
-import ai.knowly.langtoch.capability.config.v1.Input;
-import ai.knowly.langtoch.capability.config.v1.Parameter;
 import com.google.gson.Gson;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(org.junit.runners.JUnit4.class)
-public class CapabilityTest {
+public class LocalCapabilityUnitReaderTest {
   private static final String CAPABILITY_PATH =
-      "src/test/java/ai/knowly/langtoch/capability/config/example/summarize";
+      "src/test/java/ai/knowly/langtoch/capability/unit/local/v1/summarize";
 
   @Test
   public void testParse() {
     // Arrange.
-    Capability capability = new Capability(CAPABILITY_PATH, new Gson());
+    LocalCapabilityUnitReader localCapabilityUnitReader =
+        new LocalCapabilityUnitReader(CAPABILITY_PATH, new Gson());
     // Act.
-    CapabilityConfig capabilityConfig = capability.getConfig();
-    String prompt = capability.getPrompt();
+    CapabilityConfig capabilityConfig = localCapabilityUnitReader.getConfig();
+    String prompt = localCapabilityUnitReader.getPrompt();
 
     // Assert.
     assertThat(capabilityConfig.getSchema()).isEqualTo(1);

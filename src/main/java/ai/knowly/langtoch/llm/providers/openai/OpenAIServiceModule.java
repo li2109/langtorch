@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.llm.openai;
+package ai.knowly.langtoch.llm.providers.openai;
 
 import com.google.common.flogger.FluentLogger;
 import com.google.inject.AbstractModule;

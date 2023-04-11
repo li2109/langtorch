@@ -1,6 +1,5 @@
-package ai.knowly.langtoch.llm.openai;
+package ai.knowly.langtoch.llm.providers.openai;
 
-import static ai.knowly.langtoch.llm.openai.Utils.getApiKeyFromEnv;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtoch.llm.base.chatmodel.BaseChatModel;
@@ -41,13 +40,13 @@ public class OpenAIChat extends BaseChatModel {
   }
 
   public OpenAIChat() {
-    this.openAiService = new OpenAiService(getApiKeyFromEnv(logger));
+    this.openAiService = new OpenAiService(Utils.getApiKeyFromEnv(logger));
   }
 
   private static ChatMessage toChatMessage(BaseChatMessage message) {
     ChatMessage chatMessage = new ChatMessage();
-    chatMessage.setContent(message.returnMessage());
-    chatMessage.setRole(message.returnRole().name().toLowerCase());
+    chatMessage.setContent(message.getMessage());
+    chatMessage.setRole(message.getRole().name().toLowerCase());
     return chatMessage;
   }
 
@@ -76,13 +75,13 @@ public class OpenAIChat extends BaseChatModel {
                 .build());
     ChatMessage chatMessage = completion.getChoices().get(0).getMessage();
     if (Role.USER.name().toLowerCase().equals(chatMessage.getRole())) {
-      return new UserMessage(chatMessage.getContent());
+      return UserMessage.builder().setMessage(chatMessage.getContent()).build();
     }
     if (Role.SYSTEM.name().toLowerCase().equals(chatMessage.getRole())) {
-      return new SystemMessage(chatMessage.getContent());
+      return SystemMessage.builder().setMessage(chatMessage.getContent()).build();
     }
     if (Role.ASSISTANT.name().toLowerCase().equals(chatMessage.getRole())) {
-      return new AssistantMessage(chatMessage.getContent());
+      return AssistantMessage.builder().setMessage(chatMessage.getContent()).build();
     }
     throw new RuntimeException(
         String.format(

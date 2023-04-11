@@ -37,12 +37,14 @@ dependencies {
     implementation 'com.google.flogger:flogger-system-backend:0.7.4'
     // Serialization
     implementation 'com.google.code.gson:gson:2.9.1'
-    implementation 'org.jetbrains:annotations:24.0.0'
+    // Regex expression matching
+    implementation 'com.google.re2j:re2j:1.6'
     // Java Utils
     implementation "com.google.guava:guava:31.1-jre"
     implementation 'commons-io:commons-io:2.11.0'
-    // Http request
-    implementation 'com.squareup.okhttp3:okhttp:4.10.0'
+    implementation 'com.google.mug:mug:6.6'
+    implementation 'com.google.auto.value:auto-value-annotations:1.10.1'
+    annotationProcessor 'com.google.auto.value:auto-value:1.10.1'
     // third-party OpenAI java library
     implementation 'com.theokanning.openai-gpt3-java:service:0.11.1'
     // Injection framework
@@ -51,6 +53,7 @@ dependencies {
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
 }
 
+// Testing related dependencies
 dependencies {
     // Mocking
     testImplementation 'org.mockito:mockito-all:1.10.19'

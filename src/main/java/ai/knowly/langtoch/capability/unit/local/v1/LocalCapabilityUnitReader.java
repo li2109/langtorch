@@ -1,6 +1,5 @@
-package ai.knowly.langtoch.capability;
+package ai.knowly.langtoch.capability.unit.local.v1;
 
-import ai.knowly.langtoch.capability.config.v1.CapabilityConfig;
 import ai.knowly.langtoch.prompt.PromptTemplate;
 import com.google.gson.Gson;
 import java.io.FileInputStream;
@@ -9,14 +8,14 @@ import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
 /** A class for the capability. */
-public class Capability {
+public class LocalCapabilityUnitReader {
   private static final String PROMPT_FILE_NAME = "prompt.txt";
   private static final String CONFIG_FILE_NAME = "config.json";
   private final String prompt;
   private final CapabilityConfig config;
 
   @Inject
-  public Capability(String capabilityPath, Gson gson) {
+  public LocalCapabilityUnitReader(String capabilityPath, Gson gson) {
     this.prompt = readFile(capabilityPath, TARGET.PROMPT);
     this.config = gson.fromJson(readFile(capabilityPath, TARGET.CONFIG), CapabilityConfig.class);
   }

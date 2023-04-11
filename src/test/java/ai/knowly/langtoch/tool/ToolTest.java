@@ -11,19 +11,20 @@ public final class ToolTest {
   @Test
   public void testTool_sum() {
     // Arrange.
-    Tool tool =
-        Tool.builder()
-            .setName("Calculator")
-            .setDescription("The tool includes everything related to calculator.")
-            .build();
-
     Function sum =
         args -> {
           int a = (int) args[0];
           int b = (int) args[1];
           return a + b;
         };
-    tool.register("add", sum);
+
+    Tool tool =
+        Tool.builder()
+            .setName("Calculator")
+            .setDescription("The tool includes everything related to calculator.")
+            .register("add", sum)
+            .build();
+
     // Act.
     int result = (int) tool.invoke("add", 1, 2);
     // Assert.
@@ -34,15 +35,15 @@ public final class ToolTest {
   @Test
   public void testTool_search2DMatrix() {
     // Arrange.
+    Function func = args -> searchMatrix((int[][]) args[0], (int) args[1]);
+
     Tool tool =
         Tool.builder()
             .setName("LeetcodeSolver")
             .setDescription("Search a target in a 2D matrix.")
+            .register("search_2d_matrix", func)
             .build();
 
-    Function func = args -> searchMatrix((int[][]) args[0], (int) args[1]);
-
-    tool.register("search_2d_matrix", func);
     // Act.
     int[][] twoDArray = {
       {1, 3, 5, 7},

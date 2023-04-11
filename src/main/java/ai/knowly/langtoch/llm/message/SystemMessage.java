@@ -1,24 +1,26 @@
 package ai.knowly.langtoch.llm.message;
 
-import lombok.Builder;
+import com.google.auto.value.AutoValue;
 
 /** A message from the system. */
-@Builder(setterPrefix = "set")
-public final class SystemMessage extends BaseChatMessage {
-
-  private final String message;
-
-  public SystemMessage(String message) {
-    this.message = message;
+@AutoValue
+public abstract class SystemMessage extends BaseChatMessage {
+  public static Builder builder() {
+    return new AutoValue_SystemMessage.Builder();
   }
 
   @Override
-  public String returnMessage() {
-    return message;
-  }
+  public abstract String getMessage();
 
   @Override
-  public Role returnRole() {
+  public Role getRole() {
     return Role.SYSTEM;
+  }
+
+  @AutoValue.Builder
+  public abstract static class Builder {
+    public abstract Builder setMessage(String message);
+
+    public abstract SystemMessage build();
   }
 }

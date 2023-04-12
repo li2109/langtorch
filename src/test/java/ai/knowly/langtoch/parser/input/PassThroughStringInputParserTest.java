@@ -1,13 +1,11 @@
-package ai.knowly.langtoch.parser.output;
+package ai.knowly.langtoch.parser.input;
 
+import ai.knowly.langtoch.parser.output.PassThroughStringOutputParser;
 import com.google.common.truth.Truth;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
 
-@RunWith(JUnit4.class)
-public class PassThroughStringOutputParserTest {
+public class PassThroughStringInputParserTest {
   private PassThroughStringOutputParser parser;
 
   @Before

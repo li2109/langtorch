@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class SimpleLLMCapabilityUnitTest {
+public class PromptTemplateToStringLLMUnitTest {
   @Mock OpenAIChat openAIChat;
 
   @Test
@@ -27,10 +27,11 @@ public class SimpleLLMCapabilityUnitTest {
             .addVariableValuePair("area", "search engine")
             .build();
 
-    SimpleLLMCapabilityUnit simpleLLMCapabilityUnit = new SimpleLLMCapabilityUnit(openAIChat);
+    PromptTemplateToStringLLMUnit promptTemplateToStringLLMUnit =
+        new PromptTemplateToStringLLMUnit(openAIChat);
 
     // Act.
-    String result = simpleLLMCapabilityUnit.run(promptTemplate);
+    String result = promptTemplateToStringLLMUnit.run(promptTemplate);
 
     // Assert.
     assertThat(result).isEqualTo("Google");

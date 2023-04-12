@@ -22,6 +22,17 @@ public abstract class PromptTemplate {
     return new AutoValue_PromptTemplate.Builder();
   }
 
+  public static ImmutableList<String> extractVariableNames(String template) {
+    ImmutableList.Builder<String> builder = ImmutableList.builder();
+    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
+    Matcher matcher = compiledPattern.matcher(template);
+
+    while (matcher.find()) {
+      builder.add(matcher.group(1));
+    }
+    return builder.build();
+  }
+
   public abstract Optional<String> template();
 
   public abstract ImmutableMap<String, String> variables();
@@ -37,7 +48,7 @@ public abstract class PromptTemplate {
       throw new IllegalArgumentException("Template is not present.");
     }
 
-    ImmutableList<String> variableNameFromTemplate = extractVariableNames();
+    ImmutableList<String> variableNameFromTemplate = extractVariableNames(template().get());
     ImmutableMap<String, String> variablesInMap = variables();
 
     // Number of variables in the template must match the number of variables in the map.
@@ -88,17 +99,6 @@ public abstract class PromptTemplate {
     }
     matcher.appendTail(outputBuffer);
     return outputBuffer.toString();
-  }
-
-  public ImmutableList<String> extractVariableNames() {
-    ImmutableList.Builder<String> builder = ImmutableList.builder();
-    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
-    Matcher matcher = compiledPattern.matcher(template().get());
-
-    while (matcher.find()) {
-      builder.add(matcher.group(1));
-    }
-    return builder.build();
   }
 
   @AutoValue.Builder

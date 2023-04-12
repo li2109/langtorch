@@ -2,12 +2,10 @@ package ai.knowly.langtoch.llm.message;
 
 /** A abstract class for a chat message. */
 public abstract class BaseChatMessage extends BaseMessage {
-  public abstract String returnMessage();
-
-  public abstract Role returnRole();
+  public abstract Role getRole();
 
   @Override
   public String toString() {
-    return String.format("Role: %s, Content: %s", returnRole(), returnMessage());
+    return String.format("Role: %s, Content: %s", getRole(), getMessage());
   }
 }

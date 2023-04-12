@@ -5,7 +5,6 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Map;
-import java.util.Optional;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
@@ -22,20 +21,19 @@ public class PromptTemplateTest {
             + "Age: {{$age}}\n";
 
     // Act.
-    Optional<String> actual =
+    String actual =
         PromptTemplate.builder()
             .setTemplate(template)
-            .setVariables(new HashMap<>(Map.of("name", "John", "age", "30")))
+            .addAllVariableValuePairs(new HashMap<>(Map.of("name", "John", "age", "30")))
             .build()
             .format();
     // Assert.
-    assertThat(actual.isPresent()).isTrue();
     String expected =
         "This is a template for a prompt.\n"
             + "It can be used to test the prompt template.\n"
             + "Name: John\n"
             + "Age: 30\n";
-    assertThat(actual.get()).isEqualTo(expected);
+    assertThat(actual).isEqualTo(expected);
   }
 
   @Test
@@ -48,8 +46,7 @@ public class PromptTemplateTest {
             + "Age: {{$age}}\n";
 
     // Act.
-    ImmutableList<String> actual =
-        PromptTemplate.builder().setTemplate(template).build().extractVariableNames();
+    ImmutableList<String> actual = PromptTemplate.extractVariableNames(template);
 
     // Assert.
     assertThat(actual.size()).isEqualTo(2);
@@ -63,8 +60,7 @@ public class PromptTemplateTest {
     String input = "I really love this {{$subject}}";
 
     // Act.
-    ImmutableList<String> actual =
-        PromptTemplate.builder().setTemplate(input).build().extractVariableNames();
+    ImmutableList<String> actual = PromptTemplate.extractVariableNames(input);
 
     // Assert.
     assertThat(actual).hasSize(1);
@@ -77,8 +73,7 @@ public class PromptTemplateTest {
     String input = "I really love this {{$subject}} because the teacher is so {{$adj}}";
 
     // Act.
-    ImmutableList<String> actual =
-        PromptTemplate.builder().setTemplate(input).build().extractVariableNames();
+    ImmutableList<String> actual = PromptTemplate.extractVariableNames(input);
 
     // Assert.
     assertThat(actual).hasSize(2);
@@ -92,8 +87,7 @@ public class PromptTemplateTest {
     String input = "I really love this subject";
 
     // Act.
-    ImmutableList<String> actual =
-        PromptTemplate.builder().setTemplate(input).build().extractVariableNames();
+    ImmutableList<String> actual = PromptTemplate.extractVariableNames(input);
 
     // Assert.
     assertThat(actual).isEmpty();
@@ -105,8 +99,7 @@ public class PromptTemplateTest {
     String input = "";
 
     // Act.
-    ImmutableList<String> actual =
-        PromptTemplate.builder().setTemplate(input).build().extractVariableNames();
+    ImmutableList<String> actual = PromptTemplate.extractVariableNames(input);
 
     // Assert.
     assertThat(actual).isEmpty();

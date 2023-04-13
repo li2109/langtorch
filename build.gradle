@@ -1,6 +1,7 @@
 plugins {
     id 'java'
     id 'maven-publish'
+    id 'signing'
 }
 
 group 'ai.knowly'
@@ -10,22 +11,67 @@ repositories {
     mavenCentral()
 }
 
+task sourcesJar(type: Jar) {
+    classifier 'sources'
+    from sourceSets.main.allSource
+}
+
+task javadocJar(type: Jar) {
+    classifier 'javadoc'
+    from javadoc.destinationDir
+}
+
+tasks.withType(Javadoc).configureEach {
+    if (JavaVersion.current().isJava9Compatible()) {
+        options.addBooleanOption('html5', true)
+    }
+}
+
 publishing {
     publications {
         mavenJava(MavenPublication) {
             from components.java
+            artifact sourcesJar
+            artifact javadocJar
+
+            pom {
+                name = 'LangTorch'
+                description = 'Building composable LLM applications with Java.'
+                url = 'https://github.com/Knowly-ai/langtorch'
+                licenses {
+                    license {
+                        name = 'MIT License'
+                        url = 'https://github.com/Knowly-ai/langtorch/blob/master/LICENSE.md'
+                    }
+                }
+                developers {
+                    developer {
+                        id = 'langtorch-ops'
+                        name = 'Langtorch Ops'
+                        email = 'admin@knowly.ai'
+                    }
+                }
+                scm {
+                    connection = 'scm:git:git://github.com/Knowly-ai/langtorch.git'
+                    developerConnection = 'scm:git:ssh://github.com/Knowly-ai/langtorch.git'
+                    url = 'https://github.com/Knowly-ai/langtorch'
+                }
+            }
         }
     }
     repositories {
         maven {
-            name = 'GitHubPackages'
-            url = uri("https://maven.pkg.github.com/Knowly-ai/langtorch")
+            url = 'https://s01.oss.sonatype.org/service/local/staging/deploy/maven2/'
             credentials {
-                username = System.getenv("USERNAME")
-                password = System.getenv("TOKEN")
+                username = System.getenv('OSSRH_USERNAME')
+                password = System.getenv('OSSRH_PASSWORD')
             }
         }
     }
+}
+
+signing {
+    sign publishing.publications.mavenJava
 }
 
 dependencies {

@@ -6,7 +6,9 @@
 
 Building composable LLM application with Java.
 
-# 🚀 Getting started:
+# 🚀 Getting started: 
+
+Check out [Maven Central Repo for previous versions](https://central.sonatype.com/artifact/ai.knowly/langtorch/)
 ```
 <dependency>
   <groupId>ai.knowly</groupId>

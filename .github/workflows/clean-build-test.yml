@@ -1,4 +1,4 @@
-name: Java CI
+name: Clean-Build-Test
 
 on:
   push:
@@ -24,8 +24,8 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
 
-    - name: Clean, Build, and Run tests
-      run: ./gradlew clean build test
+    - name: Clean, Build, and Run tests (Debug mode)
+      run: ./gradlew clean build test --debug
 
     - name: Publish test results
       if: always()

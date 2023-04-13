@@ -5,7 +5,7 @@ plugins {
 }
 
 group 'ai.knowly'
-version '0.0.3'
+version '0.0.4'
 
 ext {
     gpgKey = project.hasProperty('gpgKey') ? project.getProperty('gpgKey') : System.getenv('GPG_PRIVATE_KEY')

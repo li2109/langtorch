@@ -3,14 +3,16 @@ package ai.knowly.langtoch.prompt;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
-import com.google.re2j.Matcher;
-import com.google.re2j.Pattern;
 import java.util.Map;
 import java.util.Optional;
+import java.util.regex.Matcher;
+import java.util.regex.Pattern;
 
 /**
- * A template for a prompt. The template is a string with variables in the form of {{$var}}. The
- * variables are replaced with the values in the variables map.
+ * A class representing a prompt template with variables.
+ *
+ * <p>The template is a string with variables in the form of {{$var}}. The variables are replaced
+ * with the values in the variables map.
  *
  * <p>Note: variables must be one or more word characters (letters, digits, or underscores).
  */
@@ -37,6 +39,8 @@ public abstract class PromptTemplate {
 
   public abstract ImmutableMap<String, String> variables();
 
+  // Private methods
+
   /**
    * Validates the template and the variables map. <br>
    * 1. Template is not empty. <br>
@@ -48,25 +52,24 @@ public abstract class PromptTemplate {
       throw new IllegalArgumentException("Template is not present.");
     }
 
-    ImmutableList<String> variableNameFromTemplate = extractVariableNames(template().get());
+    ImmutableList<String> variableNamesFromTemplate = extractVariableNames(template().get());
     ImmutableMap<String, String> variablesInMap = variables();
 
-    // Number of variables in the template must match the number of variables in the map.
-    if (variableNameFromTemplate.size() != variablesInMap.size()) {
+    if (variableNamesFromTemplate.size() != variablesInMap.size()) {
       throw new IllegalArgumentException(
           "Number of variables in the template must match the number of variables in the map.");
     }
 
-    Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
-    Matcher matcher = compiledPattern.matcher(template().get());
-    while (matcher.find()) {
-      String variableName = matcher.group(1);
-      if (!variablesInMap.containsKey(variableName)) {
-        throw new IllegalArgumentException(
-            String.format("Variable %s is not present in the variables map.", variableName));
-      }
-    }
+    variableNamesFromTemplate.forEach(
+        variableName -> {
+          if (!variablesInMap.containsKey(variableName)) {
+            throw new IllegalArgumentException(
+                String.format("Variable %s is not present in the variables map.", variableName));
+          }
+        });
   }
+
+  // Public methods
 
   /**
    * Formats the template by replacing the variables with their values.
@@ -76,8 +79,6 @@ public abstract class PromptTemplate {
   public String format() {
     validate();
 
-    // If the variables map is empty (as we have done validation above, variables in the map match
-    // exactly the variables in the template), return the template as is.
     if (variables().isEmpty()) {
       return template().get();
     }
@@ -87,15 +88,9 @@ public abstract class PromptTemplate {
 
     StringBuilder outputBuffer = new StringBuilder();
     while (matcher.find()) {
-      // Extract the variable name without the surrounding braces and dollar sign
       String variableName = matcher.group(1);
-      // Retrieve the replacement, or use an empty string if the variable name is not
       String replacement = variables().getOrDefault(variableName, "");
-      // found
-      matcher.appendReplacement(
-          outputBuffer,
-          // Quote the replacement to avoid issues with special characters
-          Matcher.quoteReplacement(replacement));
+      matcher.appendReplacement(outputBuffer, Matcher.quoteReplacement(replacement));
     }
     matcher.appendTail(outputBuffer);
     return outputBuffer.toString();

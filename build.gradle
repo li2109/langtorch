@@ -7,6 +7,11 @@ plugins {
 group 'ai.knowly'
 version '0.0.3'
 
+ext {
+    gpgKey = project.hasProperty('gpgKey') ? project.getProperty('gpgKey') : System.getenv('GPG_PRIVATE_KEY')
+    gpgPassphrase = project.hasProperty('gpgPassphrase') ? project.getProperty('gpgPassphrase') : System.getenv('GPG_PASSPHRASE')
+}
+
 repositories {
     mavenCentral()
 }
@@ -71,6 +76,7 @@ publishing {
 }
 
 signing {
+    useInMemoryPgpKeys(gpgKey, gpgPassphrase)
     sign publishing.publications.mavenJava
 }
 

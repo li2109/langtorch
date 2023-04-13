@@ -8,7 +8,6 @@
 Building composable LLM application with Java.
 
 # 🚀 Getting started:
-The following depedency is based on [github package registry](https://docs.github.com/en/packages/working-with-a-github-packages-registry/working-with-the-gradle-registry#using-a-published-package).
 ```
 <dependency>
   <groupId>ai.knowly</groupId>
@@ -16,10 +15,6 @@ The following depedency is based on [github package registry](https://docs.githu
   <version>VERSION</version>
 </dependency>
 ```
-Working on Maven central repo hosting.
-
-Alternatively, you can use jitpack:
-https://jitpack.io/#Knowly-ai/langtorch
 
 ## 📄 Documentation (still working on it)
 

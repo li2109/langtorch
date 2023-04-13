@@ -109,11 +109,14 @@ dependencies {
 dependencies {
     // Mocking
     testImplementation 'org.mockito:mockito-all:1.10.19'
-    testRuntimeOnly 'org.junit.jupiter:junit-jupiter-engine:5.9.2'
     // Testing util
-    implementation 'com.google.acai:acai:1.1'
+    testImplementation 'com.google.acai:acai:1.1'
+    // Generic testing
+    testImplementation 'junit:junit:4.13.2'
+    testImplementation 'com.google.truth:truth:1.1.3'
+    testImplementation 'org.junit.vintage:junit-vintage-engine:5.8.2'
     // Assertion
-    implementation 'com.google.truth:truth:1.1.3'
+    testImplementation 'com.google.truth:truth:1.1.3'
 }
 
 test {

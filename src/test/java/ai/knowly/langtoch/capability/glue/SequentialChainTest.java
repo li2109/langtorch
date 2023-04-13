@@ -3,7 +3,7 @@ package ai.knowly.langtoch.capability.glue;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.capability.unit.BaseCapabilityUnit;
+import ai.knowly.langtoch.capability.unit.CapabilityUnit;
 import ai.knowly.langtoch.capability.unit.PromptTemplateToPromptTemplateLLMUnit;
 import ai.knowly.langtoch.capability.unit.PromptTemplateToStringLLMUnit;
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
@@ -53,7 +53,7 @@ public class SequentialChainTest {
     PromptTemplateToStringLLMUnit promptTemplateToStringLLMUnit2 =
         new PromptTemplateToStringLLMUnit(openAIChat);
 
-    BaseCapabilityGlue<PromptTemplate, String> glue =
+    CapabilityGlue<PromptTemplate, String> glue =
         sequentialCapabilityBuilder.addUnit(promptTemplateToStringLLMUnit2).build();
 
     // Act.
@@ -70,24 +70,24 @@ public class SequentialChainTest {
 
   @Test
   public void testWithGenericCapabilityUnit() {
-    BaseCapabilityUnit<String, Integer> unit1 =
-        new BaseCapabilityUnit<String, Integer>() {
+    CapabilityUnit<String, Integer> unit1 =
+        new CapabilityUnit<String, Integer>() {
           @Override
           public Integer run(String input) {
             return 1;
           }
         };
 
-    BaseCapabilityUnit<Integer, Boolean> unit2 =
-        new BaseCapabilityUnit<Integer, Boolean>() {
+    CapabilityUnit<Integer, Boolean> unit2 =
+        new CapabilityUnit<Integer, Boolean>() {
           @Override
           public Boolean run(Integer input) {
             return true;
           }
         };
 
-    BaseCapabilityUnit<Boolean, String> unit3 =
-        new BaseCapabilityUnit<Boolean, String>() {
+    CapabilityUnit<Boolean, String> unit3 =
+        new CapabilityUnit<Boolean, String>() {
           @Override
           public String run(Boolean input) {
             return "true";
@@ -95,7 +95,7 @@ public class SequentialChainTest {
         };
 
     SequentialCapabilityBuilder<String, Integer> builder = new SequentialCapabilityBuilder<>(unit1);
-    BaseCapabilityGlue<String, String> glue = builder.addUnit(unit2).addUnit(unit3).build();
+    CapabilityGlue<String, String> glue = builder.addUnit(unit2).addUnit(unit3).build();
 
     String input = "example";
     String output = glue.run(input);

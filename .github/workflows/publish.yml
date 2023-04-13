@@ -19,8 +19,6 @@ jobs:
         distribution: 'adopt'
         server-id: ossrh
         settings-path: ${{ github.workspace }}
-        gpg-private-key: ${{ secrets.GPG_PRIVATE_KEY }}
-        gpg-passphrase: GPG_PASSPHRASE
 
     - name: Cache Gradle packages
       uses: actions/cache@v2
@@ -29,16 +27,11 @@ jobs:
         key: ${{ runner.os }}-gradle-${{ hashFiles('**/*.gradle') }}
         restore-keys: ${{ runner.os }}-gradle
 
-    - name: Import GPG key
-      run: |
-        echo "$GPG_PRIVATE_KEY" | gpg --batch --import
-      env:
-        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
-
     - name: Build and Publish
       env:
         OSSRH_USERNAME: ${{ secrets.OSSRH_USERNAME }}
         OSSRH_PASSWORD: ${{ secrets.OSSRH_PASSWORD }}
+        GPG_PRIVATE_KEY: ${{ secrets.GPG_PRIVATE_KEY }}
         GPG_PASSPHRASE: ${{ secrets.GPG_PASSPHRASE }}
       run: |
         ./gradlew build

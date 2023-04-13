@@ -27,7 +27,8 @@ public abstract class LLMCapabilityUnit<T, R> extends CapabilityUnit<T, R> {
 
   @Override
   public R run(T input) {
-    String parsedInput = inputParser().isPresent() ? inputParser().get().parse(input) : (String) input;
+    String parsedInput =
+        inputParser().isPresent() ? inputParser().get().parse(input) : (String) input;
     String output = model().get().run(parsedInput);
     return outputParser().isPresent() ? outputParser().get().parse(output) : (R) output;
   }
@@ -64,4 +65,3 @@ public abstract class LLMCapabilityUnit<T, R> extends CapabilityUnit<T, R> {
     }
   }
 }
-

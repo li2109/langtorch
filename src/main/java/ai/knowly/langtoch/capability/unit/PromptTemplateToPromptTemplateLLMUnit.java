@@ -7,8 +7,8 @@ import ai.knowly.langtoch.prompt.PromptTemplate;
 import java.util.Map;
 
 /**
- * A class representing a capability unit that processes a PromptTemplate and returns a
- * transformed PromptTemplate.
+ * A class representing a capability unit that processes a PromptTemplate and returns a transformed
+ * PromptTemplate.
  */
 public class PromptTemplateToPromptTemplateLLMUnit
     extends CapabilityUnit<PromptTemplate, PromptTemplate> {
@@ -19,7 +19,7 @@ public class PromptTemplateToPromptTemplateLLMUnit
    * Creates a new PromptTemplateToPromptTemplateLLMUnit with the specified base model and context.
    *
    * @param baseModel the base model used for processing
-   * @param context   a map containing context information
+   * @param context a map containing context information
    */
   public PromptTemplateToPromptTemplateLLMUnit(BaseModel baseModel, Map<Object, Object> context) {
     capabilityUnit =

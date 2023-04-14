@@ -2,7 +2,6 @@ package ai.knowly.langtoch.prompt.template;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Map;

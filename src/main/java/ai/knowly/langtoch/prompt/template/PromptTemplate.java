@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.prompt;
+package ai.knowly.langtoch.prompt.template;
 
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;

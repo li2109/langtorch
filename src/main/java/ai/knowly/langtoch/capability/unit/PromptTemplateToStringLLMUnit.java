@@ -2,7 +2,7 @@ package ai.knowly.langtoch.capability.unit;
 
 import ai.knowly.langtoch.llm.base.BaseModel;
 import ai.knowly.langtoch.parser.input.PromptTemplateStringInputParser;
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 
 /**
  * A class representing a capability unit that processes a PromptTemplate and returns a transformed

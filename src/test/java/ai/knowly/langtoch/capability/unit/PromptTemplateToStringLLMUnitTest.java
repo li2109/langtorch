@@ -6,7 +6,7 @@ import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;

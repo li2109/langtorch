@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.parser.input;
 
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.truth.Truth;
 import org.junit.Before;
 import org.junit.Test;

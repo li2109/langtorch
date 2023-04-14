@@ -3,7 +3,7 @@ package ai.knowly.langtoch.capability.unit;
 import ai.knowly.langtoch.llm.base.BaseModel;
 import ai.knowly.langtoch.parser.input.PromptTemplateStringInputParser;
 import ai.knowly.langtoch.parser.output.StringToSingleVarPromptTemplateOutputParser;
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 
 /**

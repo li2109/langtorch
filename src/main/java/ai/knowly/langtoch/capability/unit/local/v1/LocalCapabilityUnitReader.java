@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.capability.unit.local.v1;
 
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.gson.Gson;
 import java.io.FileInputStream;
 import java.io.IOException;

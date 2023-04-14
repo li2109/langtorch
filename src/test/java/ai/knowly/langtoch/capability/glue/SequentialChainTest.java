@@ -7,7 +7,7 @@ import ai.knowly.langtoch.capability.unit.CapabilityUnit;
 import ai.knowly.langtoch.capability.unit.PromptTemplateToPromptTemplateLLMUnit;
 import ai.knowly.langtoch.capability.unit.PromptTemplateToStringLLMUnit;
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;

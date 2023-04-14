@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.parser.input;
 
-import ai.knowly.langtoch.prompt.PromptTemplate;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 
 /** Input parser that takes a PromptTemplate object and formats it into a String. */

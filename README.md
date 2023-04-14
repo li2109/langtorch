@@ -1,10 +1,12 @@
 
 # LangTorch🔥
-
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
 [![discord](https://img.shields.io/discord/1094297543078326403)](https://discord.gg/YVUQ4X8E)
 
 Building composable LLM application with Java.
+
+🚨⚠️ Warning: This library is still in active development and is not ready for production use. ⚠️🚨
+
 
 # 🚀 Getting started: 
 
@@ -20,6 +22,19 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 ## 📄 Documentation (still working on it)
 
 [Documentation](https://docs.knowly.ai/langtorch/)
+
+## 🎯 Roadmap
+🔐 Feature 1: Implement Prompt Template and Annotation Based Prompt ✅
+
+🧑‍💼 Feature 2: Implement OpenAI LLM Provider ✅
+
+🔍 Feature 3: Implement Input and Output Parser ✅
+
+🌐 Feature 4: Implement Capability Unit and Capability Glue  ✅
+
+💳 Feature 5: Implement Capability Agent 
+
+💳 Feature 6: Providing More Pre-Built Capability Units 
 
 ## 🙏 Acknowledgements
 This library is inspired by the following libraries:

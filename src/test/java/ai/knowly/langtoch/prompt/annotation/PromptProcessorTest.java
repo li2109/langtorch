@@ -156,7 +156,10 @@ public class PromptProcessorTest {
     // Assert
     assertThat(result)
         .isEqualTo(
-            "Hello, Jane! Your age is 30.\nHere's examples:\nHello, John! Your age is 25.\nHello, Alice! Your age is 29.\n");
+            "Hello, Jane! Your age is 30.\n"
+                + "Here's examples:\n"
+                + "Hello, John! Your age is 25.\n"
+                + "Hello, Alice! Your age is 29.\n");
   }
 
   @Test
@@ -181,7 +184,10 @@ public class PromptProcessorTest {
     // Assert
     assertThat(result)
         .isEqualTo(
-            "Hello, Jane! Your age is 30.\nExample inputs:\nHello, John! Your age is 25.\nHello, Alice! Your age is 29.\n");
+            "Hello, Jane! Your age is 30.\n"
+                + "Example inputs:\n"
+                + "Hello, John! Your age is 25.\n"
+                + "Hello, Alice! Your age is 29.\n");
   }
 
   @Prompt(

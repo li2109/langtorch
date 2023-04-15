@@ -49,7 +49,10 @@ public class PromptTemplateTest {
 
     // Assert.
     String expected =
-        "Provide me company names for the technology\nHere's two examples:\nSearch Engine: Google\nSocial Media: Facebook\n";
+        "Provide me company names for the technology\n"
+            + "Here's two examples:\n"
+            + "Search Engine: Google\n"
+            + "Social Media: Facebook\n";
     assertThat(actual).isEqualTo(expected);
   }
 

@@ -11,10 +11,64 @@ import org.junit.runners.JUnit4;
 @RunWith(JUnit4.class)
 public class PromptProcessorTest {
   @Test
+  public void testPromptProcessorWithMultiplePrompts() {
+    // Arrange
+    SubjectRelatedPrompt subjectRelatedPrompt = new SubjectRelatedPrompt();
+
+    // Act
+    PromptTemplate textPromptTemplate =
+        PromptProcessor.createPromptTemplate(
+            SubjectRelatedPrompt.class, subjectRelatedPrompt, "favoriteSubjectPrompt");
+    PromptTemplate contactInfoPromptTemplate =
+        PromptProcessor.createPromptTemplate(
+            SubjectRelatedPrompt.class, subjectRelatedPrompt, "reasonPrompt");
+
+    // Assert
+    assertThat(textPromptTemplate.format()).isEqualTo("My favourite subject in school is Math.");
+    assertThat(contactInfoPromptTemplate.format())
+        .isEqualTo("I really love Math because I love numbers.");
+  }
+
+  @Test
+  public void testPromptProcessorWithNonExistentPromptName() {
+    // Arrange
+    SubjectRelatedPrompt subjectRelatedPrompt = new SubjectRelatedPrompt();
+
+    // Act and Assert
+    assertThrows(
+        IllegalArgumentException.class,
+        () ->
+            PromptProcessor.createPromptTemplate(
+                SubjectRelatedPrompt.class, subjectRelatedPrompt, "nonExistentPromptName"));
+  }
+
+  @Test
   public void testAnnotationBasedPromptTemplate() {
     // Arrange
     @Prompt(
         template = "Hello, {{$name}}! Your age is {{$age}}.",
+        variables = {"name", "age"})
+    class HelloAgePrompt {
+      public String name = "Jane";
+      public String age = "30";
+    }
+    HelloAgePrompt helloAgePrompt = new HelloAgePrompt();
+
+    // Act
+    PromptTemplate helloAgePromptTemplate =
+        PromptProcessor.createPromptTemplate(HelloAgePrompt.class, helloAgePrompt);
+    String result = helloAgePromptTemplate.format();
+
+    // Assert
+    assertThat(result).isEqualTo("Hello, Jane! Your age is 30.");
+  }
+
+  @Test
+  public void testPromptWithStringVariable() {
+    // Arrange
+    final String template = "Hello, {{$name}}! Your age is {{$age}}.";
+    @Prompt(
+        template = template,
         variables = {"name", "age"})
     class HelloAgePrompt {
       public String name = "Jane";
@@ -79,5 +133,67 @@ public class PromptProcessorTest {
     assertThrows(
         IllegalArgumentException.class,
         () -> PromptProcessor.createPromptTemplate(NoAnnotation.class, noAnnotation));
+  }
+
+  @Test
+  public void testAnnotationBasedPromptTemplateWithExamples() {
+    // Arrange
+    @Prompt(
+        template = "Hello, {{$name}}! Your age is {{$age}}.",
+        variables = {"name", "age"},
+        examples = {"Hello, John! Your age is 25.", "Hello, Alice! Your age is 29."})
+    class HelloAgePrompt {
+      public String name = "Jane";
+      public String age = "30";
+    }
+    HelloAgePrompt helloAgePrompt = new HelloAgePrompt();
+
+    // Act
+    PromptTemplate helloAgePromptTemplate =
+        PromptProcessor.createPromptTemplate(HelloAgePrompt.class, helloAgePrompt);
+    String result = helloAgePromptTemplate.format();
+
+    // Assert
+    assertThat(result)
+        .isEqualTo(
+            "Hello, Jane! Your age is 30.\nHere's examples:\nHello, John! Your age is 25.\nHello, Alice! Your age is 29.\n");
+  }
+
+  @Test
+  public void testAnnotationBasedPromptTemplateWithExamplesAndExampleHeader() {
+    // Arrange
+    @Prompt(
+        template = "Hello, {{$name}}! Your age is {{$age}}.",
+        variables = {"name", "age"},
+        examples = {"Hello, John! Your age is 25.", "Hello, Alice! Your age is 29."},
+        exampleHeader = "Example inputs:")
+    class HelloAgePrompt {
+      public String name = "Jane";
+      public String age = "30";
+    }
+    HelloAgePrompt helloAgePrompt = new HelloAgePrompt();
+
+    // Act
+    PromptTemplate helloAgePromptTemplate =
+        PromptProcessor.createPromptTemplate(HelloAgePrompt.class, helloAgePrompt);
+    String result = helloAgePromptTemplate.format();
+
+    // Assert
+    assertThat(result)
+        .isEqualTo(
+            "Hello, Jane! Your age is 30.\nExample inputs:\nHello, John! Your age is 25.\nHello, Alice! Your age is 29.\n");
+  }
+
+  @Prompt(
+      template = "My favourite subject in school is {{$subject}}.",
+      variables = {"subject"},
+      name = "favoriteSubjectPrompt")
+  @Prompt(
+      template = "I really love {{$subject}} because {{$reason}}.",
+      name = "reasonPrompt",
+      variables = {"reason", "subject"})
+  private static class SubjectRelatedPrompt {
+    public String subject = "Math";
+    public String reason = "I love numbers";
   }
 }

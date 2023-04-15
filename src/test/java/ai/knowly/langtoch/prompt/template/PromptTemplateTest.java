@@ -11,6 +11,48 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class PromptTemplateTest {
+
+  @Test
+  public void testPromptTemplateExample() {
+    // Arrange.
+    String template = "Provide me company names for the {{$industry}}";
+
+    // Act.
+    String actual =
+        PromptTemplate.builder()
+            .setTemplate(template)
+            .addVariableValuePair("industry", "technology")
+            .setExamples(ImmutableList.of("Search Engine: Google"))
+            .build()
+            .format();
+
+    // Assert.
+    String expected =
+        "Provide me company names for the technology\nHere's examples:\nSearch Engine: Google\n";
+    assertThat(actual).isEqualTo(expected);
+  }
+
+  @Test
+  public void testPromptTemplateExample_withCustomizedExampleHeader() {
+    // Arrange.
+    String template = "Provide me company names for the {{$industry}}";
+
+    // Act.
+    String actual =
+        PromptTemplate.builder()
+            .setTemplate(template)
+            .addVariableValuePair("industry", "technology")
+            .setExamples(ImmutableList.of("Search Engine: Google", "Social Media: Facebook"))
+            .setExampleHeader("Here's two examples:")
+            .build()
+            .format();
+
+    // Assert.
+    String expected =
+        "Provide me company names for the technology\nHere's two examples:\nSearch Engine: Google\nSocial Media: Facebook\n";
+    assertThat(actual).isEqualTo(expected);
+  }
+
   @Test
   public void testPromptTemplate() {
     // Arrange.

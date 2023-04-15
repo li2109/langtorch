@@ -3,6 +3,7 @@ package ai.knowly.langtoch.prompt.template;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 import java.util.regex.Matcher;
@@ -19,9 +20,10 @@ import java.util.regex.Pattern;
 @AutoValue
 public abstract class PromptTemplate {
   public static final String VARIABLE_TEMPLATE_PATTERN = "\\{\\{\\$([a-zA-Z0-9_]+)\\}\\}";
+  private static final String DEFAULT_EXAMPLE_HEADER = "Here's examples:\n";
 
   public static Builder builder() {
-    return new AutoValue_PromptTemplate.Builder();
+    return new AutoValue_PromptTemplate.Builder().setExamples(ImmutableList.of());
   }
 
   public static ImmutableList<String> extractVariableNames(String template) {
@@ -35,11 +37,39 @@ public abstract class PromptTemplate {
     return builder.build();
   }
 
+  private static Optional<String> formatExamples(
+      List<String> examples, Optional<String> exampleHeader) {
+    if (examples.isEmpty()) {
+      return Optional.empty();
+    }
+    StringBuilder builder = new StringBuilder();
+    if (exampleHeader.isPresent()) {
+      if (!exampleHeader.get().endsWith("\n")) {
+        builder.append(exampleHeader.get()).append("\n");
+      } else {
+        builder.append(exampleHeader.get());
+      }
+    } else {
+      builder.append(DEFAULT_EXAMPLE_HEADER);
+    }
+    for (String example : examples) {
+      builder.append(example).append("\n");
+    }
+    return Optional.of(builder.toString());
+  }
+
   public abstract Optional<String> template();
+
+  // Example header is a string that can be used to describe the examples.
+  public abstract Optional<String> exampleHeader();
+
+  // Examples are a list of strings that can be used for few-shot prompting by providing examples of
+  // the prompt.
+  public abstract List<String> examples();
 
   public abstract ImmutableMap<String, String> variables();
 
-  // Private methods
+  // Public methods
 
   /**
    * Validates the template and the variables map. <br>
@@ -69,8 +99,6 @@ public abstract class PromptTemplate {
         });
   }
 
-  // Public methods
-
   /**
    * Formats the template by replacing the variables with their values.
    *
@@ -79,7 +107,11 @@ public abstract class PromptTemplate {
   public String format() {
     validate();
 
+    Optional<String> formattedExample = formatExamples(examples(), exampleHeader());
     if (variables().isEmpty()) {
+      if (formattedExample.isPresent()) {
+        return String.format("%s\n%s", template().get(), formattedExample.get());
+      }
       return template().get();
     }
 
@@ -93,12 +125,19 @@ public abstract class PromptTemplate {
       matcher.appendReplacement(outputBuffer, Matcher.quoteReplacement(replacement));
     }
     matcher.appendTail(outputBuffer);
+    if (formattedExample.isPresent()) {
+      return String.format("%s\n%s", outputBuffer.toString(), formattedExample.get());
+    }
     return outputBuffer.toString();
   }
 
   @AutoValue.Builder
   public abstract static class Builder {
     public abstract Builder setTemplate(String template);
+
+    public abstract Builder setExamples(List<String> examples);
+
+    public abstract Builder setExampleHeader(String exampleHeader);
 
     abstract ImmutableMap.Builder<String, String> variablesBuilder();
 

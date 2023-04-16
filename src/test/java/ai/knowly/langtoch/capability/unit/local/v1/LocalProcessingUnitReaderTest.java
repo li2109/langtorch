@@ -8,7 +8,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 @RunWith(org.junit.runners.JUnit4.class)
-public class LocalCapabilityUnitReaderTest {
+public class LocalProcessingUnitReaderTest {
   private static final String CAPABILITY_PATH =
       "src/test/java/ai/knowly/langtoch/capability/unit/local/v1/summarize";
 

@@ -7,7 +7,7 @@ import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 
 /**
- * A class representing a capability unit that processes a PromptTemplate and returns a transformed
+ * A class wraps a LLM capability unit that processes a PromptTemplate and returns a transformed
  * PromptTemplate.
  */
 public class TemplateToTemplateLLMWrapperUnit

@@ -5,7 +5,7 @@ import ai.knowly.langtoch.parser.input.PromptTemplateStringInputParser;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 
 /**
- * A class representing a capability unit that processes a PromptTemplate and returns a transformed
+ * A class wraps a LLM capability unit that processes a PromptTemplate and returns a transformed
  * String.
  */
 public class TemplateToStringLLMWrapperUnit extends CapabilityUnit<PromptTemplate, String> {

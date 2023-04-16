@@ -30,11 +30,13 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 🔍 Feature 3: Implement Input and Output Parser ✅
 
-🌐 Feature 4: Implement Capability Unit and Capability Glue  ✅
+🌐 Feature 4: Implement Capability Unit, Capability Node and Capability DAG  ✅
 
 💳 Feature 5: Implement Capability Agent 
 
-💳 Feature 6: Providing More Pre-Built Capability Units 
+💳 Feature 6: Providing More Pre-Built Capability Units and Nodes
+
+💳 Feature 7: Adding annotation based LLM service
 
 ## 🙏 Acknowledgements
 This library is inspired by the following libraries:

@@ -10,7 +10,7 @@ import java.util.Map;
  * A class representing a capability unit that processes a PromptTemplate and returns a transformed
  * PromptTemplate.
  */
-public class PromptTemplateToPromptTemplateLLMUnit
+public class TemplateToTemplateLLMWrapperUnit
     extends CapabilityUnit<PromptTemplate, PromptTemplate> {
 
   private final LLMCapabilityUnit<PromptTemplate, PromptTemplate> capabilityUnit;
@@ -21,7 +21,7 @@ public class PromptTemplateToPromptTemplateLLMUnit
    * @param baseModel the base model used for processing
    * @param context a map containing context information
    */
-  public PromptTemplateToPromptTemplateLLMUnit(BaseModel baseModel, Map<Object, Object> context) {
+  public TemplateToTemplateLLMWrapperUnit(BaseModel baseModel, Map<Object, Object> context) {
     capabilityUnit =
         LLMCapabilityUnit.<PromptTemplate, PromptTemplate>builder()
             .setModel(baseModel)

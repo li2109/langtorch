@@ -8,7 +8,7 @@ import ai.knowly.langtoch.prompt.template.PromptTemplate;
  * A class representing a capability unit that processes a PromptTemplate and returns a transformed
  * String.
  */
-public class PromptTemplateToStringLLMUnit extends CapabilityUnit<PromptTemplate, String> {
+public class TemplateToStringLLMWrapperUnit extends CapabilityUnit<PromptTemplate, String> {
   private final LLMCapabilityUnit<PromptTemplate, String> capabilityUnit;
 
   /**
@@ -16,7 +16,7 @@ public class PromptTemplateToStringLLMUnit extends CapabilityUnit<PromptTemplate
    *
    * @param baseModel the base model used for processing
    */
-  public PromptTemplateToStringLLMUnit(BaseModel baseModel) {
+  public TemplateToStringLLMWrapperUnit(BaseModel baseModel) {
     capabilityUnit =
         LLMCapabilityUnit.<PromptTemplate, String>builder()
             .setModel(baseModel)

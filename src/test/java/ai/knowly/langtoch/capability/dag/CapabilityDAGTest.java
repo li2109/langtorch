@@ -16,23 +16,16 @@ import org.junit.runners.JUnit4;
 public class CapabilityDAGTest {
   @Test
   public void testProcessGraph_sumInputs() {
-
-    class SumInputsProcessingUnit extends ProcessingUnit {
-      public SumInputsProcessingUnit(String id, List<String> outDegree) {
-        super(id, outDegree);
-      }
-
-      @Override
-      public Object process(Iterable<Object> inputs) {
-        return Streams.stream(inputs).mapToInt(i -> (int) i).sum();
-      }
-    }
     // Arrange
-    ProcessingUnit a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    ProcessingUnit b = new SumInputsProcessingUnit("B", Arrays.asList("D"));
-    ProcessingUnit c = new SumInputsProcessingUnit("C", Arrays.asList("D"));
-    ProcessingUnit d = new SumInputsProcessingUnit("D", Arrays.asList());
-    CapabilityDAG capabilityDAG = new CapabilityDAG(Arrays.asList(a, b, c, d));
+    Node<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
+    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("D"));
+    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList("D"));
+    Node<Integer, Integer> d = new SumInputsProcessingUnit("D", Arrays.asList());
+    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    capabilityDAG.addNode(a, Integer.class);
+    capabilityDAG.addNode(b, Integer.class);
+    capabilityDAG.addNode(c, Integer.class);
+    capabilityDAG.addNode(d, Integer.class);
 
     Map<String, Object> initialInputMap = new HashMap<>();
     initialInputMap.put("A", 1);
@@ -46,23 +39,16 @@ public class CapabilityDAGTest {
 
   @Test
   public void testProcessGraph_multiplyInputs() {
-    class MultiplyInputsProcessingUnit extends ProcessingUnit {
-      public MultiplyInputsProcessingUnit(String id, List<String> outDegree) {
-        super(id, outDegree);
-      }
-
-      @Override
-      public Object process(Iterable<Object> inputs) {
-        return Streams.stream(inputs).mapToInt(i -> (int) i).reduce(1, (a, b) -> a * b);
-      }
-    }
-
     // Arrange
-    ProcessingUnit a = new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    ProcessingUnit b = new MultiplyInputsProcessingUnit("B", Arrays.asList("D"));
-    ProcessingUnit c = new MultiplyInputsProcessingUnit("C", Arrays.asList("D"));
-    ProcessingUnit d = new MultiplyInputsProcessingUnit("D", Arrays.asList());
-    CapabilityDAG capabilityDAG = new CapabilityDAG(Arrays.asList(a, b, c, d));
+    Node<Integer, Integer> a = new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
+    Node<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", Arrays.asList("D"));
+    Node<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", Arrays.asList("D"));
+    Node<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", Arrays.asList());
+    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    capabilityDAG.addNode(a, Integer.class);
+    capabilityDAG.addNode(b, Integer.class);
+    capabilityDAG.addNode(c, Integer.class);
+    capabilityDAG.addNode(d, Integer.class);
 
     Map<String, Object> initialInputMap = new HashMap<>();
     initialInputMap.put("A", 2);
@@ -76,22 +62,14 @@ public class CapabilityDAGTest {
 
   @Test
   public void testProcessGraph_withInitialMultipleInputs() {
-    class SumInputsProcessingUnit extends ProcessingUnit {
-      public SumInputsProcessingUnit(String id, List<String> outDegree) {
-        super(id, outDegree);
-      }
-
-      @Override
-      public Object process(Iterable<Object> inputs) {
-        return Streams.stream(inputs).mapToInt(i -> (int) i).sum();
-      }
-    }
-
     // Arrange
-    ProcessingUnit a = new SumInputsProcessingUnit("A", Arrays.asList("B"));
-    ProcessingUnit b = new SumInputsProcessingUnit("B", Arrays.asList("C"));
-    ProcessingUnit c = new SumInputsProcessingUnit("C", Arrays.asList());
-    CapabilityDAG capabilityDAG = new CapabilityDAG(Arrays.asList(a, b, c));
+    Node<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B"));
+    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("C"));
+    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList());
+    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    capabilityDAG.addNode(a, Integer.class);
+    capabilityDAG.addNode(b, Integer.class);
+    capabilityDAG.addNode(c, Integer.class);
 
     Map<String, Object> initialInputMap = new HashMap<>();
     initialInputMap.put("A", 1);
@@ -104,28 +82,96 @@ public class CapabilityDAGTest {
     assertThat(result.get("C")).isEqualTo(3);
   }
 
+  @Test
   public void testProcessGraph_notDAG() {
-    class NoOpProcessingUnit extends ProcessingUnit {
-      public NoOpProcessingUnit(String id, List<String> outDegree) {
-        super(id, outDegree);
-      }
-
-      @Override
-      public Object process(Iterable<Object> inputs) {
-        return inputs.iterator().next();
-      }
-    }
-
     // Arrange: Create a graph with a cycle (A -> B -> C -> A)
-    ProcessingUnit a = new NoOpProcessingUnit("A", Arrays.asList("B"));
-    ProcessingUnit b = new NoOpProcessingUnit("B", Arrays.asList("C"));
-    ProcessingUnit c = new NoOpProcessingUnit("C", Arrays.asList("A"));
-    CapabilityDAG capabilityDAG = new CapabilityDAG(Arrays.asList(a, b, c));
+    Node<Integer, Integer> a = new NoOpProcessingUnit("A", Arrays.asList("B"));
+    Node<Integer, Integer> b = new NoOpProcessingUnit("B", Arrays.asList("C"));
+    Node<Integer, Integer> c = new NoOpProcessingUnit("C", Arrays.asList("A"));
+    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    capabilityDAG.addNode(a, Integer.class);
+    capabilityDAG.addNode(b, Integer.class);
+    capabilityDAG.addNode(c, Integer.class);
 
     Map<String, Object> initialInputMap = new HashMap<>();
     initialInputMap.put("A", 1);
 
     // Act & Assert: Expect a RuntimeException due to the cycle in the graph
     assertThrows(RuntimeException.class, () -> capabilityDAG.process(initialInputMap));
+  }
+
+  private static final class SumInputsProcessingUnit implements Node<Integer, Integer> {
+    private final String id;
+    private final List<String> outDegree;
+
+    public SumInputsProcessingUnit(String id, List<String> outDegree) {
+      this.id = id;
+      this.outDegree = outDegree;
+    }
+
+    @Override
+    public String getId() {
+      return this.id;
+    }
+
+    @Override
+    public List<String> getOutDegree() {
+      return this.outDegree;
+    }
+
+    @Override
+    public Integer process(Iterable<Integer> inputs) {
+      return Streams.stream(inputs).mapToInt(i -> i).sum();
+    }
+  }
+
+  private static final class MultiplyInputsProcessingUnit implements Node<Integer, Integer> {
+    private final String id;
+    private final List<String> outDegree;
+
+    public MultiplyInputsProcessingUnit(String id, List<String> outDegree) {
+      this.id = id;
+      this.outDegree = outDegree;
+    }
+
+    @Override
+    public String getId() {
+      return this.id;
+    }
+
+    @Override
+    public List<String> getOutDegree() {
+      return this.outDegree;
+    }
+
+    @Override
+    public Integer process(Iterable<Integer> inputs) {
+      return Streams.stream(inputs).mapToInt(i -> i).reduce(1, (a, b) -> a * b);
+    }
+  }
+
+  private static final class NoOpProcessingUnit implements Node<Integer, Integer> {
+    private final String id;
+    private final List<String> outDegree;
+
+    public NoOpProcessingUnit(String id, List<String> outDegree) {
+      this.id = id;
+      this.outDegree = outDegree;
+    }
+
+    @Override
+    public String getId() {
+      return this.id;
+    }
+
+    @Override
+    public List<String> getOutDegree() {
+      return this.outDegree;
+    }
+
+    @Override
+    public Integer process(Iterable<Integer> inputs) {
+      return inputs.iterator().next();
+    }
   }
 }

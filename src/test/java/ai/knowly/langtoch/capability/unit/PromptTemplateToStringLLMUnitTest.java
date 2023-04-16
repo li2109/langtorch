@@ -17,7 +17,7 @@ public class PromptTemplateToStringLLMUnitTest {
   @Mock OpenAIChat openAIChat;
 
   @Test
-  public void testSimpleLLMChain_defualtDirectOutputParser() {
+  public void testSimpleLLVMChain_defaultDirectOutputParser() {
     // Arrange.
     when(openAIChat.run(anyString())).thenReturn("Google");
 

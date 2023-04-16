@@ -2,7 +2,12 @@ package ai.knowly.langtoch.capability.dag;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
+import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.capability.unit.PromptTemplateToPromptTemplateLLMUnit;
+import ai.knowly.langtoch.capability.unit.PromptTemplateToStringLLMUnit;
+import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
+import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.Streams;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -10,17 +15,20 @@ import java.util.List;
 import java.util.Map;
 import org.junit.Test;
 import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.mockito.Mock;
+import org.mockito.runners.MockitoJUnitRunner;
 
-@RunWith(JUnit4.class)
+@RunWith(MockitoJUnitRunner.class)
 public class CapabilityDAGTest {
+  @Mock OpenAIChat openAIChat;
+
   @Test
   public void testProcessGraph_sumInputs() {
     // Arrange
     Node<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("D"));
-    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList("D"));
-    Node<Integer, Integer> d = new SumInputsProcessingUnit("D", Arrays.asList());
+    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("D"));
+    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of("D"));
+    Node<Integer, Integer> d = new SumInputsProcessingUnit("D", List.of());
     CapabilityDAG capabilityDAG = new CapabilityDAG();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
@@ -41,9 +49,9 @@ public class CapabilityDAGTest {
   public void testProcessGraph_multiplyInputs() {
     // Arrange
     Node<Integer, Integer> a = new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    Node<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", Arrays.asList("D"));
-    Node<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", Arrays.asList("D"));
-    Node<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", Arrays.asList());
+    Node<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", List.of("D"));
+    Node<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", List.of("D"));
+    Node<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", List.of());
     CapabilityDAG capabilityDAG = new CapabilityDAG();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
@@ -63,9 +71,9 @@ public class CapabilityDAGTest {
   @Test
   public void testProcessGraph_withInitialMultipleInputs() {
     // Arrange
-    Node<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B"));
-    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("C"));
-    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList());
+    Node<Integer, Integer> a = new SumInputsProcessingUnit("A", List.of("B"));
+    Node<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("C"));
+    Node<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of());
     CapabilityDAG capabilityDAG = new CapabilityDAG();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
@@ -85,9 +93,9 @@ public class CapabilityDAGTest {
   @Test
   public void testProcessGraph_notDAG() {
     // Arrange: Create a graph with a cycle (A -> B -> C -> A)
-    Node<Integer, Integer> a = new NoOpProcessingUnit("A", Arrays.asList("B"));
-    Node<Integer, Integer> b = new NoOpProcessingUnit("B", Arrays.asList("C"));
-    Node<Integer, Integer> c = new NoOpProcessingUnit("C", Arrays.asList("A"));
+    Node<Integer, Integer> a = new NoOpProcessingUnit("A", List.of("B"));
+    Node<Integer, Integer> b = new NoOpProcessingUnit("B", List.of("C"));
+    Node<Integer, Integer> c = new NoOpProcessingUnit("C", List.of("A"));
     CapabilityDAG capabilityDAG = new CapabilityDAG();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
@@ -98,6 +106,45 @@ public class CapabilityDAGTest {
 
     // Act & Assert: Expect a RuntimeException due to the cycle in the graph
     assertThrows(RuntimeException.class, () -> capabilityDAG.process(initialInputMap));
+  }
+
+  @Test
+  public void testConcatenatedNodes() {
+    // Arrange.
+    String query1 = "Write a creative name for a sport car company.";
+    String query2 = "Create Slogan for ferrarri";
+    when(openAIChat.run(query1)).thenReturn("ferrarri");
+    when(openAIChat.run(query2)).thenReturn("We are the competition");
+
+    String template1 = "Write a creative name for a {{$area}} company.";
+    String template2 = "Create Slogan for {{$company}}";
+
+    PromptTemplateToPromptTemplateLLMUnit promptTemplateToStringLLMUnit1 =
+        new PromptTemplateToPromptTemplateLLMUnit(openAIChat, Map.of("template", template2));
+    PromptTemplateToStringLLMUnit promptTemplateToStringLLMUnit2 =
+        new PromptTemplateToStringLLMUnit(openAIChat);
+
+    PromptTemplateToPromptTemplateLLMNode node1 =
+        new PromptTemplateToPromptTemplateLLMNode(
+            "company-name-gen", promptTemplateToStringLLMUnit1, List.of("slogan-gen"));
+
+    PromptTemplateToStringLLMNode node2 =
+        new PromptTemplateToStringLLMNode("slogan-gen", promptTemplateToStringLLMUnit2, List.of());
+
+    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    capabilityDAG.addNode(node1, PromptTemplate.class);
+    capabilityDAG.addNode(node2, PromptTemplate.class);
+
+    PromptTemplate promptTemplate1 =
+        PromptTemplate.builder()
+            .setTemplate("Write a creative name for a {{$area}} company.")
+            .addVariableValuePair("area", "sport car")
+            .build();
+    // Act.
+    Map<String, Object> result = capabilityDAG.process(Map.of("company-name-gen", promptTemplate1));
+
+    // Assert.
+    assertThat(result.get("slogan-gen")).isEqualTo("We are the competition");
   }
 
   private static final class SumInputsProcessingUnit implements Node<Integer, Integer> {

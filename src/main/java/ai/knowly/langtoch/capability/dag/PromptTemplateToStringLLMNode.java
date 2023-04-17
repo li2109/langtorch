@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.capability.dag;
 
-import ai.knowly.langtoch.capability.unit.PromptTemplateToStringLLMUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToStringLLMWrapperUnit;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.Iterables;
 import java.util.List;
@@ -10,11 +10,11 @@ import java.util.List;
 public class PromptTemplateToStringLLMNode implements Node<PromptTemplate, String> {
   private final String id;
   private final List<String> outDegree;
-  private final PromptTemplateToStringLLMUnit unit;
+  private final TemplateToStringLLMWrapperUnit unit;
 
   // Constructor for creating a new instance of the node.
   public PromptTemplateToStringLLMNode(
-      String id, PromptTemplateToStringLLMUnit unit, List<String> outDegree) {
+      String id, TemplateToStringLLMWrapperUnit unit, List<String> outDegree) {
     this.id = id;
     this.outDegree = outDegree;
     this.unit = unit;

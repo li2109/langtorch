@@ -1,6 +1,7 @@
 package ai.knowly.langtoch.capability.unit;
 
 import ai.knowly.langtoch.llm.base.BaseModel;
+import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.parser.input.StringInputParser;
 import ai.knowly.langtoch.parser.output.StringOutputParser;
 import com.google.auto.value.AutoValue;
@@ -41,7 +42,6 @@ public abstract class LLMCapabilityUnit<T, R> extends CapabilityUnit<T, R> {
    */
   @AutoValue.Builder
   public abstract static class Builder<T, R> {
-
     public abstract Builder<T, R> setModel(BaseModel baseModel);
 
     public abstract Builder<T, R> setOutputParser(StringOutputParser<R> parser);

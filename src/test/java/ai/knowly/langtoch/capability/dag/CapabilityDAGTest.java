@@ -4,8 +4,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.capability.unit.PromptTemplateToPromptTemplateLLMUnit;
-import ai.knowly.langtoch.capability.unit.PromptTemplateToStringLLMUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToTemplateLLMWrapperUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToStringLLMWrapperUnit;
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.Streams;
@@ -119,17 +119,17 @@ public class CapabilityDAGTest {
     String template1 = "Write a creative name for a {{$area}} company.";
     String template2 = "Create Slogan for {{$company}}";
 
-    PromptTemplateToPromptTemplateLLMUnit promptTemplateToStringLLMUnit1 =
-        new PromptTemplateToPromptTemplateLLMUnit(openAIChat, Map.of("template", template2));
-    PromptTemplateToStringLLMUnit promptTemplateToStringLLMUnit2 =
-        new PromptTemplateToStringLLMUnit(openAIChat);
+    TemplateToTemplateLLMWrapperUnit promptTemplateToStringLLMUnit1 =
+        new TemplateToTemplateLLMWrapperUnit(openAIChat, Map.of("template", template2));
+    TemplateToStringLLMWrapperUnit templateToStringLLMWrapperUnit2 =
+        new TemplateToStringLLMWrapperUnit(openAIChat);
 
     PromptTemplateToPromptTemplateLLMNode node1 =
         new PromptTemplateToPromptTemplateLLMNode(
             "company-name-gen", promptTemplateToStringLLMUnit1, List.of("slogan-gen"));
 
     PromptTemplateToStringLLMNode node2 =
-        new PromptTemplateToStringLLMNode("slogan-gen", promptTemplateToStringLLMUnit2, List.of());
+        new PromptTemplateToStringLLMNode("slogan-gen", templateToStringLLMWrapperUnit2, List.of());
 
     CapabilityDAG capabilityDAG = new CapabilityDAG();
     capabilityDAG.addNode(node1, PromptTemplate.class);

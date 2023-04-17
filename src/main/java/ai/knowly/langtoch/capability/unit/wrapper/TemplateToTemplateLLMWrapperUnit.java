@@ -1,5 +1,7 @@
-package ai.knowly.langtoch.capability.unit;
+package ai.knowly.langtoch.capability.unit.wrapper;
 
+import ai.knowly.langtoch.capability.unit.CapabilityUnit;
+import ai.knowly.langtoch.capability.unit.LLMCapabilityUnit;
 import ai.knowly.langtoch.llm.base.BaseModel;
 import ai.knowly.langtoch.parser.input.PromptTemplateStringInputParser;
 import ai.knowly.langtoch.parser.output.StringToSingleVarPromptTemplateOutputParser;
@@ -7,10 +9,10 @@ import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 
 /**
- * A class representing a capability unit that processes a PromptTemplate and returns a transformed
+ * A class wraps a LLM capability unit that processes a PromptTemplate and returns a transformed
  * PromptTemplate.
  */
-public class PromptTemplateToPromptTemplateLLMUnit
+public class TemplateToTemplateLLMWrapperUnit
     extends CapabilityUnit<PromptTemplate, PromptTemplate> {
 
   private final LLMCapabilityUnit<PromptTemplate, PromptTemplate> capabilityUnit;
@@ -21,7 +23,7 @@ public class PromptTemplateToPromptTemplateLLMUnit
    * @param baseModel the base model used for processing
    * @param context a map containing context information
    */
-  public PromptTemplateToPromptTemplateLLMUnit(BaseModel baseModel, Map<Object, Object> context) {
+  public TemplateToTemplateLLMWrapperUnit(BaseModel baseModel, Map<Object, Object> context) {
     capabilityUnit =
         LLMCapabilityUnit.<PromptTemplate, PromptTemplate>builder()
             .setModel(baseModel)

@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit;
+package ai.knowly.langtoch.capability.unit.wrapper;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.anyString;
@@ -13,7 +13,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PromptTemplateToStringLLMUnitTest {
+public class TemplateToStringLLMWrapperUnitTest {
   @Mock OpenAIChat openAIChat;
 
   @Test
@@ -27,11 +27,11 @@ public class PromptTemplateToStringLLMUnitTest {
             .addVariableValuePair("area", "search engine")
             .build();
 
-    PromptTemplateToStringLLMUnit promptTemplateToStringLLMUnit =
-        new PromptTemplateToStringLLMUnit(openAIChat);
+    TemplateToStringLLMWrapperUnit templateToStringLLMWrapperUnit =
+        new TemplateToStringLLMWrapperUnit(openAIChat);
 
     // Act.
-    String result = promptTemplateToStringLLMUnit.run(promptTemplate);
+    String result = templateToStringLLMWrapperUnit.run(promptTemplate);
 
     // Assert.
     assertThat(result).isEqualTo("Google");

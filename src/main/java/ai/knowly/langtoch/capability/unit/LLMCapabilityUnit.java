@@ -1,7 +1,6 @@
 package ai.knowly.langtoch.capability.unit;
 
 import ai.knowly.langtoch.llm.base.BaseModel;
-import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.parser.input.StringInputParser;
 import ai.knowly.langtoch.parser.output.StringOutputParser;
 import com.google.auto.value.AutoValue;

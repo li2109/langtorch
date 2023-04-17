@@ -42,13 +42,14 @@ public class ConversationMemory extends Memory<Role, BaseChatMessage> {
     }
 
     StringBuilder prompt = new StringBuilder();
-    prompt.append("Current conversation:\n\n");
+    prompt.append("Current conversation:\n");
     for (Entry<Role, BaseChatMessage> entry : memory.entries()) {
       prompt.append(entry.getKey().toString());
       prompt.append(": ");
       prompt.append(entry.getValue().getMessage());
       prompt.append("\n");
     }
+    prompt.append("\n");
     return prompt.toString();
   }
 

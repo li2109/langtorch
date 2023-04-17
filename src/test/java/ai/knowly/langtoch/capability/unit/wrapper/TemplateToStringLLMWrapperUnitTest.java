@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit;
+package ai.knowly.langtoch.capability.unit.wrapper;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.anyString;

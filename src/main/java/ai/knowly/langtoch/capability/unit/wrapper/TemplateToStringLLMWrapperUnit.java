@@ -1,5 +1,7 @@
-package ai.knowly.langtoch.capability.unit;
+package ai.knowly.langtoch.capability.unit.wrapper;
 
+import ai.knowly.langtoch.capability.unit.CapabilityUnit;
+import ai.knowly.langtoch.capability.unit.LLMCapabilityUnit;
 import ai.knowly.langtoch.llm.base.BaseModel;
 import ai.knowly.langtoch.parser.input.PromptTemplateStringInputParser;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;

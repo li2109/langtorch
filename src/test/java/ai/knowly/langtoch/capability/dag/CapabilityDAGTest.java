@@ -4,8 +4,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.capability.unit.TemplateToTemplateLLMWrapperUnit;
-import ai.knowly.langtoch.capability.unit.TemplateToStringLLMWrapperUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToTemplateLLMWrapperUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToStringLLMWrapperUnit;
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.Streams;

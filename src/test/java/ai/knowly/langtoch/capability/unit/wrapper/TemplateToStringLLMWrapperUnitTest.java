@@ -28,7 +28,7 @@ public class TemplateToStringLLMWrapperUnitTest {
             .build();
 
     TemplateToStringLLMWrapperUnit templateToStringLLMWrapperUnit =
-        new TemplateToStringLLMWrapperUnit(openAIChat);
+        TemplateToStringLLMWrapperUnit.create(openAIChat);
 
     // Act.
     String result = templateToStringLLMWrapperUnit.run(promptTemplate);

@@ -2,39 +2,44 @@ package ai.knowly.langtoch.capability.dag;
 
 import ai.knowly.langtoch.capability.unit.wrapper.TemplateToTemplateLLMWrapperUnit;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
+import com.google.auto.value.AutoValue;
 import com.google.common.collect.Iterables;
 import java.util.List;
 
-// This class represents a node in a graph that takes a PromptTemplate as input and returns another
-// PromptTemplate.
-public class PromptTemplateToPromptTemplateLLMNode implements Node<PromptTemplate, PromptTemplate> {
-  private final String id;
-  private final List<String> outDegree;
-  private final TemplateToTemplateLLMWrapperUnit unit;
+/**
+ * This class represents a node in a graph that takes a PromptTemplate as input and returns another
+ * PromptTemplate.
+ */
+@AutoValue
+public abstract class PromptTemplateToPromptTemplateLLMNode
+    implements Node<PromptTemplate, PromptTemplate> {
 
-  // Constructor for creating a new instance of the node.
-  public PromptTemplateToPromptTemplateLLMNode(
+  public static PromptTemplateToPromptTemplateLLMNode create(
       String id, TemplateToTemplateLLMWrapperUnit unit, List<String> outDegree) {
-    this.unit = unit;
-    this.id = id;
-    this.outDegree = outDegree;
+    return new AutoValue_PromptTemplateToPromptTemplateLLMNode(id, outDegree, unit);
   }
+
+  abstract String id();
+
+  abstract List<String> outDegree();
+
+  abstract TemplateToTemplateLLMWrapperUnit unit();
 
   // Returns the ID of the node.
   @Override
   public String getId() {
-    return this.id;
+    return id();
   }
 
   // Returns the out-degree of the node.
   @Override
   public List<String> getOutDegree() {
-    return this.outDegree;
+    return outDegree();
   }
 
   // Processes the input PromptTemplate and returns the corresponding output PromptTemplate.
   @Override
   public PromptTemplate process(Iterable<PromptTemplate> inputs) {
-    return unit.run(Iterables.getOnlyElement(inputs));
+    return unit().run(Iterables.getOnlyElement(inputs));
   }
 }

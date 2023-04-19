@@ -4,8 +4,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.capability.unit.wrapper.TemplateToTemplateLLMWrapperUnit;
 import ai.knowly.langtoch.capability.unit.wrapper.TemplateToStringLLMWrapperUnit;
+import ai.knowly.langtoch.capability.unit.wrapper.TemplateToTemplateLLMWrapperUnit;
 import ai.knowly.langtoch.llm.providers.openai.OpenAIChat;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.common.collect.Streams;
@@ -29,7 +29,7 @@ public class CapabilityDAGTest {
     Node<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("D"));
     Node<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of("D"));
     Node<Integer, Integer> d = new SumInputsProcessingUnit("D", List.of());
-    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    CapabilityDAG capabilityDAG = CapabilityDAG.create();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
     capabilityDAG.addNode(c, Integer.class);
@@ -52,7 +52,7 @@ public class CapabilityDAGTest {
     Node<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", List.of("D"));
     Node<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", List.of("D"));
     Node<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", List.of());
-    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    CapabilityDAG capabilityDAG = CapabilityDAG.create();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
     capabilityDAG.addNode(c, Integer.class);
@@ -74,7 +74,7 @@ public class CapabilityDAGTest {
     Node<Integer, Integer> a = new SumInputsProcessingUnit("A", List.of("B"));
     Node<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("C"));
     Node<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of());
-    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    CapabilityDAG capabilityDAG = CapabilityDAG.create();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
     capabilityDAG.addNode(c, Integer.class);
@@ -96,7 +96,7 @@ public class CapabilityDAGTest {
     Node<Integer, Integer> a = new NoOpProcessingUnit("A", List.of("B"));
     Node<Integer, Integer> b = new NoOpProcessingUnit("B", List.of("C"));
     Node<Integer, Integer> c = new NoOpProcessingUnit("C", List.of("A"));
-    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    CapabilityDAG capabilityDAG = CapabilityDAG.create();
     capabilityDAG.addNode(a, Integer.class);
     capabilityDAG.addNode(b, Integer.class);
     capabilityDAG.addNode(c, Integer.class);
@@ -120,18 +120,19 @@ public class CapabilityDAGTest {
     String template2 = "Create Slogan for {{$company}}";
 
     TemplateToTemplateLLMWrapperUnit promptTemplateToStringLLMUnit1 =
-        new TemplateToTemplateLLMWrapperUnit(openAIChat, Map.of("template", template2));
+        TemplateToTemplateLLMWrapperUnit.create(openAIChat, Map.of("template", template2));
     TemplateToStringLLMWrapperUnit templateToStringLLMWrapperUnit2 =
-        new TemplateToStringLLMWrapperUnit(openAIChat);
+        TemplateToStringLLMWrapperUnit.create(openAIChat);
 
     PromptTemplateToPromptTemplateLLMNode node1 =
-        new PromptTemplateToPromptTemplateLLMNode(
+        PromptTemplateToPromptTemplateLLMNode.create(
             "company-name-gen", promptTemplateToStringLLMUnit1, List.of("slogan-gen"));
 
     PromptTemplateToStringLLMNode node2 =
-        new PromptTemplateToStringLLMNode("slogan-gen", templateToStringLLMWrapperUnit2, List.of());
+        PromptTemplateToStringLLMNode.create(
+            "slogan-gen", templateToStringLLMWrapperUnit2, List.of());
 
-    CapabilityDAG capabilityDAG = new CapabilityDAG();
+    CapabilityDAG capabilityDAG = CapabilityDAG.create();
     capabilityDAG.addNode(node1, PromptTemplate.class);
     capabilityDAG.addNode(node2, PromptTemplate.class);
 

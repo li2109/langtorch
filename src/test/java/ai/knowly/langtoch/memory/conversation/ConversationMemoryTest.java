@@ -20,7 +20,7 @@ public class ConversationMemoryTest {
 
   @Before
   public void setUp() {
-    conversationMemory = new ConversationMemory();
+    conversationMemory = ConversationMemory.create();
   }
 
   @Test

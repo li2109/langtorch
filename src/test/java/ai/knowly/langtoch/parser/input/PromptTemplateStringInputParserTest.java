@@ -10,7 +10,7 @@ public class PromptTemplateStringInputParserTest {
 
   @Before
   public void setUp() {
-    parser = new PromptTemplateStringInputParser();
+    parser = PromptTemplateStringInputParser.create();
   }
 
   @Test

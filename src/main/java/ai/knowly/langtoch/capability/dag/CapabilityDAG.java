@@ -1,24 +1,32 @@
 package ai.knowly.langtoch.capability.dag;
 
+import com.google.auto.value.AutoValue;
 import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.TypeToken;
 import java.util.*;
-import java.util.ArrayList;
-import java.util.Collection;
-import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
-import java.util.Map;
-import java.util.Queue;
 
 /** Class representing a directed acyclic graph (DAG) of capabilities. */
-public class CapabilityDAG {
-  private final HashMap<String, Node<?, ?>> nodes = new HashMap<>();
-  private final Multimap<String, Object> inputMap = ArrayListMultimap.create();
-  private final HashMap<String, Object> outputMap = new HashMap<>();
-  private final Multimap<String, String> inDegreeMap = ArrayListMultimap.create();
-  private final HashMap<String, TypeToken<?>> inputTypes = new HashMap<>();
+@AutoValue
+public abstract class CapabilityDAG {
+  public static CapabilityDAG create() {
+    return new AutoValue_CapabilityDAG(
+        new HashMap<>(),
+        ArrayListMultimap.create(),
+        new HashMap<>(),
+        ArrayListMultimap.create(),
+        new HashMap<>());
+  }
+
+  abstract HashMap<String, Node<?, ?>> nodes();
+
+  abstract Multimap<String, Object> inputMap();
+
+  abstract HashMap<String, Object> outputMap();
+
+  abstract Multimap<String, String> inDegreeMap();
+
+  abstract HashMap<String, TypeToken<?>> inputTypes();
 
   /**
    * Add a node to the CapabilityDAG.
@@ -29,10 +37,10 @@ public class CapabilityDAG {
    * @param <O> Output type of the node
    */
   public <I, O> void addNode(Node<I, O> node, Class<I> inputType) {
-    nodes.put(node.getId(), node);
-    inputTypes.put(node.getId(), TypeToken.of(inputType));
+    nodes().put(node.getId(), node);
+    inputTypes().put(node.getId(), TypeToken.of(inputType));
     for (String outDegree : node.getOutDegree()) {
-      inDegreeMap.put(outDegree, node.getId());
+      inDegreeMap().put(outDegree, node.getId());
     }
   }
 
@@ -49,8 +57,8 @@ public class CapabilityDAG {
     List<String> sortedList = topologicalSort();
 
     for (String id : sortedList) {
-      Node<?, ?> node = nodes.get(id);
-      Collection<Object> input = inputMap.get(id);
+      Node<?, ?> node = nodes().get(id);
+      Collection<Object> input = inputMap().get(id);
       Object output = processNode(node, input);
       addOutput(id, output);
       for (String outDegree : node.getOutDegree()) {
@@ -60,7 +68,7 @@ public class CapabilityDAG {
 
     Map<String, Object> result = new HashMap<>();
     for (String id : getEndNodeIds()) {
-      result.put(id, outputMap.get(id));
+      result.put(id, outputMap().get(id));
     }
     return result;
   }
@@ -72,12 +80,12 @@ public class CapabilityDAG {
   }
 
   public Object getOutput(String id) {
-    return outputMap.get(id);
+    return outputMap().get(id);
   }
 
   private List<String> getEndNodeIds() {
     List<String> endNodeIds = new ArrayList<>();
-    for (Node<?, ?> node : nodes.values()) {
+    for (Node<?, ?> node : nodes().values()) {
       if (node.getOutDegree().isEmpty()) {
         endNodeIds.add(node.getId());
       }
@@ -86,60 +94,50 @@ public class CapabilityDAG {
   }
 
   private void setInitialInput(String id, Object input) {
-    TypeToken<?> expectedType = inputTypes.get(id);
+    TypeToken<?> expectedType = inputTypes().get(id);
     if (!expectedType.isSupertypeOf(input.getClass())) {
       throw new IllegalArgumentException(
-          "Input type for node " + id + " does not match the expected type.");
+          "Input type for node " + id + " does not match the expected type");
     }
-    inputMap.put(id, input);
-  }
-
-  private void addOutput(String id, Object output) {
-    outputMap.put(id, output);
+    inputMap().put(id, input);
   }
 
   private void addInput(String id, Object input) {
-    TypeToken<?> expectedType = inputTypes.get(id);
-    if (!expectedType.isSupertypeOf(input.getClass())) {
-      throw new IllegalArgumentException(
-          "Input type for node " + id + " does not match the expected type.");
-    }
-    inputMap.put(id, input);
+    inputMap().put(id, input);
   }
 
-  /**
-   * Perform a topological sort on the graph to determine the correct order of node processing.
-   *
-   * @return A list of node IDs in the order they should be processed
-   */
+  private void addOutput(String id, Object output) {
+    outputMap().put(id, output);
+  }
+
   private List<String> topologicalSort() {
-    List<String> sortedList = new ArrayList<>();
+    List<String> sorted = new ArrayList<>();
     Queue<String> queue = new LinkedList<>();
-    HashMap<String, Integer> inDegreeCount = new HashMap<>();
-    for (String node : nodes.keySet()) {
-      inDegreeCount.put(node, inDegreeMap.get(node).size());
-      if (inDegreeCount.get(node) == 0) {
-        queue.add(node);
+    HashMap<String, Integer> inDegrees = new HashMap<>();
+    for (Map.Entry<String, Node<?, ?>> entry : nodes().entrySet()) {
+      int degree = inDegreeMap().get(entry.getKey()).size();
+      inDegrees.put(entry.getKey(), degree);
+      if (degree == 0) {
+        queue.offer(entry.getKey());
       }
     }
+
     while (!queue.isEmpty()) {
       String current = queue.poll();
-      sortedList.add(current);
+      sorted.add(current);
 
-      for (String neighbor : nodes.get(current).getOutDegree()) {
-        int updatedInDegree = inDegreeCount.get(neighbor) - 1;
-        inDegreeCount.put(neighbor, updatedInDegree);
-
-        if (updatedInDegree == 0) {
-          queue.add(neighbor);
+      for (String outDegree : nodes().get(current).getOutDegree()) {
+        int degree = inDegrees.get(outDegree) - 1;
+        inDegrees.put(outDegree, degree);
+        if (degree == 0) {
+          queue.offer(outDegree);
         }
       }
     }
 
-    if (sortedList.size() != nodes.size()) {
-      throw new RuntimeException("The graph contains a cycle and cannot be topologically sorted.");
+    if (sorted.size() != nodes().size()) {
+      throw new IllegalStateException("The graph contains a cycle");
     }
-
-    return sortedList;
+    return sorted;
   }
 }

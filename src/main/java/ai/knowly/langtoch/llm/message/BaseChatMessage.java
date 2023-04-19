@@ -6,6 +6,6 @@ public abstract class BaseChatMessage extends BaseMessage {
 
   @Override
   public String toString() {
-    return String.format("Role: %s, Content: %s", getRole(), getMessage());
+    return String.format("%s: %s", getRole(), getMessage());
   }
 }

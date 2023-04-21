@@ -7,7 +7,7 @@ import com.google.auto.value.AutoValue;
 import java.util.Optional;
 
 /**
- * An abstract class representing a Low-Level Model Capability Unit.
+ * An abstract class representing a Large Language Model Capability Unit.
  *
  * @param <T> The input type of the capability unit.
  * @param <R> The output type of the capability unit.

@@ -1,12 +1,16 @@
-package ai.knowly.langtoch.llm.message;
+package ai.knowly.langtoch.llm.schema.chat;
 
 import com.google.auto.value.AutoValue;
 
 /** A message from the user. */
 @AutoValue
-public abstract class UserMessage extends BaseChatMessage {
+public abstract class UserMessage extends ChatMessage {
   public static Builder builder() {
     return new AutoValue_UserMessage.Builder();
+  }
+
+  public static UserMessage of(String message) {
+    return builder().setMessage(message).build();
   }
 
   @Override

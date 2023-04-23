@@ -1,12 +1,12 @@
-package ai.knowly.langtoch.llm.message;
+package ai.knowly.langtoch.llm.schema.chat;
 
 import com.google.auto.value.AutoValue;
 
-/** A message from the system. */
+/** A message from the assistant. */
 @AutoValue
-public abstract class SystemMessage extends BaseChatMessage {
+public abstract class AssistantMessage extends ChatMessage {
   public static Builder builder() {
-    return new AutoValue_SystemMessage.Builder();
+    return new AutoValue_AssistantMessage.Builder();
   }
 
   @Override
@@ -14,13 +14,13 @@ public abstract class SystemMessage extends BaseChatMessage {
 
   @Override
   public Role getRole() {
-    return Role.SYSTEM;
+    return Role.ASSISTANT;
   }
 
   @AutoValue.Builder
   public abstract static class Builder {
     public abstract Builder setMessage(String message);
 
-    public abstract SystemMessage build();
+    public abstract AssistantMessage build();
   }
 }

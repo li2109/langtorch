@@ -1,7 +1,7 @@
-package ai.knowly.langtoch.llm.message;
+package ai.knowly.langtoch.llm.schema.chat;
 
 /** A abstract class for a message. */
-public abstract class BaseMessage {
+public abstract class Message {
   public abstract String getMessage();
 
   @Override

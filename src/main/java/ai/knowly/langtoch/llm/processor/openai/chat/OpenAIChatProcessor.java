@@ -15,39 +15,58 @@ import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.service.OpenAiService;
 import javax.inject.Inject;
 
-/** A chat model is a model that takes in a list of messages and returns a message. */
-public class ChatProcessor implements Processor<MultiChatMessageInput, ChatMessage> {
+/**
+ * OpenAI chat processor implementation. Handles chat input and output for the OpenAI Language
+ * Model.
+ */
+public class OpenAIChatProcessor implements Processor<MultiChatMessageInput, ChatMessage> {
+  // Logger, default model, and default max tokens for this processor
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
+  private static final int DEFAULT_MAX_TOKEN = 2048;
 
+  // OpenAiService instance used for making requests
   private final OpenAiService openAiService;
-  private ChatProcessorConfig chatProcessorConfig = ChatProcessorConfig.builder().build();
+  // Configuration for the OpenAI Chat Processor
+  private OpenAIChatProcessorConfig openAIChatProcessorConfig =
+      OpenAIChatProcessorConfig.builder()
+          .setModel(DEFAULT_MODEL)
+          .setMaxTokens(DEFAULT_MAX_TOKEN)
+          .build();
 
+  // Constructor with dependency injection
   @Inject
-  ChatProcessor(OpenAiService openAiService) {
+  OpenAIChatProcessor(OpenAiService openAiService) {
     this.openAiService = openAiService;
   }
 
-  private ChatProcessor() {
+  // Private constructor used in factory methods
+  private OpenAIChatProcessor() {
     this.openAiService = new OpenAiService(getOpenAIApiKeyFromEnv(logger));
   }
 
-  public static ChatProcessor create() {
-    return new ChatProcessor();
+  // Factory method to create a new OpenAIChatProcessor instance
+  public static OpenAIChatProcessor create() {
+    return new OpenAIChatProcessor();
   }
 
-  public static ChatProcessor create(OpenAiService openAiService) {
-    return new ChatProcessor(openAiService);
+  // Factory method to create a new OpenAIChatProcessor instance with a given OpenAiService instance
+  public static OpenAIChatProcessor create(OpenAiService openAiService) {
+    return new OpenAIChatProcessor(openAiService);
   }
 
-  public ChatProcessor withConfig(ChatProcessorConfig chatProcessorConfig) {
-    this.chatProcessorConfig = chatProcessorConfig;
+  // Method to set the processor configuration
+  public OpenAIChatProcessor withConfig(OpenAIChatProcessorConfig openAIChatProcessorConfig) {
+    this.openAIChatProcessorConfig = openAIChatProcessorConfig;
     return this;
   }
 
+  // Method to run the processor with the given input and return the output chat message
   @Override
   public ChatMessage run(MultiChatMessageInput inputData) {
     ChatCompletionRequest chatCompletionRequest =
-        ChatProcessorRequestConverter.convert(chatProcessorConfig, inputData.getMessages());
+        OpenAIChatProcessorRequestConverter.convert(
+            openAIChatProcessorConfig, inputData.getMessages());
 
     ChatCompletionResult chatCompletion = openAiService.createChatCompletion(chatCompletionRequest);
     com.theokanning.openai.completion.chat.ChatMessage chatMessage =

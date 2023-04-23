@@ -4,12 +4,12 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.processor.ProcessorType;
-import ai.knowly.langtoch.llm.processor.openai.chat.ChatProcessor;
-import ai.knowly.langtoch.llm.processor.openai.chat.ChatProcessorConfig;
-import ai.knowly.langtoch.llm.processor.openai.chat.ChatProcessorRequestConverter;
-import ai.knowly.langtoch.llm.processor.openai.text.TextProcessor;
-import ai.knowly.langtoch.llm.processor.openai.text.TextProcessorConfig;
-import ai.knowly.langtoch.llm.processor.openai.text.TextProcessorRequestConverter;
+import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
+import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessorConfig;
+import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessorRequestConverter;
+import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
+import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessorConfig;
+import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessorRequestConverter;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.chat.UserMessage;
 import com.theokanning.openai.completion.CompletionChoice;
@@ -29,15 +29,21 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenAITest {
+  private static final OpenAIChatProcessorConfig openAIChatProcessorConfig =
+      OpenAIChatProcessorConfig.builder().setModel("gpt-3.5-turbo").setMaxTokens(2048).build();
+  private static final OpenAITextProcessorConfig openAITextProcessorConfig =
+      OpenAITextProcessorConfig.builder().setModel("text-davinci-003").setMaxTokens(2048).build();
   @Mock private OpenAiService openAiService;
 
   @Test
   public void runWithTextProcessorTest() {
     // Arrange.
-    TextProcessor textProcessor = TextProcessor.create(openAiService);
-    OpenAI openAI = OpenAI.create().withProcessor(ProcessorType.TEXT_PROCESSOR, textProcessor);
+    OpenAITextProcessor openAITextProcessor = OpenAITextProcessor.create(openAiService);
+
+    OpenAI openAI =
+        OpenAI.create().withProcessor(ProcessorType.TEXT_PROCESSOR, openAITextProcessor);
     CompletionRequest completionRequest =
-        TextProcessorRequestConverter.convert(TextProcessorConfig.builder().build(), "Hi!");
+        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, "Hi!");
 
     CompletionResult completionResult = new CompletionResult();
     CompletionChoice completionChoice = new CompletionChoice();
@@ -47,7 +53,7 @@ public class OpenAITest {
     when(openAiService.createCompletion(completionRequest)).thenReturn(completionResult);
 
     // Act.
-    String response = openAI.run("Hi!");
+    String response = openAI.runTextProcessor("Hi!");
     // Assert.
     assertThat(response).isEqualTo("What can i do for you?");
   }
@@ -55,11 +61,12 @@ public class OpenAITest {
   @Test
   public void runWithChatProcessorTest() {
     // Arrange.
-    ChatProcessor chatProcessor = ChatProcessor.create(openAiService);
-    OpenAI openAI = OpenAI.create().withProcessor(ProcessorType.CHAT_PROCESSOR, chatProcessor);
+    OpenAIChatProcessor openAIChatProcessor = OpenAIChatProcessor.create(openAiService);
+    OpenAI openAI =
+        OpenAI.create().withProcessor(ProcessorType.CHAT_PROCESSOR, openAIChatProcessor);
     ChatCompletionRequest completionRequest =
-        ChatProcessorRequestConverter.convert(
-            ChatProcessorConfig.builder().build(),
+        OpenAIChatProcessorRequestConverter.convert(
+            openAIChatProcessorConfig,
             List.of(ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(Role.USER, "Hi!")));
 
     ChatCompletionResult completionResult = new ChatCompletionResult();
@@ -75,7 +82,8 @@ public class OpenAITest {
     when(openAiService.createChatCompletion(completionRequest)).thenReturn(completionResult);
 
     // Act.
-    ai.knowly.langtoch.llm.schema.chat.ChatMessage message = openAI.run(UserMessage.of("Hi!"));
+    ai.knowly.langtoch.llm.schema.chat.ChatMessage message =
+        openAI.runChatProcessor(UserMessage.of("Hi!"));
     // Assert.
     assertThat(message.getMessage()).isEqualTo("What can i do for you?");
   }
@@ -83,15 +91,15 @@ public class OpenAITest {
   @Test
   public void runWithMultipleProcessorTest() {
     // Arrange.
-    ChatProcessor chatProcessor = ChatProcessor.create(openAiService);
-    TextProcessor textProcessor = TextProcessor.create(openAiService);
+    OpenAIChatProcessor openAIChatProcessor = OpenAIChatProcessor.create(openAiService);
+    OpenAITextProcessor openAITextProcessor = OpenAITextProcessor.create(openAiService);
     OpenAI openAI =
         OpenAI.create()
-            .withProcessor(ProcessorType.CHAT_PROCESSOR, chatProcessor)
-            .withProcessor(ProcessorType.TEXT_PROCESSOR, textProcessor);
+            .withProcessor(ProcessorType.CHAT_PROCESSOR, openAIChatProcessor)
+            .withProcessor(ProcessorType.TEXT_PROCESSOR, openAITextProcessor);
     ChatCompletionRequest chatCompletionRequest =
-        ChatProcessorRequestConverter.convert(
-            ChatProcessorConfig.builder().build(),
+        OpenAIChatProcessorRequestConverter.convert(
+            openAIChatProcessorConfig,
             List.of(
                 ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(
                     Role.USER, "Where is Changsha?")));
@@ -107,7 +115,7 @@ public class OpenAITest {
         .thenReturn(chatCompletionResult);
 
     CompletionRequest completionRequest =
-        TextProcessorRequestConverter.convert(TextProcessorConfig.builder().build(), "Hi!");
+        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, "Hi!");
     CompletionResult completionResult = new CompletionResult();
     CompletionChoice completionChoice = new CompletionChoice();
     completionChoice.setText("What can i do for you?");
@@ -116,8 +124,8 @@ public class OpenAITest {
 
     // Act.
     ai.knowly.langtoch.llm.schema.chat.ChatMessage message =
-        openAI.run(UserMessage.of("Where is Changsha?"));
-    String response = openAI.run("Hi!");
+        openAI.runChatProcessor(UserMessage.of("Where is Changsha?"));
+    String response = openAI.runTextProcessor("Hi!");
     // Assert.
     assertThat(message.getMessage()).isEqualTo("It's in hunan province, China.");
     assertThat(response).isEqualTo("What can i do for you?");

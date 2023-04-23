@@ -5,19 +5,20 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+// Configuration class for OpenAIChatProcessor with various options
 @AutoValue
-public abstract class ChatProcessorConfig {
-  private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
-
+public abstract class OpenAIChatProcessorConfig {
+  // Factory method to create a new builder instance with default settings
   public static Builder builder() {
-    return new AutoValue_ChatProcessorConfig.Builder()
-        .setModel(DEFAULT_MODEL)
+    return new AutoValue_OpenAIChatProcessorConfig.Builder()
         .setStop(List.of())
         .setLogitBias(Map.of());
   }
 
+  // Method to create a builder from the current instance
   public abstract Builder toBuilder();
 
+  // Abstract methods for configuration properties
   public abstract String getModel();
 
   public abstract Optional<Double> getTemperature();
@@ -40,8 +41,10 @@ public abstract class ChatProcessorConfig {
 
   public abstract Optional<String> getUser();
 
+  // Builder class for constructing OpenAIChatProcessorConfig instances
   @AutoValue.Builder
   public abstract static class Builder {
+    // Builder methods for setting configuration properties
     public abstract Builder setModel(String model);
 
     public abstract Builder setTemperature(Double temperature);
@@ -64,6 +67,7 @@ public abstract class ChatProcessorConfig {
 
     public abstract Builder setUser(String user);
 
-    public abstract ChatProcessorConfig build();
+    // Method to build an instance of OpenAIChatProcessorConfig
+    public abstract OpenAIChatProcessorConfig build();
   }
 }

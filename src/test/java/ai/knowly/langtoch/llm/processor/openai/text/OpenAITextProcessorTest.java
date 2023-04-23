@@ -1,5 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
+import static ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor.DEFAULT_MODEL;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
@@ -18,20 +19,25 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class TextProcessorTest {
+public class OpenAITextProcessorTest {
   @Mock private OpenAiService openAiService;
-  private TextProcessor textProcessor;
+  private OpenAITextProcessor openAITextProcessor;
 
   @Before
   public void setUp() {
-    textProcessor = new TextProcessor(openAiService);
+    openAITextProcessor = new OpenAITextProcessor(openAiService);
   }
 
   @Test
   public void testRun() {
     // Arrange.
     SingleTextInput inputData = SingleTextInput.of("input1");
-    TextProcessorConfig config = TextProcessorConfig.builder().setSuffix("test-suffix").build();
+    OpenAITextProcessorConfig config =
+        OpenAITextProcessorConfig.builder()
+            .setModel(DEFAULT_MODEL)
+            .setMaxTokens(2048)
+            .setSuffix("test-suffix")
+            .build();
 
     CompletionResult completionResult = new CompletionResult();
     CompletionChoice completionChoice = new CompletionChoice();
@@ -50,7 +56,7 @@ public class TextProcessorTest {
         .thenReturn(completionResult);
 
     // Act.
-    SingleTextOutput output = textProcessor.withConfig(config).run(inputData);
+    SingleTextOutput output = openAITextProcessor.withConfig(config).run(inputData);
 
     // Assert.
     assertThat(output.getText()).isEqualTo("test-response");

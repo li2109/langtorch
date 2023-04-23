@@ -19,13 +19,13 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class ChatProcessorTest {
+public class OpenAIChatProcessorTest {
   @Mock private OpenAiService openAiService;
-  private ChatProcessor chatProcessor;
+  private OpenAIChatProcessor openAIChatProcessor;
 
   @Before
   public void setUp() {
-    chatProcessor = new ChatProcessor(openAiService);
+    openAIChatProcessor = new OpenAIChatProcessor(openAiService);
   }
 
   @Test
@@ -50,7 +50,7 @@ public class ChatProcessorTest {
     when(openAiService.createChatCompletion(any())).thenReturn(chatCompletionResult);
 
     // Act
-    ChatMessage output = chatProcessor.run(MultiChatMessageInput.of(messages));
+    ChatMessage output = openAIChatProcessor.run(MultiChatMessageInput.of(messages));
 
     // Assert
     assertThat(output.getRole()).isEqualTo(Role.ASSISTANT);

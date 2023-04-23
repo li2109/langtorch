@@ -6,21 +6,19 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+// Configuration class for OpenAITextProcessor with various options
 @AutoValue
-public abstract class TextProcessorConfig implements Input {
-  private static final String DEFAULT_MODEL = "text-davinci-003";
-  private static final int DEFAULT_MAX_TOKENS = 2048;
-
+public abstract class OpenAITextProcessorConfig implements Input {
+  // Factory method to create a new builder instance with default settings
   public static Builder builder() {
-    return new AutoValue_TextProcessorConfig.Builder()
-        .setModel(DEFAULT_MODEL)
-        .setMaxTokens(DEFAULT_MAX_TOKENS)
+    return new AutoValue_OpenAITextProcessorConfig.Builder()
         .setLogitBias(Map.of())
         .setStop(List.of());
   }
-
+  // Method to create a builder from the current instance
   abstract Builder toBuilder();
 
+  // Abstract methods for configuration properties
   public abstract String getModel();
 
   public abstract Optional<String> getSuffix();
@@ -51,6 +49,7 @@ public abstract class TextProcessorConfig implements Input {
 
   public abstract Optional<String> getUser();
 
+  // Builder class for constructing OpenAITextProcessorConfig instances
   @AutoValue.Builder
   public abstract static class Builder {
     public abstract Builder setModel(String model);
@@ -83,6 +82,7 @@ public abstract class TextProcessorConfig implements Input {
 
     public abstract Builder setUser(String user);
 
-    public abstract TextProcessorConfig build();
+    // Method to build an instance of OpenAITextProcessorConfig
+    public abstract OpenAITextProcessorConfig build();
   }
 }

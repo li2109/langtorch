@@ -9,7 +9,7 @@ import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
-public class ChatProcessorConfigAdapterTest {
+public class OpenAIOpenAIChatProcessorConfigAdapterTest {
   @Test
   public void testConvertChatMessage() {
     // Arrange.
@@ -18,7 +18,7 @@ public class ChatProcessorConfigAdapterTest {
 
     // Act.
     com.theokanning.openai.completion.chat.ChatMessage convertedMessage =
-        ChatProcessorRequestConverter.convertChatMessage(chatMessage);
+        OpenAIChatProcessorRequestConverter.convertChatMessage(chatMessage);
 
     // Assert.
     assertThat(convertedMessage.getRole()).isEqualTo(Role.ASSISTANT.toString().toLowerCase());

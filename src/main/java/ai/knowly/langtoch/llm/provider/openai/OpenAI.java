@@ -11,7 +11,6 @@ import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.io.input.MultiChatMessageInput;
 import ai.knowly.langtoch.llm.schema.io.input.SingleTextInput;
 import ai.knowly.langtoch.llm.schema.io.output.SingleTextOutput;
-import com.google.common.reflect.TypeToken;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -36,8 +35,7 @@ public class OpenAI {
 
   public String run(String prompt) {
     // Validate that the processor type is supported.
-    validateType(
-        TypeToken.of(String.class), TEXT_PROCESSOR, supportedProcessors.get(TEXT_PROCESSOR));
+    validateType(TEXT_PROCESSOR, supportedProcessors);
     TextProcessor processor = (TextProcessor) supportedProcessors.get(TEXT_PROCESSOR);
     SingleTextOutput output = processor.run(SingleTextInput.of(prompt));
     return output.getText();
@@ -45,24 +43,29 @@ public class OpenAI {
 
   public ChatMessage run(List<ChatMessage> chatMessages) {
     // Validate that the processor type is supported.
-    validateType(new TypeToken<List<ChatMessage>>() {}, CHAT_PROCESSOR, supportedProcessors.get(CHAT_PROCESSOR));
+    validateType(CHAT_PROCESSOR, supportedProcessors);
     ChatProcessor chatProcessor = (ChatProcessor) supportedProcessors.get(CHAT_PROCESSOR);
     return chatProcessor.run(MultiChatMessageInput.of(chatMessages));
   }
 
+  public ChatMessage run(ChatMessage chatMessages) {
+    return run(List.of(chatMessages));
+  }
+
   private void validateType(
-      TypeToken<?> typeToken, ProcessorType processorType, Processor<?, ?> processor) {
-    if (processorType == TEXT_PROCESSOR) {
-      if (!(processor instanceof TextProcessor) || !typeToken.isSubtypeOf(String.class)) {
-        throw new IllegalArgumentException(
-            "The Processor type: " + processorType.name() + " does not support the input type.");
-      }
+      ProcessorType processorType, Map<ProcessorType, Processor<?, ?>> processorByType) {
+    if (!processorByType.containsKey(processorType)) {
+      throw new IllegalArgumentException(
+          String.format("No associated processor found: %s", processorType));
     }
-    if (processorType == CHAT_PROCESSOR) {
-      if (!(processor instanceof ChatProcessor)) {
-        throw new IllegalArgumentException(
-            "Processor type: " + processorType.name() + " does not exist.");
-      }
+    Processor<?, ?> processor = processorByType.get(processorType);
+    if (processorType == TEXT_PROCESSOR && processor instanceof TextProcessor) {
+      return;
     }
+    if (processorType == CHAT_PROCESSOR && processor instanceof ChatProcessor) {
+      return;
+    }
+    throw new IllegalArgumentException(
+        String.format("Processor type is not supported: %s", processorType));
   }
 }

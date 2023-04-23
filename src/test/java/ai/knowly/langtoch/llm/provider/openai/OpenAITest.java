@@ -11,6 +11,7 @@ import ai.knowly.langtoch.llm.processor.openai.text.TextProcessor;
 import ai.knowly.langtoch.llm.processor.openai.text.TextProcessorConfig;
 import ai.knowly.langtoch.llm.processor.openai.text.TextProcessorRequestConverter;
 import ai.knowly.langtoch.llm.schema.chat.Role;
+import ai.knowly.langtoch.llm.schema.chat.UserMessage;
 import com.theokanning.openai.completion.CompletionChoice;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.completion.CompletionResult;
@@ -74,8 +75,51 @@ public class OpenAITest {
     when(openAiService.createChatCompletion(completionRequest)).thenReturn(completionResult);
 
     // Act.
+    ai.knowly.langtoch.llm.schema.chat.ChatMessage message = openAI.run(UserMessage.of("Hi!"));
+    // Assert.
+    assertThat(message.getMessage()).isEqualTo("What can i do for you?");
+  }
+
+  @Test
+  public void runWithMultipleProcessorTest() {
+    // Arrange.
+    ChatProcessor chatProcessor = ChatProcessor.create(openAiService);
+    TextProcessor textProcessor = TextProcessor.create(openAiService);
+    OpenAI openAI =
+        OpenAI.create()
+            .withProcessor(ProcessorType.CHAT_PROCESSOR, chatProcessor)
+            .withProcessor(ProcessorType.TEXT_PROCESSOR, textProcessor);
+    ChatCompletionRequest chatCompletionRequest =
+        ChatProcessorRequestConverter.convert(
+            ChatProcessorConfig.builder().build(),
+            List.of(
+                ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(
+                    Role.USER, "Where is Changsha?")));
+
+    ChatCompletionResult chatCompletionResult = new ChatCompletionResult();
+    ChatMessage chatMessage = new ChatMessage();
+    chatMessage.setContent("It's in hunan province, China.");
+    chatMessage.setRole("assistant");
+    ChatCompletionChoice chatCompletionChoice = new ChatCompletionChoice();
+    chatCompletionChoice.setMessage(chatMessage);
+    chatCompletionResult.setChoices(Arrays.asList(chatCompletionChoice));
+    when(openAiService.createChatCompletion(chatCompletionRequest))
+        .thenReturn(chatCompletionResult);
+
+    CompletionRequest completionRequest =
+        TextProcessorRequestConverter.convert(TextProcessorConfig.builder().build(), "Hi!");
+    CompletionResult completionResult = new CompletionResult();
+    CompletionChoice completionChoice = new CompletionChoice();
+    completionChoice.setText("What can i do for you?");
+    completionResult.setChoices(Arrays.asList(completionChoice));
+    when(openAiService.createCompletion(completionRequest)).thenReturn(completionResult);
+
+    // Act.
+    ai.knowly.langtoch.llm.schema.chat.ChatMessage message =
+        openAI.run(UserMessage.of("Where is Changsha?"));
     String response = openAI.run("Hi!");
     // Assert.
+    assertThat(message.getMessage()).isEqualTo("It's in hunan province, China.");
     assertThat(response).isEqualTo("What can i do for you?");
   }
 }

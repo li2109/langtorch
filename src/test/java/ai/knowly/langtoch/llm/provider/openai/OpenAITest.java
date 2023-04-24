@@ -12,15 +12,8 @@ import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessorConfig;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessorRequestConverter;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.chat.UserMessage;
-import com.theokanning.openai.completion.CompletionChoice;
-import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.CompletionResult;
-import com.theokanning.openai.completion.chat.ChatCompletionChoice;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionResult;
-import com.theokanning.openai.completion.chat.ChatMessage;
+import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.service.OpenAiService;
-import java.util.Arrays;
 import java.util.List;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -31,7 +24,7 @@ import org.mockito.runners.MockitoJUnitRunner;
 public class OpenAITest {
   private static final OpenAIChatProcessorConfig openAIChatProcessorConfig =
       OpenAIChatProcessorConfig.builder().setModel("gpt-3.5-turbo").setMaxTokens(2048).build();
-  private static final OpenAITextProcessorConfig openAITextProcessorConfig =
+  private static final OpenAITextProcessorConfig OPEN_AI_STRING_PROCESSOR_CONFIG =
       OpenAITextProcessorConfig.builder().setModel("text-davinci-003").setMaxTokens(2048).build();
   @Mock private OpenAiService openAiService;
 
@@ -42,15 +35,12 @@ public class OpenAITest {
 
     OpenAI openAI =
         OpenAI.create().withProcessor(ProcessorType.TEXT_PROCESSOR, openAITextProcessor);
-    CompletionRequest completionRequest =
-        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, "Hi!");
 
-    CompletionResult completionResult = new CompletionResult();
-    CompletionChoice completionChoice = new CompletionChoice();
-    completionChoice.setText("What can i do for you?");
-    completionResult.setChoices(Arrays.asList(completionChoice));
-
-    when(openAiService.createCompletion(completionRequest)).thenReturn(completionResult);
+    when(openAiService.createCompletion(
+            OpenAITextProcessorRequestConverter.convert(OPEN_AI_STRING_PROCESSOR_CONFIG, "Hi!")))
+        .thenReturn(
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
+                "What can i do for you?"));
 
     // Act.
     String response = openAI.runTextProcessor("Hi!");
@@ -64,22 +54,15 @@ public class OpenAITest {
     OpenAIChatProcessor openAIChatProcessor = OpenAIChatProcessor.create(openAiService);
     OpenAI openAI =
         OpenAI.create().withProcessor(ProcessorType.CHAT_PROCESSOR, openAIChatProcessor);
-    ChatCompletionRequest completionRequest =
-        OpenAIChatProcessorRequestConverter.convert(
-            openAIChatProcessorConfig,
-            List.of(ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(Role.USER, "Hi!")));
 
-    ChatCompletionResult completionResult = new ChatCompletionResult();
-
-    ChatMessage chatMessage = new ChatMessage();
-    chatMessage.setContent("What can i do for you?");
-    chatMessage.setRole("assistant");
-
-    ChatCompletionChoice completionChoice = new ChatCompletionChoice();
-    completionChoice.setMessage(chatMessage);
-    completionResult.setChoices(Arrays.asList(completionChoice));
-
-    when(openAiService.createChatCompletion(completionRequest)).thenReturn(completionResult);
+    when(openAiService.createChatCompletion(
+            OpenAIChatProcessorRequestConverter.convert(
+                openAIChatProcessorConfig,
+                List.of(ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(Role.USER, "Hi!")))))
+        .thenReturn(
+            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(
+                    Role.ASSISTANT, "What can i do for you?")));
 
     // Act.
     ai.knowly.langtoch.llm.schema.chat.ChatMessage message =
@@ -97,30 +80,23 @@ public class OpenAITest {
         OpenAI.create()
             .withProcessor(ProcessorType.CHAT_PROCESSOR, openAIChatProcessor)
             .withProcessor(ProcessorType.TEXT_PROCESSOR, openAITextProcessor);
-    ChatCompletionRequest chatCompletionRequest =
-        OpenAIChatProcessorRequestConverter.convert(
-            openAIChatProcessorConfig,
-            List.of(
+
+    when(openAiService.createChatCompletion(
+            OpenAIChatProcessorRequestConverter.convert(
+                openAIChatProcessorConfig,
+                List.of(
+                    ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(
+                        Role.USER, "Where is Changsha?")))))
+        .thenReturn(
+            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
                 ai.knowly.langtoch.llm.schema.chat.ChatMessage.of(
-                    Role.USER, "Where is Changsha?")));
+                    Role.ASSISTANT, "It's in hunan province, China.")));
 
-    ChatCompletionResult chatCompletionResult = new ChatCompletionResult();
-    ChatMessage chatMessage = new ChatMessage();
-    chatMessage.setContent("It's in hunan province, China.");
-    chatMessage.setRole("assistant");
-    ChatCompletionChoice chatCompletionChoice = new ChatCompletionChoice();
-    chatCompletionChoice.setMessage(chatMessage);
-    chatCompletionResult.setChoices(Arrays.asList(chatCompletionChoice));
-    when(openAiService.createChatCompletion(chatCompletionRequest))
-        .thenReturn(chatCompletionResult);
-
-    CompletionRequest completionRequest =
-        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, "Hi!");
-    CompletionResult completionResult = new CompletionResult();
-    CompletionChoice completionChoice = new CompletionChoice();
-    completionChoice.setText("What can i do for you?");
-    completionResult.setChoices(Arrays.asList(completionChoice));
-    when(openAiService.createCompletion(completionRequest)).thenReturn(completionResult);
+    when(openAiService.createCompletion(
+            OpenAITextProcessorRequestConverter.convert(OPEN_AI_STRING_PROCESSOR_CONFIG, "Hi!")))
+        .thenReturn(
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
+                "What can i do for you?"));
 
     // Act.
     ai.knowly.langtoch.llm.schema.chat.ChatMessage message =

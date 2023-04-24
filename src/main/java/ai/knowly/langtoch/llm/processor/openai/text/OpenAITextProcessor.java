@@ -3,8 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static ai.knowly.langtoch.llm.Utils.getOpenAIApiKeyFromEnv;
 
 import ai.knowly.langtoch.llm.processor.Processor;
-import ai.knowly.langtoch.llm.schema.io.input.SingleTextInput;
-import ai.knowly.langtoch.llm.schema.io.output.SingleTextOutput;
+import ai.knowly.langtoch.llm.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.completion.CompletionRequest;
@@ -15,7 +14,7 @@ import com.theokanning.openai.service.OpenAiService;
  * OpenAI text processor implementation. Handles single text input and output for the OpenAI
  * Language Model.
  */
-public class OpenAITextProcessor implements Processor<SingleTextInput, SingleTextOutput> {
+public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   // Default model, logger, and default max tokens for this processor
   @VisibleForTesting static final String DEFAULT_MODEL = "text-davinci-003";
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -58,12 +57,12 @@ public class OpenAITextProcessor implements Processor<SingleTextInput, SingleTex
 
   // Method to run the processor with the given input and return the output text
   @Override
-  public SingleTextOutput run(SingleTextInput inputData) {
+  public SingleText run(SingleText inputData) {
     CompletionRequest completionRequest =
         OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, inputData.getText());
 
     CompletionResult completion = openAiService.createCompletion(completionRequest);
     String response = completion.getChoices().get(0).getText();
-    return SingleTextOutput.of(response);
+    return SingleText.of(response);
   }
 }

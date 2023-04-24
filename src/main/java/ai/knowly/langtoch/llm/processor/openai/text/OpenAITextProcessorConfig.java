@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
-import ai.knowly.langtoch.llm.schema.io.input.Input;
+import ai.knowly.langtoch.llm.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
 import java.util.List;
 import java.util.Map;
@@ -8,7 +8,7 @@ import java.util.Optional;
 
 // Configuration class for OpenAITextProcessor with various options
 @AutoValue
-public abstract class OpenAITextProcessorConfig implements Input {
+public abstract class OpenAITextProcessorConfig implements ProcessorConfig {
   // Factory method to create a new builder instance with default settings
   public static Builder builder() {
     return new AutoValue_OpenAITextProcessorConfig.Builder()

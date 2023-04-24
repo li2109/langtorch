@@ -2,8 +2,8 @@ package ai.knowly.langtoch.llm.provider;
 
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.ProcessorType;
-import ai.knowly.langtoch.llm.schema.io.input.Input;
-import ai.knowly.langtoch.llm.schema.io.output.Output;
+import ai.knowly.langtoch.llm.schema.io.Input;
+import ai.knowly.langtoch.llm.schema.io.Output;
 import java.util.HashMap;
 import java.util.Map;
 

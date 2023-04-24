@@ -1,14 +1,11 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
-import static ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor.DEFAULT_MODEL;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.schema.io.input.SingleTextInput;
-import ai.knowly.langtoch.llm.schema.io.output.SingleTextOutput;
-import com.theokanning.openai.completion.CompletionChoice;
+import ai.knowly.langtoch.llm.schema.io.SingleText;
+import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.service.OpenAiService;
 import java.util.List;
 import java.util.Map;
@@ -31,18 +28,13 @@ public class OpenAITextProcessorTest {
   @Test
   public void testRun() {
     // Arrange.
-    SingleTextInput inputData = SingleTextInput.of("input1");
+    SingleText inputData = SingleText.of("input1");
     OpenAITextProcessorConfig config =
         OpenAITextProcessorConfig.builder()
-            .setModel(DEFAULT_MODEL)
+            .setModel(OpenAITextProcessor.DEFAULT_MODEL)
             .setMaxTokens(2048)
             .setSuffix("test-suffix")
             .build();
-
-    CompletionResult completionResult = new CompletionResult();
-    CompletionChoice completionChoice = new CompletionChoice();
-    completionChoice.setText("test-response");
-    completionResult.setChoices(List.of(completionChoice));
 
     when(openAiService.createCompletion(
             CompletionRequest.builder()
@@ -53,10 +45,11 @@ public class OpenAITextProcessorTest {
                 .logitBias(Map.of())
                 .stop(List.of())
                 .build()))
-        .thenReturn(completionResult);
+        .thenReturn(
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));
 
     // Act.
-    SingleTextOutput output = openAITextProcessor.withConfig(config).run(inputData);
+    SingleText output = openAITextProcessor.withConfig(config).run(inputData);
 
     // Assert.
     assertThat(output.getText()).isEqualTo("test-response");

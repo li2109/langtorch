@@ -6,11 +6,10 @@ import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.llm.provider.LargeLanguageModelProvider;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
-import ai.knowly.langtoch.llm.schema.io.input.Input;
-import ai.knowly.langtoch.llm.schema.io.input.MultiChatMessageInput;
-import ai.knowly.langtoch.llm.schema.io.input.SingleTextInput;
-import ai.knowly.langtoch.llm.schema.io.output.Output;
-import ai.knowly.langtoch.llm.schema.io.output.SingleTextOutput;
+import ai.knowly.langtoch.llm.schema.io.Input;
+import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import ai.knowly.langtoch.llm.schema.io.Output;
+import ai.knowly.langtoch.llm.schema.io.SingleText;
 import java.util.List;
 
 /**
@@ -50,14 +49,14 @@ public class OpenAI extends LargeLanguageModelProvider {
 
   // Convenience method to run a text processor with a given prompt and return the output text
   public String runTextProcessor(String prompt) {
-    SingleTextOutput output = run(SingleTextInput.of(prompt), ProcessorType.TEXT_PROCESSOR);
+    SingleText output = run(SingleText.of(prompt), ProcessorType.TEXT_PROCESSOR);
     return output.getText();
   }
 
   // Convenience method to run a chat processor with a list of chat messages and return the output
   // chat message
   public ChatMessage runChatProcessor(List<ChatMessage> chatMessages) {
-    return run(MultiChatMessageInput.of(chatMessages), ProcessorType.CHAT_PROCESSOR);
+    return run(MultiChatMessage.of(chatMessages), ProcessorType.CHAT_PROCESSOR);
   }
 
   // Convenience method to run a chat processor with a single chat message and return the output

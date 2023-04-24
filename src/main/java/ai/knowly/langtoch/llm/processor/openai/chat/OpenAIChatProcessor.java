@@ -8,7 +8,7 @@ import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.chat.SystemMessage;
 import ai.knowly.langtoch.llm.schema.chat.UserMessage;
-import ai.knowly.langtoch.llm.schema.io.input.MultiChatMessageInput;
+import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
 import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
@@ -19,7 +19,7 @@ import javax.inject.Inject;
  * OpenAI chat processor implementation. Handles chat input and output for the OpenAI Language
  * Model.
  */
-public class OpenAIChatProcessor implements Processor<MultiChatMessageInput, ChatMessage> {
+public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMessage> {
   // Logger, default model, and default max tokens for this processor
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
@@ -63,7 +63,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessageInput, Cha
 
   // Method to run the processor with the given input and return the output chat message
   @Override
-  public ChatMessage run(MultiChatMessageInput inputData) {
+  public ChatMessage run(MultiChatMessage inputData) {
     ChatCompletionRequest chatCompletionRequest =
         OpenAIChatProcessorRequestConverter.convert(
             openAIChatProcessorConfig, inputData.getMessages());

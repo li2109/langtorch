@@ -6,9 +6,8 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.io.input.MultiChatMessageInput;
-import com.theokanning.openai.completion.chat.ChatCompletionChoice;
-import com.theokanning.openai.completion.chat.ChatCompletionResult;
+import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.service.OpenAiService;
 import java.util.Arrays;
 import java.util.List;
@@ -36,21 +35,13 @@ public class OpenAIChatProcessorTest {
             ChatMessage.of(Role.USER, "What is the weather today?"),
             ChatMessage.of(Role.ASSISTANT, "The weather today is sunny."));
 
-    com.theokanning.openai.completion.chat.ChatMessage chatMessage =
-        new com.theokanning.openai.completion.chat.ChatMessage();
-    chatMessage.setRole(Role.ASSISTANT.name().toLowerCase());
-    chatMessage.setContent("It's going to be a hot day.");
-
-    ChatCompletionChoice completionChoice = new ChatCompletionChoice();
-    completionChoice.setMessage(chatMessage);
-
-    ChatCompletionResult chatCompletionResult = new ChatCompletionResult();
-    chatCompletionResult.setChoices(List.of(completionChoice));
-
-    when(openAiService.createChatCompletion(any())).thenReturn(chatCompletionResult);
+    when(openAiService.createChatCompletion(any()))
+        .thenReturn(
+            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day.")));
 
     // Act
-    ChatMessage output = openAIChatProcessor.run(MultiChatMessageInput.of(messages));
+    ChatMessage output = openAIChatProcessor.run(MultiChatMessage.of(messages));
 
     // Assert
     assertThat(output.getRole()).isEqualTo(Role.ASSISTANT);

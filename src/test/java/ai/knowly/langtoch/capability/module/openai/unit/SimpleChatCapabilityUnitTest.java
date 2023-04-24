@@ -4,8 +4,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.capability.module.openai.unit.SimpleChatCapabilityUnit;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
+import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
@@ -30,7 +30,7 @@ public class SimpleChatCapabilityUnitTest {
 
     // Act.
     ChatMessage response =
-        SimpleChatCapabilityUnit.with(OpenAIChatProcessor.create(openAiService))
+        SimpleChatCapabilityUnit.create(OpenAIChatProcessor.create(openAiService))
             .run(MultiChatMessage.of(ChatMessage.of(Role.USER, "Where is Changsha?")));
 
     // Assert.

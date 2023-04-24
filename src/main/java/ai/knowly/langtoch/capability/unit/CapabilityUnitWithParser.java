@@ -32,15 +32,10 @@ public class CapabilityUnitWithParser<T, I extends Input, R extends Output, U>
 
   @SuppressWarnings("unchecked")
   protected U run(T input) {
-    I processedInput =
-        inputParser
-            .map(parser -> parser.parse(input))
-            .orElseThrow(() -> new IllegalArgumentException("Input parser is not provided."));
+    I processedInput = inputParser.map(parser -> parser.parse(input)).orElse((I) input);
 
     R result = super.run(processedInput);
 
-    return outputParser
-        .map(parser -> parser.parse(result))
-        .orElseThrow(() -> new IllegalArgumentException("Output parser is not provided."));
+    return outputParser.map(parser -> parser.parse(result)).orElse((U) result);
   }
 }

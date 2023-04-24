@@ -11,7 +11,7 @@ public abstract class CapabilityUnit<I extends Input, R extends Output> {
     this.processor = processor;
   }
 
-  protected R run(I input) {
+  public R run(I input) {
     return processor.run(input);
   }
 }

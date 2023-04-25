@@ -3,10 +3,10 @@ package ai.knowly.langtoch.memory.conversation;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.llm.message.AssistantMessage;
-import ai.knowly.langtoch.llm.message.BaseChatMessage;
-import ai.knowly.langtoch.llm.message.Role;
-import ai.knowly.langtoch.llm.message.UserMessage;
+import ai.knowly.langtoch.llm.schema.chat.AssistantMessage;
+import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
+import ai.knowly.langtoch.llm.schema.chat.Role;
+import ai.knowly.langtoch.llm.schema.chat.UserMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.Map.Entry;
 import org.junit.Before;
@@ -30,7 +30,7 @@ public class ConversationMemoryTest {
         Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
 
     // Act
-    Iterable<BaseChatMessage> messages = conversationMemory.get(Role.USER);
+    Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
     // Assert
     assertThat(messages)
@@ -40,7 +40,7 @@ public class ConversationMemoryTest {
   @Test
   public void testGetNotPresent() {
     // Act
-    Iterable<BaseChatMessage> messages = conversationMemory.get(Role.USER);
+    Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
     // Assert
     assertThat(messages).isEmpty();
@@ -57,8 +57,8 @@ public class ConversationMemoryTest {
     conversationMemory.clear();
 
     // Act
-    Iterable<BaseChatMessage> userMessages = conversationMemory.get(Role.USER);
-    Iterable<BaseChatMessage> assistantMessages = conversationMemory.get(Role.ASSISTANT);
+    Iterable<ChatMessage> userMessages = conversationMemory.get(Role.USER);
+    Iterable<ChatMessage> assistantMessages = conversationMemory.get(Role.ASSISTANT);
 
     // Assert
     assertThat(userMessages).isEmpty();
@@ -78,7 +78,7 @@ public class ConversationMemoryTest {
         AssistantMessage.builder().setMessage("It's sunny in Mountain View, CA.").build());
 
     // Act
-    ImmutableList<BaseChatMessage> actual =
+    ImmutableList<ChatMessage> actual =
         conversationMemory.getMemory().entries().stream()
             .map(Entry::getValue)
             .collect(toImmutableList());

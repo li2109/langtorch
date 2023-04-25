@@ -1,5 +1,7 @@
 package ai.knowly.langtoch.prompt.template;
 
+import ai.knowly.langtoch.llm.schema.io.Input;
+import ai.knowly.langtoch.llm.schema.io.Output;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
@@ -18,14 +20,14 @@ import java.util.regex.Pattern;
  * <p>Note: variables must be one or more word characters (letters, digits, or underscores).
  */
 @AutoValue
-public abstract class PromptTemplate {
+public abstract class PromptTemplate implements Input, Output {
   public static final String VARIABLE_TEMPLATE_PATTERN = "\\{\\{\\$([a-zA-Z0-9_]+)\\}\\}";
   private static final String DEFAULT_EXAMPLE_HEADER = "Here's examples:\n";
 
   public static Builder builder() {
     return new AutoValue_PromptTemplate.Builder().setExamples(ImmutableList.of());
   }
-
+  
   public static ImmutableList<String> extractVariableNames(String template) {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
     Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
@@ -57,6 +59,8 @@ public abstract class PromptTemplate {
     }
     return Optional.of(builder.toString());
   }
+
+  public abstract Builder toBuilder();
 
   public abstract Optional<String> template();
 

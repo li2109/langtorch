@@ -1,7 +1,7 @@
 package ai.knowly.langtoch.memory.conversation;
 
-import ai.knowly.langtoch.llm.message.BaseChatMessage;
-import ai.knowly.langtoch.llm.message.Role;
+import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
+import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.memory.Memory;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
@@ -12,21 +12,21 @@ import java.util.Map.Entry;
 
 /** Implementation of Memory for storing conversation-related key-value pairs. */
 @AutoValue
-public abstract class ConversationMemory extends Memory<Role, BaseChatMessage> {
+public abstract class ConversationMemory extends Memory<Role, ChatMessage> {
 
   public static ConversationMemory create() {
     return new AutoValue_ConversationMemory(LinkedHashMultimap.create());
   }
 
-  abstract Multimap<Role, BaseChatMessage> memory();
+  abstract Multimap<Role, ChatMessage> memory();
 
   @Override
-  public void add(Role key, BaseChatMessage value) {
+  public void add(Role key, ChatMessage value) {
     memory().put(key, value);
   }
 
   @Override
-  public List<BaseChatMessage> get(Role key) {
+  public List<ChatMessage> get(Role key) {
     return ImmutableList.copyOf(memory().get(key));
   }
 
@@ -36,7 +36,7 @@ public abstract class ConversationMemory extends Memory<Role, BaseChatMessage> {
   }
 
   @Override
-  public Multimap<Role, BaseChatMessage> getMemory() {
+  public Multimap<Role, ChatMessage> getMemory() {
     return memory();
   }
 
@@ -48,7 +48,7 @@ public abstract class ConversationMemory extends Memory<Role, BaseChatMessage> {
 
     StringBuilder prompt = new StringBuilder();
     prompt.append("Current conversation:\n");
-    for (Entry<Role, BaseChatMessage> entry : memory().entries()) {
+    for (Entry<Role, ChatMessage> entry : memory().entries()) {
       prompt.append(entry.getKey().toString());
       prompt.append(": ");
       prompt.append(entry.getValue().getMessage());

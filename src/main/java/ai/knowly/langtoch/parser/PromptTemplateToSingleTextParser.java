@@ -3,7 +3,7 @@ package ai.knowly.langtoch.parser;
 import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 
-public class PromptTemplateToSingleTextParser extends Parser<PromptTemplate, SingleText> {
+public class PromptTemplateToSingleTextParser implements Parser<PromptTemplate, SingleText> {
 
   private PromptTemplateToSingleTextParser() {
     super();

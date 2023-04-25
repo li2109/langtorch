@@ -5,7 +5,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
-import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.service.OpenAiService;
 import org.junit.Test;
@@ -26,11 +25,11 @@ public class SimpleTextCapabilityUnitTest {
                 "Changsha is a city in Hunan province, China."));
 
     // Act.
-    SingleText output =
+    String output =
         SimpleTextCapabilityUnit.create(OpenAITextProcessor.create(openAiService))
-            .run(SingleText.of("Where is Changsha?"));
+            .run("Where is Changsha?");
 
     // Assert.
-    assertThat(output.getText()).isEqualTo("Changsha is a city in Hunan province, China.");
+    assertThat(output).isEqualTo("Changsha is a city in Hunan province, China.");
   }
 }

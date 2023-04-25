@@ -5,7 +5,6 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
-import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;

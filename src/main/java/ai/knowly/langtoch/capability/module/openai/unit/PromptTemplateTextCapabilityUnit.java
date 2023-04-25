@@ -1,22 +1,28 @@
 package ai.knowly.langtoch.capability.module.openai.unit;
 
-import ai.knowly.langtoch.capability.unit.CapabilityUnitWithParser;
+import ai.knowly.langtoch.capability.unit.CapabilityUnit;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.llm.schema.io.SingleText;
-import ai.knowly.langtoch.parser.PromptTemplateToSingleTextParser;
+import ai.knowly.langtoch.parser.SingleTextToStringParser;
+import ai.knowly.langtoch.parser.StringToSingleTextParser;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
+import java.util.Map;
+import java.util.Optional;
 
 public class PromptTemplateTextCapabilityUnit
-    extends CapabilityUnitWithParser<PromptTemplate, SingleText, SingleText, SingleText> {
+    extends CapabilityUnit<String, SingleText, SingleText, String> {
+  private Optional<PromptTemplate> promptTemplate;
 
   private PromptTemplateTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
-    super(openAITextProcessor);
-    super.withInputParser(PromptTemplateToSingleTextParser.create());
+    super(
+        StringToSingleTextParser.create(), SingleTextToStringParser.create(), openAITextProcessor);
   }
 
   private PromptTemplateTextCapabilityUnit() {
-    super(OpenAITextProcessor.create());
-    super.withInputParser(PromptTemplateToSingleTextParser.create());
+    super(
+        StringToSingleTextParser.create(),
+        SingleTextToStringParser.create(),
+        OpenAITextProcessor.create());
   }
 
   public static PromptTemplateTextCapabilityUnit create() {
@@ -27,8 +33,16 @@ public class PromptTemplateTextCapabilityUnit
     return new PromptTemplateTextCapabilityUnit(openAITextProcessor);
   }
 
-  @Override
-  public SingleText run(PromptTemplate input) {
-    return super.run(input);
+  public PromptTemplateTextCapabilityUnit withPromptTemplate(PromptTemplate promptTemplate) {
+    this.promptTemplate = Optional.ofNullable(promptTemplate);
+    return this;
+  }
+
+  public String run(Map<String, String> variableMap) {
+    if (promptTemplate.isEmpty()) {
+      throw new RuntimeException("Prompt template is not set");
+    }
+    return super.run(
+        promptTemplate.get().toBuilder().addAllVariableValuePairs(variableMap).build().format());
   }
 }

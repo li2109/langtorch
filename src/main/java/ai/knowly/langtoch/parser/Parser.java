@@ -1,5 +1,6 @@
 package ai.knowly.langtoch.parser;
 
-public abstract class Parser<T, R> {
-  public abstract R parse(T input);
+@FunctionalInterface
+public interface Parser<T, R> {
+  R parse(T input);
 }

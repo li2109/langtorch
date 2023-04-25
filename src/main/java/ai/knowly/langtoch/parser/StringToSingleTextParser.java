@@ -2,7 +2,7 @@ package ai.knowly.langtoch.parser;
 
 import ai.knowly.langtoch.llm.schema.io.SingleText;
 
-public class StringToSingleTextParser extends Parser<String, SingleText> {
+public class StringToSingleTextParser implements Parser<String, SingleText> {
 
   private StringToSingleTextParser() {
     super();

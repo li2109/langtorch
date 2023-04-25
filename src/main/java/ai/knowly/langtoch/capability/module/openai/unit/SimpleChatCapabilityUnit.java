@@ -1,12 +1,12 @@
 package ai.knowly.langtoch.capability.module.openai.unit;
 
-import ai.knowly.langtoch.capability.unit.CapabilityUnitWithParser;
+import ai.knowly.langtoch.capability.unit.CapabilityUnit;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
 
 public class SimpleChatCapabilityUnit
-    extends CapabilityUnitWithParser<String, MultiChatMessage, ChatMessage, String> {
+    extends CapabilityUnit<MultiChatMessage, MultiChatMessage, ChatMessage, ChatMessage> {
 
   private SimpleChatCapabilityUnit(OpenAIChatProcessor openAIChatProcessor) {
     super(openAIChatProcessor);

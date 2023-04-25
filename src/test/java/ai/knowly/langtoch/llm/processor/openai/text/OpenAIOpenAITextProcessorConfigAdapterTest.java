@@ -44,23 +44,28 @@ public class OpenAIOpenAITextProcessorConfigAdapterTest {
 
     assertThat(completionRequest.getModel()).isEqualTo(openAITextProcessorConfig.getModel());
     assertThat(completionRequest.getPrompt()).isEqualTo("Test prompt");
-    assertThat(completionRequest.getSuffix()).isEqualTo(openAITextProcessorConfig.getSuffix().get());
+    assertThat(completionRequest.getSuffix())
+        .isEqualTo(openAITextProcessorConfig.getSuffix().get());
     assertThat(completionRequest.getMaxTokens())
         .isEqualTo(openAITextProcessorConfig.getMaxTokens().get());
     assertThat(completionRequest.getTemperature())
         .isEqualTo(openAITextProcessorConfig.getTemperature().get());
     assertThat(completionRequest.getTopP()).isEqualTo(openAITextProcessorConfig.getTopP().get());
     assertThat(completionRequest.getN()).isEqualTo(openAITextProcessorConfig.getN().get());
-    assertThat(completionRequest.getStream()).isEqualTo(openAITextProcessorConfig.getStream().get());
-    assertThat(completionRequest.getLogprobs()).isEqualTo(openAITextProcessorConfig.getLogprobs().get());
+    assertThat(completionRequest.getStream())
+        .isEqualTo(openAITextProcessorConfig.getStream().get());
+    assertThat(completionRequest.getLogprobs())
+        .isEqualTo(openAITextProcessorConfig.getLogprobs().get());
     assertThat(completionRequest.getEcho()).isEqualTo(openAITextProcessorConfig.getEcho().get());
     assertThat(completionRequest.getStop()).isEqualTo(openAITextProcessorConfig.getStop());
     assertThat(completionRequest.getPresencePenalty())
         .isEqualTo(openAITextProcessorConfig.getPresencePenalty().get());
     assertThat(completionRequest.getFrequencyPenalty())
         .isEqualTo(openAITextProcessorConfig.getFrequencyPenalty().get());
-    assertThat(completionRequest.getBestOf()).isEqualTo(openAITextProcessorConfig.getBestOf().get());
-    assertThat(completionRequest.getLogitBias()).isEqualTo(openAITextProcessorConfig.getLogitBias());
+    assertThat(completionRequest.getBestOf())
+        .isEqualTo(openAITextProcessorConfig.getBestOf().get());
+    assertThat(completionRequest.getLogitBias())
+        .isEqualTo(openAITextProcessorConfig.getLogitBias());
     assertThat(completionRequest.getUser()).isEqualTo(openAITextProcessorConfig.getUser().get());
   }
 }

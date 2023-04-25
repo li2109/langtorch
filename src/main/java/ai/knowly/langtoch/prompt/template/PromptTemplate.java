@@ -27,7 +27,7 @@ public abstract class PromptTemplate implements Input, Output {
   public static Builder builder() {
     return new AutoValue_PromptTemplate.Builder().setExamples(ImmutableList.of());
   }
-  
+
   public static ImmutableList<String> extractVariableNames(String template) {
     ImmutableList.Builder<String> builder = ImmutableList.builder();
     Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);

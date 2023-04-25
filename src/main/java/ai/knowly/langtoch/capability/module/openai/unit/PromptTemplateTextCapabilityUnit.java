@@ -9,6 +9,10 @@ import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 import java.util.Optional;
 
+/**
+ * A capability unit that contains a prompt template and accepts a map of variable-value pairs to
+ * the prompt template.
+ */
 public class PromptTemplateTextCapabilityUnit
     extends CapabilityUnit<String, SingleText, SingleText, String> {
   private Optional<PromptTemplate> promptTemplate;

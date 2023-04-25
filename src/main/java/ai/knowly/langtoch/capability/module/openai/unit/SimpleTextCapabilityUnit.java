@@ -6,6 +6,7 @@ import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.parser.SingleTextToStringParser;
 import ai.knowly.langtoch.parser.StringToSingleTextParser;
 
+/** A simple text capability unit that leverages openai api to generate response */
 public class SimpleTextCapabilityUnit
     extends CapabilityUnit<String, SingleText, SingleText, String> {
 

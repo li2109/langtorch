@@ -5,6 +5,7 @@ import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
 
+/** A simple chat capability unit that leverages openai api to generate response */
 public class SimpleChatCapabilityUnit
     extends CapabilityUnit<MultiChatMessage, MultiChatMessage, ChatMessage, ChatMessage> {
 

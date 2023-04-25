@@ -24,7 +24,7 @@ public class PromptTemplateToSingleTextParserTest {
     SingleText result = parser.parse(promptTemplate);
 
     // Assert
-    Truth.assertThat(result.getText()).isEqualTo("Hello, World!");
+    Truth.assertThat(result.getText()).isEqualTo("Create a name for search engine company");
   }
 
   @Test

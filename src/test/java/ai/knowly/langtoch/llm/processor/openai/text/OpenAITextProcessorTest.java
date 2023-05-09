@@ -43,7 +43,6 @@ public class OpenAITextProcessorTest {
                 .suffix("test-suffix")
                 .prompt("input1")
                 .logitBias(Map.of())
-                .stop(List.of())
                 .build()))
         .thenReturn(
             OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));

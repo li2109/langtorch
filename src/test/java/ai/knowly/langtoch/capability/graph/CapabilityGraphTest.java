@@ -104,6 +104,7 @@ public class CapabilityGraphTest {
     // Act & Assert: Expect a RuntimeException due to the cycle in the graph
     assertThrows(RuntimeException.class, () -> capabilityGraph.process(initialInputMap));
   }
+
   //
   //  @Test
   //  public void testConcatenatedNodeAdapters() {

@@ -15,6 +15,7 @@ public abstract class OpenAITextProcessorConfig implements ProcessorConfig {
         .setLogitBias(Map.of())
         .setStop(List.of());
   }
+
   // Method to create a builder from the current instance
   abstract Builder toBuilder();
 

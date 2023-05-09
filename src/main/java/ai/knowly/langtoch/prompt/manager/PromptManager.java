@@ -128,6 +128,7 @@ public final class PromptManager {
   public boolean containsVersion(long version) {
     return promptTemplateVersions.containsKey(version);
   }
+
   /**
    * Adds a new prompt template with the specified version.
    *
@@ -139,6 +140,7 @@ public final class PromptManager {
     promptTemplateVersions.put(version, promptTemplate);
     return this;
   }
+
   /**
    * Removes a prompt template with the specified version.
    *
@@ -149,6 +151,7 @@ public final class PromptManager {
     promptTemplateVersions.remove(version);
     return this;
   }
+
   /**
    * Updates a prompt template with the specified version.
    *

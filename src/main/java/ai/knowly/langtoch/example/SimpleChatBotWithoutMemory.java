@@ -7,7 +7,7 @@ import java.io.InputStreamReader;
 
 public class SimpleChatBotWithoutMemory {
   public static void main(String[] args) {
-    String openAIKey = "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";
+    String openAIKey = "RandomKey";
     SimpleChatCapabilityUnit chatBot = SimpleChatCapabilityUnit.create(openAIKey);
     readInputUntilEXIT(chatBot);
   }

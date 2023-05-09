@@ -7,7 +7,6 @@ import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.completion.CompletionRequest;
 import com.theokanning.openai.service.OpenAiService;
-import java.util.List;
 import java.util.Map;
 import org.junit.Before;
 import org.junit.Test;

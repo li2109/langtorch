@@ -45,6 +45,10 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
     this.openAiService = new OpenAiService(getOpenAIApiKeyFromEnv(logger));
   }
 
+  public static OpenAIChatProcessor create(String openAIKey) {
+    return new OpenAIChatProcessor(new OpenAiService(openAIKey));
+  }
+
   // Factory method to create a new OpenAIChatProcessor instance
   public static OpenAIChatProcessor create() {
     return new OpenAIChatProcessor();

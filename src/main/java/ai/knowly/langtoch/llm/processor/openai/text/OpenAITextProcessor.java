@@ -44,6 +44,11 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
     return new OpenAITextProcessor(openAiService);
   }
 
+  // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
+  public static OpenAITextProcessor create(String openAIKey) {
+    return new OpenAITextProcessor(new OpenAiService(openAIKey));
+  }
+
   // Factory method to create a new OpenAITextProcessor instance
   public static OpenAITextProcessor create() {
     return new OpenAITextProcessor();

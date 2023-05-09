@@ -19,6 +19,8 @@ public class SimpleChatCapabilityUnit
 
   private SimpleChatCapabilityUnit() {
     super(OpenAIChatProcessor.create());
+    super.withInputParser((input) -> MultiChatMessage.of(ChatMessage.of(Role.USER, input)))
+        .withOutputParser(Message::getMessage);
   }
 
   public static SimpleChatCapabilityUnit create() {

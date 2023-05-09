@@ -33,7 +33,9 @@ public final class OpenAIChatProcessorRequestConverter {
     openAIChatProcessorConfig.getTopP().ifPresent(completionRequestBuilder::topP);
     openAIChatProcessorConfig.getN().ifPresent(completionRequestBuilder::n);
     openAIChatProcessorConfig.getStream().ifPresent(completionRequestBuilder::stream);
-    completionRequestBuilder.stop(openAIChatProcessorConfig.getStop());
+    if (!openAIChatProcessorConfig.getStop().isEmpty()) {
+      completionRequestBuilder.stop(openAIChatProcessorConfig.getStop());
+    }
     openAIChatProcessorConfig.getMaxTokens().ifPresent(completionRequestBuilder::maxTokens);
     openAIChatProcessorConfig
         .getPresencePenalty()

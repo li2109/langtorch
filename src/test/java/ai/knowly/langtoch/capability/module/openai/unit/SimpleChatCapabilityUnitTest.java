@@ -7,7 +7,6 @@ import static org.mockito.Mockito.when;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.service.OpenAiService;
 import org.junit.Test;
@@ -28,12 +27,11 @@ public class SimpleChatCapabilityUnitTest {
                 ChatMessage.of(Role.ASSISTANT, "Changsha is a city in Hunan province, China.")));
 
     // Act.
-    ChatMessage response =
+    String response =
         SimpleChatCapabilityUnit.create(OpenAIChatProcessor.create(openAiService))
-            .run(MultiChatMessage.of(ChatMessage.of(Role.USER, "Where is Changsha?")));
+            .run("Where is Changsha?");
 
     // Assert.
-    assertThat(response.getMessage()).isEqualTo("Changsha is a city in Hunan province, China.");
-    assertThat(response.getRole()).isEqualTo(Role.ASSISTANT);
+    assertThat(response).isEqualTo("Changsha is a city in Hunan province, China.");
   }
 }

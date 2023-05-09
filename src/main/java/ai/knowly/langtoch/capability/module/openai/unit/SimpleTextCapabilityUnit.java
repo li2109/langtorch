@@ -26,6 +26,10 @@ public class SimpleTextCapabilityUnit
     return new SimpleTextCapabilityUnit();
   }
 
+  public static SimpleTextCapabilityUnit create(String openAIKey) {
+    return new SimpleTextCapabilityUnit(OpenAITextProcessor.create(openAIKey));
+  }
+
   public static SimpleTextCapabilityUnit create(OpenAITextProcessor openAITextProcessor) {
     return new SimpleTextCapabilityUnit(openAITextProcessor);
   }

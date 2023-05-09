@@ -24,7 +24,9 @@ public final class OpenAITextProcessorRequestConverter {
     openAITextProcessorConfig.getStream().ifPresent(completionRequest::setStream);
     openAITextProcessorConfig.getLogprobs().ifPresent(completionRequest::setLogprobs);
     openAITextProcessorConfig.getEcho().ifPresent(completionRequest::setEcho);
-    completionRequest.setStop(openAITextProcessorConfig.getStop());
+    if (!openAITextProcessorConfig.getStop().isEmpty()) {
+      completionRequest.setStop(openAITextProcessorConfig.getStop());
+    }
     openAITextProcessorConfig.getPresencePenalty().ifPresent(completionRequest::setPresencePenalty);
     openAITextProcessorConfig
         .getFrequencyPenalty()

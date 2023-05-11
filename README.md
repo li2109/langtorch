@@ -23,7 +23,7 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 [Documentation](https://docs.knowly.ai/langtorch/)
 
-## 🎯 Roadmap
+## 🎯 Roadmap: order does not matter below
 🔐 Feature 1: Implement Prompt Template and Annotation Based Prompt ✅
 
 🧑‍💼 Feature 2: Implement OpenAI LLM Provider ✅
@@ -39,6 +39,9 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 💳 Feature 7: Adding annotation based LLM service
 
 🌐 Feature 8: Implement Memory
+
+🌐 Feature 9: Add async and token streamming support.
+
 
 ## 🙏 Acknowledgements
 This library is inspired by the following libraries:

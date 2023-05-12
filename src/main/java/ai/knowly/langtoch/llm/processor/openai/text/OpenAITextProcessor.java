@@ -65,8 +65,13 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
 
   // Method to run the processor with the given input and return the output text
   @Override
-  public SingleText run(SingleText inputData) throws ExecutionException, InterruptedException {
-    return runAsync(CompletableFuture.completedFuture(inputData)).get();
+  public SingleText run(SingleText inputData) {
+    try {
+      return runAsync(CompletableFuture.completedFuture(inputData)).get();
+    } catch (InterruptedException | ExecutionException e) {
+      logger.atWarning().withCause(e).log("Error running OpenAI Text Processor");
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

@@ -10,6 +10,7 @@ import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.chat.SystemMessage;
 import ai.knowly.langtoch.llm.schema.chat.UserMessage;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import java.util.concurrent.CompletableFuture;
@@ -24,7 +25,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
   // Logger, default model, and default max tokens for this processor
   private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
   private static final int DEFAULT_MAX_TOKEN = 2048;
-
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   // OpenAiApi instance used for making requests
   private final OpenAiApi openAiApi;
   // Configuration for the OpenAI Chat Processor
@@ -67,9 +68,14 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
 
   // Method to run the processor with the given input and return the output chat message
   @Override
-  public ChatMessage run(MultiChatMessage inputData)
-      throws ExecutionException, InterruptedException {
-    return runAsync(CompletableFuture.completedFuture(inputData)).get();
+  public ChatMessage run(MultiChatMessage inputData) {
+    try {
+      return runAsync(CompletableFuture.completedFuture(inputData)).get();
+    } catch (InterruptedException | ExecutionException e) {
+      logger.atWarning().withCause(e).log(
+          "Error running OpenAIChatProcessor with input: %s", inputData);
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

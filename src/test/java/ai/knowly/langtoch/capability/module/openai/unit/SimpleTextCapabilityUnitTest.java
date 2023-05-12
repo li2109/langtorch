@@ -6,7 +6,9 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.service.OpenAiService;
+import com.theokanning.openai.OpenAiApi;
+import io.reactivex.Single;
+import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -14,19 +16,20 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleTextCapabilityUnitTest {
-  @Mock private OpenAiService openAiService;
+  @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() {
+  public void simpleTest() throws ExecutionException, InterruptedException {
     // Arrange.
-    when(openAiService.createCompletion(any()))
+    when(openAiApi.createCompletion(any()))
         .thenReturn(
-            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
-                "Changsha is a city in Hunan province, China."));
+            Single.just(
+                OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
+                    "Changsha is a city in Hunan province, China.")));
 
     // Act.
     String output =
-        SimpleTextCapabilityUnit.create(OpenAITextProcessor.create(openAiService))
+        SimpleTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
             .run("Where is Changsha?");
 
     // Assert.

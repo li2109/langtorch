@@ -5,9 +5,11 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
+import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.service.OpenAiService;
+import io.reactivex.Single;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -16,16 +18,16 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenAITextProcessorTest {
-  @Mock private OpenAiService openAiService;
+  @Mock private OpenAiApi openAiApi;
   private OpenAITextProcessor openAITextProcessor;
 
   @Before
   public void setUp() {
-    openAITextProcessor = new OpenAITextProcessor(openAiService);
+    openAITextProcessor = new OpenAITextProcessor(openAiApi);
   }
 
   @Test
-  public void testRun() {
+  public void testRun() throws ExecutionException, InterruptedException {
     // Arrange.
     SingleText inputData = SingleText.of("input1");
     OpenAITextProcessorConfig config =
@@ -35,7 +37,7 @@ public class OpenAITextProcessorTest {
             .setSuffix("test-suffix")
             .build();
 
-    when(openAiService.createCompletion(
+    when(openAiApi.createCompletion(
             CompletionRequest.builder()
                 .model("text-davinci-003")
                 .maxTokens(2048)
@@ -44,7 +46,8 @@ public class OpenAITextProcessorTest {
                 .logitBias(Map.of())
                 .build()))
         .thenReturn(
-            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));
+            Single.just(
+                OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response")));
 
     // Act.
     SingleText output = openAITextProcessor.withConfig(config).run(inputData);

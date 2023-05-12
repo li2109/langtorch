@@ -1,6 +1,7 @@
 package ai.knowly.langtoch.capability.graph;
 
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 
 /**
  * Interface representing a node in the CapabilityDAG.
@@ -13,5 +14,5 @@ public interface NodeAdapter<I, O> {
 
   List<String> getOutDegree();
 
-  O process(Iterable<I> inputs);
+  O process(Iterable<I> inputs) throws ExecutionException, InterruptedException;
 }

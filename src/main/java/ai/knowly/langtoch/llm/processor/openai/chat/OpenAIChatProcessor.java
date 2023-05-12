@@ -1,18 +1,19 @@
 package ai.knowly.langtoch.llm.processor.openai.chat;
 
-import static ai.knowly.langtoch.llm.Utils.getOpenAIApiKeyFromEnv;
+import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
 import ai.knowly.langtoch.llm.processor.Processor;
+import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.llm.schema.chat.AssistantMessage;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.chat.SystemMessage;
 import ai.knowly.langtoch.llm.schema.chat.UserMessage;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
-import com.google.common.flogger.FluentLogger;
+import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatCompletionResult;
-import com.theokanning.openai.service.OpenAiService;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
 
 /**
@@ -21,12 +22,11 @@ import javax.inject.Inject;
  */
 public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMessage> {
   // Logger, default model, and default max tokens for this processor
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
   private static final int DEFAULT_MAX_TOKEN = 2048;
 
-  // OpenAiService instance used for making requests
-  private final OpenAiService openAiService;
+  // OpenAiApi instance used for making requests
+  private final OpenAiApi openAiApi;
   // Configuration for the OpenAI Chat Processor
   private OpenAIChatProcessorConfig openAIChatProcessorConfig =
       OpenAIChatProcessorConfig.builder()
@@ -36,17 +36,17 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
 
   // Constructor with dependency injection
   @Inject
-  OpenAIChatProcessor(OpenAiService openAiService) {
-    this.openAiService = openAiService;
+  OpenAIChatProcessor(OpenAiApi openAiApi) {
+    this.openAiApi = openAiApi;
   }
 
   // Private constructor used in factory methods
   private OpenAIChatProcessor() {
-    this.openAiService = new OpenAiService(getOpenAIApiKeyFromEnv(logger));
+    this.openAiApi = OpenAIServiceProvider.createOpenAiAPI();
   }
 
   public static OpenAIChatProcessor create(String openAIKey) {
-    return new OpenAIChatProcessor(new OpenAiService(openAIKey));
+    return new OpenAIChatProcessor(OpenAIServiceProvider.createOpenAiAPI(openAIKey));
   }
 
   // Factory method to create a new OpenAIChatProcessor instance
@@ -54,9 +54,9 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
     return new OpenAIChatProcessor();
   }
 
-  // Factory method to create a new OpenAIChatProcessor instance with a given OpenAiService instance
-  public static OpenAIChatProcessor create(OpenAiService openAiService) {
-    return new OpenAIChatProcessor(openAiService);
+  // Factory method to create a new OpenAIChatProcessor instance with a given OpenAiApi instance
+  public static OpenAIChatProcessor create(OpenAiApi openAiApi) {
+    return new OpenAIChatProcessor(openAiApi);
   }
 
   // Method to set the processor configuration
@@ -67,25 +67,40 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
 
   // Method to run the processor with the given input and return the output chat message
   @Override
-  public ChatMessage run(MultiChatMessage inputData) {
-    ChatCompletionRequest chatCompletionRequest =
-        OpenAIChatProcessorRequestConverter.convert(
-            openAIChatProcessorConfig, inputData.getMessages());
+  public ChatMessage run(MultiChatMessage inputData)
+      throws ExecutionException, InterruptedException {
+    return runAsync(CompletableFuture.completedFuture(inputData)).get();
+  }
 
-    ChatCompletionResult chatCompletion = openAiService.createChatCompletion(chatCompletionRequest);
-    com.theokanning.openai.completion.chat.ChatMessage chatMessage =
-        chatCompletion.getChoices().get(0).getMessage();
-    if (Role.USER.name().toLowerCase().equals(chatMessage.getRole())) {
-      return UserMessage.builder().setMessage(chatMessage.getContent()).build();
-    }
-    if (Role.SYSTEM.name().toLowerCase().equals(chatMessage.getRole())) {
-      return SystemMessage.builder().setMessage(chatMessage.getContent()).build();
-    }
-    if (Role.ASSISTANT.name().toLowerCase().equals(chatMessage.getRole())) {
-      return AssistantMessage.builder().setMessage(chatMessage.getContent()).build();
-    }
-    throw new RuntimeException(
-        String.format(
-            "Unknown role %s with message: %s ", chatMessage.getRole(), chatMessage.getContent()));
+  @Override
+  public CompletableFuture<ChatMessage> runAsync(CompletableFuture<MultiChatMessage> inputData) {
+    return inputData.thenCompose(
+        data -> {
+          ChatCompletionRequest chatCompletionRequest =
+              OpenAIChatProcessorRequestConverter.convert(
+                  openAIChatProcessorConfig, data.getMessages());
+
+          return singleToCompletableFuture(openAiApi.createChatCompletion(chatCompletionRequest))
+              .thenApply(
+                  chatCompletion -> {
+                    com.theokanning.openai.completion.chat.ChatMessage chatMessage =
+                        chatCompletion.getChoices().get(0).getMessage();
+                    if (Role.USER.name().toLowerCase().equals(chatMessage.getRole())) {
+                      return UserMessage.builder().setMessage(chatMessage.getContent()).build();
+                    }
+                    if (Role.SYSTEM.name().toLowerCase().equals(chatMessage.getRole())) {
+                      return SystemMessage.builder().setMessage(chatMessage.getContent()).build();
+                    }
+                    if (Role.ASSISTANT.name().toLowerCase().equals(chatMessage.getRole())) {
+                      return AssistantMessage.builder()
+                          .setMessage(chatMessage.getContent())
+                          .build();
+                    }
+                    throw new RuntimeException(
+                        String.format(
+                            "Unknown role %s with message: %s ",
+                            chatMessage.getRole(), chatMessage.getContent()));
+                  });
+        });
   }
 }

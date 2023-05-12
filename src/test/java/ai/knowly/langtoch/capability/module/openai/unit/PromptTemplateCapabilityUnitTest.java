@@ -8,8 +8,10 @@ import static org.mockito.Mockito.when;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.service.OpenAiService;
+import com.theokanning.openai.OpenAiApi;
+import io.reactivex.Single;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -17,17 +19,18 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class PromptTemplateCapabilityUnitTest {
-  @Mock private OpenAiService openAiService;
+  @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() {
+  public void simpleTest() throws ExecutionException, InterruptedException {
     // Arrange.
-    when(openAiService.createCompletion(any()))
-        .thenReturn(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google"));
+    when(openAiApi.createCompletion(any()))
+        .thenReturn(
+            Single.just(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google")));
 
     // Act.
     String response =
-        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiService))
+        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
             .withPromptTemplate(
                 PromptTemplate.builder().setTemplate("Create name for {{$area}} company").build())
             .run(Map.of("area", "search engine"));
@@ -37,14 +40,16 @@ public class PromptTemplateCapabilityUnitTest {
   }
 
   @Test
-  public void simpleTest_promptTemplateWithoutVariable() {
+  public void simpleTest_promptTemplateWithoutVariable()
+      throws ExecutionException, InterruptedException {
     // Arrange.
-    when(openAiService.createCompletion(any()))
-        .thenReturn(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google"));
+    when(openAiApi.createCompletion(any()))
+        .thenReturn(
+            Single.just(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google")));
 
     // Act.
     String response =
-        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiService))
+        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
             .withPromptTemplate(
                 PromptTemplate.builder()
                     .setTemplate("Create name for search engine company")
@@ -58,15 +63,16 @@ public class PromptTemplateCapabilityUnitTest {
   @Test
   public void promptTemplateWithoutVariable_withInputMap() {
     // Arrange.
-    when(openAiService.createCompletion(any()))
-        .thenReturn(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google"));
+    when(openAiApi.createCompletion(any()))
+        .thenReturn(
+            Single.just(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google")));
 
     // Act.
     // Assert.
     assertThrows(
         IllegalArgumentException.class,
         () ->
-            PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiService))
+            PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
                 .withPromptTemplate(
                     PromptTemplate.builder()
                         .setTemplate("Create name for search engine company")

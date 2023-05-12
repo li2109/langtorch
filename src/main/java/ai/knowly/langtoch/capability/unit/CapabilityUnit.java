@@ -5,6 +5,7 @@ import ai.knowly.langtoch.llm.schema.io.Input;
 import ai.knowly.langtoch.llm.schema.io.Output;
 import ai.knowly.langtoch.parser.Parser;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 public abstract class CapabilityUnit<T, I extends Input, R extends Output, U> {
   private Optional<Parser<T, I>> inputParser;
@@ -24,7 +25,7 @@ public abstract class CapabilityUnit<T, I extends Input, R extends Output, U> {
     this.processor = processor;
   }
 
-  public final U run(T input) {
+  public final U run(T input) throws ExecutionException, InterruptedException {
     Optional<I> parsedInput = inputParser.map(parser -> parser.parse(input));
     I processedInput;
     if (parsedInput.isPresent()) {

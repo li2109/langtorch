@@ -7,9 +7,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 
 public class SequentialChain {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ExecutionException, InterruptedException {
     SimpleTextCapabilityUnit unit = SimpleTextCapabilityUnit.create();
 
     // Graph:
@@ -55,7 +56,7 @@ public class SequentialChain {
     }
 
     @Override
-    public String process(Iterable<String> inputs) {
+    public String process(Iterable<String> inputs) throws ExecutionException, InterruptedException {
       return this.unit.run(
           "Please provide a creative company name based on the business description: "
               + ImmutableList.copyOf(inputs).get(0));
@@ -89,7 +90,7 @@ public class SequentialChain {
     }
 
     @Override
-    public String process(Iterable<String> inputs) {
+    public String process(Iterable<String> inputs) throws ExecutionException, InterruptedException {
       return this.unit.run(
           "Please provide a creative slogan based on the company name: "
               + ImmutableList.copyOf(inputs).get(0));

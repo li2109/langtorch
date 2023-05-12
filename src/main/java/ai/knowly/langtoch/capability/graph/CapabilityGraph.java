@@ -5,6 +5,7 @@ import com.google.common.collect.ArrayListMultimap;
 import com.google.common.collect.Multimap;
 import com.google.common.reflect.TypeToken;
 import java.util.*;
+import java.util.concurrent.ExecutionException;
 
 /** Class representing a directed acyclic graph (DAG) of capabilities. */
 @AutoValue
@@ -50,7 +51,8 @@ public abstract class CapabilityGraph {
    * @param initialInputMap Map of node IDs to their initial input values
    * @return Map of end node IDs to their final output values
    */
-  public Map<String, Object> process(Map<String, Object> initialInputMap) {
+  public Map<String, Object> process(Map<String, Object> initialInputMap)
+      throws ExecutionException, InterruptedException {
     for (Map.Entry<String, Object> entry : initialInputMap.entrySet()) {
       setInitialInput(entry.getKey(), entry.getValue());
     }
@@ -74,7 +76,8 @@ public abstract class CapabilityGraph {
   }
 
   @SuppressWarnings("unchecked")
-  private <I, O> O processNode(NodeAdapter<I, O> nodeAdapter, Collection<Object> input) {
+  private <I, O> O processNode(NodeAdapter<I, O> nodeAdapter, Collection<Object> input)
+      throws ExecutionException, InterruptedException {
     Iterable<I> typedInput = (Iterable<I>) input;
     return nodeAdapter.process(typedInput);
   }

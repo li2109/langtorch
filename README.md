@@ -49,3 +49,8 @@ This library is inspired by the following libraries:
  - [semantic-kernel](https://github.com/microsoft/semantic-kernel)
  - [openai-java](https://github.com/TheoKanning/openai-java)
 
+
+##  🌟 Star History
+
+[![Star History Chart](https://api.star-history.com/svg?repos=Knowly-ai/langtorch&type=Timeline)](https://star-history.com/#Knowly-ai/langtorch&Timeline)
+

@@ -11,6 +11,64 @@ import org.junit.runners.JUnit4;
 
 @RunWith(JUnit4.class)
 public class PromptTemplateTest {
+  @Test
+  public void promptTemplateWithReusableVariable() {
+    // Arrange.
+    PromptTemplate promptTemplate =
+        PromptTemplate.builder()
+            .setExampleHeader("Here's one example:")
+            .setExamples(
+                ImmutableList.of(
+                    "What is 25% of 1400?\n"
+                        + "a) 700\n"
+                        + "b) 350\n"
+                        + "c) 1050\n"
+                        + "d) 1000\n"
+                        + "answer: b"))
+            .setTemplate(
+                "Can you please generate a trivia question by following the response template:\n"
+                    + "{question}\n"
+                    + "{option A}\n"
+                    + "{option B}\n"
+                    + "{option C}\n"
+                    + "{option D}\n"
+                    + "{answer}")
+            .build();
+
+    // Act.
+    // Assert.
+    assertThat(promptTemplate.format())
+        .isEqualTo(
+            "Can you please generate a trivia question by following the response template:\n"
+                + "{question}\n"
+                + "{option A}\n"
+                + "{option B}\n"
+                + "{option C}\n"
+                + "{option D}\n"
+                + "{answer}\n"
+                + "Here's one example:\n"
+                + "What is 25% of 1400?\n"
+                + "a) 700\n"
+                + "b) 350\n"
+                + "c) 1050\n"
+                + "d) 1000\n"
+                + "answer: b\n");
+  }
+
+  @Test
+  public void promptTemplateWithSections() {
+    // Arrange.
+    PromptTemplate promptTemplate =
+        PromptTemplate.builder().setTemplate("What's the stock price of {{$ticker}}?").build();
+
+    // Act.
+    // Assert.
+    assertThat(promptTemplate.toBuilder().addVariableValuePair("ticker", "GOOG").build().format())
+        .isEqualTo("What's the stock price of GOOG?");
+
+    assertThat(promptTemplate.toBuilder().addVariableValuePair("ticker", "MSFT").build().format())
+        .isEqualTo("What's the stock price of MSFT?");
+  }
 
   @Test
   public void testPromptTemplateExample() {

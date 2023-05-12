@@ -39,13 +39,20 @@ public class PromptTemplateTest {
     // Assert.
     assertThat(promptTemplate.format())
         .isEqualTo(
-            "Can you please generate a trivia question by following the response template:\\n\"\n"
-                + "                    + \"{question}\\n\"\n"
-                + "                    + \"{option A}\\n\"\n"
-                + "                    + \"{option B}\\n\"\n"
-                + "                    + \"{option C}\\n\"\n"
-                + "                    + \"{option D}\\n\"\n"
-                + "                    + \"{answer}");
+            "Can you please generate a trivia question by following the response template:\n"
+                + "{question}\n"
+                + "{option A}\n"
+                + "{option B}\n"
+                + "{option C}\n"
+                + "{option D}\n"
+                + "{answer}\n"
+                + "Here's one example:\n"
+                + "What is 25% of 1400?\n"
+                + "a) 700\n"
+                + "b) 350\n"
+                + "c) 1050\n"
+                + "d) 1000\n"
+                + "answer: b\n");
   }
 
   @Test

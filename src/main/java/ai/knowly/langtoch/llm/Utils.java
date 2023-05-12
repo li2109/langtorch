@@ -19,7 +19,7 @@ public class Utils {
     return openaiApiKey;
   }
 
-    public static <T> CompletableFuture<T> singleToCompletableFuture(Single<T> single) {
+  public static <T> CompletableFuture<T> singleToCompletableFuture(Single<T> single) {
     CompletableFuture<T> future = new CompletableFuture<>();
     single.subscribe(future::complete, future::completeExceptionally);
     return future;

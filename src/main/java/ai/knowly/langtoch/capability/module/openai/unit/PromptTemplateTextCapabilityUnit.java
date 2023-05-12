@@ -8,6 +8,7 @@ import ai.knowly.langtoch.parser.StringToSingleTextParser;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.util.Map;
 import java.util.Optional;
+import java.util.concurrent.ExecutionException;
 
 /**
  * A capability unit that contains a prompt template and accepts a map of variable-value pairs to
@@ -42,7 +43,8 @@ public class PromptTemplateTextCapabilityUnit
     return this;
   }
 
-  public String run(Map<String, String> variableMap) {
+  public String run(Map<String, String> variableMap)
+      throws ExecutionException, InterruptedException {
     if (promptTemplate.isEmpty()) {
       throw new RuntimeException("Prompt template is not set");
     }

@@ -4,16 +4,18 @@ import ai.knowly.langtoch.capability.module.openai.unit.SimpleChatCapabilityUnit
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
+import java.util.concurrent.ExecutionException;
 
 public class SimpleChatBotWithoutExplicitKey {
-  public static void main(String[] args) {
+  public static void main(String[] args) throws ExecutionException, InterruptedException {
     // Reading the key from the environment variable under Resource folder(.env file, OPENAI_API_KEY
     // field)
     SimpleChatCapabilityUnit chatBot = SimpleChatCapabilityUnit.create();
     readInputUntilEXIT(chatBot);
   }
 
-  private static void readInputUntilEXIT(SimpleChatCapabilityUnit chatBot) {
+  private static void readInputUntilEXIT(SimpleChatCapabilityUnit chatBot)
+      throws ExecutionException, InterruptedException {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       final String sentinel = "EXIT"; // Define a sentinel value to exit the loop

@@ -9,6 +9,7 @@ import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -19,7 +20,7 @@ public class CapabilityGraphTest {
   @Mock OpenAiService openAIChat;
 
   @Test
-  public void testProcessGraph_sumInputs() {
+  public void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
     NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("D"));
@@ -42,7 +43,7 @@ public class CapabilityGraphTest {
   }
 
   @Test
-  public void testProcessGraph_multiplyInputs() {
+  public void testProcessGraph_multiplyInputs() throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a =
         new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
@@ -66,7 +67,8 @@ public class CapabilityGraphTest {
   }
 
   @Test
-  public void testProcessGraph_withInitialMultipleInputs() {
+  public void testProcessGraph_withInitialMultipleInputs()
+      throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", List.of("B"));
     NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("C"));

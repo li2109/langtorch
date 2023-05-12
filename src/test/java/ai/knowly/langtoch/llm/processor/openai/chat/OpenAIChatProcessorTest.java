@@ -8,9 +8,11 @@ import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.service.OpenAiService;
+import com.theokanning.openai.OpenAiApi;
+import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.List;
+import java.util.concurrent.ExecutionException;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -19,26 +21,27 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class OpenAIChatProcessorTest {
-  @Mock private OpenAiService openAiService;
+  @Mock private OpenAiApi OpenAiApi;
   private OpenAIChatProcessor openAIChatProcessor;
 
   @Before
   public void setUp() {
-    openAIChatProcessor = new OpenAIChatProcessor(openAiService);
+    openAIChatProcessor = new OpenAIChatProcessor(OpenAiApi);
   }
 
   @Test
-  public void testRunWithChatProcessorConfig() {
+  public void testRunWithChatProcessorConfig() throws ExecutionException, InterruptedException {
     // Arrange
     List<ChatMessage> messages =
         Arrays.asList(
             ChatMessage.of(Role.USER, "What is the weather today?"),
             ChatMessage.of(Role.ASSISTANT, "The weather today is sunny."));
 
-    when(openAiService.createChatCompletion(any()))
+    when(OpenAiApi.createChatCompletion(any()))
         .thenReturn(
-            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
-                ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day.")));
+            Single.just(
+                OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                    ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day."))));
 
     // Act
     ChatMessage output = openAIChatProcessor.run(MultiChatMessage.of(messages));

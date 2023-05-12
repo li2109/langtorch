@@ -8,7 +8,9 @@ import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
 import ai.knowly.langtoch.llm.schema.chat.Role;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.service.OpenAiService;
+import com.theokanning.openai.OpenAiApi;
+import io.reactivex.Single;
+import java.util.concurrent.ExecutionException;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.mockito.Mock;
@@ -16,19 +18,21 @@ import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
 public class SimpleChatCapabilityUnitTest {
-  @Mock private OpenAiService openAiService;
+  @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() {
+  public void simpleTest() throws ExecutionException, InterruptedException {
     // Arrange.
-    when(openAiService.createChatCompletion(any()))
+    when(openAiApi.createChatCompletion(any()))
         .thenReturn(
-            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
-                ChatMessage.of(Role.ASSISTANT, "Changsha is a city in Hunan province, China.")));
+            Single.just(
+                OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                    ChatMessage.of(
+                        Role.ASSISTANT, "Changsha is a city in Hunan province, China."))));
 
     // Act.
     String response =
-        SimpleChatCapabilityUnit.create(OpenAIChatProcessor.create(openAiService))
+        SimpleChatCapabilityUnit.create(OpenAIChatProcessor.create(openAiApi))
             .run("Where is Changsha?");
 
     // Assert.

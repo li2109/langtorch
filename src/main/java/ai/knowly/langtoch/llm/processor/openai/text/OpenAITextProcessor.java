@@ -1,14 +1,16 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
-import static ai.knowly.langtoch.llm.Utils.getOpenAIApiKeyFromEnv;
+import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
 import ai.knowly.langtoch.llm.processor.Processor;
+import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.llm.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
+import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.CompletionRequest;
-import com.theokanning.openai.completion.CompletionResult;
-import com.theokanning.openai.service.OpenAiService;
+import java.util.concurrent.CompletableFuture;
+import java.util.concurrent.ExecutionException;
 
 /**
  * OpenAI text processor implementation. Handles single text input and output for the OpenAI
@@ -20,8 +22,9 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final int DEFAULT_MAX_TOKENS = 2048;
 
-  // OpenAiService instance used for making requests
-  private final OpenAiService openAiService;
+  // OpenAiApi instance used for making requests
+  private final OpenAiApi openAiApi;
+
   // Configuration for the OpenAI Text Processor
   private OpenAITextProcessorConfig openAITextProcessorConfig =
       OpenAITextProcessorConfig.builder()
@@ -30,23 +33,23 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
           .build();
 
   // Constructor with dependency injection
-  OpenAITextProcessor(OpenAiService openAiService) {
-    this.openAiService = openAiService;
+  OpenAITextProcessor(OpenAiApi openAiApi) {
+    this.openAiApi = openAiApi;
   }
 
   // Private constructor used in factory methods
   private OpenAITextProcessor() {
-    this.openAiService = new OpenAiService(getOpenAIApiKeyFromEnv(logger));
+    this.openAiApi = OpenAIServiceProvider.createOpenAiAPI();
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
-  public static OpenAITextProcessor create(OpenAiService openAiService) {
-    return new OpenAITextProcessor(openAiService);
+  public static OpenAITextProcessor create(OpenAiApi openAiApi) {
+    return new OpenAITextProcessor(openAiApi);
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
   public static OpenAITextProcessor create(String openAIKey) {
-    return new OpenAITextProcessor(new OpenAiService(openAIKey));
+    return new OpenAITextProcessor(OpenAIServiceProvider.createOpenAiAPI(openAIKey));
   }
 
   // Factory method to create a new OpenAITextProcessor instance
@@ -62,12 +65,24 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
 
   // Method to run the processor with the given input and return the output text
   @Override
-  public SingleText run(SingleText inputData) {
-    CompletionRequest completionRequest =
-        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, inputData.getText());
+  public SingleText run(SingleText inputData) throws ExecutionException, InterruptedException {
+    return runAsync(CompletableFuture.completedFuture(inputData)).get();
+  }
 
-    CompletionResult completion = openAiService.createCompletion(completionRequest);
-    String response = completion.getChoices().get(0).getText();
-    return SingleText.of(response);
+  @Override
+  public CompletableFuture<SingleText> runAsync(CompletableFuture<SingleText> inputData) {
+    return inputData.thenCompose(
+        data -> {
+          CompletionRequest completionRequest =
+              OpenAITextProcessorRequestConverter.convert(
+                  openAITextProcessorConfig, data.getText());
+
+          return singleToCompletableFuture(openAiApi.createCompletion(completionRequest))
+              .thenApply(
+                  completion -> {
+                    String response = completion.getChoices().get(0).getText();
+                    return SingleText.of(response);
+                  });
+        });
   }
 }

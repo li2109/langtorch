@@ -6,6 +6,9 @@ import com.theokanning.openai.completion.CompletionResult;
 import com.theokanning.openai.completion.chat.ChatCompletionChoice;
 import com.theokanning.openai.completion.chat.ChatCompletionResult;
 import com.theokanning.openai.completion.chat.ChatMessage;
+import com.theokanning.openai.embedding.EmbeddingResult;
+
+import java.util.List;
 
 public class OpenAIServiceTestingUtils {
 
@@ -80,6 +83,14 @@ public class OpenAIServiceTestingUtils {
         builder.add(completionChoice);
       }
       return builder.build();
+    }
+  }
+
+  public static class Embeddings {
+    public static EmbeddingResult createQueryEmbeddingResult(String inputData) {
+      EmbeddingResult embeddingResult = new EmbeddingResult();
+      embeddingResult.setObject("list");
+      return embeddingResult;
     }
   }
 }

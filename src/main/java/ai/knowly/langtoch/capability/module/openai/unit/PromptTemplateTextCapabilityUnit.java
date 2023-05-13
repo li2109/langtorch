@@ -18,19 +18,17 @@ public class PromptTemplateTextCapabilityUnit
   private Optional<PromptTemplate> promptTemplate;
 
   private PromptTemplateTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
-    super(
-        openAITextProcessor,
-        Optional.of(StringToSingleTextParser.create()),
-        Optional.of(SingleTextToStringParser.create()),
-        String.class);
+    super(openAITextProcessor);
+
+    super.withInputParser(StringToSingleTextParser.create());
+    super.withOutputParser(SingleTextToStringParser.create());
   }
 
   private PromptTemplateTextCapabilityUnit() {
-    super(
-        OpenAITextProcessor.create(),
-        Optional.of(StringToSingleTextParser.create()),
-        Optional.of(SingleTextToStringParser.create()),
-        String.class);
+    super(OpenAITextProcessor.create());
+
+    super.withInputParser(StringToSingleTextParser.create());
+    super.withOutputParser(SingleTextToStringParser.create());
   }
 
   public static PromptTemplateTextCapabilityUnit create() {

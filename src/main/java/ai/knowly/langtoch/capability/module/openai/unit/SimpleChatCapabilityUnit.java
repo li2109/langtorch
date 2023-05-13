@@ -13,16 +13,14 @@ public class SimpleChatCapabilityUnit extends ChatCompletionLLMCapability<String
     super(
         openAIChatProcessor,
         Optional.of(StringToMultiChatMessageParser.create()),
-        Optional.of(ChatMessageToStringParser.create()),
-        String.class);
+        Optional.of(ChatMessageToStringParser.create()));
   }
 
   private SimpleChatCapabilityUnit() {
     super(
         OpenAIChatProcessor.create(),
         Optional.of(StringToMultiChatMessageParser.create()),
-        Optional.of(ChatMessageToStringParser.create()),
-        String.class);
+        Optional.of(ChatMessageToStringParser.create()));
   }
 
   public static SimpleChatCapabilityUnit create() {

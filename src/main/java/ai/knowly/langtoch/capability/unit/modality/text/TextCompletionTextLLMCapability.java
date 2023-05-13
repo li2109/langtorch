@@ -12,27 +12,21 @@ import java.util.concurrent.CompletableFuture;
 public class TextCompletionTextLLMCapability<I, O>
     implements TextLLMCapability<I, SingleText, SingleText, O> {
   private final Processor<SingleText, SingleText> processor;
-  private final Class<O> outputClass;
+
   private Optional<Parser<I, SingleText>> inputParser;
   private Optional<Parser<SingleText, O>> outputParser;
   private Optional<Memory<MemoryKey, MemoryValue>> memory;
 
-  public TextCompletionTextLLMCapability(
-      Processor<SingleText, SingleText> processor,
-      Optional<Parser<I, SingleText>> inputParser,
-      Optional<Parser<SingleText, O>> outputParser,
-      Class<O> outputClass) {
+  public TextCompletionTextLLMCapability(Processor<SingleText, SingleText> processor) {
     this.processor = processor;
-    this.inputParser = inputParser;
-    this.outputParser = outputParser;
+    this.inputParser = Optional.empty();
+    this.outputParser = Optional.empty();
     this.memory = Optional.empty();
-    this.outputClass = outputClass;
   }
 
   public static <I, O> TextCompletionTextLLMCapability<I, O> of(
-      Processor<SingleText, SingleText> processor, Class<O> outputClass) {
-    return new TextCompletionTextLLMCapability<>(
-        processor, Optional.empty(), Optional.empty(), outputClass);
+      Processor<SingleText, SingleText> processor) {
+    return new TextCompletionTextLLMCapability<>(processor);
   }
 
   public TextCompletionTextLLMCapability<I, O> withInputParser(Parser<I, SingleText> inputParser) {
@@ -70,9 +64,7 @@ public class TextCompletionTextLLMCapability<I, O>
 
   @Override
   public O postProcess(SingleText outputData) {
-    if (outputClass.isInstance(outputData)) {
-      return outputClass.cast(outputData);
-    } else if (outputParser.isPresent()) {
+    if (outputParser.isPresent()) {
       return outputParser.get().parse(outputData);
     } else {
       throw new IllegalArgumentException(

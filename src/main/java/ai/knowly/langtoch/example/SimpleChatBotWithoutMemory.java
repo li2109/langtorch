@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.example;
 
-import ai.knowly.langtoch.capability.module.openai.unit.SimpleChatCapabilityUnit;
+import ai.knowly.langtoch.capability.module.openai.SimpleChatCapability;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -9,11 +9,11 @@ import java.util.concurrent.ExecutionException;
 public class SimpleChatBotWithoutMemory {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     String openAIKey = "RandomKey";
-    SimpleChatCapabilityUnit chatBot = SimpleChatCapabilityUnit.create(openAIKey);
+    SimpleChatCapability chatBot = SimpleChatCapability.create(openAIKey);
     readInputUntilEXIT(chatBot);
   }
 
-  private static void readInputUntilEXIT(SimpleChatCapabilityUnit chatBot)
+  private static void readInputUntilEXIT(SimpleChatCapability chatBot)
       throws ExecutionException, InterruptedException {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
       String input;

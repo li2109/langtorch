@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit.local.v1;
+package ai.knowly.langtoch.capability.local.v1;
 
 import com.google.gson.annotations.SerializedName;
 import lombok.Data;

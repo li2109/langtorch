@@ -1,8 +1,8 @@
-package ai.knowly.langtoch.capability.unit;
+package ai.knowly.langtoch.capability;
 
 import java.util.concurrent.CompletableFuture;
 
-public interface CapabilityUnit<T, R> {
+public interface Capability<T, R> {
   R run(T inputData);
 
   CompletableFuture<R> runAsync(CompletableFuture<T> inputData);

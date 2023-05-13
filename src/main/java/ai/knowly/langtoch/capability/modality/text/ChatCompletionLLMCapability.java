@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit.modality.text;
+package ai.knowly.langtoch.capability.modality.text;
 
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.memory.Memory;

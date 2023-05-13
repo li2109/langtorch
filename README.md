@@ -23,6 +23,22 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 [Documentation](https://docs.knowly.ai/langtorch/)
 
+##  💫 Community
+Join [Discord](https://discord.gg/YVUQ4X8E) if you would like to chat or contribute
+
+## 👥 Contribution
+If you would like to contribute, please open a discussion and let's discuss there.
+
+Step 1: Open an discussion about your idea
+
+Step 2: Draft your PR and assign the maintainer as reviewr
+
+Step 3: Maintainer merges the PR after review
+
+
+## 💡 Wanted Feature
+If you have some fantastic idea you want us to implement, please open an issue
+
 ## 🙏 Acknowledgements
 This library is inspired by the following libraries:
  - [langchain](https://github.com/hwchase17/langchain)

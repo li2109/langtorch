@@ -1,7 +1,7 @@
 package ai.knowly.langtoch.prompt.template;
 
-import ai.knowly.langtoch.llm.schema.io.Input;
-import ai.knowly.langtoch.llm.schema.io.Output;
+import ai.knowly.langtoch.schema.io.Input;
+import ai.knowly.langtoch.schema.io.Output;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;

@@ -1,6 +1,6 @@
-package ai.knowly.langtoch.llm.schema.io;
+package ai.knowly.langtoch.schema.io;
 
-import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
+import ai.knowly.langtoch.schema.chat.ChatMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 

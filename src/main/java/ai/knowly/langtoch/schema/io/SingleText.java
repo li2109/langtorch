@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.llm.schema.io;
+package ai.knowly.langtoch.schema.io;
 
 /** A model input/output that is a text string. */
 public class SingleText implements Input, Output {

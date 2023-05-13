@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.parser;
 
-import ai.knowly.langtoch.llm.schema.io.SingleText;
+import ai.knowly.langtoch.schema.io.SingleText;
 
 public class SingleTextToStringParser implements Parser<SingleText, String> {
 

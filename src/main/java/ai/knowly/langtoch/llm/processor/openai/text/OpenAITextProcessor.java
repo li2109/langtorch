@@ -4,7 +4,7 @@ import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
-import ai.knowly.langtoch.llm.schema.io.SingleText;
+import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.OpenAiApi;
@@ -65,8 +65,13 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
 
   // Method to run the processor with the given input and return the output text
   @Override
-  public SingleText run(SingleText inputData) throws ExecutionException, InterruptedException {
-    return runAsync(CompletableFuture.completedFuture(inputData)).get();
+  public SingleText run(SingleText inputData) {
+    try {
+      return runAsync(CompletableFuture.completedFuture(inputData)).get();
+    } catch (InterruptedException | ExecutionException e) {
+      logger.atWarning().withCause(e).log("Error running OpenAI Text Processor");
+      throw new RuntimeException(e);
+    }
   }
 
   @Override

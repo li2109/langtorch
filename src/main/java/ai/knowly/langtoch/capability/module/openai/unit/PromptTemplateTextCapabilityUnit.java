@@ -1,8 +1,7 @@
 package ai.knowly.langtoch.capability.module.openai.unit;
 
-import ai.knowly.langtoch.capability.unit.CapabilityUnit;
+import ai.knowly.langtoch.capability.unit.modality.text.TextCompletionTextLLMCapability;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
-import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.parser.SingleTextToStringParser;
 import ai.knowly.langtoch.parser.StringToSingleTextParser;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
@@ -15,19 +14,23 @@ import java.util.concurrent.ExecutionException;
  * the prompt template.
  */
 public class PromptTemplateTextCapabilityUnit
-    extends CapabilityUnit<String, SingleText, SingleText, String> {
+    extends TextCompletionTextLLMCapability<String, String> {
   private Optional<PromptTemplate> promptTemplate;
 
   private PromptTemplateTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
     super(
-        StringToSingleTextParser.create(), SingleTextToStringParser.create(), openAITextProcessor);
+        openAITextProcessor,
+        Optional.of(StringToSingleTextParser.create()),
+        Optional.of(SingleTextToStringParser.create()),
+        String.class);
   }
 
   private PromptTemplateTextCapabilityUnit() {
     super(
-        StringToSingleTextParser.create(),
-        SingleTextToStringParser.create(),
-        OpenAITextProcessor.create());
+        OpenAITextProcessor.create(),
+        Optional.of(StringToSingleTextParser.create()),
+        Optional.of(SingleTextToStringParser.create()),
+        String.class);
   }
 
   public static PromptTemplateTextCapabilityUnit create() {

@@ -1,26 +1,28 @@
 package ai.knowly.langtoch.capability.module.openai.unit;
 
-import ai.knowly.langtoch.capability.unit.CapabilityUnit;
+import ai.knowly.langtoch.capability.unit.modality.text.ChatCompletionLLMCapability;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
-import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
-import ai.knowly.langtoch.llm.schema.chat.Message;
-import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import ai.knowly.langtoch.parser.ChatMessageToStringParser;
+import ai.knowly.langtoch.parser.StringToMultiChatMessageParser;
+import java.util.Optional;
 
 /** A simple chat capability unit that leverages openai api to generate response */
-public class SimpleChatCapabilityUnit
-    extends CapabilityUnit<String, MultiChatMessage, ChatMessage, String> {
+public class SimpleChatCapabilityUnit extends ChatCompletionLLMCapability<String, String> {
 
   private SimpleChatCapabilityUnit(OpenAIChatProcessor openAIChatProcessor) {
-    super(openAIChatProcessor);
-    super.withInputParser((input) -> MultiChatMessage.of(ChatMessage.of(Role.USER, input)))
-        .withOutputParser(Message::getMessage);
+    super(
+        openAIChatProcessor,
+        Optional.of(StringToMultiChatMessageParser.create()),
+        Optional.of(ChatMessageToStringParser.create()),
+        String.class);
   }
 
   private SimpleChatCapabilityUnit() {
-    super(OpenAIChatProcessor.create());
-    super.withInputParser((input) -> MultiChatMessage.of(ChatMessage.of(Role.USER, input)))
-        .withOutputParser(Message::getMessage);
+    super(
+        OpenAIChatProcessor.create(),
+        Optional.of(StringToMultiChatMessageParser.create()),
+        Optional.of(ChatMessageToStringParser.create()),
+        String.class);
   }
 
   public static SimpleChatCapabilityUnit create() {

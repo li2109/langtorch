@@ -12,31 +12,31 @@ public class OpenAIServiceTestingUtils {
   // ChatCompletion related utils
   public static class ChatCompletion {
     public static ChatCompletionResult createChatCompletionResult(
-        ai.knowly.langtoch.llm.schema.chat.ChatMessage message) {
+        ai.knowly.langtoch.schema.chat.ChatMessage message) {
       return createChatCompletionResult(ImmutableList.of(message));
     }
 
     public static ChatCompletionResult createChatCompletionResult(
-        ai.knowly.langtoch.llm.schema.chat.ChatMessage... messages) {
+        ai.knowly.langtoch.schema.chat.ChatMessage... messages) {
       return createChatCompletionResult(ImmutableList.copyOf(messages));
     }
 
     public static ChatCompletionResult createChatCompletionResult(
-        Iterable<ai.knowly.langtoch.llm.schema.chat.ChatMessage> chatMessages) {
+        Iterable<ai.knowly.langtoch.schema.chat.ChatMessage> chatMessages) {
       ChatCompletionResult completionResult = new ChatCompletionResult();
       completionResult.setChoices(createChatCompletionChoices(chatMessages));
       return completionResult;
     }
 
     public static ImmutableList<ChatCompletionChoice> createChatCompletionChoices(
-        ai.knowly.langtoch.llm.schema.chat.ChatMessage... chatMessages) {
+        ai.knowly.langtoch.schema.chat.ChatMessage... chatMessages) {
       return createChatCompletionChoices(ImmutableList.copyOf(chatMessages));
     }
 
     public static ImmutableList<ChatCompletionChoice> createChatCompletionChoices(
-        Iterable<ai.knowly.langtoch.llm.schema.chat.ChatMessage> chatMessages) {
+        Iterable<ai.knowly.langtoch.schema.chat.ChatMessage> chatMessages) {
       ImmutableList.Builder<ChatCompletionChoice> builder = ImmutableList.builder();
-      for (ai.knowly.langtoch.llm.schema.chat.ChatMessage chatMessage : chatMessages) {
+      for (ai.knowly.langtoch.schema.chat.ChatMessage chatMessage : chatMessages) {
         ChatCompletionChoice completionChoice = new ChatCompletionChoice();
         completionChoice.setMessage(createChatMessage(chatMessage));
         builder.add(completionChoice);
@@ -45,7 +45,7 @@ public class OpenAIServiceTestingUtils {
     }
 
     public static ChatMessage createChatMessage(
-        ai.knowly.langtoch.llm.schema.chat.ChatMessage msg) {
+        ai.knowly.langtoch.schema.chat.ChatMessage msg) {
       ChatMessage chatMessage = new ChatMessage();
       chatMessage.setContent(msg.getMessage());
       chatMessage.setRole(msg.getRole().toString().toLowerCase());

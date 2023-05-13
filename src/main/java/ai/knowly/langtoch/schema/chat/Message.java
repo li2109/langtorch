@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.llm.schema.chat;
+package ai.knowly.langtoch.schema.chat;
 
 /** A abstract class for a message. */
 public abstract class Message {

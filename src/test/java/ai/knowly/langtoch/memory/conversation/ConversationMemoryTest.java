@@ -3,10 +3,10 @@ package ai.knowly.langtoch.memory.conversation;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.llm.schema.chat.AssistantMessage;
-import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
-import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.chat.UserMessage;
+import ai.knowly.langtoch.schema.chat.AssistantMessage;
+import ai.knowly.langtoch.schema.chat.ChatMessage;
+import ai.knowly.langtoch.schema.chat.Role;
+import ai.knowly.langtoch.schema.chat.UserMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.Map.Entry;
 import org.junit.Before;

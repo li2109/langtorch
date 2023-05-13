@@ -4,9 +4,9 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
-import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import ai.knowly.langtoch.schema.chat.ChatMessage;
+import ai.knowly.langtoch.schema.chat.Role;
+import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;

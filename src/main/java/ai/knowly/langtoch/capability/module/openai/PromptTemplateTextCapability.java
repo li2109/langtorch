@@ -1,6 +1,6 @@
-package ai.knowly.langtoch.capability.module.openai.unit;
+package ai.knowly.langtoch.capability.module.openai;
 
-import ai.knowly.langtoch.capability.unit.modality.text.TextCompletionTextLLMCapability;
+import ai.knowly.langtoch.capability.modality.text.TextCompletionTextLLMCapability;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.parser.SingleTextToStringParser;
 import ai.knowly.langtoch.parser.StringToSingleTextParser;
@@ -13,33 +13,33 @@ import java.util.concurrent.ExecutionException;
  * A capability unit that contains a prompt template and accepts a map of variable-value pairs to
  * the prompt template.
  */
-public class PromptTemplateTextCapabilityUnit
+public class PromptTemplateTextCapability
     extends TextCompletionTextLLMCapability<String, String> {
   private Optional<PromptTemplate> promptTemplate;
 
-  private PromptTemplateTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
+  private PromptTemplateTextCapability(OpenAITextProcessor openAITextProcessor) {
     super(openAITextProcessor);
 
     super.withInputParser(StringToSingleTextParser.create());
     super.withOutputParser(SingleTextToStringParser.create());
   }
 
-  private PromptTemplateTextCapabilityUnit() {
+  private PromptTemplateTextCapability() {
     super(OpenAITextProcessor.create());
 
     super.withInputParser(StringToSingleTextParser.create());
     super.withOutputParser(SingleTextToStringParser.create());
   }
 
-  public static PromptTemplateTextCapabilityUnit create() {
-    return new PromptTemplateTextCapabilityUnit();
+  public static PromptTemplateTextCapability create() {
+    return new PromptTemplateTextCapability();
   }
 
-  public static PromptTemplateTextCapabilityUnit create(OpenAITextProcessor openAITextProcessor) {
-    return new PromptTemplateTextCapabilityUnit(openAITextProcessor);
+  public static PromptTemplateTextCapability create(OpenAITextProcessor openAITextProcessor) {
+    return new PromptTemplateTextCapability(openAITextProcessor);
   }
 
-  public PromptTemplateTextCapabilityUnit withPromptTemplate(PromptTemplate promptTemplate) {
+  public PromptTemplateTextCapability withPromptTemplate(PromptTemplate promptTemplate) {
     this.promptTemplate = Optional.ofNullable(promptTemplate);
     return this;
   }

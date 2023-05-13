@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit.local.v1;
+package ai.knowly.langtoch.capability.local.v1;
 
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import com.google.gson.Gson;

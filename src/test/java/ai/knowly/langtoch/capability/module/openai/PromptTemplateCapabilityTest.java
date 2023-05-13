@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.module.openai.unit;
+package ai.knowly.langtoch.capability.module.openai;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
@@ -18,7 +18,7 @@ import org.mockito.Mock;
 import org.mockito.runners.MockitoJUnitRunner;
 
 @RunWith(MockitoJUnitRunner.class)
-public class PromptTemplateCapabilityUnitTest {
+public class PromptTemplateCapabilityTest {
   @Mock private OpenAiApi openAiApi;
 
   @Test
@@ -30,7 +30,7 @@ public class PromptTemplateCapabilityUnitTest {
 
     // Act.
     String response =
-        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
+        PromptTemplateTextCapability.create(OpenAITextProcessor.create(openAiApi))
             .withPromptTemplate(
                 PromptTemplate.builder().setTemplate("Create name for {{$area}} company").build())
             .run(Map.of("area", "search engine"));
@@ -49,7 +49,7 @@ public class PromptTemplateCapabilityUnitTest {
 
     // Act.
     String response =
-        PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
+        PromptTemplateTextCapability.create(OpenAITextProcessor.create(openAiApi))
             .withPromptTemplate(
                 PromptTemplate.builder()
                     .setTemplate("Create name for search engine company")
@@ -72,7 +72,7 @@ public class PromptTemplateCapabilityUnitTest {
     assertThrows(
         IllegalArgumentException.class,
         () ->
-            PromptTemplateTextCapabilityUnit.create(OpenAITextProcessor.create(openAiApi))
+            PromptTemplateTextCapability.create(OpenAITextProcessor.create(openAiApi))
                 .withPromptTemplate(
                     PromptTemplate.builder()
                         .setTemplate("Create name for search engine company")

@@ -2,7 +2,7 @@ package ai.knowly.langtoch.example;
 
 import ai.knowly.langtoch.capability.graph.CapabilityGraph;
 import ai.knowly.langtoch.capability.graph.NodeAdapter;
-import ai.knowly.langtoch.capability.module.openai.unit.SimpleTextCapabilityUnit;
+import ai.knowly.langtoch.capability.module.openai.SimpleTextCapability;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.List;
@@ -11,7 +11,7 @@ import java.util.concurrent.ExecutionException;
 
 public class SequentialChain {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
-    SimpleTextCapabilityUnit unit = SimpleTextCapabilityUnit.create();
+    SimpleTextCapability unit = SimpleTextCapability.create();
 
     // Graph:
     // A: Generate company name based on the business description
@@ -30,18 +30,18 @@ public class SequentialChain {
   }
 
   private static class CompanyNameGenerator implements NodeAdapter<String, String> {
-    private final SimpleTextCapabilityUnit unit;
+    private final SimpleTextCapability unit;
     private final String id;
     private final List<String> outDegree;
 
-    private CompanyNameGenerator(SimpleTextCapabilityUnit unit, String id, List<String> outDegree) {
+    private CompanyNameGenerator(SimpleTextCapability unit, String id, List<String> outDegree) {
       this.unit = unit;
       this.id = id;
       this.outDegree = outDegree;
     }
 
     public static CompanyNameGenerator create(
-        SimpleTextCapabilityUnit unit, String id, List<String> outDegree) {
+        SimpleTextCapability unit, String id, List<String> outDegree) {
       return new CompanyNameGenerator(unit, id, ImmutableList.copyOf(outDegree));
     }
 
@@ -64,18 +64,18 @@ public class SequentialChain {
   }
 
   private static class SloganGenerator implements NodeAdapter<String, String> {
-    private final SimpleTextCapabilityUnit unit;
+    private final SimpleTextCapability unit;
     private final String id;
     private final List<String> outDegree;
 
-    private SloganGenerator(SimpleTextCapabilityUnit unit, String id, List<String> outDegree) {
+    private SloganGenerator(SimpleTextCapability unit, String id, List<String> outDegree) {
       this.unit = unit;
       this.id = id;
       this.outDegree = outDegree;
     }
 
     public static SloganGenerator create(
-        SimpleTextCapabilityUnit unit, String id, List<String> outDegree) {
+        SimpleTextCapability unit, String id, List<String> outDegree) {
       return new SloganGenerator(unit, id, ImmutableList.copyOf(outDegree));
     }
 

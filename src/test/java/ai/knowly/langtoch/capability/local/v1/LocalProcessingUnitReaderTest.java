@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.capability.unit.local.v1;
+package ai.knowly.langtoch.capability.local.v1;
 
 import static com.google.common.truth.Truth.assertThat;
 
@@ -10,7 +10,7 @@ import org.junit.runner.RunWith;
 @RunWith(org.junit.runners.JUnit4.class)
 public class LocalProcessingUnitReaderTest {
   private static final String CAPABILITY_PATH =
-      "src/test/java/ai/knowly/langtoch/capability/unit/local/v1/summarize";
+      "src/test/java/ai/knowly/langtoch/capability/local/v1/summarize";
 
   @Test
   public void testParse() {

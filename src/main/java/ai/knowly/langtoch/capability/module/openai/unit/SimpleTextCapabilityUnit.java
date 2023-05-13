@@ -4,25 +4,21 @@ import ai.knowly.langtoch.capability.unit.modality.text.TextCompletionTextLLMCap
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.parser.SingleTextToStringParser;
 import ai.knowly.langtoch.parser.StringToSingleTextParser;
-import java.util.Optional;
 
 /** A simple text capability unit that leverages openai api to generate response */
 public class SimpleTextCapabilityUnit extends TextCompletionTextLLMCapability<String, String> {
 
   private SimpleTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
-    super(
-        openAITextProcessor,
-        Optional.of(StringToSingleTextParser.create()),
-        Optional.of(SingleTextToStringParser.create()),
-        String.class);
+    super(openAITextProcessor);
+    super.withInputParser(StringToSingleTextParser.create());
+    super.withOutputParser(SingleTextToStringParser.create());
   }
 
   private SimpleTextCapabilityUnit() {
-    super(
-        OpenAITextProcessor.create(),
-        Optional.of(StringToSingleTextParser.create()),
-        Optional.of(SingleTextToStringParser.create()),
-        String.class);
+    super(OpenAITextProcessor.create());
+
+    super.withInputParser(StringToSingleTextParser.create());
+    super.withOutputParser(SingleTextToStringParser.create());
   }
 
   public static SimpleTextCapabilityUnit create() {

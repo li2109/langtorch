@@ -13,7 +13,7 @@ import java.util.concurrent.CompletableFuture;
 public class ChatCompletionLLMCapability<I, O>
     implements TextLLMCapability<I, MultiChatMessage, ChatMessage, O> {
   private final Processor<MultiChatMessage, ChatMessage> processor;
-  private final Class<O> outputClass;
+
   private Optional<Parser<I, MultiChatMessage>> inputParser;
   private Optional<Parser<ChatMessage, O>> outputParser;
   private Optional<Memory<MemoryKey, MemoryValue>> memory;
@@ -21,19 +21,16 @@ public class ChatCompletionLLMCapability<I, O>
   public ChatCompletionLLMCapability(
       Processor<MultiChatMessage, ChatMessage> processor,
       Optional<Parser<I, MultiChatMessage>> inputParser,
-      Optional<Parser<ChatMessage, O>> outputParser,
-      Class<O> outputClass) {
+      Optional<Parser<ChatMessage, O>> outputParser) {
     this.processor = processor;
     this.inputParser = inputParser;
     this.outputParser = outputParser;
     this.memory = Optional.empty();
-    this.outputClass = outputClass;
   }
 
   public static <I, O> ChatCompletionLLMCapability<I, O> of(
       Processor<MultiChatMessage, ChatMessage> processor, Class<O> outputClass) {
-    return new ChatCompletionLLMCapability<>(
-        processor, Optional.empty(), Optional.empty(), outputClass);
+    return new ChatCompletionLLMCapability<>(processor, Optional.empty(), Optional.empty());
   }
 
   public ChatCompletionLLMCapability<I, O> withInputParser(
@@ -71,9 +68,7 @@ public class ChatCompletionLLMCapability<I, O>
 
   @Override
   public O postProcess(ChatMessage outputData) {
-    if (outputClass.isInstance(outputData)) {
-      return outputClass.cast(outputData);
-    } else if (outputParser.isPresent()) {
+    if (outputParser.isPresent()) {
       return outputParser.get().parse(outputData);
     } else {
       throw new IllegalArgumentException(

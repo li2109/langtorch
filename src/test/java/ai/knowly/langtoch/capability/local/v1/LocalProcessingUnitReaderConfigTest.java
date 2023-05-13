@@ -2,10 +2,6 @@ package ai.knowly.langtoch.capability.local.v1;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.capability.local.v1.CapabilityConfig;
-import ai.knowly.langtoch.capability.local.v1.Completion;
-import ai.knowly.langtoch.capability.local.v1.Input;
-import ai.knowly.langtoch.capability.local.v1.Parameter;
 import com.google.gson.Gson;
 import java.util.List;
 import org.junit.Before;

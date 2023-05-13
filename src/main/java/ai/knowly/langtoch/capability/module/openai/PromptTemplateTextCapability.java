@@ -13,8 +13,7 @@ import java.util.concurrent.ExecutionException;
  * A capability unit that contains a prompt template and accepts a map of variable-value pairs to
  * the prompt template.
  */
-public class PromptTemplateTextCapability
-    extends TextCompletionTextLLMCapability<String, String> {
+public class PromptTemplateTextCapability extends TextCompletionTextLLMCapability<String, String> {
   private Optional<PromptTemplate> promptTemplate;
 
   private PromptTemplateTextCapability(OpenAITextProcessor openAITextProcessor) {

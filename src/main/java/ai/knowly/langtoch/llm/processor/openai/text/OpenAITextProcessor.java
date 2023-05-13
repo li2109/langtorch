@@ -4,7 +4,7 @@ import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
-import ai.knowly.langtoch.llm.schema.io.SingleText;
+import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.OpenAiApi;

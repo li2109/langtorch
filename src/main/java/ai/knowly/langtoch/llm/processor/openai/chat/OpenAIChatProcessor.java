@@ -4,12 +4,12 @@ import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
-import ai.knowly.langtoch.llm.schema.chat.AssistantMessage;
-import ai.knowly.langtoch.llm.schema.chat.ChatMessage;
-import ai.knowly.langtoch.llm.schema.chat.Role;
-import ai.knowly.langtoch.llm.schema.chat.SystemMessage;
-import ai.knowly.langtoch.llm.schema.chat.UserMessage;
-import ai.knowly.langtoch.llm.schema.io.MultiChatMessage;
+import ai.knowly.langtoch.schema.chat.AssistantMessage;
+import ai.knowly.langtoch.schema.chat.ChatMessage;
+import ai.knowly.langtoch.schema.chat.Role;
+import ai.knowly.langtoch.schema.chat.SystemMessage;
+import ai.knowly.langtoch.schema.chat.UserMessage;
+import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import com.google.common.flogger.FluentLogger;
 import com.theokanning.openai.OpenAiApi;
 import com.theokanning.openai.completion.chat.ChatCompletionRequest;

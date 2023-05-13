@@ -1,7 +1,7 @@
 package ai.knowly.langtoch.llm.processor;
 
-import ai.knowly.langtoch.llm.schema.io.Input;
-import ai.knowly.langtoch.llm.schema.io.Output;
+import ai.knowly.langtoch.schema.io.Input;
+import ai.knowly.langtoch.schema.io.Output;
 import java.util.concurrent.CompletableFuture;
 
 /**

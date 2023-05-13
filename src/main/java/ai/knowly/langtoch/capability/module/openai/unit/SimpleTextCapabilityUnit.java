@@ -1,25 +1,28 @@
 package ai.knowly.langtoch.capability.module.openai.unit;
 
-import ai.knowly.langtoch.capability.unit.CapabilityUnit;
+import ai.knowly.langtoch.capability.unit.modality.text.TextCompletionTextLLMCapability;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
-import ai.knowly.langtoch.llm.schema.io.SingleText;
 import ai.knowly.langtoch.parser.SingleTextToStringParser;
 import ai.knowly.langtoch.parser.StringToSingleTextParser;
+import java.util.Optional;
 
 /** A simple text capability unit that leverages openai api to generate response */
-public class SimpleTextCapabilityUnit
-    extends CapabilityUnit<String, SingleText, SingleText, String> {
+public class SimpleTextCapabilityUnit extends TextCompletionTextLLMCapability<String, String> {
 
   private SimpleTextCapabilityUnit(OpenAITextProcessor openAITextProcessor) {
     super(
-        StringToSingleTextParser.create(), SingleTextToStringParser.create(), openAITextProcessor);
+        openAITextProcessor,
+        Optional.of(StringToSingleTextParser.create()),
+        Optional.of(SingleTextToStringParser.create()),
+        String.class);
   }
 
   private SimpleTextCapabilityUnit() {
     super(
-        StringToSingleTextParser.create(),
-        SingleTextToStringParser.create(),
-        OpenAITextProcessor.create());
+        OpenAITextProcessor.create(),
+        Optional.of(StringToSingleTextParser.create()),
+        Optional.of(SingleTextToStringParser.create()),
+        String.class);
   }
 
   public static SimpleTextCapabilityUnit create() {

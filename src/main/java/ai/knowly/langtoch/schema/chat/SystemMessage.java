@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.llm.schema.chat;
+package ai.knowly.langtoch.schema.chat;
 
 import com.google.auto.value.AutoValue;
 

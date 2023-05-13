@@ -11,7 +11,7 @@ import java.util.List;
 public final class OpenAIChatProcessorRequestConverter {
   // Helper method to convert a chat message to the corresponding OpenAI chat message type
   public static ChatMessage convertChatMessage(
-      ai.knowly.langtoch.llm.schema.chat.ChatMessage chatMessage) {
+      ai.knowly.langtoch.schema.chat.ChatMessage chatMessage) {
     return new ChatMessage(chatMessage.getRole().name().toLowerCase(), chatMessage.getMessage());
   }
 
@@ -19,7 +19,7 @@ public final class OpenAIChatProcessorRequestConverter {
   // to a ChatCompletionRequest
   public static ChatCompletionRequest convert(
       OpenAIChatProcessorConfig openAIChatProcessorConfig,
-      List<ai.knowly.langtoch.llm.schema.chat.ChatMessage> messages) {
+      List<ai.knowly.langtoch.schema.chat.ChatMessage> messages) {
     ChatCompletionRequest.ChatCompletionRequestBuilder completionRequestBuilder =
         ChatCompletionRequest.builder()
             .model(openAIChatProcessorConfig.getModel())

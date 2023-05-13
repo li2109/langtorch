@@ -1,7 +1,7 @@
-package ai.knowly.langtoch.llm.schema.chat;
+package ai.knowly.langtoch.schema.chat;
 
-import ai.knowly.langtoch.llm.schema.io.Input;
-import ai.knowly.langtoch.llm.schema.io.Output;
+import ai.knowly.langtoch.schema.io.Input;
+import ai.knowly.langtoch.schema.io.Output;
 
 /** A abstract class for a chat message. */
 public abstract class ChatMessage extends Message implements Input, Output {

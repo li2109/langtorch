@@ -13,8 +13,7 @@ public class OpenAIOpenAIChatProcessorConfigAdapterTest {
   @Test
   public void testConvertChatMessage() {
     // Arrange.
-    ChatMessage chatMessage =
-        ChatMessage.of(Role.ASSISTANT, "Hello, how can I help you?");
+    ChatMessage chatMessage = ChatMessage.of(Role.ASSISTANT, "Hello, how can I help you?");
 
     // Act.
     com.theokanning.openai.completion.chat.ChatMessage convertedMessage =

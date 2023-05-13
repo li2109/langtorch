@@ -44,8 +44,7 @@ public class OpenAIServiceTestingUtils {
       return builder.build();
     }
 
-    public static ChatMessage createChatMessage(
-        ai.knowly.langtoch.schema.chat.ChatMessage msg) {
+    public static ChatMessage createChatMessage(ai.knowly.langtoch.schema.chat.ChatMessage msg) {
       ChatMessage chatMessage = new ChatMessage();
       chatMessage.setContent(msg.getMessage());
       chatMessage.setRole(msg.getRole().toString().toLowerCase());

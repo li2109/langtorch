@@ -1,16 +1,17 @@
 package ai.knowly.langtoch.schema.embeddings;
 
 import ai.knowly.langtoch.schema.io.Output;
+import com.google.common.collect.ImmutableList;
 
 public abstract class Embedding implements Output {
 
     private final EmbeddingType type;
 
-    private final Double[] vector;
+    private final ImmutableList<Double> vector;
 
     abstract Embedding of();
 
-    private Embedding(EmbeddingType type, Double[] vector) {
+    private Embedding(EmbeddingType type, ImmutableList<Double> vector) {
         this.type = type;
         this.vector = vector;
     }
@@ -19,7 +20,7 @@ public abstract class Embedding implements Output {
         return type;
     }
 
-    public Double[] getVector() {
+    public ImmutableList<Double> getVector() {
         return vector;
     }
 

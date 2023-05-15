@@ -25,7 +25,7 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 [English One Pager](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
 
-[中文一页纸](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
+[中文一页纸](https://docs.knowly.ai/langtorch/zhong-wen-langtorch-one-pager)
 
 
 ##  💫 Community

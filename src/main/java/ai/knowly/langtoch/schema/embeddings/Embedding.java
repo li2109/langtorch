@@ -1,26 +1,22 @@
 package ai.knowly.langtoch.schema.embeddings;
 
 import ai.knowly.langtoch.schema.io.Output;
-import com.google.common.collect.ImmutableList;
 
-public abstract class Embedding implements Output {
+import java.util.List;
 
-    private final EmbeddingType type;
+public class Embedding implements Output {
 
-    private final ImmutableList<Double> vector;
+    private final List<Double> vector;
 
-    abstract Embedding of();
-
-    private Embedding(EmbeddingType type, ImmutableList<Double> vector) {
-        this.type = type;
+    private Embedding(List<Double> vector) {
         this.vector = vector;
     }
 
-    public EmbeddingType getType() {
-        return type;
+    public static Embedding of(List<Double> vector) {
+        return new Embedding(vector);
     }
 
-    public ImmutableList<Double> getVector() {
+    public List<Double> getVector() {
         return vector;
     }
 

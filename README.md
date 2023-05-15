@@ -23,6 +23,11 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 [Documentation](https://docs.knowly.ai/langtorch/)
 
+[English One Pager](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
+
+[中文一页纸](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
+
+
 ##  💫 Community
 Join [Discord](https://discord.gg/YVUQ4X8E) if you would like to chat or contribute
 

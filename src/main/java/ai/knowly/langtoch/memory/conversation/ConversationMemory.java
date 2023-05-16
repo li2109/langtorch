@@ -1,8 +1,8 @@
 package ai.knowly.langtoch.memory.conversation;
 
+import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
-import ai.knowly.langtoch.memory.Memory;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.LinkedHashMultimap;

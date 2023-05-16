@@ -105,6 +105,10 @@ dependencies {
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
     // RxJava
     implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
+    // Gson retrofit converter
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    // Retrofit guava adapter
+    implementation 'com.squareup.retrofit2:adapter-guava:2.9.0'
 }
 
 // Testing related dependencies

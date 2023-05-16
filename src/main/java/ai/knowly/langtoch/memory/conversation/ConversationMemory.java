@@ -1,11 +1,10 @@
 package ai.knowly.langtoch.memory.conversation;
 
+import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
-import ai.knowly.langtoch.memory.Memory;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
-import com.google.common.collect.ImmutableMultimap;
 import com.google.common.collect.LinkedHashMultimap;
 import com.google.common.collect.Multimap;
 import java.util.List;
@@ -19,7 +18,7 @@ public abstract class ConversationMemory extends Memory<Role, ChatMessage> {
     return new AutoValue_ConversationMemory(LinkedHashMultimap.create());
   }
 
-  abstract ImmutableMultimap<Role, ChatMessage> memory();
+  abstract Multimap<Role, ChatMessage> memory();
 
   @Override
   public void add(Role key, ChatMessage value) {

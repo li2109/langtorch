@@ -15,6 +15,7 @@ import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
@@ -59,8 +60,8 @@ public class CohereAPIService {
     } catch (InterruptedException e) {
       throw new RuntimeException(e);
     } catch (ExecutionException e) {
-      if (e.getCause() instanceof retrofit2.HttpException) {
-        retrofit2.HttpException httpException = (retrofit2.HttpException) e.getCause();
+      if (e.getCause() instanceof HttpException) {
+        retrofit2.HttpException httpException = (HttpException) e.getCause();
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);

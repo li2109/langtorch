@@ -1,8 +1,7 @@
 package ai.knowly.langtoch.capability.graph;
 
 import com.google.auto.value.AutoValue;
-import com.google.common.collect.ArrayListMultimap;
-import com.google.common.collect.Multimap;
+import com.google.common.collect.ImmutableMultimap;
 import com.google.common.reflect.TypeToken;
 import java.util.*;
 import java.util.concurrent.ExecutionException;
@@ -13,19 +12,19 @@ public abstract class CapabilityGraph {
   public static CapabilityGraph create() {
     return new AutoValue_CapabilityGraph(
         new HashMap<>(),
-        ArrayListMultimap.create(),
+        ImmutableMultimap.of(),
         new HashMap<>(),
-        ArrayListMultimap.create(),
+        ImmutableMultimap.of(),
         new HashMap<>());
   }
 
   abstract HashMap<String, NodeAdapter<?, ?>> nodes();
 
-  abstract Multimap<String, Object> inputMap();
+  abstract ImmutableMultimap<String, Object> inputMap();
 
   abstract HashMap<String, Object> outputMap();
 
-  abstract Multimap<String, String> inDegreeMap();
+  abstract ImmutableMultimap<String, String> inDegreeMap();
 
   abstract HashMap<String, TypeToken<?>> inputTypes();
 

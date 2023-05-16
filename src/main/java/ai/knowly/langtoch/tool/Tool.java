@@ -1,6 +1,7 @@
 package ai.knowly.langtoch.tool;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -15,7 +16,7 @@ public abstract class Tool {
 
   public abstract String description();
 
-  public abstract Map<String, Function> functionRegistry();
+  public abstract ImmutableMap<String, Function> functionRegistry();
 
   /**
    * Invoke a registered function with the given label and arguments.

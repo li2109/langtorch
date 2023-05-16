@@ -2,6 +2,8 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 
 import ai.knowly.langtoch.llm.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -38,7 +40,7 @@ public abstract class OpenAITextProcessorConfig implements ProcessorConfig {
 
   public abstract Optional<Boolean> getEcho();
 
-  public abstract List<String> getStop();
+  public abstract ImmutableList<String> getStop();
 
   public abstract Optional<Double> getPresencePenalty();
 
@@ -46,7 +48,7 @@ public abstract class OpenAITextProcessorConfig implements ProcessorConfig {
 
   public abstract Optional<Integer> getBestOf();
 
-  public abstract Map<String, Integer> getLogitBias();
+  public abstract ImmutableMap<String, Integer> getLogitBias();
 
   public abstract Optional<String> getUser();
 

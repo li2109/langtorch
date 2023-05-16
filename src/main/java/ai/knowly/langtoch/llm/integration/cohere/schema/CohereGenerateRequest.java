@@ -1,6 +1,8 @@
 package ai.knowly.langtoch.llm.integration.cohere.schema;
 
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 
@@ -76,11 +78,11 @@ public abstract class CohereGenerateRequest {
 
   // The generated text will be cut at the beginning of the earliest occurrence of an end sequence.
   // The sequence will be excluded from the text.
-  public abstract List<String> endSequences();
+  public abstract ImmutableList<String> endSequences();
 
   // The generated text will be cut at the end of the earliest occurence of a stop sequence. The
   // sequence will be included the text.
-  public abstract List<String> stopSequences();
+  public abstract ImmutableList<String> stopSequences();
 
   // One of GENERATION|ALL|NONE to specify how and if the token likelihoods are returned with the
   // response. Defaults to NONE.
@@ -101,7 +103,7 @@ public abstract class CohereGenerateRequest {
   // will proportionally affect the likelihood of the token appearing in the generated text.
   //
   // Note: logit bias may not be supported for all custom models.
-  public abstract Map<String, Float> logitBias();
+  public abstract ImmutableMap<String, Float> logitBias();
 
   // One of NONE|START|END to specify how the API will handle inputs longer than the maximum token
   // length.

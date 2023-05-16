@@ -61,7 +61,7 @@ public class CohereAPIService {
       throw new RuntimeException(e);
     } catch (ExecutionException e) {
       if (e.getCause() instanceof HttpException) {
-        retrofit2.HttpException httpException = (HttpException) e.getCause();
+        HttpException httpException = (HttpException) e.getCause();
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);

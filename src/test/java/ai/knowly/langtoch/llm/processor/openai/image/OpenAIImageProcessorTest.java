@@ -3,12 +3,11 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
 import ai.knowly.langtoch.schema.image.Images;
 import ai.knowly.langtoch.schema.io.SingleText;
-import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;
@@ -19,12 +18,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIImageProcessorTest {
-  @Mock private OpenAIApi openAiApi;
+  @Mock private OpenAIService openAIService;
   private OpenAIImageProcessor openAIImageProcessor;
 
   @BeforeEach
   public void setUp() {
-    openAIImageProcessor = new OpenAIImageProcessor(openAiApi);
+    openAIImageProcessor = new OpenAIImageProcessor(openAIService);
   }
 
   @Test
@@ -42,9 +41,9 @@ final class OpenAIImageProcessorTest {
 
     expectedResult.setData(Arrays.asList(image1, image2));
 
-    when(openAiApi.createImage(
+    when(openAIService.createImage(
             OpenAIImageProcessorRequestConverter.convert(config, "image description")))
-        .thenReturn(Single.just(expectedResult));
+        .thenReturn(expectedResult);
 
     // Act.
     Images output = openAIImageProcessor.withConfig(config).run(inputData);

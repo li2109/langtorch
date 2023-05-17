@@ -4,12 +4,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -20,12 +19,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIChatProcessorTest {
-  @Mock private OpenAIApi OpenAiApi;
+  @Mock private OpenAIService openAIService;
   private OpenAIChatProcessor openAIChatProcessor;
 
   @BeforeEach
   public void setUp() {
-    openAIChatProcessor = new OpenAIChatProcessor(OpenAiApi);
+    openAIChatProcessor = new OpenAIChatProcessor(openAIService);
   }
 
   @Test
@@ -36,11 +35,10 @@ final class OpenAIChatProcessorTest {
             ChatMessage.of(Role.USER, "What is the weather today?"),
             ChatMessage.of(Role.ASSISTANT, "The weather today is sunny."));
 
-    when(OpenAiApi.createChatCompletion(any()))
+    when(openAIService.createChatCompletion(any()))
         .thenReturn(
-            Single.just(
-                OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
-                    ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day."))));
+            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day.")));
 
     // Act
     ChatMessage output = openAIChatProcessor.run(MultiChatMessage.of(messages));

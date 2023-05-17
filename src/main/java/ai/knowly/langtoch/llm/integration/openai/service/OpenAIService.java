@@ -1,7 +1,6 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIError;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
+import ai.knowly.langtoch.llm.integration.cohere.schema.CohereHttpException;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
@@ -20,26 +19,24 @@ import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
-import io.reactivex.BackpressureStrategy;
-import io.reactivex.Flowable;
-import io.reactivex.Single;
+import com.google.common.flogger.FluentLogger;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
+import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import okhttp3.*;
-import retrofit2.Call;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
-import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
+import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 public class OpenAIService {
-
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.openai.com/";
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
-  private static final ObjectMapper mapper = defaultObjectMapper();
 
   private final OpenAIApi api;
   private final ExecutorService executorService;
@@ -94,54 +91,24 @@ public class OpenAIService {
   }
 
   /** Calls the Open AI api, returns the response, and parses error messages if the request fails */
-  public static <T> T execute(Single<T> apiCall) {
+  public static <T> T execute(ListenableFuture<T> apiCall) {
     try {
-      return apiCall.blockingGet();
-    } catch (HttpException e) {
-      try {
-        if (e.response() == null || e.response().errorBody() == null) {
-          throw e;
+      return apiCall.get();
+    } catch (InterruptedException e) {
+      throw new RuntimeException(e);
+    } catch (ExecutionException e) {
+      if (e.getCause() instanceof HttpException) {
+        HttpException httpException = (HttpException) e.getCause();
+        try {
+          String errorBody = httpException.response().errorBody().string();
+          logger.atSevere().log("HTTP Error: %s", errorBody);
+          throw new CohereHttpException(errorBody, httpException.code(), httpException);
+        } catch (IOException ioException) {
+          logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }
-        String errorBody = e.response().errorBody().string();
-
-        OpenAIError error = mapper.readValue(errorBody, OpenAIError.class);
-        throw new OpenAIHttpException(error, e, e.code());
-      } catch (IOException ex) {
-        // couldn't parse OpenAI error
-        throw e;
       }
+      throw new RuntimeException(e);
     }
-  }
-
-  /**
-   * Calls the Open AI api and returns a Flowable of SSE for streaming omitting the last message.
-   *
-   * @param apiCall The api call
-   */
-  public static Flowable<SSE> stream(Call<ResponseBody> apiCall) {
-    return stream(apiCall, false);
-  }
-
-  /**
-   * Calls the Open AI api and returns a Flowable of SSE for streaming.
-   *
-   * @param apiCall The api call
-   * @param emitDone If true the last message ([DONE]) is emitted
-   */
-  public static Flowable<SSE> stream(Call<ResponseBody> apiCall, boolean emitDone) {
-    return Flowable.create(
-        emitter -> apiCall.enqueue(new ResponseBodyCallback(emitter, emitDone)),
-        BackpressureStrategy.BUFFER);
-  }
-
-  /**
-   * Calls the Open AI api and returns a Flowable of type T for streaming omitting the last message.
-   *
-   * @param apiCall The api call
-   * @param cl Class of type T to return
-   */
-  public static <T> Flowable<T> stream(Call<ResponseBody> apiCall, Class<T> cl) {
-    return stream(apiCall).map(sse -> mapper.readValue(sse.getData(), cl));
   }
 
   public static OpenAIApi buildApi(String token, Duration timeout) {
@@ -173,7 +140,7 @@ public class OpenAIService {
         .baseUrl(BASE_URL)
         .client(client)
         .addConverterFactory(JacksonConverterFactory.create(mapper))
-        .addCallAdapterFactory(RxJava2CallAdapterFactory.create())
+        .addCallAdapterFactory(GuavaCallAdapterFactory.create())
         .build();
   }
 
@@ -181,20 +148,41 @@ public class OpenAIService {
     return execute(api.createCompletion(request));
   }
 
+  public ListenableFuture<CompletionResult> createCompletionAsync(CompletionRequest request) {
+    return api.createCompletion(request);
+  }
+
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
     return execute(api.createChatCompletion(request));
+  }
+
+  public ListenableFuture<ChatCompletionResult> createChatCompletionAsync(
+      ChatCompletionRequest request) {
+    return api.createChatCompletion(request);
   }
 
   public EditResult createEdit(EditRequest request) {
     return execute(api.createEdit(request));
   }
 
+  public ListenableFuture<EditResult> createEditAsync(EditRequest request) {
+    return api.createEdit(request);
+  }
+
   public EmbeddingResult createEmbeddings(EmbeddingRequest request) {
     return execute(api.createEmbeddings(request));
   }
 
+  public ListenableFuture<EmbeddingResult> createEmbeddingsAsync(EmbeddingRequest request) {
+    return api.createEmbeddings(request);
+  }
+
   public ImageResult createImage(CreateImageRequest request) {
     return execute(api.createImage(request));
+  }
+
+  public ListenableFuture<ImageResult> createImageAsync(CreateImageRequest request) {
+    return api.createImage(request);
   }
 
   public ImageResult createImageEdit(
@@ -205,6 +193,16 @@ public class OpenAIService {
       mask = new java.io.File(maskPath);
     }
     return createImageEdit(request, image, mask);
+  }
+
+  public ListenableFuture<ImageResult> createImageEditAsync(
+      CreateImageEditRequest request, String imagePath, String maskPath) {
+    java.io.File image = new java.io.File(imagePath);
+    java.io.File mask = null;
+    if (maskPath != null) {
+      mask = new java.io.File(maskPath);
+    }
+    return createImageEditAsync(request, image, mask);
   }
 
   public ImageResult createImageEdit(
@@ -231,9 +229,39 @@ public class OpenAIService {
     return execute(api.createImageEdit(builder.build()));
   }
 
+  public ListenableFuture<ImageResult> createImageEditAsync(
+      CreateImageEditRequest request, java.io.File image, java.io.File mask) {
+    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+
+    MultipartBody.Builder builder =
+        new MultipartBody.Builder()
+            .setType(MediaType.get("multipart/form-data"))
+            .addFormDataPart("prompt", request.getPrompt())
+            .addFormDataPart("size", request.getSize())
+            .addFormDataPart("response_format", request.getResponseFormat())
+            .addFormDataPart("image", "image", imageBody);
+
+    if (request.getN() != null) {
+      builder.addFormDataPart("n", request.getN().toString());
+    }
+
+    if (mask != null) {
+      RequestBody maskBody = RequestBody.create(MediaType.parse("image"), mask);
+      builder.addFormDataPart("mask", "mask", maskBody);
+    }
+
+    return api.createImageEdit(builder.build());
+  }
+
   public ImageResult createImageVariation(CreateImageVariationRequest request, String imagePath) {
     java.io.File image = new java.io.File(imagePath);
     return createImageVariation(request, image);
+  }
+
+  public ListenableFuture<ImageResult> createImageVariationAsync(
+      CreateImageVariationRequest request, String imagePath) {
+    java.io.File image = new java.io.File(imagePath);
+    return createImageVariationAsync(request, image);
   }
 
   public ImageResult createImageVariation(CreateImageVariationRequest request, java.io.File image) {
@@ -253,8 +281,30 @@ public class OpenAIService {
     return execute(api.createImageVariation(builder.build()));
   }
 
+  public ListenableFuture<ImageResult> createImageVariationAsync(
+      CreateImageVariationRequest request, java.io.File image) {
+    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+
+    MultipartBody.Builder builder =
+        new MultipartBody.Builder()
+            .setType(MediaType.get("multipart/form-data"))
+            .addFormDataPart("size", request.getSize())
+            .addFormDataPart("response_format", request.getResponseFormat())
+            .addFormDataPart("image", "image", imageBody);
+
+    if (request.getN() != null) {
+      builder.addFormDataPart("n", request.getN().toString());
+    }
+
+    return api.createImageVariation(builder.build());
+  }
+
   public ModerationResult createModeration(ModerationRequest request) {
     return execute(api.createModeration(request));
+  }
+
+  public ListenableFuture<ModerationResult> createModerationAsync(ModerationRequest request) {
+    return api.createModeration(request);
   }
 
   /**

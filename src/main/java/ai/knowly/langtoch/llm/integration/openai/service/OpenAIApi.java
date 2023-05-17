@@ -12,7 +12,7 @@ import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImag
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationResult;
-import io.reactivex.Single;
+import com.google.common.util.concurrent.ListenableFuture;
 import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
@@ -20,26 +20,26 @@ import retrofit2.http.POST;
 public interface OpenAIApi {
 
   @POST("/v1/completions")
-  Single<CompletionResult> createCompletion(@Body CompletionRequest request);
+  ListenableFuture<CompletionResult> createCompletion(@Body CompletionRequest request);
 
   @POST("/v1/chat/completions")
-  Single<ChatCompletionResult> createChatCompletion(@Body ChatCompletionRequest request);
+  ListenableFuture<ChatCompletionResult> createChatCompletion(@Body ChatCompletionRequest request);
 
   @POST("/v1/edits")
-  Single<EditResult> createEdit(@Body EditRequest request);
+  ListenableFuture<EditResult> createEdit(@Body EditRequest request);
 
   @POST("/v1/embeddings")
-  Single<EmbeddingResult> createEmbeddings(@Body EmbeddingRequest request);
+  ListenableFuture<EmbeddingResult> createEmbeddings(@Body EmbeddingRequest request);
 
   @POST("/v1/images/generations")
-  Single<ImageResult> createImage(@Body CreateImageRequest request);
+  ListenableFuture<ImageResult> createImage(@Body CreateImageRequest request);
 
   @POST("/v1/images/edits")
-  Single<ImageResult> createImageEdit(@Body RequestBody requestBody);
+  ListenableFuture<ImageResult> createImageEdit(@Body RequestBody requestBody);
 
   @POST("/v1/images/variations")
-  Single<ImageResult> createImageVariation(@Body RequestBody requestBody);
+  ListenableFuture<ImageResult> createImageVariation(@Body RequestBody requestBody);
 
   @POST("/v1/moderations")
-  Single<ModerationResult> createModeration(@Body ModerationRequest request);
+  ListenableFuture<ModerationResult> createModeration(@Body ModerationRequest request);
 }

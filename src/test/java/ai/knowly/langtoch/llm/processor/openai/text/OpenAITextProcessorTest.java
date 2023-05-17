@@ -3,11 +3,10 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import io.reactivex.Single;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -18,12 +17,12 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAITextProcessorTest {
-  @Mock private OpenAIApi openAiApi;
+  @Mock private OpenAIService openAIService;
   private OpenAITextProcessor openAITextProcessor;
 
   @BeforeEach
   void setUp() {
-    openAITextProcessor = new OpenAITextProcessor(openAiApi);
+    openAITextProcessor = new OpenAITextProcessor(openAIService);
   }
 
   @Test
@@ -37,7 +36,7 @@ final class OpenAITextProcessorTest {
             .setSuffix("test-suffix")
             .build();
 
-    when(openAiApi.createCompletion(
+    when(openAIService.createCompletion(
             CompletionRequest.builder()
                 .model("text-davinci-003")
                 .maxTokens(2048)
@@ -46,8 +45,7 @@ final class OpenAITextProcessorTest {
                 .logitBias(Map.of())
                 .build()))
         .thenReturn(
-            Single.just(
-                OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response")));
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));
 
     // Act.
     SingleText output = openAITextProcessor.withConfig(config).run(inputData);

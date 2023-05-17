@@ -114,7 +114,7 @@ dependencies {
 // Testing related dependencies
 dependencies {
     // Mocking
-    testImplementation 'org.mockito:mockito-all:1.10.19'
+    testImplementation 'org.mockito:mockito-core:3.2.4'
     // Testing util
     testImplementation 'com.google.acai:acai:1.1'
     // Generic testing

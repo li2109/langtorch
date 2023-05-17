@@ -63,10 +63,6 @@ public class PromptTemplateCapabilityTest {
   @Test
   public void promptTemplateWithoutVariable_withInputMap() {
     // Arrange.
-    when(openAiApi.createCompletion(any()))
-        .thenReturn(
-            Single.just(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google")));
-
     // Act.
     // Assert.
     assertThrows(

@@ -5,7 +5,7 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class PromptTemplateCapabilityTest {
-  @Mock private OpenAiApi openAiApi;
+  @Mock private OpenAIApi openAiApi;
 
   @Test
   void simpleTest() throws ExecutionException, InterruptedException {

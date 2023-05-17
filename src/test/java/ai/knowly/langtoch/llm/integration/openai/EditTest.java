@@ -3,8 +3,8 @@ package ai.knowly.langtoch.llm.integration.openai;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ai.knowly.langtoch.llm.Utils;
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditResult;
 import org.junit.jupiter.api.Test;
@@ -14,9 +14,9 @@ class EditTest {
 
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
-  void edit() throws OpenAiHttpException {
+  void edit() throws OpenAIHttpException {
     String token = Utils.getOpenAIApiKeyFromEnv();
-    OpenAiService service = new OpenAiService(token);
+    OpenAIService service = new OpenAIService(token);
     EditRequest request =
         EditRequest.builder()
             .model("text-davinci-edit-001")

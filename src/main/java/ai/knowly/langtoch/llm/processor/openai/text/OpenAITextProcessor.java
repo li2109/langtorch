@@ -2,7 +2,7 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
@@ -23,7 +23,7 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   private static final int DEFAULT_MAX_TOKENS = 2048;
 
   // OpenAiApi instance used for making requests
-  private final OpenAiApi openAiApi;
+  private final OpenAIApi openAiApi;
 
   // Configuration for the OpenAI Text Processor
   private OpenAITextProcessorConfig openAITextProcessorConfig =
@@ -33,7 +33,7 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
           .build();
 
   // Constructor with dependency injection
-  OpenAITextProcessor(OpenAiApi openAiApi) {
+  OpenAITextProcessor(OpenAIApi openAiApi) {
     this.openAiApi = openAiApi;
   }
 
@@ -43,7 +43,7 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
-  public static OpenAITextProcessor create(OpenAiApi openAiApi) {
+  public static OpenAITextProcessor create(OpenAIApi openAiApi) {
     return new OpenAITextProcessor(openAiApi);
   }
 

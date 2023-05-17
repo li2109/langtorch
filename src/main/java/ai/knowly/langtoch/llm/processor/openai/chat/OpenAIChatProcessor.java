@@ -2,7 +2,7 @@ package ai.knowly.langtoch.llm.processor.openai.chat;
 
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
@@ -27,7 +27,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
   private static final int DEFAULT_MAX_TOKEN = 2048;
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   // OpenAiApi instance used for making requests
-  private final OpenAiApi openAiApi;
+  private final OpenAIApi openAiApi;
   // Configuration for the OpenAI Chat Processor
   private OpenAIChatProcessorConfig openAIChatProcessorConfig =
       OpenAIChatProcessorConfig.builder()
@@ -37,7 +37,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
 
   // Constructor with dependency injection
   @Inject
-  OpenAIChatProcessor(OpenAiApi openAiApi) {
+  OpenAIChatProcessor(OpenAIApi openAiApi) {
     this.openAiApi = openAiApi;
   }
 
@@ -56,7 +56,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
   }
 
   // Factory method to create a new OpenAIChatProcessor instance with a given OpenAiApi instance
-  public static OpenAIChatProcessor create(OpenAiApi openAiApi) {
+  public static OpenAIChatProcessor create(OpenAIApi openAiApi) {
     return new OpenAIChatProcessor(openAiApi);
   }
 

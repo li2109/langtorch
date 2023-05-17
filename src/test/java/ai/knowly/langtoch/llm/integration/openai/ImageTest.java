@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ai.knowly.langtoch.llm.Utils;
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageEditRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageVariationRequest;
@@ -21,12 +21,12 @@ class ImageTest {
   static String maskPath = "src/test/resources/mask.png";
 
   private String token;
-  private OpenAiService service;
+  private OpenAIService service;
 
   @BeforeEach
   void setUp() {
     token = Utils.getOpenAIApiKeyFromEnv();
-    service = new OpenAiService(token);
+    service = new OpenAIService(token);
   }
 
   @Test

@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.image.Image;
@@ -17,14 +17,14 @@ public class OpenAIImageProcessor implements Processor<SingleText, Images> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   // OpenAiApi instance used for making requests
-  private final OpenAiApi openAiApi;
+  private final OpenAIApi openAiApi;
 
   // Configuration for the OpenAI Image Processor
   private OpenAIImageProcessorConfig openAIImageProcessorConfig =
       OpenAIImageProcessorConfig.builder().build();
 
   // Constructor with dependency injection
-  OpenAIImageProcessor(OpenAiApi openAiApi) {
+  OpenAIImageProcessor(OpenAIApi openAiApi) {
     this.openAiApi = openAiApi;
   }
 
@@ -34,7 +34,7 @@ public class OpenAIImageProcessor implements Processor<SingleText, Images> {
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
-  public static OpenAIImageProcessor create(OpenAiApi openAiApi) {
+  public static OpenAIImageProcessor create(OpenAIApi openAiApi) {
     return new OpenAIImageProcessor(openAiApi);
   }
 

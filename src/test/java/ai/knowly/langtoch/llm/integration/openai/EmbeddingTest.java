@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.integration.openai;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import ai.knowly.langtoch.llm.Utils;
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.Embedding;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingRequest;
 import java.util.Collections;
@@ -17,7 +17,7 @@ class EmbeddingTest {
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createEmbeddings() {
     String token = Utils.getOpenAIApiKeyFromEnv();
-    OpenAiService service = new OpenAiService(token);
+    OpenAIService service = new OpenAIService(token);
     EmbeddingRequest embeddingRequest =
         EmbeddingRequest.builder()
             .model("text-similarity-babbage-001")

@@ -5,7 +5,7 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import ai.knowly.langtoch.llm.integration.openai.service.ResponseBodyCallback;
 import ai.knowly.langtoch.llm.integration.openai.service.SSE;
 import ai.knowly.langtoch.llm.integration.openai.service.SSEFormatException;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import io.reactivex.BackpressureStrategy;
 import io.reactivex.Flowable;
 import io.reactivex.subscribers.TestSubscriber;
@@ -101,7 +101,7 @@ class ResponseBodyCallbackTest {
     TestSubscriber<SSE> testSubscriber = new TestSubscriber<>();
     flowable.subscribe(testSubscriber);
 
-    testSubscriber.assertError(OpenAiHttpException.class);
+    testSubscriber.assertError(OpenAIHttpException.class);
 
     assertEquals("Invalid auth token", testSubscriber.errors().get(0).getMessage());
   }

@@ -17,8 +17,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class CapabilityGraphTest {
-  @Mock
-  OpenAIService openAIChat;
+  @Mock OpenAIService openAIChat;
 
   @Test
   void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {

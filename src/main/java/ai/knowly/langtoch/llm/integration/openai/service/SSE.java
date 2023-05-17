@@ -1,26 +1,24 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-/**
- * Simple Server Sent Event representation
- */
+/** Simple Server Sent Event representation */
 public class SSE {
-    private static final String DONE_DATA = "[DONE]";
-    
-    private final String data;
+  private static final String DONE_DATA = "[DONE]";
 
-    public SSE(String data){
-        this.data = data;
-    }
+  private final String data;
 
-    public String getData(){
-        return this.data;
-    }
+  public SSE(String data) {
+    this.data = data;
+  }
 
-    public byte[] toBytes(){
-        return String.format("data: %s\n\n", this.data).getBytes();
-    }
+  public String getData() {
+    return this.data;
+  }
 
-    public boolean isDone(){
-        return DONE_DATA.equalsIgnoreCase(this.data);
-    }
+  public byte[] toBytes() {
+    return String.format("data: %s\n\n", this.data).getBytes();
+  }
+
+  public boolean isDone() {
+    return DONE_DATA.equalsIgnoreCase(this.data);
+  }
 }

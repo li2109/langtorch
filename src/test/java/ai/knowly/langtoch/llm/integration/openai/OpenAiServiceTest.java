@@ -36,7 +36,8 @@ class OpenAiServiceTest {
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void executeParseHttpError() {
     String errorBody =
-        "{\"error\":{\"message\":\"Invalid auth token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
+        "{\"error\":{\"message\":\"Invalid auth"
+            + " token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
     HttpException httpException = createException(errorBody, 401);
     Single<CompletionResult> single = Single.error(httpException);
 
@@ -55,7 +56,8 @@ class OpenAiServiceTest {
   void executeParseUnknownProperties() {
     // error body contains one unknown property and no message
     String errorBody =
-        "{\"error\":{\"unknown\":\"Invalid auth token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
+        "{\"error\":{\"unknown\":\"Invalid auth"
+            + " token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
     HttpException httpException = createException(errorBody, 401);
     Single<CompletionResult> single = Single.error(httpException);
 

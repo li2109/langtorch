@@ -6,26 +6,26 @@ import lombok.Data;
 /**
  * An object containing the scores for each moderation category
  *
- * https://beta.openai.com/docs/api-reference/moderations/create
+ * <p>https://beta.openai.com/docs/api-reference/moderations/create
  */
 @Data
 public class ModerationCategoryScores {
 
-    public double hate;
+  public double hate;
 
-    @JsonProperty("hate/threatening")
-    public double hateThreatening;
+  @JsonProperty("hate/threatening")
+  public double hateThreatening;
 
-    @JsonProperty("self-harm")
-    public double selfHarm;
+  @JsonProperty("self-harm")
+  public double selfHarm;
 
-    public double sexual;
+  public double sexual;
 
-    @JsonProperty("sexual/minors")
-    public double sexualMinors;
+  @JsonProperty("sexual/minors")
+  public double sexualMinors;
 
-    public double violence;
+  public double violence;
 
-    @JsonProperty("violence/graphic")
-    public double violenceGraphic;
+  @JsonProperty("violence/graphic")
+  public double violenceGraphic;
 }

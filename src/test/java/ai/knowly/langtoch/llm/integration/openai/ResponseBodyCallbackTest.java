@@ -88,7 +88,8 @@ class ResponseBodyCallbackTest {
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void testServerError() {
     String errorBody =
-        "{\"error\":{\"message\":\"Invalid auth token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
+        "{\"error\":{\"message\":\"Invalid auth"
+            + " token\",\"type\":\"type\",\"param\":\"param\",\"code\":\"code\"}}";
     ResponseBody body = ResponseBody.create(MediaType.get("application/json"), errorBody);
     Call<ResponseBody> call = Calls.response(Response.error(401, body));
 

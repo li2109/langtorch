@@ -3,18 +3,12 @@ package ai.knowly.langtoch.llm.integration.openai.service.schema;
 import java.util.List;
 import lombok.Data;
 
-/**
- * A wrapper class to fit the OpenAI engine and search endpoints
- */
+/** A wrapper class to fit the OpenAI engine and search endpoints */
 @Data
 public class OpenAiResponse<T> {
-    /**
-     * A list containing the actual results
-     */
-    public List<T> data;
+  /** A list containing the actual results */
+  public List<T> data;
 
-    /**
-     * The type of object returned, should be "list"
-     */
-    public String object;
+  /** The type of object returned, should be "list" */
+  public String object;
 }

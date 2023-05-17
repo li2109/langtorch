@@ -1,7 +1,7 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiError;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIError;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
@@ -35,13 +35,13 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.rxjava2.RxJava2CallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class OpenAiService {
+public class OpenAIService {
 
   private static final String BASE_URL = "https://api.openai.com/";
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
   private static final ObjectMapper mapper = defaultObjectMapper();
 
-  private final OpenAiApi api;
+  private final OpenAIApi api;
   private final ExecutorService executorService;
 
   /**
@@ -49,7 +49,7 @@ public class OpenAiService {
    *
    * @param token OpenAi token string "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    */
-  public OpenAiService(final String token) {
+  public OpenAIService(final String token) {
     this(token, DEFAULT_TIMEOUT);
   }
 
@@ -59,12 +59,12 @@ public class OpenAiService {
    * @param token OpenAi token string "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    * @param timeout http read timeout, Duration.ZERO means no timeout
    */
-  public OpenAiService(final String token, final Duration timeout) {
+  public OpenAIService(final String token, final Duration timeout) {
     ObjectMapper mapper = defaultObjectMapper();
     OkHttpClient client = defaultClient(token, timeout);
     Retrofit retrofit = defaultRetrofit(client, mapper);
 
-    this.api = retrofit.create(OpenAiApi.class);
+    this.api = retrofit.create(OpenAIApi.class);
     this.executorService = client.dispatcher().executorService();
   }
 
@@ -74,7 +74,7 @@ public class OpenAiService {
    *
    * @param api OpenAiApi instance to use for all methods
    */
-  public OpenAiService(final OpenAiApi api) {
+  public OpenAIService(final OpenAIApi api) {
     this.api = api;
     this.executorService = null;
   }
@@ -88,7 +88,7 @@ public class OpenAiService {
    * @param api OpenAiApi instance to use for all methods
    * @param executorService the ExecutorService from client.dispatcher().executorService()
    */
-  public OpenAiService(final OpenAiApi api, final ExecutorService executorService) {
+  public OpenAIService(final OpenAIApi api, final ExecutorService executorService) {
     this.api = api;
     this.executorService = executorService;
   }
@@ -104,8 +104,8 @@ public class OpenAiService {
         }
         String errorBody = e.response().errorBody().string();
 
-        OpenAiError error = mapper.readValue(errorBody, OpenAiError.class);
-        throw new OpenAiHttpException(error, e, e.code());
+        OpenAIError error = mapper.readValue(errorBody, OpenAIError.class);
+        throw new OpenAIHttpException(error, e, e.code());
       } catch (IOException ex) {
         // couldn't parse OpenAI error
         throw e;
@@ -144,12 +144,12 @@ public class OpenAiService {
     return stream(apiCall).map(sse -> mapper.readValue(sse.getData(), cl));
   }
 
-  public static OpenAiApi buildApi(String token, Duration timeout) {
+  public static OpenAIApi buildApi(String token, Duration timeout) {
     ObjectMapper mapper = defaultObjectMapper();
     OkHttpClient client = defaultClient(token, timeout);
     Retrofit retrofit = defaultRetrofit(client, mapper);
 
-    return retrofit.create(OpenAiApi.class);
+    return retrofit.create(OpenAIApi.class);
   }
 
   public static ObjectMapper defaultObjectMapper() {
@@ -162,7 +162,7 @@ public class OpenAiService {
 
   public static OkHttpClient defaultClient(String token, Duration timeout) {
     return new OkHttpClient.Builder()
-        .addInterceptor(new AuthenticationInterceptor(token))
+        .addInterceptor(new OpenAIAuthenticationInterceptor(token))
         .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
         .readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
         .build();

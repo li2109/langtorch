@@ -2,8 +2,8 @@ package ai.knowly.langtoch.llm.integration.openai;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import io.reactivex.Single;
 import okhttp3.MediaType;
@@ -13,13 +13,13 @@ import org.junit.jupiter.api.condition.EnabledIf;
 import retrofit2.HttpException;
 import retrofit2.Response;
 
-class OpenAiServiceTest {
+class OpenAIServiceTest {
 
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void assertTokenNotNull() {
     String token = null;
-    assertThrows(NullPointerException.class, () -> new OpenAiService(token));
+    assertThrows(NullPointerException.class, () -> new OpenAIService(token));
   }
 
   @Test
@@ -28,7 +28,7 @@ class OpenAiServiceTest {
     CompletionResult expected = new CompletionResult();
     Single<CompletionResult> single = Single.just(expected);
 
-    CompletionResult actual = OpenAiService.execute(single);
+    CompletionResult actual = OpenAIService.execute(single);
     assertEquals(expected, actual);
   }
 
@@ -41,8 +41,8 @@ class OpenAiServiceTest {
     HttpException httpException = createException(errorBody, 401);
     Single<CompletionResult> single = Single.error(httpException);
 
-    OpenAiHttpException exception =
-        assertThrows(OpenAiHttpException.class, () -> OpenAiService.execute(single));
+    OpenAIHttpException exception =
+        assertThrows(OpenAIHttpException.class, () -> OpenAIService.execute(single));
 
     assertEquals("Invalid auth token", exception.getMessage());
     assertEquals("type", exception.type);
@@ -61,8 +61,8 @@ class OpenAiServiceTest {
     HttpException httpException = createException(errorBody, 401);
     Single<CompletionResult> single = Single.error(httpException);
 
-    OpenAiHttpException exception =
-        assertThrows(OpenAiHttpException.class, () -> OpenAiService.execute(single));
+    OpenAIHttpException exception =
+        assertThrows(OpenAIHttpException.class, () -> OpenAIService.execute(single));
     assertNull(exception.getMessage());
     assertEquals("type", exception.type);
     assertEquals("param", exception.param);
@@ -78,7 +78,7 @@ class OpenAiServiceTest {
     Single<CompletionResult> single = Single.error(httpException);
 
     HttpException exception =
-        assertThrows(HttpException.class, () -> OpenAiService.execute(single));
+        assertThrows(HttpException.class, () -> OpenAIService.execute(single));
   }
 
   private HttpException createException(String errorBody, int code) {

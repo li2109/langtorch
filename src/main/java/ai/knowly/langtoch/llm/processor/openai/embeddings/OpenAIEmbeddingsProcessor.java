@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.embeddings;
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.embeddings.Embedding;
@@ -17,12 +17,12 @@ import java.util.concurrent.ExecutionException;
 public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embeddings> {
 
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-  private final OpenAiApi openAiApi;
+  private final OpenAIApi openAiApi;
 
   private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =
       OpenAIEmbeddingsProcessorConfig.builder().build();
 
-  public OpenAIEmbeddingsProcessor(OpenAiApi openAiApi) {
+  public OpenAIEmbeddingsProcessor(OpenAIApi openAiApi) {
     this.openAiApi = openAiApi;
   }
 
@@ -30,7 +30,7 @@ public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embe
     this.openAiApi = OpenAIServiceProvider.createOpenAiAPI();
   }
 
-  public static OpenAIEmbeddingsProcessor create(OpenAiApi openAiApi) {
+  public static OpenAIEmbeddingsProcessor create(OpenAIApi openAiApi) {
     return new OpenAIEmbeddingsProcessor(openAiApi);
   }
 

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class OpenAiError {
+public class OpenAIError {
 
   public OpenAiErrorDetails error;
 

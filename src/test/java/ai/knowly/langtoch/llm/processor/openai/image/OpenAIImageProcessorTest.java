@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
 import ai.knowly.langtoch.schema.image.Images;
@@ -19,7 +19,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIImageProcessorTest {
-  @Mock private OpenAiApi openAiApi;
+  @Mock private OpenAIApi openAiApi;
   private OpenAIImageProcessor openAIImageProcessor;
 
   @BeforeEach

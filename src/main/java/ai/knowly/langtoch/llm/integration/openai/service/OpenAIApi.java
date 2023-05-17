@@ -17,7 +17,7 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface OpenAiApi {
+public interface OpenAIApi {
 
   @POST("/v1/completions")
   Single<CompletionResult> createCompletion(@Body CompletionRequest request);

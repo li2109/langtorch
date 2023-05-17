@@ -7,11 +7,11 @@ import okhttp3.Request;
 import okhttp3.Response;
 
 /** OkHttp Interceptor that adds an authorization token header */
-public class AuthenticationInterceptor implements Interceptor {
+public class OpenAIAuthenticationInterceptor implements Interceptor {
 
   private final String token;
 
-  AuthenticationInterceptor(String token) {
+  OpenAIAuthenticationInterceptor(String token) {
     Objects.requireNonNull(token, "OpenAI token required");
     this.token = token;
   }

@@ -3,8 +3,8 @@ package ai.knowly.langtoch.capability.graph;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
 import com.google.common.collect.Streams;
-import com.theokanning.openai.service.OpenAiService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;

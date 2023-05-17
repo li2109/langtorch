@@ -1,9 +1,9 @@
 package ai.knowly.langtoch.llm.processor.openai;
 
 import ai.knowly.langtoch.llm.Utils;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
 import com.google.common.flogger.FluentLogger;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.service.OpenAiService;
 import java.time.Duration;
 
 public final class OpenAIServiceProvider {

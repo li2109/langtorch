@@ -2,8 +2,8 @@ package ai.knowly.langtoch.llm.processor.openai.chat;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
-import com.theokanning.openai.completion.chat.ChatMessage;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage;
 import java.util.List;
 
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages

@@ -3,11 +3,11 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
 import ai.knowly.langtoch.schema.image.Images;
 import ai.knowly.langtoch.schema.io.SingleText;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.image.Image;
-import com.theokanning.openai.image.ImageResult;
 import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.stream.Collectors;

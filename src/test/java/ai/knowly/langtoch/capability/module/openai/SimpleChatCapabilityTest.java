@@ -4,11 +4,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

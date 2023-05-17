@@ -3,13 +3,13 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.image.Image;
 import ai.knowly.langtoch.schema.image.Images;
 import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.flogger.FluentLogger;
-import com.theokanning.openai.OpenAiApi;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 

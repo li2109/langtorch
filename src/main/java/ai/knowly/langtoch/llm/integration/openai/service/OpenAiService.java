@@ -1,27 +1,19 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.DeleteResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiError;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionChunk;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChunk;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.file.File;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.finetune.FineTuneEvent;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.finetune.FineTuneRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.finetune.FineTuneResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageEditRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageVariationRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.model.Model;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
@@ -33,7 +25,6 @@ import io.reactivex.Flowable;
 import io.reactivex.Single;
 import java.io.IOException;
 import java.time.Duration;
-import java.util.List;
 import java.util.Objects;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -186,32 +177,12 @@ public class OpenAiService {
         .build();
   }
 
-  public List<Model> listModels() {
-    return execute(api.listModels()).data;
-  }
-
-  public Model getModel(String modelId) {
-    return execute(api.getModel(modelId));
-  }
-
   public CompletionResult createCompletion(CompletionRequest request) {
     return execute(api.createCompletion(request));
   }
 
-  public Flowable<CompletionChunk> streamCompletion(CompletionRequest request) {
-    request.setStream(true);
-
-    return stream(api.createCompletionStream(request), CompletionChunk.class);
-  }
-
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
     return execute(api.createChatCompletion(request));
-  }
-
-  public Flowable<ChatCompletionChunk> streamChatCompletion(ChatCompletionRequest request) {
-    request.setStream(true);
-
-    return stream(api.createChatCompletionStream(request), ChatCompletionChunk.class);
   }
 
   public EditResult createEdit(EditRequest request) {
@@ -220,55 +191,6 @@ public class OpenAiService {
 
   public EmbeddingResult createEmbeddings(EmbeddingRequest request) {
     return execute(api.createEmbeddings(request));
-  }
-
-  public List<File> listFiles() {
-    return execute(api.listFiles()).data;
-  }
-
-  public File uploadFile(String purpose, String filepath) {
-    java.io.File file = new java.io.File(filepath);
-    RequestBody purposeBody = RequestBody.create(MultipartBody.FORM, purpose);
-    RequestBody fileBody = RequestBody.create(MediaType.parse("text"), file);
-    MultipartBody.Part body = MultipartBody.Part.createFormData("file", filepath, fileBody);
-
-    return execute(api.uploadFile(purposeBody, body));
-  }
-
-  public DeleteResult deleteFile(String fileId) {
-    return execute(api.deleteFile(fileId));
-  }
-
-  public File retrieveFile(String fileId) {
-    return execute(api.retrieveFile(fileId));
-  }
-
-  public FineTuneResult createFineTune(FineTuneRequest request) {
-    return execute(api.createFineTune(request));
-  }
-
-  public CompletionResult createFineTuneCompletion(CompletionRequest request) {
-    return execute(api.createFineTuneCompletion(request));
-  }
-
-  public List<FineTuneResult> listFineTunes() {
-    return execute(api.listFineTunes()).data;
-  }
-
-  public FineTuneResult retrieveFineTune(String fineTuneId) {
-    return execute(api.retrieveFineTune(fineTuneId));
-  }
-
-  public FineTuneResult cancelFineTune(String fineTuneId) {
-    return execute(api.cancelFineTune(fineTuneId));
-  }
-
-  public List<FineTuneEvent> listFineTuneEvents(String fineTuneId) {
-    return execute(api.listFineTuneEvents(fineTuneId)).data;
-  }
-
-  public DeleteResult deleteFineTune(String fineTuneId) {
-    return execute(api.deleteFineTune(fineTuneId));
   }
 
   public ImageResult createImage(CreateImageRequest request) {

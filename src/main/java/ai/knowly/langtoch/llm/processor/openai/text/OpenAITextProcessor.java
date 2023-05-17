@@ -2,13 +2,13 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.completion.CompletionRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 

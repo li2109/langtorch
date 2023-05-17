@@ -2,7 +2,7 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import com.theokanning.openai.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;

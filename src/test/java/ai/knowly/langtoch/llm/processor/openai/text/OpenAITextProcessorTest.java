@@ -3,10 +3,10 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.completion.CompletionRequest;
 import io.reactivex.Single;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;

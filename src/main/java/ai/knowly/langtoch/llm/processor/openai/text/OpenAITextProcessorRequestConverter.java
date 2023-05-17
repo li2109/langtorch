@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
-import com.theokanning.openai.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 
 // Converter class to convert OpenAITextProcessorConfig and a prompt string
 // to a CompletionRequest

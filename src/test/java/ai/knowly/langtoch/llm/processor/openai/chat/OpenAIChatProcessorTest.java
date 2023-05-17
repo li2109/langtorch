@@ -4,11 +4,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.List;
@@ -20,7 +20,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIChatProcessorTest {
-  @Mock private OpenAiApi OpenAiApi;
+  @Mock private ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi OpenAiApi;
   private OpenAIChatProcessor openAIChatProcessor;
 
   @BeforeEach

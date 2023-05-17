@@ -2,6 +2,8 @@ package ai.knowly.langtoch.llm.processor.openai.chat;
 
 import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.chat.AssistantMessage;
@@ -11,8 +13,6 @@ import ai.knowly.langtoch.schema.chat.SystemMessage;
 import ai.knowly.langtoch.schema.chat.UserMessage;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import com.google.common.flogger.FluentLogger;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.completion.chat.ChatCompletionRequest;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 import javax.inject.Inject;
@@ -89,8 +89,9 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
           return singleToCompletableFuture(openAiApi.createChatCompletion(chatCompletionRequest))
               .thenApply(
                   chatCompletion -> {
-                    com.theokanning.openai.completion.chat.ChatMessage chatMessage =
-                        chatCompletion.getChoices().get(0).getMessage();
+                    ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat
+                            .ChatMessage
+                        chatMessage = chatCompletion.getChoices().get(0).getMessage();
                     if (Role.USER.name().toLowerCase().equals(chatMessage.getRole())) {
                       return UserMessage.builder().setMessage(chatMessage.getContent()).build();
                     }

@@ -13,8 +13,8 @@ final class OpenAIChatProcessorRequestConverterTest {
     ChatMessage chatMessage = ChatMessage.of(Role.ASSISTANT, "Hello, how can I help you?");
 
     // Act.
-    com.theokanning.openai.completion.chat.ChatMessage convertedMessage =
-        OpenAIChatProcessorRequestConverter.convertChatMessage(chatMessage);
+    ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage
+        convertedMessage = OpenAIChatProcessorRequestConverter.convertChatMessage(chatMessage);
 
     // Assert.
     assertThat(convertedMessage.getRole()).isEqualTo(Role.ASSISTANT.toString().toLowerCase());

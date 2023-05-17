@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.image;
 
-import com.theokanning.openai.image.CreateImageRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
 
 public final class OpenAIImageProcessorRequestConverter {
   public static CreateImageRequest convert(

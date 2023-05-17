@@ -16,12 +16,11 @@ import org.junit.jupiter.api.condition.EnabledIf;
 
 class ChatCompletionTest {
 
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token);
-
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createChatCompletion() {
+    String token = Utils.getOpenAIApiKeyFromEnv();
+    OpenAiService service = new OpenAiService(token);
     final List<ChatMessage> messages = new ArrayList<>();
     final ChatMessage systemMessage =
         new ChatMessage(ChatMessageRole.SYSTEM.value(), "You are a dog and will speak as such.");

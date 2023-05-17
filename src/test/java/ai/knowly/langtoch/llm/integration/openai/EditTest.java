@@ -12,12 +12,11 @@ import org.junit.jupiter.api.condition.EnabledIf;
 
 class EditTest {
 
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token);
-
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void edit() throws OpenAiHttpException {
+    String token = Utils.getOpenAIApiKeyFromEnv();
+    OpenAiService service = new OpenAiService(token);
     EditRequest request =
         EditRequest.builder()
             .model("text-davinci-edit-001")

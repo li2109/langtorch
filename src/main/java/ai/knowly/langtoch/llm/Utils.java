@@ -17,7 +17,7 @@ public class Utils {
   }
 
   public static String getOpenAIApiKeyFromEnv(Optional<FluentLogger> logger) {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     String openaiApiKey = dotenv.get("OPENAI_API_KEY");
     logger.ifPresent(l -> logPartialApiKey(l, "OpenAI", openaiApiKey));
     return openaiApiKey;
@@ -28,7 +28,7 @@ public class Utils {
   }
 
   public static String getCohereAIApiKeyFromEnv(Optional<FluentLogger> logger) {
-    Dotenv dotenv = Dotenv.load();
+    Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
     String openaiApiKey = dotenv.get("COHERE_API_KEY");
     logger.ifPresent(l -> logPartialApiKey(l, "CohereAI", openaiApiKey));
     return openaiApiKey;

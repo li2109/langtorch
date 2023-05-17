@@ -10,13 +10,11 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
 class ModerationTest {
-
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token);
-
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createModeration() {
+    String token = Utils.getOpenAIApiKeyFromEnv();
+    OpenAiService service = new OpenAiService(token);
     ModerationRequest moderationRequest =
         ModerationRequest.builder()
             .input("I want to kill them")

@@ -13,12 +13,11 @@ import org.junit.jupiter.api.condition.EnabledIf;
 
 class EmbeddingTest {
 
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token);
-
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createEmbeddings() {
+    String token = Utils.getOpenAIApiKeyFromEnv();
+    OpenAiService service = new OpenAiService(token);
     EmbeddingRequest embeddingRequest =
         EmbeddingRequest.builder()
             .model("text-similarity-babbage-001")

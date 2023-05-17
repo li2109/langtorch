@@ -13,12 +13,11 @@ import org.junit.jupiter.api.condition.EnabledIf;
 
 class CompletionTest {
 
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token);
-
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createCompletion() {
+    String token = Utils.getOpenAIApiKeyFromEnv();
+    OpenAiService service = new OpenAiService(token);
     CompletionRequest completionRequest =
         CompletionRequest.builder()
             .model("ada")

@@ -9,8 +9,8 @@ import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImag
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageVariationRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
-import java.time.Duration;
 import java.util.List;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
@@ -20,8 +20,14 @@ class ImageTest {
   static String fileWithAlphaPath = "src/test/resources/penguin_with_alpha.png";
   static String maskPath = "src/test/resources/mask.png";
 
-  String token = Utils.getOpenAIApiKeyFromEnv();
-  OpenAiService service = new OpenAiService(token, Duration.ofSeconds(30));
+  private String token;
+  private OpenAiService service;
+
+  @BeforeEach
+  void setUp() {
+    token = Utils.getOpenAIApiKeyFromEnv();
+    service = new OpenAiService(token);
+  }
 
   @Test
   @EnabledIf("ai.knowly.langtoch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")

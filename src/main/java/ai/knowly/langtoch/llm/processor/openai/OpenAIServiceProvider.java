@@ -5,6 +5,7 @@ import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
 import com.google.common.flogger.FluentLogger;
 import java.time.Duration;
+import java.util.Optional;
 
 public final class OpenAIServiceProvider {
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
@@ -15,7 +16,8 @@ public final class OpenAIServiceProvider {
   }
 
   public static OpenAiApi createOpenAiAPI() {
-    return OpenAiService.buildApi(Utils.getOpenAIApiKeyFromEnv(logger), DEFAULT_TIMEOUT);
+    return OpenAiService.buildApi(
+        Utils.getOpenAIApiKeyFromEnv(Optional.of(logger)), DEFAULT_TIMEOUT);
   }
 
   public static OpenAiService createOpenAIService(String apiKey) {

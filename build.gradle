@@ -109,6 +109,7 @@ dependencies {
     implementation 'com.squareup.retrofit2:adapter-guava:2.9.0'
     implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
+    testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
 }
 
 // Testing related dependencies
@@ -122,6 +123,8 @@ dependencies {
     testImplementation 'com.google.truth:truth:1.1.3'
     // Assertion
     testImplementation 'com.google.truth:truth:1.1.3'
+    // Yaml
+    implementation 'org.yaml:snakeyaml:1.33'
 }
 
 test {

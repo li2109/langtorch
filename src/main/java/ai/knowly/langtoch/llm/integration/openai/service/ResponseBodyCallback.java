@@ -1,7 +1,7 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiError;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAiHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIError;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import io.reactivex.FlowableEmitter;
 import java.io.BufferedReader;
@@ -19,7 +19,7 @@ import retrofit2.Response;
  * io.reactivex.FlowableEmitter to allow streaming of SSE.
  */
 public class ResponseBodyCallback implements Callback<ResponseBody> {
-  private static final ObjectMapper mapper = OpenAiService.defaultObjectMapper();
+  private static final ObjectMapper mapper = OpenAIService.defaultObjectMapper();
 
   private FlowableEmitter<SSE> emitter;
   private boolean emitDone;
@@ -41,8 +41,8 @@ public class ResponseBodyCallback implements Callback<ResponseBody> {
         if (errorBody == null) {
           throw e;
         } else {
-          OpenAiError error = mapper.readValue(errorBody.string(), OpenAiError.class);
-          throw new OpenAiHttpException(error, e, e.code());
+          OpenAIError error = mapper.readValue(errorBody.string(), OpenAIError.class);
+          throw new OpenAIHttpException(error, e, e.code());
         }
       }
 

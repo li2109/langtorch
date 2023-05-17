@@ -3,7 +3,7 @@ package ai.knowly.langtoch.capability.graph;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiService;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import com.google.common.collect.Streams;
 import java.util.Arrays;
 import java.util.HashMap;
@@ -17,7 +17,8 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class CapabilityGraphTest {
-  @Mock OpenAiService openAIChat;
+  @Mock
+  OpenAIService openAIChat;
 
   @Test
   void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {

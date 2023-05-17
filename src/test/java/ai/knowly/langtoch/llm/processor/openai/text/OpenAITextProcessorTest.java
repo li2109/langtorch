@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAiApi;
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
@@ -18,7 +18,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAITextProcessorTest {
-  @Mock private OpenAiApi openAiApi;
+  @Mock private OpenAIApi openAiApi;
   private OpenAITextProcessor openAITextProcessor;
 
   @BeforeEach

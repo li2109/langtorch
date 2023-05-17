@@ -8,18 +8,17 @@ import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
-import java.util.concurrent.ExecutionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SimpleTextCapabilityTest {
+@ExtendWith(MockitoExtension.class)
+final class SimpleTextCapabilityTest {
   @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() throws ExecutionException, InterruptedException {
+  void simpleTest() {
     // Arrange.
     when(openAiApi.createCompletion(any()))
         .thenReturn(

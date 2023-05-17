@@ -12,17 +12,17 @@ import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class PromptTemplateCapabilityTest {
+@ExtendWith(MockitoExtension.class)
+final class PromptTemplateCapabilityTest {
   @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() throws ExecutionException, InterruptedException {
+  void simpleTest() throws ExecutionException, InterruptedException {
     // Arrange.
     when(openAiApi.createCompletion(any()))
         .thenReturn(
@@ -61,7 +61,7 @@ public class PromptTemplateCapabilityTest {
   }
 
   @Test
-  public void promptTemplateWithoutVariable_withInputMap() {
+  void promptTemplateWithoutVariable_withInputMap() {
     // Arrange.
     // Act.
     // Assert.

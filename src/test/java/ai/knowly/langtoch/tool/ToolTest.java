@@ -2,14 +2,11 @@ package ai.knowly.langtoch.tool;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
-public final class ToolTest {
+final class ToolTest {
   @Test
-  public void testTool_sum() {
+  void testTool_sum() {
     // Arrange.
     Function sum =
         args -> {
@@ -33,7 +30,7 @@ public final class ToolTest {
 
   // https://leetcode.com/problems/search-a-2d-matrix/
   @Test
-  public void testTool_search2DMatrix() {
+  void testTool_search2DMatrix() {
     // Arrange.
     Function func = args -> searchMatrix((int[][]) args[0], (int) args[1]);
 

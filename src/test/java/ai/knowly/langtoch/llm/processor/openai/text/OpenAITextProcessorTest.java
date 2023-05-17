@@ -10,24 +10,24 @@ import com.theokanning.openai.completion.CompletionRequest;
 import io.reactivex.Single;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAITextProcessorTest {
+@ExtendWith(MockitoExtension.class)
+final class OpenAITextProcessorTest {
   @Mock private OpenAiApi openAiApi;
   private OpenAITextProcessor openAITextProcessor;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     openAITextProcessor = new OpenAITextProcessor(openAiApi);
   }
 
   @Test
-  public void testRun() throws ExecutionException, InterruptedException {
+  void testRun() throws ExecutionException, InterruptedException {
     // Arrange.
     SingleText inputData = SingleText.of("input1");
     OpenAITextProcessorConfig config =

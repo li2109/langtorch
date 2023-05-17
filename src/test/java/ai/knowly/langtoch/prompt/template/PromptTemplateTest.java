@@ -5,14 +5,11 @@ import static com.google.common.truth.Truth.assertThat;
 import com.google.common.collect.ImmutableList;
 import java.util.HashMap;
 import java.util.Map;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
-public class PromptTemplateTest {
+final class PromptTemplateTest {
   @Test
-  public void promptTemplateWithReusableVariable() {
+  void promptTemplateWithReusableVariable() {
     // Arrange.
     PromptTemplate promptTemplate =
         PromptTemplate.builder()
@@ -71,7 +68,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testPromptTemplateExample() {
+  void testPromptTemplateExample() {
     // Arrange.
     String template = "Provide me company names for the {{$industry}}";
 
@@ -91,7 +88,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testPromptTemplateExample_withCustomizedExampleHeader() {
+  void testPromptTemplateExample_withCustomizedExampleHeader() {
     // Arrange.
     String template = "Provide me company names for the {{$industry}}";
 
@@ -115,7 +112,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testPromptTemplate() {
+  void testPromptTemplate() {
     // Arrange.
     String template =
         "This is a template for a prompt.\n"
@@ -140,7 +137,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testVariableExtractor() {
+  void testVariableExtractor() {
     // Arrange.
     String template =
         "This is a template for a prompt.\n"
@@ -158,7 +155,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testExtractVariables_singleVariable() {
+  void testExtractVariables_singleVariable() {
     // Arrange.
     String input = "I really love this {{$subject}}";
 
@@ -171,7 +168,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testExtractVariables_multipleVariables() {
+  void testExtractVariables_multipleVariables() {
     // Arrange.
     String input = "I really love this {{$subject}} because the teacher is so {{$adj}}";
 
@@ -185,7 +182,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testExtractVariables_noVariables() {
+  void testExtractVariables_noVariables() {
     // Arrange.
     String input = "I really love this subject";
 
@@ -197,7 +194,7 @@ public class PromptTemplateTest {
   }
 
   @Test
-  public void testExtractVariables_emptyString() {
+  void testExtractVariables_emptyString() {
     // Arrange.
     String input = "";
 

@@ -4,16 +4,14 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gson.Gson;
 import java.util.List;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
 
-@RunWith(org.junit.runners.JUnit4.class)
-public class LocalProcessingUnitReaderTest {
+final class LocalProcessingUnitReaderTest {
   private static final String CAPABILITY_PATH =
       "src/test/java/ai/knowly/langtoch/capability/local/v1/summarize";
 
   @Test
-  public void testParse() {
+  void testParse() {
     // Arrange.
     LocalCapabilityUnitReader localCapabilityUnitReader =
         new LocalCapabilityUnitReader(CAPABILITY_PATH, new Gson());

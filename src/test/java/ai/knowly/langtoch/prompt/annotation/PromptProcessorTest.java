@@ -4,14 +4,11 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
-public class PromptProcessorTest {
+final class PromptProcessorTest {
   @Test
-  public void testPromptProcessorWithMultiplePrompts() {
+  void testPromptProcessorWithMultiplePrompts() {
     // Arrange
     SubjectRelatedPrompt subjectRelatedPrompt = new SubjectRelatedPrompt();
 
@@ -30,7 +27,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testPromptProcessorWithNonExistentPromptName() {
+  void testPromptProcessorWithNonExistentPromptName() {
     // Arrange
     SubjectRelatedPrompt subjectRelatedPrompt = new SubjectRelatedPrompt();
 
@@ -43,7 +40,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplate() {
+  void testAnnotationBasedPromptTemplate() {
     // Arrange
     @Prompt(
         template = "Hello, {{$name}}! Your age is {{$age}}.",
@@ -64,7 +61,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testPromptWithStringVariable() {
+  void testPromptWithStringVariable() {
     // Arrange
     final String template = "Hello, {{$name}}! Your age is {{$age}}.";
     @Prompt(
@@ -86,7 +83,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplateNoVariables() {
+  void testAnnotationBasedPromptTemplateNoVariables() {
     // Arrange
     @Prompt(template = "Hello, world!")
     class HelloWorldPrompt {}
@@ -102,7 +99,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplateInvalidVariable() {
+  void testAnnotationBasedPromptTemplateInvalidVariable() {
     // Arrange
     @Prompt(
         template = "Hello, {{$name}}! Your age is {{$age}}.",
@@ -121,7 +118,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplateMissingAnnotation() {
+  void testAnnotationBasedPromptTemplateMissingAnnotation() {
     // Arrange
     class NoAnnotation {
       public String name = "Jane";
@@ -136,7 +133,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplateWithExamples() {
+  void testAnnotationBasedPromptTemplateWithExamples() {
     // Arrange
     @Prompt(
         template = "Hello, {{$name}}! Your age is {{$age}}.",
@@ -163,7 +160,7 @@ public class PromptProcessorTest {
   }
 
   @Test
-  public void testAnnotationBasedPromptTemplateWithExamplesAndExampleHeader() {
+  void testAnnotationBasedPromptTemplateWithExamplesAndExampleHeader() {
     // Arrange
     @Prompt(
         template = "Hello, {{$name}}! Your age is {{$age}}.",

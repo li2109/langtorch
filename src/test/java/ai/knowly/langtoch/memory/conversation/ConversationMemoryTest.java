@@ -9,22 +9,22 @@ import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.schema.chat.UserMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.Map.Entry;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(JUnit4.class)
-public class ConversationMemoryTest {
+@ExtendWith(MockitoExtension.class)
+final class ConversationMemoryTest {
   private ConversationMemory conversationMemory;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     conversationMemory = ConversationMemory.create();
   }
 
   @Test
-  public void testAddAndGet() {
+  void testAddAndGet() {
     // Arrange
     conversationMemory.add(
         Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
@@ -38,7 +38,7 @@ public class ConversationMemoryTest {
   }
 
   @Test
-  public void testGetNotPresent() {
+  void testGetNotPresent() {
     // Act
     Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
@@ -47,7 +47,7 @@ public class ConversationMemoryTest {
   }
 
   @Test
-  public void testClear() {
+  void testClear() {
     // Arrange
     conversationMemory.add(
         Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
@@ -66,7 +66,7 @@ public class ConversationMemoryTest {
   }
 
   @Test
-  public void testPreserveInsertionOrder() {
+  void testPreserveInsertionOrder() {
     // Arrange
     conversationMemory.add(
         Role.ASSISTANT,

@@ -10,18 +10,17 @@ import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
-import java.util.concurrent.ExecutionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SimpleChatCapabilityTest {
+@ExtendWith(MockitoExtension.class)
+final class SimpleChatCapabilityTest {
   @Mock private OpenAiApi openAiApi;
 
   @Test
-  public void simpleTest() throws ExecutionException, InterruptedException {
+  void simpleTest() {
     // Arrange.
     when(openAiApi.createChatCompletion(any()))
         .thenReturn(

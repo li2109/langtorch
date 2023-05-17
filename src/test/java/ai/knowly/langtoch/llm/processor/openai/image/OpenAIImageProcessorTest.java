@@ -11,24 +11,24 @@ import com.theokanning.openai.image.ImageResult;
 import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAIImageProcessorTest {
+@ExtendWith(MockitoExtension.class)
+final class OpenAIImageProcessorTest {
   @Mock private OpenAiApi openAiApi;
   private OpenAIImageProcessor openAIImageProcessor;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     openAIImageProcessor = new OpenAIImageProcessor(openAiApi);
   }
 
   @Test
-  public void testRun() {
+  void testRun() {
     // Arrange.
     SingleText inputData = SingleText.of("image description");
     OpenAIImageProcessorConfig config = OpenAIImageProcessorConfig.builder().setN(2).build();

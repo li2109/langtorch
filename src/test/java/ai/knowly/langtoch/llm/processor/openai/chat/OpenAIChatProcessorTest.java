@@ -12,25 +12,24 @@ import com.theokanning.openai.OpenAiApi;
 import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAIChatProcessorTest {
+@ExtendWith(MockitoExtension.class)
+final class OpenAIChatProcessorTest {
   @Mock private OpenAiApi OpenAiApi;
   private OpenAIChatProcessor openAIChatProcessor;
 
-  @Before
+  @BeforeEach
   public void setUp() {
     openAIChatProcessor = new OpenAIChatProcessor(OpenAiApi);
   }
 
   @Test
-  public void testRunWithChatProcessorConfig() throws ExecutionException, InterruptedException {
+  void testRunWithChatProcessorConfig() {
     // Arrange
     List<ChatMessage> messages =
         Arrays.asList(

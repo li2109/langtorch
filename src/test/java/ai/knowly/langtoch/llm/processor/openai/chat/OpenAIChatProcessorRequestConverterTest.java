@@ -4,14 +4,11 @@ import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
-public class OpenAIChatProcessorRequestConverterTest {
+final class OpenAIChatProcessorRequestConverterTest {
   @Test
-  public void testConvertChatMessage() {
+  void testConvertChatMessage() {
     // Arrange.
     ChatMessage chatMessage = ChatMessage.of(Role.ASSISTANT, "Hello, how can I help you?");
 

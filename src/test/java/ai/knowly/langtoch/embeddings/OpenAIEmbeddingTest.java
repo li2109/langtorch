@@ -5,8 +5,8 @@ import ai.knowly.langtoch.llm.processor.openai.embeddings.OpenAIEmbeddingsProces
 import ai.knowly.langtoch.schema.embeddings.Embeddings;
 import ai.knowly.langtoch.schema.io.EmbeddingInput;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -22,12 +22,12 @@ import static org.mockito.Mockito.when;
 final class OpenAIEmbeddingTest {
 
     @Mock
-    private OpenAIService OpenAiApi;
+    private OpenAIService openAIService;
     private OpenAIEmbeddingsProcessor openAIEmbeddingsProcessor;
 
-    @Before
+    @BeforeEach
     void setUp() {
-        openAIEmbeddingsProcessor = new OpenAIEmbeddingsProcessor(OpenAiApi);
+        openAIEmbeddingsProcessor = new OpenAIEmbeddingsProcessor(openAIService);
     }
 
     @Test
@@ -39,7 +39,7 @@ final class OpenAIEmbeddingTest {
 
         EmbeddingInput input = new EmbeddingInput(model, inputData, user);
 
-        when(OpenAiApi.createEmbeddings(any()))
+        when(openAIService.createEmbeddings(any()))
                 .thenReturn(
                         OpenAIServiceTestingUtils.Embeddings.createEmbeddingResult()
                 );

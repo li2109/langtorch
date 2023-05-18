@@ -1,26 +1,15 @@
 package ai.knowly.langtoch.schema.chat;
 
-/** A message from the user. */
-public class UserMessage extends ChatMessage {
+/**
+ * A message from the user.
+ */
+public final class UserMessage {
 
-  public UserMessage(String content) {
-    super(content, Role.USER);
+  private UserMessage() {
   }
 
-  public static UserMessage of(String content) {
-    return new UserMessage(content);
+  public static ChatMessage of(String content) {
+    return new ChatMessage(content, Role.USER);
   }
 
-  @Override
-  public String toString() {
-    return String.format("%s: %s", getRole(), getContent());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    return (obj instanceof UserMessage && ((UserMessage) obj).getContent().equals(getContent()))
-        || (obj instanceof ChatMessage
-            && ((ChatMessage) obj).getContent().equals(getContent())
-            && ((ChatMessage) obj).getRole().equals(Role.USER));
-  }
 }

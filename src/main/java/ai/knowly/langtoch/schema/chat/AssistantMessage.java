@@ -1,17 +1,15 @@
 package ai.knowly.langtoch.schema.chat;
 
-public class AssistantMessage extends ChatMessage {
+/**
+ * A message from the assistant.
+ */
+public final class AssistantMessage {
 
-  public AssistantMessage(String content) {
-    super(content, Role.ASSISTANT);
+  private AssistantMessage() {
   }
 
-  public static AssistantMessage of(String content) {
-    return new AssistantMessage(content);
+  public static ChatMessage of(String content) {
+    return new ChatMessage(content, Role.ASSISTANT);
   }
 
-  @Override
-  public String toString() {
-    return String.format("%s: %s", getRole(), getContent());
-  }
 }

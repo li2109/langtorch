@@ -1,18 +1,15 @@
 package ai.knowly.langtoch.schema.chat;
 
-/** A message from the system. */
-public class SystemMessage extends ChatMessage {
+/**
+ * A message from the system.
+ */
+public final class SystemMessage {
 
-  public SystemMessage(String content) {
-    super(content, Role.SYSTEM);
+  private SystemMessage() {
   }
 
-  public static SystemMessage of(String content) {
-    return new SystemMessage(content);
+  public static ChatMessage of(String content) {
+    return new ChatMessage(content, Role.SYSTEM);
   }
 
-  @Override
-  public String toString() {
-    return String.format("%s: %s", getRole(), getContent());
-  }
 }

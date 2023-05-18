@@ -49,7 +49,5 @@ final class OpenAIEmbeddingTest {
         Assertions.assertEquals("OPEN_AI", result.getType().name());
         Assertions.assertNotNull(result);
     }
-
-
-
+    
 }

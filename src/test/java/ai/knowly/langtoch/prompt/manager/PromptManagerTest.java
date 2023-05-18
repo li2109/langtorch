@@ -6,13 +6,13 @@ import ai.knowly.langtoch.prompt.template.PromptTemplate;
 import java.io.File;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import org.junit.Test;
+import org.junit.jupiter.api.Test;
 
-public final class PromptManagerTest {
+final class PromptManagerTest {
 
   // Test adding a prompt template
   @Test
-  public void addPromptTemplateTest() {
+  void addPromptTemplateTest() {
     // Arrange.
     PromptManager promptManager = PromptManager.create();
     long version = 1;
@@ -28,7 +28,7 @@ public final class PromptManagerTest {
 
   // Test removing a prompt template
   @Test
-  public void removePromptTemplateTest() {
+  void removePromptTemplateTest() {
     // Arrange.
     PromptManager promptManager = PromptManager.create();
     long version = 1;
@@ -63,7 +63,7 @@ public final class PromptManagerTest {
 
   // Test saving and loading JSON
   @Test
-  public void saveAndLoadJsonTest() throws Exception {
+  void saveAndLoadJsonTest() throws Exception {
     PromptManager promptManager = PromptManager.create();
     long version = 1;
     PromptTemplate promptTemplate = PromptTemplate.builder().setTemplate("Test").build();
@@ -90,7 +90,7 @@ public final class PromptManagerTest {
 
   // Test multi-version prompt templates
   @Test
-  public void multiVersionPromptTemplatesTest() {
+  void multiVersionPromptTemplatesTest() {
     // Arrange.
     PromptManager promptManager = PromptManager.create();
     long version1 = 1;

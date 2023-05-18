@@ -1,7 +1,7 @@
 
 # LangTorch🔥
 [![MIT License](https://img.shields.io/badge/License-MIT-green.svg)](https://choosealicense.com/licenses/mit/)
-[![discord](https://img.shields.io/discord/1094297543078326403)](https://discord.gg/YVUQ4X8E)
+[![discord](https://img.shields.io/discord/1094297543078326403)](https://discord.gg/BUSyZQAPvm)
 
 Building composable LLM application with Java.
 
@@ -23,8 +23,13 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 [Documentation](https://docs.knowly.ai/langtorch/)
 
+[English One Pager](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
+
+[中文一页纸](https://docs.knowly.ai/langtorch/zhong-wen-langtorch-one-pager)
+
+
 ##  💫 Community
-Join [Discord](https://discord.gg/YVUQ4X8E) if you would like to chat or contribute
+Join [Discord](https://discord.gg/BUSyZQAPvm) if you would like to chat or contribute
 
 ## 👥 Contribution
 If you would like to contribute, please open a discussion and let's discuss there.

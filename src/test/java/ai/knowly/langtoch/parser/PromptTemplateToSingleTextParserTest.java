@@ -1,21 +1,21 @@
 package ai.knowly.langtoch.parser;
 
-import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.prompt.template.PromptTemplate;
+import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.truth.Truth;
-import org.junit.Before;
-import org.junit.Test;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-public class PromptTemplateToSingleTextParserTest {
+final class PromptTemplateToSingleTextParserTest {
   private PromptTemplateToSingleTextParser parser;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     parser = PromptTemplateToSingleTextParser.create();
   }
 
   @Test
-  public void parse_validPromptTemplate_noVariableInside() {
+  void parse_validPromptTemplate_noVariableInside() {
     // Arrange
     PromptTemplate promptTemplate =
         PromptTemplate.builder().setTemplate("Create a name for search engine company").build();
@@ -28,7 +28,7 @@ public class PromptTemplateToSingleTextParserTest {
   }
 
   @Test
-  public void parse_validPromptTemplate_threeVariablesInside() {
+  void parse_validPromptTemplate_threeVariablesInside() {
     // Arrange
     PromptTemplate promptTemplate =
         PromptTemplate.builder()

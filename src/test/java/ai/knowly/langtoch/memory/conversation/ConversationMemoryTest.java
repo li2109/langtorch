@@ -9,36 +9,34 @@ import ai.knowly.langtoch.schema.chat.Role;
 import ai.knowly.langtoch.schema.chat.UserMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.Map.Entry;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(JUnit4.class)
-public class ConversationMemoryTest {
+@ExtendWith(MockitoExtension.class)
+final class ConversationMemoryTest {
   private ConversationMemory conversationMemory;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     conversationMemory = ConversationMemory.create();
   }
 
   @Test
-  public void testAddAndGet() {
+  void testAddAndGet() {
     // Arrange
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
+    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
 
     // Act
     Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
     // Assert
-    assertThat(messages)
-        .containsExactly(UserMessage.builder().setMessage("Hi, how's whether like today?").build());
+    assertThat(messages).containsExactly(UserMessage.of("Hi, how's whether like today?"));
   }
 
   @Test
-  public void testGetNotPresent() {
+  void testGetNotPresent() {
     // Act
     Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
@@ -47,13 +45,10 @@ public class ConversationMemoryTest {
   }
 
   @Test
-  public void testClear() {
+  void testClear() {
     // Arrange
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
-    conversationMemory.add(
-        Role.ASSISTANT,
-        UserMessage.builder().setMessage("It's sunny in Mountain View, CA.").build());
+    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
     conversationMemory.clear();
 
     // Act
@@ -66,16 +61,11 @@ public class ConversationMemoryTest {
   }
 
   @Test
-  public void testPreserveInsertionOrder() {
+  void testPreserveInsertionOrder() {
     // Arrange
-    conversationMemory.add(
-        Role.ASSISTANT,
-        AssistantMessage.builder().setMessage("Hi, how can i help you today?").build());
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("how's whether like today?").build());
-    conversationMemory.add(
-        Role.ASSISTANT,
-        AssistantMessage.builder().setMessage("It's sunny in Mountain View, CA.").build());
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("Hi, how can i help you today?"));
+    conversationMemory.add(Role.USER, UserMessage.of("how's whether like today?"));
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
 
     // Act
     ImmutableList<ChatMessage> actual =
@@ -84,13 +74,13 @@ public class ConversationMemoryTest {
             .collect(toImmutableList());
 
     // Assert
-    assertThat(actual.get(0).getMessage()).isEqualTo("Hi, how can i help you today?");
+    assertThat(actual.get(0).getContent()).isEqualTo("Hi, how can i help you today?");
     assertThat(actual.get(0).getRole()).isEqualTo(Role.ASSISTANT);
 
-    assertThat(actual.get(1).getMessage()).isEqualTo("how's whether like today?");
+    assertThat(actual.get(1).getContent()).isEqualTo("how's whether like today?");
     assertThat(actual.get(1).getRole()).isEqualTo(Role.USER);
 
-    assertThat(actual.get(2).getMessage()).isEqualTo("It's sunny in Mountain View, CA.");
+    assertThat(actual.get(2).getContent()).isEqualTo("It's sunny in Mountain View, CA.");
     assertThat(actual.get(2).getRole()).isEqualTo(Role.ASSISTANT);
   }
 }

@@ -4,22 +4,19 @@ import static com.google.common.truth.Truth.assertThat;
 
 import com.google.gson.Gson;
 import java.util.List;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.junit.runners.JUnit4;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
 
-@RunWith(JUnit4.class)
-public class LocalProcessingUnitReaderConfigTest {
+final class LocalProcessingUnitReaderConfigTest {
   private Gson gson;
 
-  @Before
-  public void setUp() {
+  @BeforeEach
+  void setUp() {
     gson = new Gson();
   }
 
   @Test
-  public void testCapabilityConfig_fromJson() {
+  void testCapabilityConfig_fromJson() {
     // Arrange.
     String json =
         "{\n"
@@ -71,7 +68,7 @@ public class LocalProcessingUnitReaderConfigTest {
   }
 
   @Test
-  public void testScientificAbstractConfig() {
+  void testScientificAbstractConfig() {
     // Arrange.
     String json =
         "{\n"
@@ -106,7 +103,7 @@ public class LocalProcessingUnitReaderConfigTest {
   }
 
   @Test
-  public void testPersonalInfoConfig() {
+  void testPersonalInfoConfig() {
     // Arrange.
     String json =
         "{\n"

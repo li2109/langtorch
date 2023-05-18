@@ -4,50 +4,49 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.schema.chat.AssistantMessage;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
+import ai.knowly.langtoch.schema.chat.UserMessage;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
-import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.List;
-import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAIChatProcessorTest {
-  @Mock private OpenAiApi OpenAiApi;
+@ExtendWith(MockitoExtension.class)
+final class OpenAIChatProcessorTest {
+  @Mock private OpenAIService openAIService;
   private OpenAIChatProcessor openAIChatProcessor;
 
-  @Before
+  @BeforeEach
   public void setUp() {
-    openAIChatProcessor = new OpenAIChatProcessor(OpenAiApi);
+    openAIChatProcessor = new OpenAIChatProcessor(openAIService);
   }
 
   @Test
-  public void testRunWithChatProcessorConfig() throws ExecutionException, InterruptedException {
+  void testRunWithChatProcessorConfig() {
     // Arrange
     List<ChatMessage> messages =
         Arrays.asList(
-            ChatMessage.of(Role.USER, "What is the weather today?"),
-            ChatMessage.of(Role.ASSISTANT, "The weather today is sunny."));
+            UserMessage.of("What is the weather today?"),
+            AssistantMessage.of("The weather today is sunny."));
 
-    when(OpenAiApi.createChatCompletion(any()))
+    when(openAIService.createChatCompletion(any()))
         .thenReturn(
-            Single.just(
-                OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
-                    ChatMessage.of(Role.ASSISTANT, "It's going to be a hot day."))));
+            OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
+                AssistantMessage.of("It's going to be a hot day.")));
 
     // Act
     ChatMessage output = openAIChatProcessor.run(MultiChatMessage.of(messages));
 
     // Assert
     assertThat(output.getRole()).isEqualTo(Role.ASSISTANT);
-    assertThat(output.getMessage()).isEqualTo("It's going to be a hot day.");
+    assertThat(output.getContent()).isEqualTo("It's going to be a hot day.");
   }
 }

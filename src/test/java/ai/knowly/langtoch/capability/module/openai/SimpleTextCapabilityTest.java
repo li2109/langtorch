@@ -4,32 +4,29 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
-import io.reactivex.Single;
-import java.util.concurrent.ExecutionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class SimpleTextCapabilityTest {
-  @Mock private OpenAiApi openAiApi;
+@ExtendWith(MockitoExtension.class)
+final class SimpleTextCapabilityTest {
+  @Mock private OpenAIService openAIService;
 
   @Test
-  public void simpleTest() throws ExecutionException, InterruptedException {
+  void simpleTest() {
     // Arrange.
-    when(openAiApi.createCompletion(any()))
+    when(openAIService.createCompletion(any()))
         .thenReturn(
-            Single.just(
-                OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
-                    "Changsha is a city in Hunan province, China.")));
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult(
+                "Changsha is a city in Hunan province, China."));
 
     // Act.
     String output =
-        SimpleTextCapability.create(OpenAITextProcessor.create(openAiApi))
+        SimpleTextCapability.create(OpenAITextProcessor.create(openAIService))
             .run("Where is Changsha?");
 
     // Assert.

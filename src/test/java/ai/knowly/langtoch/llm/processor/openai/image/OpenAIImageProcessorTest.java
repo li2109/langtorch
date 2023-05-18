@@ -3,32 +3,31 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
 import ai.knowly.langtoch.schema.image.Images;
 import ai.knowly.langtoch.schema.io.SingleText;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.image.Image;
-import com.theokanning.openai.image.ImageResult;
-import io.reactivex.Single;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAIImageProcessorTest {
-  @Mock private OpenAiApi openAiApi;
+@ExtendWith(MockitoExtension.class)
+final class OpenAIImageProcessorTest {
+  @Mock private OpenAIService openAIService;
   private OpenAIImageProcessor openAIImageProcessor;
 
-  @Before
+  @BeforeEach
   public void setUp() {
-    openAIImageProcessor = new OpenAIImageProcessor(openAiApi);
+    openAIImageProcessor = new OpenAIImageProcessor(openAIService);
   }
 
   @Test
-  public void testRun() {
+  void testRun() {
     // Arrange.
     SingleText inputData = SingleText.of("image description");
     OpenAIImageProcessorConfig config = OpenAIImageProcessorConfig.builder().setN(2).build();
@@ -42,9 +41,9 @@ public class OpenAIImageProcessorTest {
 
     expectedResult.setData(Arrays.asList(image1, image2));
 
-    when(openAiApi.createImage(
+    when(openAIService.createImage(
             OpenAIImageProcessorRequestConverter.convert(config, "image description")))
-        .thenReturn(Single.just(expectedResult));
+        .thenReturn(expectedResult);
 
     // Act.
     Images output = openAIImageProcessor.withConfig(config).run(inputData);

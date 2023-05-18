@@ -3,24 +3,24 @@ package ai.knowly.langtoch.capability.graph;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import com.google.common.collect.Streams;
-import com.theokanning.openai.service.OpenAiService;
 import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class CapabilityGraphTest {
-  @Mock OpenAiService openAIChat;
+@ExtendWith(MockitoExtension.class)
+final class CapabilityGraphTest {
+  @Mock OpenAIService openAIChat;
 
   @Test
-  public void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {
+  void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
     NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("D"));
@@ -43,7 +43,7 @@ public class CapabilityGraphTest {
   }
 
   @Test
-  public void testProcessGraph_multiplyInputs() throws ExecutionException, InterruptedException {
+  void testProcessGraph_multiplyInputs() throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a =
         new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
@@ -67,7 +67,7 @@ public class CapabilityGraphTest {
   }
 
   @Test
-  public void testProcessGraph_withInitialMultipleInputs()
+  void testProcessGraph_withInitialMultipleInputs()
       throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", List.of("B"));

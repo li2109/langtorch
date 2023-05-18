@@ -1,8 +1,8 @@
 package ai.knowly.langtoch.memory.conversation;
 
+import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.Role;
-import ai.knowly.langtoch.memory.Memory;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.LinkedHashMultimap;
@@ -51,7 +51,7 @@ public abstract class ConversationMemory extends Memory<Role, ChatMessage> {
     for (Entry<Role, ChatMessage> entry : memory().entries()) {
       prompt.append(entry.getKey().toString());
       prompt.append(": ");
-      prompt.append(entry.getValue().getMessage());
+      prompt.append(entry.getValue().getContent());
       prompt.append("\n");
     }
     prompt.append("\n");

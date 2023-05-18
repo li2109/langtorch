@@ -1,16 +1,17 @@
 package ai.knowly.langtoch.llm.processor.openai.text;
 
-import static ai.knowly.langtoch.llm.Utils.singleToCompletableFuture;
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.flogger.FluentLogger;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.completion.CompletionRequest;
-import java.util.concurrent.CompletableFuture;
-import java.util.concurrent.ExecutionException;
+import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.ListenableFuture;
 
 /**
  * OpenAI text processor implementation. Handles single text input and output for the OpenAI
@@ -22,8 +23,7 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final int DEFAULT_MAX_TOKENS = 2048;
 
-  // OpenAiApi instance used for making requests
-  private final OpenAiApi openAiApi;
+  private final OpenAIService openAIService;
 
   // Configuration for the OpenAI Text Processor
   private OpenAITextProcessorConfig openAITextProcessorConfig =
@@ -33,23 +33,23 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
           .build();
 
   // Constructor with dependency injection
-  OpenAITextProcessor(OpenAiApi openAiApi) {
-    this.openAiApi = openAiApi;
+  OpenAITextProcessor(OpenAIService openAIService) {
+    this.openAIService = openAIService;
   }
 
   // Private constructor used in factory methods
   private OpenAITextProcessor() {
-    this.openAiApi = OpenAIServiceProvider.createOpenAiAPI();
+    this.openAIService = OpenAIServiceProvider.createOpenAIService();
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
-  public static OpenAITextProcessor create(OpenAiApi openAiApi) {
-    return new OpenAITextProcessor(openAiApi);
+  public static OpenAITextProcessor create(OpenAIService openAIService) {
+    return new OpenAITextProcessor(openAIService);
   }
 
   // Factory method to create a new OpenAITextProcessor instance with a given OpenAiService instance
   public static OpenAITextProcessor create(String openAIKey) {
-    return new OpenAITextProcessor(OpenAIServiceProvider.createOpenAiAPI(openAIKey));
+    return new OpenAITextProcessor(OpenAIServiceProvider.createOpenAIService(openAIKey));
   }
 
   // Factory method to create a new OpenAITextProcessor instance
@@ -66,28 +66,20 @@ public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   // Method to run the processor with the given input and return the output text
   @Override
   public SingleText run(SingleText inputData) {
-    try {
-      return runAsync(CompletableFuture.completedFuture(inputData)).get();
-    } catch (InterruptedException | ExecutionException e) {
-      logger.atWarning().withCause(e).log("Error running OpenAI Text Processor");
-      throw new RuntimeException(e);
-    }
+    CompletionRequest completionRequest =
+        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, inputData.getText());
+    CompletionResult completion = openAIService.createCompletion(completionRequest);
+    return SingleText.of(completion.getChoices().get(0).getText());
   }
 
   @Override
-  public CompletableFuture<SingleText> runAsync(CompletableFuture<SingleText> inputData) {
-    return inputData.thenCompose(
-        data -> {
-          CompletionRequest completionRequest =
-              OpenAITextProcessorRequestConverter.convert(
-                  openAITextProcessorConfig, data.getText());
-
-          return singleToCompletableFuture(openAiApi.createCompletion(completionRequest))
-              .thenApply(
-                  completion -> {
-                    String response = completion.getChoices().get(0).getText();
-                    return SingleText.of(response);
-                  });
-        });
+  public ListenableFuture<SingleText> runAsync(SingleText inputData) {
+    CompletionRequest completionRequest =
+        OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, inputData.getText());
+    return FluentFuture.from(openAIService.createCompletionAsync(completionRequest))
+        .transform(
+            (CompletionResult completion) ->
+                SingleText.of(completion.getChoices().get(0).getText()),
+            directExecutor());
   }
 }

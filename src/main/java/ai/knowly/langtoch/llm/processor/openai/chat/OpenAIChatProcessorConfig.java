@@ -2,6 +2,8 @@ package ai.knowly.langtoch.llm.processor.openai.chat;
 
 import ai.knowly.langtoch.llm.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
+import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -30,7 +32,7 @@ public abstract class OpenAIChatProcessorConfig implements ProcessorConfig {
 
   public abstract Optional<Boolean> getStream();
 
-  public abstract List<String> getStop();
+  public abstract ImmutableList<String> getStop();
 
   public abstract Optional<Integer> getMaxTokens();
 
@@ -38,7 +40,7 @@ public abstract class OpenAIChatProcessorConfig implements ProcessorConfig {
 
   public abstract Optional<Double> getFrequencyPenalty();
 
-  public abstract Map<String, Integer> getLogitBias();
+  public abstract ImmutableMap<String, Integer> getLogitBias();
 
   public abstract Optional<String> getUser();
 

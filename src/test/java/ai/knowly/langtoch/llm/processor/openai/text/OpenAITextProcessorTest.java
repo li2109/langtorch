@@ -3,31 +3,30 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
-import com.theokanning.openai.completion.CompletionRequest;
-import io.reactivex.Single;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAITextProcessorTest {
-  @Mock private OpenAiApi openAiApi;
+@ExtendWith(MockitoExtension.class)
+final class OpenAITextProcessorTest {
+  @Mock private OpenAIService openAIService;
   private OpenAITextProcessor openAITextProcessor;
 
-  @Before
-  public void setUp() {
-    openAITextProcessor = new OpenAITextProcessor(openAiApi);
+  @BeforeEach
+  void setUp() {
+    openAITextProcessor = new OpenAITextProcessor(openAIService);
   }
 
   @Test
-  public void testRun() throws ExecutionException, InterruptedException {
+  void testRun() throws ExecutionException, InterruptedException {
     // Arrange.
     SingleText inputData = SingleText.of("input1");
     OpenAITextProcessorConfig config =
@@ -37,7 +36,7 @@ public class OpenAITextProcessorTest {
             .setSuffix("test-suffix")
             .build();
 
-    when(openAiApi.createCompletion(
+    when(openAIService.createCompletion(
             CompletionRequest.builder()
                 .model("text-davinci-003")
                 .maxTokens(2048)
@@ -46,8 +45,7 @@ public class OpenAITextProcessorTest {
                 .logitBias(Map.of())
                 .build()))
         .thenReturn(
-            Single.just(
-                OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response")));
+            OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));
 
     // Act.
     SingleText output = openAITextProcessor.withConfig(config).run(inputData);

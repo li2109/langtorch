@@ -69,7 +69,7 @@ public abstract class PromptTemplate implements Input, Output {
 
   // Examples are a list of strings that can be used for few-shot prompting by providing examples of
   // the prompt.
-  public abstract List<String> examples();
+  public abstract ImmutableList<String> examples();
 
   public abstract ImmutableMap<String, String> variables();
 

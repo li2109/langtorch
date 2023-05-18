@@ -6,42 +6,43 @@ import ai.knowly.langtoch.parser.Parser;
 import ai.knowly.langtoch.schema.io.SingleText;
 import ai.knowly.langtoch.schema.memory.MemoryKey;
 import ai.knowly.langtoch.schema.memory.MemoryValue;
+
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class TextCompletionTextLLMCapability<I, O>
-    implements TextLLMCapability<I, SingleText, SingleText, O> {
+        implements TextLLMCapability<I, SingleText, SingleText, O> {
   private final Processor<SingleText, SingleText> processor;
 
-  private Optional<Parser<I, SingleText>> inputParser;
-  private Optional<Parser<SingleText, O>> outputParser;
-  private Optional<Memory<MemoryKey, MemoryValue>> memory;
+  private Parser<I, SingleText> inputParser;
+  private Parser<SingleText, O> outputParser;
+  private Memory<MemoryKey, MemoryValue> memory;
 
   public TextCompletionTextLLMCapability(Processor<SingleText, SingleText> processor) {
     this.processor = processor;
-    this.inputParser = Optional.empty();
-    this.outputParser = Optional.empty();
-    this.memory = Optional.empty();
+    this.inputParser = null;
+    this.outputParser = null;
+    this.memory = null;
   }
 
   public static <I, O> TextCompletionTextLLMCapability<I, O> of(
-      Processor<SingleText, SingleText> processor) {
+          Processor<SingleText, SingleText> processor) {
     return new TextCompletionTextLLMCapability<>(processor);
   }
 
   public TextCompletionTextLLMCapability<I, O> withInputParser(Parser<I, SingleText> inputParser) {
-    this.inputParser = Optional.of(inputParser);
+    this.inputParser = inputParser;
     return this;
   }
 
   public TextCompletionTextLLMCapability<I, O> withOutputParser(
       Parser<SingleText, O> outputParser) {
-    this.outputParser = Optional.of(outputParser);
+    this.outputParser = outputParser;
     return this;
   }
 
   public TextCompletionTextLLMCapability<I, O> withMemory(Memory<MemoryKey, MemoryValue> memory) {
-    this.memory = Optional.of(memory);
+    this.memory = memory;
     return this;
   }
 
@@ -49,27 +50,23 @@ public class TextCompletionTextLLMCapability<I, O>
   public SingleText preProcess(I inputData) {
     if (inputData instanceof SingleText) {
       return (SingleText) inputData;
-    } else if (inputParser.isPresent()) {
-      return inputParser.get().parse(inputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Input data is not a SingleText and no input parser is present.");
     }
+    return Optional.ofNullable(inputParser)
+            .orElseThrow(() -> new IllegalArgumentException(
+                    "Input data is not a SingleText and no input parser is present."))
+            .parse(inputData);
   }
 
   @Override
   public Optional<Memory<MemoryKey, MemoryValue>> getMemory() {
-    return this.memory;
+    return Optional.ofNullable(this.memory);
   }
 
   @Override
   public O postProcess(SingleText outputData) {
-    if (outputParser.isPresent()) {
-      return outputParser.get().parse(outputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Output data type is not SingleText and no output parser is present.");
-    }
+    return Optional.ofNullable(outputParser).orElseThrow(() -> new IllegalArgumentException(
+                    "Output data type is not SingleText and no output parser is present."))
+            .parse(outputData);
   }
 
   @Override

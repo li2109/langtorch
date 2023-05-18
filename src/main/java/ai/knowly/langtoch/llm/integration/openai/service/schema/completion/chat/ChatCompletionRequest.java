@@ -1,5 +1,6 @@
 package ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat;
 
+import ai.knowly.langtoch.schema.chat.ChatMessage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;

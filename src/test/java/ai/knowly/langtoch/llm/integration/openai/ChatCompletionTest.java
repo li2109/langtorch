@@ -6,8 +6,8 @@ import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessageRole;
+import ai.knowly.langtoch.schema.chat.ChatMessage;
+import ai.knowly.langtoch.schema.chat.SystemMessage;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -22,9 +22,7 @@ class ChatCompletionTest {
     String token = Utils.getOpenAIApiKeyFromEnv();
     OpenAIService service = new OpenAIService(token);
     final List<ChatMessage> messages = new ArrayList<>();
-    final ChatMessage systemMessage =
-        new ChatMessage(ChatMessageRole.SYSTEM.value(), "You are a dog and will speak as such.");
-    messages.add(systemMessage);
+    messages.add(SystemMessage.of("You are a dog and will speak as such."));
 
     ChatCompletionRequest chatCompletionRequest =
         ChatCompletionRequest.builder()

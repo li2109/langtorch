@@ -1,20 +1,11 @@
 package ai.knowly.langtoch.llm.processor.openai.chat;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage;
 import java.util.List;
 
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages
 // to a ChatCompletionRequest
 public final class OpenAIChatProcessorRequestConverter {
-  // Helper method to convert a chat message to the corresponding OpenAI chat message type
-  public static ChatMessage convertChatMessage(
-      ai.knowly.langtoch.schema.chat.ChatMessage chatMessage) {
-    return new ChatMessage(chatMessage.getRole().name().toLowerCase(), chatMessage.getContent());
-  }
-
   // Method to convert OpenAIChatProcessorConfig and a list of chat messages
   // to a ChatCompletionRequest
   public static ChatCompletionRequest convert(
@@ -23,10 +14,7 @@ public final class OpenAIChatProcessorRequestConverter {
     ChatCompletionRequest.ChatCompletionRequestBuilder completionRequestBuilder =
         ChatCompletionRequest.builder()
             .model(openAIChatProcessorConfig.getModel())
-            .messages(
-                messages.stream()
-                    .map(OpenAIChatProcessorRequestConverter::convertChatMessage)
-                    .collect(toImmutableList()));
+            .messages(messages);
 
     // Set optional configuration properties
     openAIChatProcessorConfig.getTemperature().ifPresent(completionRequestBuilder::temperature);

@@ -74,15 +74,14 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
         OpenAIChatProcessorRequestConverter.convert(
             openAIChatProcessorConfig, inputData.getMessages());
     ChatCompletionResult chatCompletion = openAIService.createChatCompletion(chatCompletionRequest);
-    ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage
-        chatMessage = chatCompletion.getChoices().get(0).getMessage();
-    if (Role.USER.value().equals(chatMessage.getRole())) {
+    ChatMessage chatMessage = chatCompletion.getChoices().get(0).getMessage();
+    if (Role.USER == chatMessage.getRole()) {
       return UserMessage.of(chatMessage.getContent());
     }
-    if (Role.SYSTEM.value().equals(chatMessage.getRole())) {
+    if (Role.SYSTEM == chatMessage.getRole()) {
       return SystemMessage.of(chatMessage.getContent());
     }
-    if (Role.ASSISTANT.value().equals(chatMessage.getRole())) {
+    if (Role.ASSISTANT == chatMessage.getRole()) {
       return AssistantMessage.of(chatMessage.getContent());
     }
     throw new RuntimeException(
@@ -100,15 +99,14 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
     return FluentFuture.from(chatCompletionAsync)
         .transform(
             chatCompletion -> {
-              ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage
-                  chatMessage = chatCompletion.getChoices().get(0).getMessage();
-              if (Role.USER.name().toLowerCase().equals(chatMessage.getRole())) {
+              ChatMessage chatMessage = chatCompletion.getChoices().get(0).getMessage();
+              if (chatMessage.getRole() == Role.USER) {
                 return UserMessage.of(chatMessage.getContent());
               }
-              if (Role.SYSTEM.name().toLowerCase().equals(chatMessage.getRole())) {
+              if (chatMessage.getRole() == Role.SYSTEM) {
                 return SystemMessage.of(chatMessage.getContent());
               }
-              if (Role.ASSISTANT.name().toLowerCase().equals(chatMessage.getRole())) {
+              if (chatMessage.getRole() == Role.ASSISTANT) {
                 return AssistantMessage.of(chatMessage.getContent());
               }
               throw new RuntimeException(

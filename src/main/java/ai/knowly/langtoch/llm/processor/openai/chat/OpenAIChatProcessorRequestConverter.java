@@ -12,7 +12,7 @@ public final class OpenAIChatProcessorRequestConverter {
   // Helper method to convert a chat message to the corresponding OpenAI chat message type
   public static ChatMessage convertChatMessage(
       ai.knowly.langtoch.schema.chat.ChatMessage chatMessage) {
-    return new ChatMessage(chatMessage.getRole().name().toLowerCase(), chatMessage.getMessage());
+    return new ChatMessage(chatMessage.getRole().name().toLowerCase(), chatMessage.getContent());
   }
 
   // Method to convert OpenAIChatProcessorConfig and a list of chat messages

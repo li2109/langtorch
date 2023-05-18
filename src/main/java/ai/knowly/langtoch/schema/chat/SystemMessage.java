@@ -1,26 +1,24 @@
 package ai.knowly.langtoch.schema.chat;
 
-import com.google.auto.value.AutoValue;
-
 /** A message from the system. */
-@AutoValue
-public abstract class SystemMessage extends ChatMessage {
-  public static Builder builder() {
-    return new AutoValue_SystemMessage.Builder();
+public class SystemMessage extends ChatMessage {
+  private final String content;
+
+  public SystemMessage(String content) {
+    super(content, Role.SYSTEM);
+    this.content = content;
+  }
+
+  public static SystemMessage of(String content) {
+    return new SystemMessage(content);
+  }
+
+  public String getContent() {
+    return content;
   }
 
   @Override
-  public abstract String getMessage();
-
-  @Override
-  public Role getRole() {
-    return Role.SYSTEM;
-  }
-
-  @AutoValue.Builder
-  public abstract static class Builder {
-    public abstract Builder setMessage(String message);
-
-    public abstract SystemMessage build();
+  public String toString() {
+    return String.format("%s: %s", getRole(), getContent());
   }
 }

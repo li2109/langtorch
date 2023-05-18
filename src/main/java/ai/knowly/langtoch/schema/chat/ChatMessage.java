@@ -1,28 +1,24 @@
 package ai.knowly.langtoch.schema.chat;
 
-import ai.knowly.langtoch.schema.io.Input;
-import ai.knowly.langtoch.schema.io.Output;
-
 /** A abstract class for a chat message. */
-public abstract class ChatMessage extends Message implements Input, Output {
-  public static ChatMessage of(Role role, String message) {
-    return new ChatMessage() {
-      @Override
-      public Role getRole() {
-        return role;
-      }
+public class ChatMessage extends Message {
+  private final Role role;
 
-      @Override
-      public String getMessage() {
-        return message;
-      }
-    };
+  public ChatMessage(String content, Role role) {
+    super(content);
+    this.role = role;
   }
 
-  public abstract Role getRole();
+  public static ChatMessage of(String content, Role role) {
+    return new ChatMessage(content, role);
+  }
+
+  public Role getRole() {
+    return role;
+  }
 
   @Override
   public String toString() {
-    return String.format("%s: %s", getRole(), getMessage());
+    return String.format("%s: %s", getRole(), getContent());
   }
 }

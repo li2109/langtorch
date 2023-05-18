@@ -26,15 +26,13 @@ final class ConversationMemoryTest {
   @Test
   void testAddAndGet() {
     // Arrange
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
+    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
 
     // Act
     Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
 
     // Assert
-    assertThat(messages)
-        .containsExactly(UserMessage.builder().setMessage("Hi, how's whether like today?").build());
+    assertThat(messages).containsExactly(UserMessage.of("Hi, how's whether like today?"));
   }
 
   @Test
@@ -49,11 +47,8 @@ final class ConversationMemoryTest {
   @Test
   void testClear() {
     // Arrange
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("Hi, how's whether like today?").build());
-    conversationMemory.add(
-        Role.ASSISTANT,
-        UserMessage.builder().setMessage("It's sunny in Mountain View, CA.").build());
+    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
     conversationMemory.clear();
 
     // Act
@@ -68,14 +63,9 @@ final class ConversationMemoryTest {
   @Test
   void testPreserveInsertionOrder() {
     // Arrange
-    conversationMemory.add(
-        Role.ASSISTANT,
-        AssistantMessage.builder().setMessage("Hi, how can i help you today?").build());
-    conversationMemory.add(
-        Role.USER, UserMessage.builder().setMessage("how's whether like today?").build());
-    conversationMemory.add(
-        Role.ASSISTANT,
-        AssistantMessage.builder().setMessage("It's sunny in Mountain View, CA.").build());
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("Hi, how can i help you today?"));
+    conversationMemory.add(Role.USER, UserMessage.of("how's whether like today?"));
+    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
 
     // Act
     ImmutableList<ChatMessage> actual =
@@ -84,13 +74,13 @@ final class ConversationMemoryTest {
             .collect(toImmutableList());
 
     // Assert
-    assertThat(actual.get(0).getMessage()).isEqualTo("Hi, how can i help you today?");
+    assertThat(actual.get(0).getContent()).isEqualTo("Hi, how can i help you today?");
     assertThat(actual.get(0).getRole()).isEqualTo(Role.ASSISTANT);
 
-    assertThat(actual.get(1).getMessage()).isEqualTo("how's whether like today?");
+    assertThat(actual.get(1).getContent()).isEqualTo("how's whether like today?");
     assertThat(actual.get(1).getRole()).isEqualTo(Role.USER);
 
-    assertThat(actual.get(2).getMessage()).isEqualTo("It's sunny in Mountain View, CA.");
+    assertThat(actual.get(2).getContent()).isEqualTo("It's sunny in Mountain View, CA.");
     assertThat(actual.get(2).getRole()).isEqualTo(Role.ASSISTANT);
   }
 }

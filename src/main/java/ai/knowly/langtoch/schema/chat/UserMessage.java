@@ -1,30 +1,32 @@
 package ai.knowly.langtoch.schema.chat;
 
-import com.google.auto.value.AutoValue;
-
 /** A message from the user. */
-@AutoValue
-public abstract class UserMessage extends ChatMessage {
-  public static Builder builder() {
-    return new AutoValue_UserMessage.Builder();
+public class UserMessage extends ChatMessage {
+  private final String content;
+
+  public UserMessage(String content) {
+    super(content, Role.USER);
+    this.content = content;
   }
 
-  public static UserMessage of(String message) {
-    return builder().setMessage(message).build();
+  public static UserMessage of(String content) {
+    return new UserMessage(content);
+  }
+
+  public String getContent() {
+    return content;
   }
 
   @Override
-  public abstract String getMessage();
-
-  @Override
-  public Role getRole() {
-    return Role.USER;
+  public String toString() {
+    return String.format("%s: %s", getRole(), getContent());
   }
 
-  @AutoValue.Builder
-  public abstract static class Builder {
-    public abstract Builder setMessage(String message);
-
-    public abstract UserMessage build();
+  @Override
+  public boolean equals(Object obj) {
+    return (obj instanceof UserMessage && ((UserMessage) obj).getContent().equals(getContent()))
+        || (obj instanceof ChatMessage
+            && ((ChatMessage) obj).getContent().equals(getContent())
+            && ((ChatMessage) obj).getRole().equals(Role.USER));
   }
 }

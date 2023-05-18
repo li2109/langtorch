@@ -26,15 +26,15 @@ class ChatCompletionTest {
 
     ChatCompletionRequest chatCompletionRequest =
         ChatCompletionRequest.builder()
-            .model("gpt-3.5-turbo")
-            .messages(messages)
-            .n(5)
-            .maxTokens(50)
-            .logitBias(new HashMap<>())
+            .setModel("gpt-3.5-turbo")
+            .setMessages(messages)
+            .setN(3)
+            .setMaxTokens(50)
+            .setLogitBias(new HashMap<>())
             .build();
 
     List<ChatCompletionChoice> choices =
         service.createChatCompletion(chatCompletionRequest).getChoices();
-    assertEquals(5, choices.size());
+    assertEquals(3, choices.size());
   }
 }

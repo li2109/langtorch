@@ -1,10 +1,13 @@
 package ai.knowly.langtoch.schema.chat;
 
-/** A abstract class for a chat message. */
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 public class ChatMessage extends Message {
   private final Role role;
 
-  public ChatMessage(String content, Role role) {
+  @JsonCreator
+  public ChatMessage(@JsonProperty("content") String content, @JsonProperty("role") Role role) {
     super(content);
     this.role = role;
   }

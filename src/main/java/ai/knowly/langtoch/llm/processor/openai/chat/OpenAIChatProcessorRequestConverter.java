@@ -13,26 +13,26 @@ public final class OpenAIChatProcessorRequestConverter {
       List<ai.knowly.langtoch.schema.chat.ChatMessage> messages) {
     ChatCompletionRequest.ChatCompletionRequestBuilder completionRequestBuilder =
         ChatCompletionRequest.builder()
-            .model(openAIChatProcessorConfig.getModel())
-            .messages(messages);
+            .setModel(openAIChatProcessorConfig.getModel())
+            .setMessages(messages);
 
     // Set optional configuration properties
-    openAIChatProcessorConfig.getTemperature().ifPresent(completionRequestBuilder::temperature);
-    openAIChatProcessorConfig.getTopP().ifPresent(completionRequestBuilder::topP);
-    openAIChatProcessorConfig.getN().ifPresent(completionRequestBuilder::n);
-    openAIChatProcessorConfig.getStream().ifPresent(completionRequestBuilder::stream);
+    openAIChatProcessorConfig.getTemperature().ifPresent(completionRequestBuilder::setTemperature);
+    openAIChatProcessorConfig.getTopP().ifPresent(completionRequestBuilder::setTopP);
+    openAIChatProcessorConfig.getN().ifPresent(completionRequestBuilder::setN);
+    openAIChatProcessorConfig.getStream().ifPresent(completionRequestBuilder::setStream);
     if (!openAIChatProcessorConfig.getStop().isEmpty()) {
-      completionRequestBuilder.stop(openAIChatProcessorConfig.getStop());
+      completionRequestBuilder.setStop(openAIChatProcessorConfig.getStop());
     }
-    openAIChatProcessorConfig.getMaxTokens().ifPresent(completionRequestBuilder::maxTokens);
+    openAIChatProcessorConfig.getMaxTokens().ifPresent(completionRequestBuilder::setMaxTokens);
     openAIChatProcessorConfig
         .getPresencePenalty()
-        .ifPresent(completionRequestBuilder::presencePenalty);
+        .ifPresent(completionRequestBuilder::setPresencePenalty);
     openAIChatProcessorConfig
         .getFrequencyPenalty()
-        .ifPresent(completionRequestBuilder::frequencyPenalty);
-    completionRequestBuilder.logitBias(openAIChatProcessorConfig.getLogitBias());
-    openAIChatProcessorConfig.getUser().ifPresent(completionRequestBuilder::user);
+        .ifPresent(completionRequestBuilder::setFrequencyPenalty);
+    completionRequestBuilder.setLogitBias(openAIChatProcessorConfig.getLogitBias());
+    openAIChatProcessorConfig.getUser().ifPresent(completionRequestBuilder::setUser);
     // Build and return the ChatCompletionRequest
     return completionRequestBuilder.build();
   }

@@ -10,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatCompletionRequest {

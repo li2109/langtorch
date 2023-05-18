@@ -1,6 +1,7 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.cohere.schema.CohereHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIError;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
@@ -37,6 +38,7 @@ public class OpenAIService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.openai.com/";
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
+  private static final ObjectMapper mapper = defaultObjectMapper();
 
   private final OpenAIApi api;
   private final ExecutorService executorService;
@@ -102,7 +104,8 @@ public class OpenAIService {
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);
-          throw new CohereHttpException(errorBody, httpException.code(), httpException);
+          OpenAIError error = mapper.readValue(errorBody, OpenAIError.class);
+          throw new OpenAIHttpException(error, e, httpException.code());
         } catch (IOException ioException) {
           logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }

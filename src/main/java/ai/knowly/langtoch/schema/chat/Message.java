@@ -2,20 +2,14 @@ package ai.knowly.langtoch.schema.chat;
 
 import ai.knowly.langtoch.schema.io.Input;
 import ai.knowly.langtoch.schema.io.Output;
+import com.fasterxml.jackson.annotation.JsonCreator;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
-/** A abstract class for a message. */
-// public abstract class Message {
-//  public abstract String getMessage();
-//
-//  @Override
-//  public String toString() {
-//    return String.format("Role: UNKNOWN(Base Message), Content: %s", getMessage());
-//  }
-// }
 public class Message implements Input, Output {
   private final String content;
 
-  public Message(String content) {
+  @JsonCreator
+  public Message(@JsonProperty("content") String content) {
     this.content = content;
   }
 

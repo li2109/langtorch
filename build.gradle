@@ -107,7 +107,6 @@ dependencies {
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
     // Retrofit guava adapter
     implementation 'com.squareup.retrofit2:adapter-guava:2.9.0'
-    implementation 'com.squareup.retrofit2:adapter-rxjava2:2.9.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
 }

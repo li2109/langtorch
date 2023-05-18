@@ -16,7 +16,7 @@ public class TestingUtils {
   public static ImmutableMap<String, Object> getTestingSetting() {
     Yaml yaml = new Yaml();
     InputStream inputStream =
-        TestingUtils.class.getClassLoader().getResourceAsStream("test-settings.yaml");
+        TestingUtils.class.getClassLoader().getResourceAsStream("test_settings.yaml");
     Map<String, Object> obj = yaml.load(inputStream);
     return ImmutableMap.copyOf(obj);
   }

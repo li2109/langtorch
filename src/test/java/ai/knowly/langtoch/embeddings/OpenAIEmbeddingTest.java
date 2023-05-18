@@ -5,6 +5,7 @@ import ai.knowly.langtoch.llm.processor.openai.embeddings.OpenAIEmbeddingsProces
 import ai.knowly.langtoch.schema.embeddings.Embeddings;
 import ai.knowly.langtoch.schema.io.EmbeddingInput;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -14,8 +15,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.Assert.*;
-import static org.mockito.Matchers.any;
+import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -46,8 +46,8 @@ final class OpenAIEmbeddingTest {
 
         Embeddings result = openAIEmbeddingsProcessor.run(input);
 
-        assertEquals("OPEN_AI", result.getType().name());
-        assertNotNull(result);
+        Assertions.assertEquals("OPEN_AI", result.getType().name());
+        Assertions.assertNotNull(result);
     }
 
 

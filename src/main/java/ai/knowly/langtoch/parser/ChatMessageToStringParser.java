@@ -13,7 +13,7 @@ public class ChatMessageToStringParser implements Parser<ChatMessage, String> {
   }
 
   @Override
-  public String parse(ChatMessage input) {
-    return input.getMessage();
+  public String parse(ChatMessage chatMessage) {
+    return chatMessage.getContent();
   }
 }

@@ -1,5 +1,6 @@
 package ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat;
 
+import ai.knowly.langtoch.schema.chat.ChatMessage;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import java.util.Map;
@@ -9,7 +10,7 @@ import lombok.Data;
 import lombok.NoArgsConstructor;
 
 @Data
-@Builder
+@Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor
 @NoArgsConstructor
 public class ChatCompletionRequest {

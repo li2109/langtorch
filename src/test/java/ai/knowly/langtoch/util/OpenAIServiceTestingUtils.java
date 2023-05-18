@@ -4,7 +4,6 @@ import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.Compl
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage;
 import com.google.common.collect.ImmutableList;
 
 public class OpenAIServiceTestingUtils {
@@ -38,17 +37,10 @@ public class OpenAIServiceTestingUtils {
       ImmutableList.Builder<ChatCompletionChoice> builder = ImmutableList.builder();
       for (ai.knowly.langtoch.schema.chat.ChatMessage chatMessage : chatMessages) {
         ChatCompletionChoice completionChoice = new ChatCompletionChoice();
-        completionChoice.setMessage(createChatMessage(chatMessage));
+        completionChoice.setMessage(chatMessage);
         builder.add(completionChoice);
       }
       return builder.build();
-    }
-
-    public static ChatMessage createChatMessage(ai.knowly.langtoch.schema.chat.ChatMessage msg) {
-      ChatMessage chatMessage = new ChatMessage();
-      chatMessage.setContent(msg.getMessage());
-      chatMessage.setRole(msg.getRole().toString().toLowerCase());
-      return chatMessage;
     }
   }
 

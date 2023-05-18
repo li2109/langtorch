@@ -51,7 +51,7 @@ public abstract class ConversationMemory extends Memory<Role, ChatMessage> {
     for (Entry<Role, ChatMessage> entry : memory().entries()) {
       prompt.append(entry.getKey().toString());
       prompt.append(": ");
-      prompt.append(entry.getValue().getMessage());
+      prompt.append(entry.getValue().getContent());
       prompt.append("\n");
     }
     prompt.append("\n");

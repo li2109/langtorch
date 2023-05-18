@@ -16,7 +16,7 @@ public final class StringToMultiChatMessageParser implements Parser<String, Mult
   }
 
   @Override
-  public MultiChatMessage parse(String input) {
-    return MultiChatMessage.of(ChatMessage.of(USER, input));
+  public MultiChatMessage parse(String content) {
+    return MultiChatMessage.of(ChatMessage.of(content, USER));
   }
 }

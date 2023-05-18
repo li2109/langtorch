@@ -1,20 +1,11 @@
 package ai.knowly.langtoch.llm.processor.openai.chat;
 
-import static com.google.common.collect.ImmutableList.toImmutableList;
-
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatMessage;
 import java.util.List;
 
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages
 // to a ChatCompletionRequest
 public final class OpenAIChatProcessorRequestConverter {
-  // Helper method to convert a chat message to the corresponding OpenAI chat message type
-  public static ChatMessage convertChatMessage(
-      ai.knowly.langtoch.schema.chat.ChatMessage chatMessage) {
-    return new ChatMessage(chatMessage.getRole().name().toLowerCase(), chatMessage.getMessage());
-  }
-
   // Method to convert OpenAIChatProcessorConfig and a list of chat messages
   // to a ChatCompletionRequest
   public static ChatCompletionRequest convert(
@@ -22,29 +13,26 @@ public final class OpenAIChatProcessorRequestConverter {
       List<ai.knowly.langtoch.schema.chat.ChatMessage> messages) {
     ChatCompletionRequest.ChatCompletionRequestBuilder completionRequestBuilder =
         ChatCompletionRequest.builder()
-            .model(openAIChatProcessorConfig.getModel())
-            .messages(
-                messages.stream()
-                    .map(OpenAIChatProcessorRequestConverter::convertChatMessage)
-                    .collect(toImmutableList()));
+            .setModel(openAIChatProcessorConfig.getModel())
+            .setMessages(messages);
 
     // Set optional configuration properties
-    openAIChatProcessorConfig.getTemperature().ifPresent(completionRequestBuilder::temperature);
-    openAIChatProcessorConfig.getTopP().ifPresent(completionRequestBuilder::topP);
-    openAIChatProcessorConfig.getN().ifPresent(completionRequestBuilder::n);
-    openAIChatProcessorConfig.getStream().ifPresent(completionRequestBuilder::stream);
+    openAIChatProcessorConfig.getTemperature().ifPresent(completionRequestBuilder::setTemperature);
+    openAIChatProcessorConfig.getTopP().ifPresent(completionRequestBuilder::setTopP);
+    openAIChatProcessorConfig.getN().ifPresent(completionRequestBuilder::setN);
+    openAIChatProcessorConfig.getStream().ifPresent(completionRequestBuilder::setStream);
     if (!openAIChatProcessorConfig.getStop().isEmpty()) {
-      completionRequestBuilder.stop(openAIChatProcessorConfig.getStop());
+      completionRequestBuilder.setStop(openAIChatProcessorConfig.getStop());
     }
-    openAIChatProcessorConfig.getMaxTokens().ifPresent(completionRequestBuilder::maxTokens);
+    openAIChatProcessorConfig.getMaxTokens().ifPresent(completionRequestBuilder::setMaxTokens);
     openAIChatProcessorConfig
         .getPresencePenalty()
-        .ifPresent(completionRequestBuilder::presencePenalty);
+        .ifPresent(completionRequestBuilder::setPresencePenalty);
     openAIChatProcessorConfig
         .getFrequencyPenalty()
-        .ifPresent(completionRequestBuilder::frequencyPenalty);
-    completionRequestBuilder.logitBias(openAIChatProcessorConfig.getLogitBias());
-    openAIChatProcessorConfig.getUser().ifPresent(completionRequestBuilder::user);
+        .ifPresent(completionRequestBuilder::setFrequencyPenalty);
+    completionRequestBuilder.setLogitBias(openAIChatProcessorConfig.getLogitBias());
+    openAIChatProcessorConfig.getUser().ifPresent(completionRequestBuilder::setUser);
     // Build and return the ChatCompletionRequest
     return completionRequestBuilder.build();
   }

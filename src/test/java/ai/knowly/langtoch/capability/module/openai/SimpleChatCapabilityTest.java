@@ -6,8 +6,7 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.processor.openai.chat.OpenAIChatProcessor;
-import ai.knowly.langtoch.schema.chat.ChatMessage;
-import ai.knowly.langtoch.schema.chat.Role;
+import ai.knowly.langtoch.schema.chat.AssistantMessage;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -24,7 +23,7 @@ final class SimpleChatCapabilityTest {
     when(openAIService.createChatCompletion(any()))
         .thenReturn(
             OpenAIServiceTestingUtils.ChatCompletion.createChatCompletionResult(
-                ChatMessage.of(Role.ASSISTANT, "Changsha is a city in Hunan province, China.")));
+                AssistantMessage.of("Changsha is a city in Hunan province, China.")));
 
     // Act.
     String response =

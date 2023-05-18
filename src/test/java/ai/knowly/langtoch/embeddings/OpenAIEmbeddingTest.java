@@ -1,39 +1,37 @@
 package ai.knowly.langtoch.embeddings;
 
+import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtoch.llm.processor.openai.embeddings.OpenAIEmbeddingsProcessor;
 import ai.knowly.langtoch.schema.embeddings.Embeddings;
 import ai.knowly.langtoch.schema.io.EmbeddingInput;
 import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
-import com.theokanning.openai.OpenAiApi;
-import io.reactivex.Single;
 import org.junit.Before;
 import org.junit.Test;
-import org.junit.runner.RunWith;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
-import org.mockito.runners.MockitoJUnitRunner;
+import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.*;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-@RunWith(MockitoJUnitRunner.class)
-public class OpenAIEmbeddingTest {
+@ExtendWith(MockitoExtension.class)
+final class OpenAIEmbeddingTest {
 
     @Mock
-    private OpenAiApi OpenAiApi;
+    private OpenAIService OpenAiApi;
     private OpenAIEmbeddingsProcessor openAIEmbeddingsProcessor;
 
     @Before
-    public void setUp() {
+    void setUp() {
         openAIEmbeddingsProcessor = new OpenAIEmbeddingsProcessor(OpenAiApi);
     }
 
     @Test
-    public void testOpenAiEmbeddings() {
+    void testOpenAiEmbeddings() {
 
         String model = "model";
         List<String> inputData = new ArrayList<>();
@@ -43,9 +41,7 @@ public class OpenAIEmbeddingTest {
 
         when(OpenAiApi.createEmbeddings(any()))
                 .thenReturn(
-                        Single.just(
-                                OpenAIServiceTestingUtils.Embeddings.createEmbeddingResult()
-                        )
+                        OpenAIServiceTestingUtils.Embeddings.createEmbeddingResult()
                 );
 
         Embeddings result = openAIEmbeddingsProcessor.run(input);

@@ -4,14 +4,9 @@ import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.Compl
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.Embedding;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingResult;
 import com.google.common.collect.ImmutableList;
-import com.theokanning.openai.completion.CompletionChoice;
-import com.theokanning.openai.completion.CompletionResult;
-import com.theokanning.openai.completion.chat.ChatCompletionChoice;
-import com.theokanning.openai.completion.chat.ChatCompletionResult;
-import com.theokanning.openai.completion.chat.ChatMessage;
-import com.theokanning.openai.embedding.Embedding;
-import com.theokanning.openai.embedding.EmbeddingResult;
 
 import java.util.ArrayList;
 import java.util.List;

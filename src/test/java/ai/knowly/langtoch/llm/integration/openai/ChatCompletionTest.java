@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionChoice;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.chat.SystemMessage;
 import java.util.ArrayList;

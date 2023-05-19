@@ -5,10 +5,10 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageEditRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageVariationRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageEditRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageVariationRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.Image;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

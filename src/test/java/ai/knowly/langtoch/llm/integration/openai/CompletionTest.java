@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionChoice;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;

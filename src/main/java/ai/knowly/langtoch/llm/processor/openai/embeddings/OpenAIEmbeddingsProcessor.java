@@ -3,7 +3,7 @@ package ai.knowly.langtoch.llm.processor.openai.embeddings;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.EmbeddingResult;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.embeddings.Embedding;

@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.chat;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
 import java.util.List;
 
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages

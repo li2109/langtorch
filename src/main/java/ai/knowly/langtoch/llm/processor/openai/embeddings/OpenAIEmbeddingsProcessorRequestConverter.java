@@ -1,6 +1,6 @@
 package ai.knowly.langtoch.llm.processor.openai.embeddings;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.EmbeddingRequest;
 import java.util.List;
 
 public final class OpenAIEmbeddingsProcessorRequestConverter {

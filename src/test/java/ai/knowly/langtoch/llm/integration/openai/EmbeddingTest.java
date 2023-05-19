@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.Embedding;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.Embedding;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.EmbeddingRequest;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;

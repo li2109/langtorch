@@ -4,8 +4,8 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.Image;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.Image;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.ImageResult;
 import ai.knowly.langtoch.schema.image.Images;
 import ai.knowly.langtoch.schema.io.SingleText;
 import java.util.Arrays;

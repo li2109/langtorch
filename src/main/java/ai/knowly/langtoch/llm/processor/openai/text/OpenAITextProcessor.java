@@ -3,8 +3,8 @@ package ai.knowly.langtoch.llm.processor.openai.text;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionResult;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.io.SingleText;

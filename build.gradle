@@ -2,10 +2,19 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    id "org.sonarqube" version "3.5.0.2730"
 }
 
 group 'ai.knowly'
 version '0.0.10'
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "Knowly-ai_langtorch"
+    property "sonar.organization", "knowly-ai"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
+}
 
 ext {
     gpgKey = project.hasProperty('gpgKey') ? project.getProperty('gpgKey') : System.getenv('GPG_PRIVATE_KEY')

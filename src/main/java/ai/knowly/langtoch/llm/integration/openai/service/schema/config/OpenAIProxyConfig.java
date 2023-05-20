@@ -1,7 +1,6 @@
 package ai.knowly.langtoch.llm.integration.openai.service.schema.config;
 
 import com.google.auto.value.AutoValue;
-import lombok.Builder;
 
 @AutoValue
 public abstract class OpenAIProxyConfig {

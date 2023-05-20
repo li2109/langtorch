@@ -1,9 +1,9 @@
 package ai.knowly.langtoch.capability;
 
-import java.util.concurrent.CompletableFuture;
+import com.google.common.util.concurrent.ListenableFuture;
 
 public interface Capability<T, R> {
   R run(T inputData);
 
-  CompletableFuture<R> runAsync(CompletableFuture<T> inputData);
+  ListenableFuture<R> runAsync(T inputData);
 }

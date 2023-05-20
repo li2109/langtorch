@@ -1,5 +1,8 @@
 package ai.knowly.langtoch.capability.modality.text;
 
+import static com.google.common.util.concurrent.Futures.immediateFuture;
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
+
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.memory.Memory;
 import ai.knowly.langtoch.parser.Parser;
@@ -7,8 +10,9 @@ import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.schema.memory.MemoryKey;
 import ai.knowly.langtoch.schema.memory.MemoryValue;
+import com.google.common.util.concurrent.FluentFuture;
+import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 public class ChatCompletionLLMCapability<I, O>
     implements TextLLMCapability<I, MultiChatMessage, ChatMessage, O> {
@@ -82,11 +86,7 @@ public class ChatCompletionLLMCapability<I, O>
   }
 
   @Override
-  public CompletableFuture<O> runAsync(CompletableFuture<I> inputData) {
-    return inputData.thenCompose(
-        i -> {
-          O result = run(i);
-          return CompletableFuture.completedFuture(result);
-        });
+  public ListenableFuture<O> runAsync(I inputData) {
+    return FluentFuture.from(immediateFuture(inputData)).transform(this::run, directExecutor());
   }
 }

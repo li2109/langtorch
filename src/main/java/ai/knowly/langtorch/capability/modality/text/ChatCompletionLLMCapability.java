@@ -33,7 +33,7 @@ public class ChatCompletionLLMCapability<I, O>
   }
 
   public static <I, O> ChatCompletionLLMCapability<I, O> of(
-      Processor<MultiChatMessage, ChatMessage> processor, Class<O> outputClass) {
+      Processor<MultiChatMessage, ChatMessage> processor) {
     return new ChatCompletionLLMCapability<>(processor, Optional.empty(), Optional.empty());
   }
 

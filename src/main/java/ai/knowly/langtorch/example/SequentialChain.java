@@ -5,12 +5,15 @@ import ai.knowly.langtorch.capability.graph.NodeAdapter;
 import ai.knowly.langtorch.capability.module.openai.SimpleTextCapability;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import com.google.common.flogger.FluentLogger;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
 
 public class SequentialChain {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
+    FluentLogger logger = FluentLogger.forEnclosingClass();
+
     SimpleTextCapability unit = SimpleTextCapability.create();
 
     // Graph:
@@ -26,7 +29,7 @@ public class SequentialChain {
     Map<String, Object> result =
         capabilityGraph.process(ImmutableMap.of("A", "Search engine solution provider"));
     String slogan = (String) result.get("B");
-    System.out.println(slogan);
+    logger.atInfo().log("Slogan: %s", slogan);
   }
 
   private static class CompanyNameGenerator implements NodeAdapter<String, String> {

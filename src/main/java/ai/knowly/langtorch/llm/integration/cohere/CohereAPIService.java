@@ -65,7 +65,7 @@ public class CohereAPIService {
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);
-          throw new CohereHttpException(errorBody, httpException.code(), httpException);
+          throw new CohereHttpException(errorBody, httpException);
         } catch (IOException ioException) {
           logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }
@@ -78,8 +78,7 @@ public class CohereAPIService {
     Objects.requireNonNull(token, "OpenAI token required");
     OkHttpClient client = defaultClient(token, timeout);
     Retrofit retrofit = defaultRetrofit(client, gson);
-    CohereApi cohereApi = retrofit.create(CohereApi.class);
-    return cohereApi;
+    return retrofit.create(CohereApi.class);
   }
 
   public static OkHttpClient defaultClient(String token, Duration timeout) {

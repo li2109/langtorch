@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
@@ -69,7 +70,7 @@ public final class PromptManager {
   public static PromptManager fromFile(String folderName, String fileName) {
     String path = folderName + "/" + fileName;
     try (FileInputStream inputStream = new FileInputStream(path)) {
-      String json = IOUtils.toString(inputStream);
+      String json = IOUtils.toString(inputStream, Charset.defaultCharset());
       return fromJson(json);
     } catch (IOException e) {
       throw new RuntimeException(e);

@@ -53,7 +53,7 @@ final class PromptTemplateTest {
   }
 
   @Test
-  public void promptTemplateWithSections() {
+  void promptTemplateWithSections() {
     // Arrange.
     PromptTemplate promptTemplate =
         PromptTemplate.builder().setTemplate("What's the stock price of {{$ticker}}?").build();

@@ -12,6 +12,7 @@ public class AssistantMessage extends ChatMessage {
     return new AssistantMessage(content);
   }
 
+  @Override
   public String getContent() {
     return content;
   }

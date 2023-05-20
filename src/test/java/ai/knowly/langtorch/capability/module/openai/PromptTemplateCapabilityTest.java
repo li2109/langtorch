@@ -39,8 +39,7 @@ final class PromptTemplateCapabilityTest {
   }
 
   @Test
-  public void simpleTest_promptTemplateWithoutVariable()
-      throws ExecutionException, InterruptedException {
+  void simpleTest_promptTemplateWithoutVariable() throws ExecutionException, InterruptedException {
     // Arrange.
     when(openAIService.createCompletion(any()))
         .thenReturn(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google"));
@@ -61,16 +60,14 @@ final class PromptTemplateCapabilityTest {
   @Test
   void promptTemplateWithoutVariable_withInputMap() {
     // Arrange.
+    OpenAITextProcessor openAITextProcessor = OpenAITextProcessor.create(openAIService);
+    PromptTemplate promptTemplate =
+        PromptTemplate.builder().setTemplate("Create name for search engine company").build();
+    PromptTemplateTextCapability promptTemplateTextCapability =
+        PromptTemplateTextCapability.create(openAITextProcessor).withPromptTemplate(promptTemplate);
+    ImmutableMap<String, String> variables = ImmutableMap.of("area", "search engine");
     // Act.
     // Assert.
-    assertThrows(
-        IllegalArgumentException.class,
-        () ->
-            PromptTemplateTextCapability.create(OpenAITextProcessor.create(openAIService))
-                .withPromptTemplate(
-                    PromptTemplate.builder()
-                        .setTemplate("Create name for search engine company")
-                        .build())
-                .run(ImmutableMap.of("area", "search engine")));
+    assertThrows(IllegalArgumentException.class, () -> promptTemplateTextCapability.run(variables));
   }
 }

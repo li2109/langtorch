@@ -1,25 +1,26 @@
 package ai.knowly.langtorch.example;
 
 import ai.knowly.langtorch.capability.module.openai.SimpleChatCapability;
+import com.google.common.flogger.FluentLogger;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
-import java.util.concurrent.ExecutionException;
 
 public class SimpleChatBotWithoutExplicitKey {
-  public static void main(String[] args) throws ExecutionException, InterruptedException {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  public static void main(String[] args) {
     // Reading the key from the environment variable under Resource folder(.env file, OPENAI_API_KEY
     // field)
     SimpleChatCapability chatBot = SimpleChatCapability.create();
     readInputUntilEXIT(chatBot);
   }
 
-  private static void readInputUntilEXIT(SimpleChatCapability chatBot)
-      throws ExecutionException, InterruptedException {
+  private static void readInputUntilEXIT(SimpleChatCapability chatBot) {
     try (BufferedReader reader = new BufferedReader(new InputStreamReader(System.in))) {
       String input;
       final String sentinel = "EXIT"; // Define a sentinel value to exit the loop
-      System.out.printf("Type '%s' and press Enter to exit the application.\n", sentinel);
+      logger.atInfo().log("Type '%s' and press Enter to exit the application.%n", sentinel);
 
       while (true) {
         input = reader.readLine();
@@ -28,14 +29,14 @@ public class SimpleChatBotWithoutExplicitKey {
           break; // Exit the loop if the user types the sentinel value
         }
 
-        System.out.println("User: " + input);
+        logger.atInfo().log("User: " + input);
         String assistantMsg = chatBot.run(input);
-        System.out.println("Assistant: " + assistantMsg);
+        logger.atInfo().log("Assistant: " + assistantMsg);
       }
     } catch (IOException e) {
       e.printStackTrace();
     }
 
-    System.out.println("Exiting the application.");
+    logger.atInfo().log("Exiting the application.");
   }
 }

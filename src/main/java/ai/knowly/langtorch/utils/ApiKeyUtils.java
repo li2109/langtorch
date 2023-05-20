@@ -5,6 +5,8 @@ import io.github.cdimascio.dotenv.Dotenv;
 import java.util.Optional;
 
 public class ApiKeyUtils {
+  private ApiKeyUtils() {}
+
   public static void logPartialApiKey(FluentLogger logger, String provider, String apiKey) {
     logger.atInfo().log(
         "Using %s API key: ***************" + apiKey.substring(apiKey.length() - 6), provider);
@@ -42,7 +44,6 @@ public class ApiKeyUtils {
 
   private static String getKeyFromEnv(ApiKey apiKey) {
     Dotenv dotenv = Dotenv.configure().ignoreIfMissing().load();
-    String key = dotenv.get(apiKey.name());
-    return key;
+    return dotenv.get(apiKey.name());
   }
 }

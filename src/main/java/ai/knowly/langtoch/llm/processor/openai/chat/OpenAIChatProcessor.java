@@ -3,8 +3,8 @@ package ai.knowly.langtoch.llm.processor.openai.chat;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.chat.AssistantMessage;

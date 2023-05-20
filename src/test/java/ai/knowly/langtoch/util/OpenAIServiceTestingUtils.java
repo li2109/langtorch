@@ -1,9 +1,9 @@
 package ai.knowly.langtoch.util;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionChoice;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionChoice;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionResult;
 import com.google.common.collect.ImmutableList;
 
 public class OpenAIServiceTestingUtils {

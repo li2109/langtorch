@@ -2,7 +2,7 @@ package ai.knowly.langtoch.llm.processor.openai.image;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageRequest;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

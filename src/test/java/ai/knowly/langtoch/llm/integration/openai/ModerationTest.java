@@ -4,8 +4,8 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.Moderation;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.moderation.Moderation;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.moderation.ModerationRequest;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 

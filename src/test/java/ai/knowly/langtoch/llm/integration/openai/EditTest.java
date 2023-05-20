@@ -4,9 +4,9 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 
 import ai.knowly.langtoch.llm.Utils;
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.OpenAIHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.edit.EditRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.edit.EditResult;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 

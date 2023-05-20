@@ -4,8 +4,8 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.ImageResult;
 import ai.knowly.langtoch.llm.processor.Processor;
 import ai.knowly.langtoch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtoch.schema.image.Image;

@@ -1,21 +1,23 @@
 package ai.knowly.langtoch.llm.integration.openai.service;
 
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIError;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.OpenAIHttpException;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.edit.EditResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageEditRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.CreateImageVariationRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.image.ImageResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationRequest;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.moderation.ModerationResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.config.OpenAIProxyConfig;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.config.OpenAIServiceConfig;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.OpenAIError;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.OpenAIHttpException;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.CompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.edit.EditRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.edit.EditResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.EmbeddingRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.embedding.EmbeddingResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageEditRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.CreateImageVariationRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.image.ImageResult;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.moderation.ModerationRequest;
+import ai.knowly.langtoch.llm.integration.openai.service.schema.dto.moderation.ModerationResult;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -23,12 +25,15 @@ import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
+import java.net.InetSocketAddress;
+import java.net.Proxy;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import okhttp3.*;
+import okhttp3.OkHttpClient.Builder;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
@@ -37,7 +42,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class OpenAIService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.openai.com/";
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
   private static final ObjectMapper mapper = defaultObjectMapper();
 
   private final OpenAIApi api;
@@ -49,7 +53,7 @@ public class OpenAIService {
    * @param token OpenAi token string "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
    */
   public OpenAIService(final String token) {
-    this(token, DEFAULT_TIMEOUT);
+    this(OpenAIServiceConfig.builder().setApiKey(token).build());
   }
 
   /**
@@ -59,8 +63,13 @@ public class OpenAIService {
    * @param timeout http read timeout, Duration.ZERO means no timeout
    */
   public OpenAIService(final String token, final Duration timeout) {
+    this(OpenAIServiceConfig.builder().setApiKey(token).setTimeoutDuration(timeout).build());
+  }
+
+  public OpenAIService(final OpenAIServiceConfig openAIServiceConfig) {
     ObjectMapper mapper = defaultObjectMapper();
-    OkHttpClient client = defaultClient(token, timeout);
+    if (openAIServiceConfig.proxyConfig().isPresent()) {}
+    OkHttpClient client = buildClient(openAIServiceConfig);
     Retrofit retrofit = defaultRetrofit(client, mapper);
 
     this.api = retrofit.create(OpenAIApi.class);
@@ -116,9 +125,10 @@ public class OpenAIService {
 
   public static OpenAIApi buildApi(String token, Duration timeout) {
     ObjectMapper mapper = defaultObjectMapper();
-    OkHttpClient client = defaultClient(token, timeout);
+    OkHttpClient client =
+        buildClient(
+            OpenAIServiceConfig.builder().setApiKey(token).setTimeoutDuration(timeout).build());
     Retrofit retrofit = defaultRetrofit(client, mapper);
-
     return retrofit.create(OpenAIApi.class);
   }
 
@@ -130,12 +140,22 @@ public class OpenAIService {
     return mapper;
   }
 
-  public static OkHttpClient defaultClient(String token, Duration timeout) {
-    return new OkHttpClient.Builder()
-        .addInterceptor(new OpenAIAuthenticationInterceptor(token))
-        .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
-        .readTimeout(timeout.toMillis(), TimeUnit.MILLISECONDS)
-        .build();
+  public static OkHttpClient buildClient(OpenAIServiceConfig openAIServiceConfig) {
+    Builder builder =
+        new Builder()
+            .addInterceptor(new OpenAIAuthenticationInterceptor(openAIServiceConfig.apiKey()))
+            .connectionPool(new ConnectionPool(5, 1, TimeUnit.SECONDS))
+            .readTimeout(openAIServiceConfig.timeoutDuration().toMillis(), TimeUnit.MILLISECONDS);
+
+    openAIServiceConfig
+        .proxyConfig()
+        .ifPresent(
+            proxyConfig ->
+                builder.proxy(
+                    new Proxy(
+                        convertProxyEnum(proxyConfig.proxyType()),
+                        new InetSocketAddress(proxyConfig.proxyHost(), proxyConfig.proxyPort()))));
+    return builder.build();
   }
 
   public static Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper) {
@@ -145,6 +165,16 @@ public class OpenAIService {
         .addConverterFactory(JacksonConverterFactory.create(mapper))
         .addCallAdapterFactory(GuavaCallAdapterFactory.create())
         .build();
+  }
+
+  private static Proxy.Type convertProxyEnum(OpenAIProxyConfig.ProxyType proxyType) {
+    if (proxyType == OpenAIProxyConfig.ProxyType.HTTP) {
+      return Proxy.Type.HTTP;
+    } else if (proxyType == OpenAIProxyConfig.ProxyType.SOCKS) {
+      return Proxy.Type.SOCKS;
+    } else {
+      throw new IllegalArgumentException("Unknown proxy type: " + proxyType);
+    }
   }
 
   public CompletionResult createCompletion(CompletionRequest request) {

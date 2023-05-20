@@ -9,7 +9,8 @@ import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -31,7 +32,7 @@ final class PromptTemplateCapabilityTest {
         PromptTemplateTextCapability.create(OpenAITextProcessor.create(openAIService))
             .withPromptTemplate(
                 PromptTemplate.builder().setTemplate("Create name for {{$area}} company").build())
-            .run(Map.of("area", "search engine"));
+            .run(ImmutableMap.of("area", "search engine"));
 
     // Assert.
     assertThat(response).isEqualTo("Google");
@@ -51,7 +52,7 @@ final class PromptTemplateCapabilityTest {
                 PromptTemplate.builder()
                     .setTemplate("Create name for search engine company")
                     .build())
-            .run(Map.of());
+            .run(new HashMap<>());
 
     // Assert.
     assertThat(response).isEqualTo("Google");
@@ -70,6 +71,6 @@ final class PromptTemplateCapabilityTest {
                     PromptTemplate.builder()
                         .setTemplate("Create name for search engine company")
                         .build())
-                .run(Map.of("area", "search engine")));
+                .run(ImmutableMap.of("area", "search engine")));
   }
 }

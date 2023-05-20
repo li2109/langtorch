@@ -82,7 +82,7 @@ public abstract class PromptTemplate implements Input, Output {
    * 3. All variables in the template must be present in the variables map.
    */
   private void validate() {
-    if (template().isEmpty()) {
+    if (!template().isPresent()) {
       throw new IllegalArgumentException("Template is not present.");
     }
 
@@ -122,7 +122,7 @@ public abstract class PromptTemplate implements Input, Output {
     Pattern compiledPattern = Pattern.compile(VARIABLE_TEMPLATE_PATTERN);
     Matcher matcher = compiledPattern.matcher(template().get());
 
-    StringBuilder outputBuffer = new StringBuilder();
+    StringBuffer outputBuffer = new StringBuffer();
     while (matcher.find()) {
       String variableName = matcher.group(1);
       String replacement = variables().getOrDefault(variableName, "");

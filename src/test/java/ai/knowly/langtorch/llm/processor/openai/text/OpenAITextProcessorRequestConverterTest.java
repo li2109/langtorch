@@ -3,8 +3,8 @@ package ai.knowly.langtorch.llm.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -28,11 +28,11 @@ final class OpenAITextProcessorRequestConverterTest {
             .setStream(true)
             .setLogprobs(10)
             .setEcho(true)
-            .setStop(List.of("stop1", "stop2"))
+            .setStop(Arrays.asList("stop1", "stop2"))
             .setPresencePenalty(0.5)
             .setFrequencyPenalty(0.6)
             .setBestOf(3)
-            .setLogitBias(Map.of("key1", 50, "key2", -20))
+            .setLogitBias(ImmutableMap.of("key1", 50, "key2", -20))
             .setUser("user123")
             .build();
   }

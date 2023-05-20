@@ -3,8 +3,8 @@ package ai.knowly.langtorch.prompt.template;
 import static com.google.common.truth.Truth.assertThat;
 
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import java.util.HashMap;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 
 final class PromptTemplateTest {
@@ -124,7 +124,7 @@ final class PromptTemplateTest {
     String actual =
         PromptTemplate.builder()
             .setTemplate(template)
-            .addAllVariableValuePairs(new HashMap<>(Map.of("name", "John", "age", "30")))
+            .addAllVariableValuePairs(new HashMap<>(ImmutableMap.of("name", "John", "age", "30")))
             .build()
             .format();
     // Assert.

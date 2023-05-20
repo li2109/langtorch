@@ -3,6 +3,8 @@ package ai.knowly.langtorch.llm.integration.cohere.schema;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -21,9 +23,9 @@ public abstract class CohereGenerateRequest {
         .p(0.0)
         .frequencyPenalty(0.0)
         .presencePenalty(0.0)
-        .endSequences(List.of())
-        .stopSequences(List.of())
-        .logitBias(Map.of())
+        .endSequences(new ArrayList<>())
+        .stopSequences(new ArrayList<>())
+        .logitBias(new HashMap<>())
         .returnLikelihoods("NONE")
         .truncate("END");
   }

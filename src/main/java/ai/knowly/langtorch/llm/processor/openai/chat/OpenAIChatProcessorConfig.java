@@ -4,6 +4,8 @@ import ai.knowly.langtorch.llm.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,8 +16,8 @@ public abstract class OpenAIChatProcessorConfig implements ProcessorConfig {
   // Factory method to create a new builder instance with default settings
   public static Builder builder() {
     return new AutoValue_OpenAIChatProcessorConfig.Builder()
-        .setStop(List.of())
-        .setLogitBias(Map.of());
+        .setStop(new ArrayList<>())
+        .setLogitBias(new HashMap<>());
   }
 
   // Method to create a builder from the current instance

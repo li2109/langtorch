@@ -23,9 +23,9 @@ final class CapabilityGraphTest {
   void testProcessGraph_sumInputs() throws ExecutionException, InterruptedException {
     // Arrange
     NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("D"));
-    NodeAdapter<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of("D"));
-    NodeAdapter<Integer, Integer> d = new SumInputsProcessingUnit("D", List.of());
+    NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("D"));
+    NodeAdapter<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList("D"));
+    NodeAdapter<Integer, Integer> d = new SumInputsProcessingUnit("D", Arrays.asList());
     CapabilityGraph capabilityGraph = CapabilityGraph.create();
     capabilityGraph.addNode(a, Integer.class);
     capabilityGraph.addNode(b, Integer.class);
@@ -47,9 +47,9 @@ final class CapabilityGraphTest {
     // Arrange
     NodeAdapter<Integer, Integer> a =
         new MultiplyInputsProcessingUnit("A", Arrays.asList("B", "C"));
-    NodeAdapter<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", List.of("D"));
-    NodeAdapter<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", List.of("D"));
-    NodeAdapter<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", List.of());
+    NodeAdapter<Integer, Integer> b = new MultiplyInputsProcessingUnit("B", Arrays.asList("D"));
+    NodeAdapter<Integer, Integer> c = new MultiplyInputsProcessingUnit("C", Arrays.asList("D"));
+    NodeAdapter<Integer, Integer> d = new MultiplyInputsProcessingUnit("D", Arrays.asList());
     CapabilityGraph capabilityGraph = CapabilityGraph.create();
     capabilityGraph.addNode(a, Integer.class);
     capabilityGraph.addNode(b, Integer.class);
@@ -70,9 +70,9 @@ final class CapabilityGraphTest {
   void testProcessGraph_withInitialMultipleInputs()
       throws ExecutionException, InterruptedException {
     // Arrange
-    NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", List.of("B"));
-    NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", List.of("C"));
-    NodeAdapter<Integer, Integer> c = new SumInputsProcessingUnit("C", List.of());
+    NodeAdapter<Integer, Integer> a = new SumInputsProcessingUnit("A", Arrays.asList("B"));
+    NodeAdapter<Integer, Integer> b = new SumInputsProcessingUnit("B", Arrays.asList("C"));
+    NodeAdapter<Integer, Integer> c = new SumInputsProcessingUnit("C", Arrays.asList());
     CapabilityGraph capabilityGraph = CapabilityGraph.create();
     capabilityGraph.addNode(a, Integer.class);
     capabilityGraph.addNode(b, Integer.class);
@@ -92,9 +92,9 @@ final class CapabilityGraphTest {
   @Test
   public void testProcessGraph_notDAG() {
     // Arrange: Create a graph with a cycle (A -> B -> C -> A)
-    NodeAdapter<Integer, Integer> a = new NoOpProcessingUnit("A", List.of("B"));
-    NodeAdapter<Integer, Integer> b = new NoOpProcessingUnit("B", List.of("C"));
-    NodeAdapter<Integer, Integer> c = new NoOpProcessingUnit("C", List.of("A"));
+    NodeAdapter<Integer, Integer> a = new NoOpProcessingUnit("A", Arrays.asList("B"));
+    NodeAdapter<Integer, Integer> b = new NoOpProcessingUnit("B", Arrays.asList("C"));
+    NodeAdapter<Integer, Integer> c = new NoOpProcessingUnit("C", Arrays.asList("A"));
     CapabilityGraph capabilityGraph = CapabilityGraph.create();
     capabilityGraph.addNode(a, Integer.class);
     capabilityGraph.addNode(b, Integer.class);
@@ -126,11 +126,11 @@ final class CapabilityGraphTest {
   //
   //    PromptTemplateToPromptTemplateLLMNodeAdapter NodeAdapter1 =
   //        PromptTemplateToPromptTemplateLLMNodeAdapter.create(
-  //            "company-name-gen", promptTemplateToStringLLMUnit1, List.of("slogan-gen"));
+  //            "company-name-gen", promptTemplateToStringLLMUnit1, Arrays.asList("slogan-gen"));
   //
   //    PromptTemplateToStringLLMNodeAdapter NodeAdapter2 =
   //        PromptTemplateToStringLLMNodeAdapter.create(
-  //            "slogan-gen", templateToStringLLMWrapperUnit2, List.of());
+  //            "slogan-gen", templateToStringLLMWrapperUnit2, Arrays.asList());
   //
   //    CapabilityGraph CapabilityGraph = CapabilityGraph.create();
   //    CapabilityGraph.addNodeAdapter(NodeAdapter1, PromptTemplate.class);

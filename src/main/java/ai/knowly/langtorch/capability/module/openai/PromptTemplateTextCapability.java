@@ -45,7 +45,7 @@ public class PromptTemplateTextCapability extends TextCompletionTextLLMCapabilit
 
   public String run(Map<String, String> variableMap)
       throws ExecutionException, InterruptedException {
-    if (promptTemplate.isEmpty()) {
+    if (!promptTemplate.isPresent()) {
       throw new RuntimeException("Prompt template is not set");
     }
     return super.run(

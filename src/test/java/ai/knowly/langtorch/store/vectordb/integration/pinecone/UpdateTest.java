@@ -11,8 +11,8 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
@@ -32,11 +32,11 @@ public class UpdateTest {
     UpsertRequest upsertRequest =
         UpsertRequest.builder()
             .setVectors(
-                List.of(
+                Arrays.asList(
                     Vector.builder()
                         .setId("test2")
-                        .setValues(List.of(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
-                        .setMetadata(Map.of("key", "val"))
+                        .setValues(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
+                        .setMetadata(ImmutableMap.of("key", "val"))
                         .build()))
             .setNamespace("testr2")
             .build();
@@ -44,12 +44,12 @@ public class UpdateTest {
     UpdateRequest updateRequest =
         UpdateRequest.builder()
             .setId("test2")
-            .setValues(List.of(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9))
+            .setValues(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9))
             .setNamespace("testr2")
             .build();
 
     FetchRequest fetchRequest =
-        FetchRequest.builder().setIds(List.of("test2")).setNamespace("testr2").build();
+        FetchRequest.builder().setIds(Arrays.asList("test2")).setNamespace("testr2").build();
 
     // Act.
     UpsertResponse response = service.upsert(upsertRequest);
@@ -58,6 +58,6 @@ public class UpdateTest {
     // Assert.
     assertThat(response.getUpsertedCount()).isEqualTo(1);
     assertThat(fetchResponse.getVectors().get("test2").getValues())
-        .isEqualTo(List.of(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9));
+        .isEqualTo(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9));
   }
 }

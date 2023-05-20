@@ -9,8 +9,8 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
-import java.util.List;
-import java.util.Map;
+import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
@@ -30,15 +30,15 @@ class FetchTest {
     Vector vector =
         Vector.builder()
             .setId("test2")
-            .setValues(List.of(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
-            .setMetadata(Map.of("key", "val"))
+            .setValues(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
+            .setMetadata(ImmutableMap.of("key", "val"))
             .build();
 
     UpsertRequest upsertRequest =
-        UpsertRequest.builder().setVectors(List.of(vector)).setNamespace("namespace").build();
+        UpsertRequest.builder().setVectors(Arrays.asList(vector)).setNamespace("namespace").build();
 
     FetchRequest fetchRequest =
-        FetchRequest.builder().setIds(List.of("test2")).setNamespace("namespace").build();
+        FetchRequest.builder().setIds(Arrays.asList("test2")).setNamespace("namespace").build();
 
     // Act.
     UpsertResponse response = service.upsert(upsertRequest);

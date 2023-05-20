@@ -2,8 +2,8 @@ package ai.knowly.langtorch.prompt.annotation;
 
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import java.lang.reflect.Field;
+import java.util.Arrays;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
 
 /**
@@ -63,7 +63,7 @@ public class PromptProcessor {
         PromptTemplate.builder().setTemplate(template).addAllVariableValuePairs(variableValues);
 
     if (examples.length > 0) {
-      builder.setExamples(List.of(examples));
+      builder.setExamples(Arrays.asList(examples));
       if (!exampleHeader.isEmpty()) {
         builder.setExampleHeader(exampleHeader);
       }

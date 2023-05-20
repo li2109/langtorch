@@ -11,6 +11,8 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
+import com.google.common.collect.ImmutableMap;
+import java.util.Arrays;
 import java.util.List;
 import java.util.Map;
 import org.junit.jupiter.api.Test;
@@ -32,17 +34,17 @@ final class DeleteTest {
     UpsertRequest upsertRequest =
         UpsertRequest.builder()
             .setVectors(
-                List.of(
+                Arrays.asList(
                     Vector.builder()
                         .setId("test2")
-                        .setValues(List.of(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
-                        .setMetadata(Map.of("key", "val"))
+                        .setValues(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
+                        .setMetadata(ImmutableMap.of("key", "val"))
                         .build()))
             .setNamespace("namespace")
             .build();
 
     DeleteRequest deleteRequest =
-        DeleteRequest.builder().setIds(List.of("test2")).setNamespace("namespace").build();
+        DeleteRequest.builder().setIds(Arrays.asList("test2")).setNamespace("namespace").build();
 
     QueryRequest queryRequest =
         QueryRequest.builder().setNamespace("namespace").setId("test2").setTopK(1).build();

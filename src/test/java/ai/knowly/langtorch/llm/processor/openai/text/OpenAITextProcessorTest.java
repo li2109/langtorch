@@ -7,7 +7,7 @@ import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
 import ai.knowly.langtorch.schema.io.SingleText;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
-import java.util.Map;
+import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -42,7 +42,7 @@ final class OpenAITextProcessorTest {
                 .maxTokens(2048)
                 .suffix("test-suffix")
                 .prompt("input1")
-                .logitBias(Map.of())
+                .logitBias(new HashMap<>())
                 .build()))
         .thenReturn(
             OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));

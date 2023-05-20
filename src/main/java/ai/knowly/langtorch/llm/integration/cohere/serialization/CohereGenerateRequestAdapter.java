@@ -19,7 +19,7 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
     out.name("model").value(value.model());
     out.name("numGenerations").value(value.numGenerations());
     out.name("maxTokens").value(value.maxTokens());
-    if (value.preset() != null && !value.preset().isBlank()) {
+    if (value.preset() != null && !value.preset().isEmpty()) {
       out.name("preset").value(value.preset());
     }
     out.name("temperature").value(value.temperature());

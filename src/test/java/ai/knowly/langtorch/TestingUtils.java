@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.llm.integration.openai;
+package ai.knowly.langtorch;
 
 import com.google.common.collect.ImmutableMap;
 import java.io.InputStream;

@@ -2,21 +2,21 @@ package ai.knowly.langtorch.llm.integration.openai;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import ai.knowly.langtorch.llm.Utils;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionChoice;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtorch.utils.ApiKeyUtils;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
+@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
 class CompletionTest {
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createCompletion() {
-    String token = Utils.getOpenAIApiKeyFromEnv();
+    String token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
     OpenAIService service = new OpenAIService(token);
     CompletionRequest completionRequest =
         CompletionRequest.builder()

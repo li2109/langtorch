@@ -2,9 +2,7 @@ package ai.knowly.langtorch.llm;
 
 import com.google.common.flogger.FluentLogger;
 import io.github.cdimascio.dotenv.Dotenv;
-import io.reactivex.Single;
 import java.util.Optional;
-import java.util.concurrent.CompletableFuture;
 
 public class Utils {
   public static void logPartialApiKey(FluentLogger logger, String provider, String apiKey) {
@@ -32,11 +30,5 @@ public class Utils {
     String openaiApiKey = dotenv.get("COHERE_API_KEY");
     logger.ifPresent(l -> logPartialApiKey(l, "CohereAI", openaiApiKey));
     return openaiApiKey;
-  }
-
-  public static <T> CompletableFuture<T> singleToCompletableFuture(Single<T> single) {
-    CompletableFuture<T> future = new CompletableFuture<>();
-    single.subscribe(future::complete, future::completeExceptionally);
-    return future;
   }
 }

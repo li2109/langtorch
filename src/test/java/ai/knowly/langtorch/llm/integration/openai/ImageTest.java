@@ -3,17 +3,18 @@ package ai.knowly.langtorch.llm.integration.openai;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ai.knowly.langtorch.llm.Utils;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.CreateImageEditRequest;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.CreateImageRequest;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.CreateImageVariationRequest;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.Image;
+import ai.knowly.langtorch.utils.ApiKeyUtils;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
+@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
 class ImageTest {
 
   static String filePath = "src/test/resources/penguin.png";
@@ -25,12 +26,11 @@ class ImageTest {
 
   @BeforeEach
   void setUp() {
-    token = Utils.getOpenAIApiKeyFromEnv();
+    token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
     service = new OpenAIService(token);
   }
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createImageUrl() {
     CreateImageRequest createImageRequest =
         CreateImageRequest.builder().prompt("penguin").n(3).size("256x256").user("testing").build();
@@ -41,7 +41,6 @@ class ImageTest {
   }
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createImageBase64() {
     CreateImageRequest createImageRequest =
         CreateImageRequest.builder()
@@ -56,7 +55,6 @@ class ImageTest {
   }
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createImageEdit() {
     CreateImageEditRequest createImageRequest =
         CreateImageEditRequest.builder()
@@ -74,7 +72,6 @@ class ImageTest {
   }
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createImageEditWithMask() {
     CreateImageEditRequest createImageRequest =
         CreateImageEditRequest.builder()
@@ -91,7 +88,6 @@ class ImageTest {
   }
 
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createImageVariation() {
     CreateImageVariationRequest createImageVariationRequest =
         CreateImageVariationRequest.builder()

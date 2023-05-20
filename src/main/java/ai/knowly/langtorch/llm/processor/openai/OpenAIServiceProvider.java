@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.llm.processor.openai;
 
-import ai.knowly.langtorch.llm.Utils;
+import ai.knowly.langtorch.utils.ApiKeyUtils;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import com.google.common.flogger.FluentLogger;
@@ -17,7 +17,7 @@ public final class OpenAIServiceProvider {
 
   public static OpenAIApi createOpenAiAPI() {
     return OpenAIService.buildApi(
-        Utils.getOpenAIApiKeyFromEnv(Optional.of(logger)), DEFAULT_TIMEOUT);
+        ApiKeyUtils.getOpenAIApiKeyFromEnv(Optional.of(logger)), DEFAULT_TIMEOUT);
   }
 
   public static OpenAIService createOpenAIService(String apiKey) {

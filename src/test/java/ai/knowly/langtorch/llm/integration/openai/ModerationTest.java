@@ -2,18 +2,18 @@ package ai.knowly.langtorch.llm.integration.openai;
 
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-import ai.knowly.langtorch.llm.Utils;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.moderation.Moderation;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.moderation.ModerationRequest;
+import ai.knowly.langtorch.utils.ApiKeyUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
+@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
 class ModerationTest {
   @Test
-  @EnabledIf("ai.knowly.langtorch.llm.integration.openai.TestingUtils#testWithHttpRequestEnabled")
   void createModeration() {
-    String token = Utils.getOpenAIApiKeyFromEnv();
+    String token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
     OpenAIService service = new OpenAIService(token);
     ModerationRequest moderationRequest =
         ModerationRequest.builder()

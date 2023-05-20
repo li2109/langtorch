@@ -13,8 +13,6 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 

@@ -7,7 +7,6 @@ import ai.knowly.langtorch.parser.StringToSingleTextParser;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import java.util.Map;
 import java.util.Optional;
-import java.util.concurrent.ExecutionException;
 
 /**
  * A capability unit that contains a prompt template and accepts a map of variable-value pairs to
@@ -43,10 +42,9 @@ public class PromptTemplateTextCapability extends TextCompletionTextLLMCapabilit
     return this;
   }
 
-  public String run(Map<String, String> variableMap)
-      throws ExecutionException, InterruptedException {
+  public String run(Map<String, String> variableMap) {
     if (!promptTemplate.isPresent()) {
-      throw new RuntimeException("Prompt template is not set");
+      throw new PromptTemplateNotSetException("Prompt template is not set");
     }
     return super.run(
         promptTemplate.get().toBuilder().addAllVariableValuePairs(variableMap).build().format());

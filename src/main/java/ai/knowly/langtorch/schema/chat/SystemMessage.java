@@ -13,6 +13,7 @@ public class SystemMessage extends ChatMessage {
     return new SystemMessage(content);
   }
 
+  @Override
   public String getContent() {
     return content;
   }

@@ -45,7 +45,7 @@ final class PromptManagerTest {
 
   // Test updating a prompt template
   @Test
-  public void updatePromptTemplateTest() {
+  void updatePromptTemplateTest() {
     // Arrange.
     PromptManager promptManager = PromptManager.create();
     long version = 1;

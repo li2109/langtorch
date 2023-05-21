@@ -17,7 +17,7 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
 @EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
-public class UpdateTest {
+class UpdateTest {
   @Test
   void test() {
     // Arrange.

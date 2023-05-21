@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.llm.integration.openai.service.schema.dto;
 
-public class OpenAIHttpException extends RuntimeException {
+public class OpenAIHttpParseException extends RuntimeException {
 
   /** HTTP status code */
   public final int statusCode;
@@ -16,7 +16,7 @@ public class OpenAIHttpException extends RuntimeException {
    */
   public final String type;
 
-  public OpenAIHttpException(OpenAIError error, Exception parent, int statusCode) {
+  public OpenAIHttpParseException(OpenAIError error, Exception parent, int statusCode) {
     super(error.error.message, parent);
     this.statusCode = statusCode;
     this.code = error.error.code;

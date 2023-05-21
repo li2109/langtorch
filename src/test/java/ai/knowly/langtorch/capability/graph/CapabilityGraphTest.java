@@ -90,7 +90,7 @@ final class CapabilityGraphTest {
   }
 
   @Test
-  public void testProcessGraph_notDAG() {
+  void testProcessGraph_notDAG() {
     // Arrange: Create a graph with a cycle (A -> B -> C -> A)
     NodeAdapter<Integer, Integer> a = new NoOpProcessingUnit("A", Arrays.asList("B"));
     NodeAdapter<Integer, Integer> b = new NoOpProcessingUnit("B", Arrays.asList("C"));

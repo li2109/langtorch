@@ -13,6 +13,7 @@ public class UserMessage extends ChatMessage {
     return new UserMessage(content);
   }
 
+  @Override
   public String getContent() {
     return content;
   }
@@ -28,5 +29,10 @@ public class UserMessage extends ChatMessage {
         || (obj instanceof ChatMessage
             && ((ChatMessage) obj).getContent().equals(getContent())
             && ((ChatMessage) obj).getRole().equals(Role.USER));
+  }
+
+  @Override
+  public int hashCode() {
+    return getContent().hashCode();
   }
 }

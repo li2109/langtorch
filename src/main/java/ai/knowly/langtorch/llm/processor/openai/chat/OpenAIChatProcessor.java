@@ -13,7 +13,6 @@ import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.SystemMessage;
 import ai.knowly.langtorch.schema.chat.UserMessage;
 import ai.knowly.langtorch.schema.io.MultiChatMessage;
-import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import javax.inject.Inject;
@@ -26,7 +25,6 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
   // Logger, default model, and default max tokens for this processor
   private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
   private static final int DEFAULT_MAX_TOKEN = 2048;
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   // OpenAiApi instance used for making requests
   private final OpenAIService openAIService;
   // Configuration for the OpenAI Chat Processor
@@ -84,7 +82,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
     if (Role.ASSISTANT == chatMessage.getRole()) {
       return AssistantMessage.of(chatMessage.getContent());
     }
-    throw new RuntimeException(
+    throw new UnknownMessageException(
         String.format(
             "Unknown role %s with message: %s ", chatMessage.getRole(), chatMessage.getContent()));
   }
@@ -109,7 +107,7 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
               if (chatMessage.getRole() == Role.ASSISTANT) {
                 return AssistantMessage.of(chatMessage.getContent());
               }
-              throw new RuntimeException(
+              throw new UnknownMessageException(
                   String.format(
                       "Unknown role %s with message: %s ",
                       chatMessage.getRole(), chatMessage.getContent()));

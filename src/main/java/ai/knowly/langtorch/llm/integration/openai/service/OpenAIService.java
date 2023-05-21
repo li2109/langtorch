@@ -1,9 +1,11 @@
 package ai.knowly.langtorch.llm.integration.openai.service;
 
+import ai.knowly.langtorch.llm.integration.openai.service.schema.OpenAIApiExecutionException;
+import ai.knowly.langtorch.llm.integration.openai.service.schema.OpenAIServiceInterruptedException;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.config.OpenAIProxyConfig;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.config.OpenAIServiceConfig;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.OpenAIError;
-import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.OpenAIHttpException;
+import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.OpenAIHttpParseException;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionResult;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
@@ -28,12 +30,11 @@ import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.time.Duration;
-import java.util.Objects;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import okhttp3.*;
 import okhttp3.OkHttpClient.Builder;
+import org.jetbrains.annotations.NotNull;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
@@ -43,10 +44,12 @@ public class OpenAIService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.openai.com/";
   private static final ObjectMapper mapper = defaultObjectMapper();
+  private static final String RESPONSE_FORMAT = "response_format";
+  private static final MediaType MULTI_PART_FORM_DATA = MediaType.parse("multipart/form-data");
+  private static final String IMAGE = "image";
+  private static final MediaType IMAGE_MEDIA_TYPE = MediaType.parse(IMAGE);
 
   private final OpenAIApi api;
-  private final ExecutorService executorService;
-
   /**
    * Creates a new OpenAiService that wraps OpenAiApi
    *
@@ -55,7 +58,6 @@ public class OpenAIService {
   public OpenAIService(final String token) {
     this(OpenAIServiceConfig.builder().setApiKey(token).build());
   }
-
   /**
    * Creates a new OpenAiService that wraps OpenAiApi
    *
@@ -67,15 +69,12 @@ public class OpenAIService {
   }
 
   public OpenAIService(final OpenAIServiceConfig openAIServiceConfig) {
-    ObjectMapper mapper = defaultObjectMapper();
-    if (openAIServiceConfig.proxyConfig().isPresent()) {}
+    ObjectMapper defaultObjectMapper = defaultObjectMapper();
     OkHttpClient client = buildClient(openAIServiceConfig);
-    Retrofit retrofit = defaultRetrofit(client, mapper);
+    Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper);
 
     this.api = retrofit.create(OpenAIApi.class);
-    this.executorService = client.dispatcher().executorService();
   }
-
   /**
    * Creates a new OpenAiService that wraps OpenAiApi. Use this if you need more customization, but
    * use OpenAiService(api, executorService) if you use streaming and want to shut down instantly
@@ -84,21 +83,6 @@ public class OpenAIService {
    */
   public OpenAIService(final OpenAIApi api) {
     this.api = api;
-    this.executorService = null;
-  }
-
-  /**
-   * Creates a new OpenAiService that wraps OpenAiApi. The ExecutorService must be the one you get
-   * from the client you created the api with otherwise shutdownExecutor() won't work.
-   *
-   * <p>Use this if you need more customization.
-   *
-   * @param api OpenAiApi instance to use for all methods
-   * @param executorService the ExecutorService from client.dispatcher().executorService()
-   */
-  public OpenAIService(final OpenAIApi api, final ExecutorService executorService) {
-    this.api = api;
-    this.executorService = executorService;
   }
 
   /** Calls the Open AI api, returns the response, and parses error messages if the request fails */
@@ -106,7 +90,12 @@ public class OpenAIService {
     try {
       return apiCall.get();
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      // Restore the interrupt status
+      Thread.currentThread().interrupt();
+      // Optionally, log or handle the exception here.
+      logger.atSevere().withCause(e).log("Thread was interrupted during API call.");
+      throw new OpenAIServiceInterruptedException(e);
+
     } catch (ExecutionException e) {
       if (e.getCause() instanceof HttpException) {
         HttpException httpException = (HttpException) e.getCause();
@@ -114,12 +103,12 @@ public class OpenAIService {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);
           OpenAIError error = mapper.readValue(errorBody, OpenAIError.class);
-          throw new OpenAIHttpException(error, e, httpException.code());
+          throw new OpenAIHttpParseException(error, e, httpException.code());
         } catch (IOException ioException) {
           logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }
       }
-      throw new RuntimeException(e);
+      throw new OpenAIApiExecutionException(e);
     }
   }
 
@@ -175,6 +164,17 @@ public class OpenAIService {
     } else {
       throw new IllegalArgumentException("Unknown proxy type: " + proxyType);
     }
+  }
+
+  @NotNull
+  private static MultipartBody.Builder getMultipartBodyDefaultBuilder(
+      CreateImageEditRequest request, RequestBody imageBody) {
+    return new MultipartBody.Builder()
+        .setType(MULTI_PART_FORM_DATA)
+        .addFormDataPart("prompt", request.getPrompt())
+        .addFormDataPart("size", request.getSize())
+        .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
+        .addFormDataPart(IMAGE, IMAGE, imageBody);
   }
 
   public CompletionResult createCompletion(CompletionRequest request) {
@@ -240,22 +240,16 @@ public class OpenAIService {
 
   public ImageResult createImageEdit(
       CreateImageEditRequest request, java.io.File image, java.io.File mask) {
-    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+    RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
-    MultipartBody.Builder builder =
-        new MultipartBody.Builder()
-            .setType(MediaType.get("multipart/form-data"))
-            .addFormDataPart("prompt", request.getPrompt())
-            .addFormDataPart("size", request.getSize())
-            .addFormDataPart("response_format", request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+    MultipartBody.Builder builder = getMultipartBodyDefaultBuilder(request, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());
     }
 
     if (mask != null) {
-      RequestBody maskBody = RequestBody.create(MediaType.parse("image"), mask);
+      RequestBody maskBody = RequestBody.create(mask, IMAGE_MEDIA_TYPE);
       builder.addFormDataPart("mask", "mask", maskBody);
     }
 
@@ -264,22 +258,16 @@ public class OpenAIService {
 
   public ListenableFuture<ImageResult> createImageEditAsync(
       CreateImageEditRequest request, java.io.File image, java.io.File mask) {
-    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+    RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
-    MultipartBody.Builder builder =
-        new MultipartBody.Builder()
-            .setType(MediaType.get("multipart/form-data"))
-            .addFormDataPart("prompt", request.getPrompt())
-            .addFormDataPart("size", request.getSize())
-            .addFormDataPart("response_format", request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+    MultipartBody.Builder builder = getMultipartBodyDefaultBuilder(request, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());
     }
 
     if (mask != null) {
-      RequestBody maskBody = RequestBody.create(MediaType.parse("image"), mask);
+      RequestBody maskBody = RequestBody.create(mask, IMAGE_MEDIA_TYPE);
       builder.addFormDataPart("mask", "mask", maskBody);
     }
 
@@ -298,14 +286,14 @@ public class OpenAIService {
   }
 
   public ImageResult createImageVariation(CreateImageVariationRequest request, java.io.File image) {
-    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+    RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder =
         new MultipartBody.Builder()
-            .setType(MediaType.get("multipart/form-data"))
+            .setType(MULTI_PART_FORM_DATA)
             .addFormDataPart("size", request.getSize())
-            .addFormDataPart("response_format", request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+            .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
+            .addFormDataPart(IMAGE, IMAGE, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());
@@ -313,17 +301,19 @@ public class OpenAIService {
 
     return execute(api.createImageVariation(builder.build()));
   }
+  
+
 
   public ListenableFuture<ImageResult> createImageVariationAsync(
       CreateImageVariationRequest request, java.io.File image) {
-    RequestBody imageBody = RequestBody.create(MediaType.parse("image"), image);
+    RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder =
         new MultipartBody.Builder()
-            .setType(MediaType.get("multipart/form-data"))
+            .setType(MULTI_PART_FORM_DATA)
             .addFormDataPart("size", request.getSize())
-            .addFormDataPart("response_format", request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+            .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
+            .addFormDataPart(IMAGE, IMAGE, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());
@@ -338,16 +328,5 @@ public class OpenAIService {
 
   public ListenableFuture<ModerationResult> createModerationAsync(ModerationRequest request) {
     return api.createModeration(request);
-  }
-
-  /**
-   * Shuts down the OkHttp ExecutorService. The default behaviour of OkHttp's ExecutorService
-   * (ConnectionPool) is to shut down after an idle timeout of 60s. Call this method to shut down
-   * the ExecutorService immediately.
-   */
-  public void shutdownExecutor() {
-    Objects.requireNonNull(
-        this.executorService, "executorService must be set in order to shut down");
-    this.executorService.shutdown();
   }
 }

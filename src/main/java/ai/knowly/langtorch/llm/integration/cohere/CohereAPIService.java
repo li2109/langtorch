@@ -1,8 +1,10 @@
 package ai.knowly.langtorch.llm.integration.cohere;
 
+import ai.knowly.langtorch.llm.integration.cohere.schema.CohereExecutionException;
 import ai.knowly.langtorch.llm.integration.cohere.schema.CohereGenerateRequest;
 import ai.knowly.langtorch.llm.integration.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.llm.integration.cohere.schema.CohereHttpException;
+import ai.knowly.langtorch.llm.integration.cohere.schema.CohereInterruptedException;
 import ai.knowly.langtorch.llm.integration.cohere.serialization.CohereGenerateRequestAdapter;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -58,19 +60,25 @@ public class CohereAPIService {
     try {
       return apiCall.get();
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      // Restore the interrupt status
+      Thread.currentThread().interrupt();
+
+      // Optionally, log or handle the exception here.
+      logger.atSevere().withCause(e).log("Thread was interrupted during API call.");
+
+      throw new CohereInterruptedException(e);
     } catch (ExecutionException e) {
       if (e.getCause() instanceof HttpException) {
         HttpException httpException = (HttpException) e.getCause();
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);
-          throw new CohereHttpException(errorBody, httpException.code(), httpException);
+          throw new CohereHttpException(errorBody, httpException);
         } catch (IOException ioException) {
           logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }
       }
-      throw new RuntimeException(e);
+      throw new CohereExecutionException(e);
     }
   }
 
@@ -78,8 +86,7 @@ public class CohereAPIService {
     Objects.requireNonNull(token, "OpenAI token required");
     OkHttpClient client = defaultClient(token, timeout);
     Retrofit retrofit = defaultRetrofit(client, gson);
-    CohereApi cohereApi = retrofit.create(CohereApi.class);
-    return cohereApi;
+    return retrofit.create(CohereApi.class);
   }
 
   public static OkHttpClient defaultClient(String token, Duration timeout) {

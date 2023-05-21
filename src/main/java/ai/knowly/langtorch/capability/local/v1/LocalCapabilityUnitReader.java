@@ -4,6 +4,7 @@ import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import com.google.gson.Gson;
 import java.io.FileInputStream;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import javax.inject.Inject;
 import org.apache.commons.io.IOUtils;
 
@@ -33,12 +34,12 @@ public class LocalCapabilityUnitReader {
   }
 
   private String readFile(String folderPath, TARGET target) {
-    String path =
-        folderPath + "/" + (target == TARGET.CONFIG ? CONFIG_FILE_NAME : PROMPT_FILE_NAME);
+    String fileName = target == TARGET.CONFIG ? CONFIG_FILE_NAME : PROMPT_FILE_NAME;
+    String path = String.format("%s/%s", folderPath, fileName);
     try (FileInputStream inputStream = new FileInputStream(path)) {
-      return IOUtils.toString(inputStream);
+      return IOUtils.toString(inputStream, Charset.defaultCharset());
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new LocalCapabilityReadException(e);
     }
   }
 

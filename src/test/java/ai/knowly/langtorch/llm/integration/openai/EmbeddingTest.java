@@ -27,6 +27,6 @@ class EmbeddingTest {
     List<Embedding> embeddings = service.createEmbeddings(embeddingRequest).getData();
 
     assertFalse(embeddings.isEmpty());
-    assertFalse(embeddings.get(0).getEmbedding().isEmpty());
+    assertFalse(embeddings.get(0).getValue().isEmpty());
   }
 }

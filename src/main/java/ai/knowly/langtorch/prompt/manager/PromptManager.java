@@ -6,6 +6,7 @@ import com.google.gson.GsonBuilder;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.nio.charset.Charset;
 import java.util.HashMap;
 import java.util.Map;
 import org.apache.commons.io.IOUtils;
@@ -67,12 +68,12 @@ public final class PromptManager {
    * @return An instance of PromptManager.
    */
   public static PromptManager fromFile(String folderName, String fileName) {
-    String path = folderName + "/" + fileName;
+    String path = String.format("%s/%s", folderName, fileName);
     try (FileInputStream inputStream = new FileInputStream(path)) {
-      String json = IOUtils.toString(inputStream);
+      String json = IOUtils.toString(inputStream, Charset.defaultCharset());
       return fromJson(json);
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new FileLoadingException(e);
     }
   }
 
@@ -96,7 +97,7 @@ public final class PromptManager {
     try (FileWriter fileWriter = new FileWriter(folderName + "/" + toWriteFileName)) {
       fileWriter.write(toJson());
     } catch (IOException e) {
-      throw new RuntimeException(e);
+      throw new FileSaveException(e);
     }
   }
 
@@ -145,11 +146,9 @@ public final class PromptManager {
    * Removes a prompt template with the specified version.
    *
    * @param version The version number.
-   * @return The updated PromptManager instance.
    */
-  public PromptManager removePromptTemplate(long version) {
+  public void removePromptTemplate(long version) {
     promptTemplateVersions.remove(version);
-    return this;
   }
 
   /**
@@ -157,10 +156,8 @@ public final class PromptManager {
    *
    * @param version The version number.
    * @param promptTemplate The updated PromptTemplate.
-   * @return The updated PromptManager instance.
    */
-  public PromptManager updatePromptTemplate(long version, PromptTemplate promptTemplate) {
+  public void updatePromptTemplate(long version, PromptTemplate promptTemplate) {
     promptTemplateVersions.put(version, promptTemplate);
-    return this;
   }
 }

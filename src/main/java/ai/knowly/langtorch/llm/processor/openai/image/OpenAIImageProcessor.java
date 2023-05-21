@@ -11,13 +11,10 @@ import ai.knowly.langtorch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.image.Image;
 import ai.knowly.langtorch.schema.image.Images;
 import ai.knowly.langtorch.schema.io.SingleText;
-import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 
 public class OpenAIImageProcessor implements Processor<SingleText, Images> {
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-
   private final OpenAIService openAIService;
 
   // Configuration for the OpenAI Image Processor

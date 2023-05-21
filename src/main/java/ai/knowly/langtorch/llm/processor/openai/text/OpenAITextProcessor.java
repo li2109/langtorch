@@ -9,7 +9,6 @@ import ai.knowly.langtorch.llm.processor.Processor;
 import ai.knowly.langtorch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.io.SingleText;
 import com.google.common.annotations.VisibleForTesting;
-import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 
@@ -20,7 +19,6 @@ import com.google.common.util.concurrent.ListenableFuture;
 public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   // Default model, logger, and default max tokens for this processor
   @VisibleForTesting static final String DEFAULT_MODEL = "text-davinci-003";
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final int DEFAULT_MAX_TOKENS = 2048;
 
   private final OpenAIService openAIService;

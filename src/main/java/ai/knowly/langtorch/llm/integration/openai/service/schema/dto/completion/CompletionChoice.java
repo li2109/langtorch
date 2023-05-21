@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import lombok.Data;
 
 /**
@@ -22,5 +23,6 @@ public class CompletionChoice {
   LogProbResult logprobs;
 
   /** The reason why GPT stopped generating, for example "length". */
-  String finish_reason;
+  @JsonProperty("finish_reason")
+  String finishReason;
 }

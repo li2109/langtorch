@@ -4,6 +4,7 @@ import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.embedding.E
 import java.util.List;
 
 public final class OpenAIEmbeddingsProcessorRequestConverter {
+  private OpenAIEmbeddingsProcessorRequestConverter() {}
 
   public static EmbeddingRequest convert(
       OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig,

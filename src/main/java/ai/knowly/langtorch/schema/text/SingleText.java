@@ -1,4 +1,7 @@
-package ai.knowly.langtorch.schema.io;
+package ai.knowly.langtorch.schema.text;
+
+import ai.knowly.langtorch.schema.io.Input;
+import ai.knowly.langtorch.schema.io.Output;
 
 /** A model input/output that is a text string. */
 public class SingleText implements Input, Output {

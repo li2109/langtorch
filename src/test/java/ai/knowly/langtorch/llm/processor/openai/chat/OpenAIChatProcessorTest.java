@@ -9,7 +9,7 @@ import ai.knowly.langtorch.schema.chat.AssistantMessage;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.UserMessage;
-import ai.knowly.langtorch.schema.io.MultiChatMessage;
+import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import java.util.Arrays;
 import java.util.List;

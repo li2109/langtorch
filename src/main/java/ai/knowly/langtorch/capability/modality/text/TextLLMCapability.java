@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.capability.modality.text;
 
 import ai.knowly.langtorch.capability.Capability;
-import ai.knowly.langtorch.memory.Memory;
+import ai.knowly.langtorch.store.memory.Memory;
 import ai.knowly.langtorch.schema.io.Input;
 import ai.knowly.langtorch.schema.io.Output;
 import ai.knowly.langtorch.schema.memory.MemoryKey;

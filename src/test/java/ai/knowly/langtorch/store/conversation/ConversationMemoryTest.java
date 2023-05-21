@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.memory.conversation;
+package ai.knowly.langtorch.store.conversation;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.truth.Truth.assertThat;
@@ -7,6 +7,7 @@ import ai.knowly.langtorch.schema.chat.AssistantMessage;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.UserMessage;
+import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import com.google.common.collect.ImmutableList;
 import java.util.Map.Entry;
 import org.junit.jupiter.api.BeforeEach;

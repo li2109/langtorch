@@ -1,19 +1,30 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
+import ai.knowly.langtorch.store.vectordb.schema.AddRequest;
+import ai.knowly.langtorch.store.vectordb.schema.AddResponse;
+import ai.knowly.langtorch.store.vectordb.schema.DeleteRequest;
+import ai.knowly.langtorch.store.vectordb.schema.DeleteResponse;
+import ai.knowly.langtorch.store.vectordb.schema.QueryRequest;
+import ai.knowly.langtorch.store.vectordb.schema.QueryResponse;
+import ai.knowly.langtorch.store.vectordb.schema.UpdateRequest;
+import ai.knowly.langtorch.store.vectordb.schema.UpdateResponse;
+import ai.knowly.langtorch.store.vectordb.schema.UpsertRequest;
+import ai.knowly.langtorch.store.vectordb.schema.UpsertResponse;
+import ai.knowly.langtorch.store.vectordb.VectorStoreService;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeApiExecutionException;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeHttpParseException;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeInterruptedException;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.DeleteRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.DeleteResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.PineconeDeleteRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.PineconeDeleteResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.UpdateRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.UpdateResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.PineconeFetchResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.PineconeQueryRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.PineconeQueryResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.PineconeUpdateRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.PineconeUpdateResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertResponse;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -31,7 +42,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-public class PineconeService {
+public class PineconeService extends VectorStoreService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final PineconeAPI api;
@@ -105,43 +116,68 @@ public class PineconeService {
         .build();
   }
 
-  public UpsertResponse upsert(UpsertRequest request) {
+  public PineconeUpsertResponse upsert(PineconeUpsertRequest request) {
     return execute(api.upsert(request));
   }
 
-  public ListenableFuture<UpsertResponse> upsertAsync(UpsertRequest request) {
+  public ListenableFuture<PineconeUpsertResponse> upsertAsync(PineconeUpsertRequest request) {
     return api.upsert(request);
   }
 
-  public QueryResponse query(QueryRequest request) {
+  public PineconeQueryResponse query(PineconeQueryRequest request) {
     return execute(api.query(request));
   }
 
-  public ListenableFuture<QueryResponse> queryAsync(QueryRequest request) {
+  public ListenableFuture<PineconeQueryResponse> queryAsync(PineconeQueryRequest request) {
     return api.query(request);
   }
 
-  public DeleteResponse delete(DeleteRequest request) {
+  public PineconeDeleteResponse delete(PineconeDeleteRequest request) {
     return execute(api.delete(request));
   }
 
-  public ListenableFuture<DeleteResponse> queryAsync(DeleteRequest request) {
+  public ListenableFuture<PineconeDeleteResponse> queryAsync(PineconeDeleteRequest request) {
     return api.delete(request);
   }
 
-  public FetchResponse fetch(FetchRequest request) {
+  public PineconeFetchResponse fetch(FetchRequest request) {
     return execute(api.fetch(request.getNamespace(), request.getIds()));
   }
 
-  public ListenableFuture<FetchResponse> fetchAsync(FetchRequest request) {
+  public ListenableFuture<PineconeFetchResponse> fetchAsync(FetchRequest request) {
     return api.fetch(request.getNamespace(), request.getIds());
   }
 
-  public UpdateResponse update(UpdateRequest request) {
+  public PineconeUpdateResponse update(PineconeUpdateRequest request) {
     return execute(api.update(request));
   }
 
-  public ListenableFuture<UpdateResponse> updateAsync(UpdateRequest request) {
+  public ListenableFuture<PineconeUpdateResponse> updateAsync(PineconeUpdateRequest request) {
     return api.update(request);
+  }
+
+  @Override
+  public AddResponse add(AddRequest request) {
+    return upsert(request);
+  }
+
+  @Override
+  public UpdateResponse update(UpdateRequest request) {
+    return null;
+  }
+
+  @Override
+  public UpsertResponse upsert(UpsertRequest request) {
+    return null;
+  }
+
+  @Override
+  public DeleteResponse delete(DeleteRequest request) {
+    return null;
+  }
+
+  @Override
+  public QueryResponse query(QueryRequest request) {
+    return null;
   }
 }

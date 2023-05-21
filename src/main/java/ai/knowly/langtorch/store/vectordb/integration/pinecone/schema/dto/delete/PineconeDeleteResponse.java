@@ -5,4 +5,4 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class DeleteResponse {}
+public class PineconeDeleteResponse {}

@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class QueryRequest {
+public class PineconeQueryRequest {
   private String namespace;
   private long topK;
   // The filter to apply. You can use vector metadata to limit your search. See

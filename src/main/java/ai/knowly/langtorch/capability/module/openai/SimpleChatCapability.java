@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.capability.module.openai;
 
-import ai.knowly.langtorch.capability.modality.text.ChatCompletionLLMCapability;
+import ai.knowly.langtorch.capability.usecase.text.ChatCompletionLLMCapability;
 import ai.knowly.langtorch.llm.processor.openai.chat.OpenAIChatProcessor;
 import ai.knowly.langtorch.parser.ChatMessageToStringParser;
 import ai.knowly.langtorch.parser.StringToMultiChatMessageParser;

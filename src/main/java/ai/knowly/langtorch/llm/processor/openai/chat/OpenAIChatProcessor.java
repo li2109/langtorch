@@ -12,7 +12,7 @@ import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.SystemMessage;
 import ai.knowly.langtorch.schema.chat.UserMessage;
-import ai.knowly.langtorch.schema.io.MultiChatMessage;
+import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import javax.inject.Inject;

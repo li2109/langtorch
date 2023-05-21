@@ -1,6 +1,8 @@
-package ai.knowly.langtorch.schema.io;
+package ai.knowly.langtorch.schema.text;
 
 import ai.knowly.langtorch.schema.chat.ChatMessage;
+import ai.knowly.langtorch.schema.io.Input;
+import ai.knowly.langtorch.schema.io.Output;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 

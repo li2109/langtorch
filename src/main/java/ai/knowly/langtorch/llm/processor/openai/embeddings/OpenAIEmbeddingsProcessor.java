@@ -9,7 +9,7 @@ import ai.knowly.langtorch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
-import ai.knowly.langtorch.schema.io.EmbeddingInput;
+import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import com.google.common.util.concurrent.ListenableFuture;
 
 public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embeddings> {

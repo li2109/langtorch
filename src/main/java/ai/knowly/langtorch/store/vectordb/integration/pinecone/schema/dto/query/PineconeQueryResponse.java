@@ -9,7 +9,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class QueryResponse {
+public class PineconeQueryResponse {
   @JsonProperty("matches")
   private List<Match> matches;
 

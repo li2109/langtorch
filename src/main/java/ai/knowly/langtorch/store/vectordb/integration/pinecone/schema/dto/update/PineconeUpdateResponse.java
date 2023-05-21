@@ -5,4 +5,4 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class UpdateResponse {}
+public class PineconeUpdateResponse {}

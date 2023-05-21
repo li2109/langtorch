@@ -20,8 +20,8 @@ class EmbeddingTest {
     OpenAIService service = new OpenAIService(token);
     EmbeddingRequest embeddingRequest =
         EmbeddingRequest.builder()
-            .model("text-similarity-babbage-001")
-            .input(Collections.singletonList("The food was delicious and the waiter..."))
+            .setModel("text-similarity-babbage-001")
+            .setInput(Collections.singletonList("The food was delicious and the waiter..."))
             .build();
 
     List<Embedding> embeddings = service.createEmbeddings(embeddingRequest).getData();

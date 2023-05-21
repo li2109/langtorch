@@ -10,7 +10,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class FetchResponse {
+public class PineconeFetchResponse {
   @JsonProperty("vectors")
   private Map<String, Vector> vectors;
 

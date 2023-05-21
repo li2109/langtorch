@@ -7,7 +7,7 @@ import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionResult;
 import ai.knowly.langtorch.llm.processor.Processor;
 import ai.knowly.langtorch.llm.processor.openai.OpenAIServiceProvider;
-import ai.knowly.langtorch.schema.io.SingleText;
+import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.annotations.VisibleForTesting;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;

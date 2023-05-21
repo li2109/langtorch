@@ -1,6 +1,7 @@
-package ai.knowly.langtorch.memory.conversation;
+package ai.knowly.langtorch.store.memory.conversation;
 
-import ai.knowly.langtorch.memory.Memory;
+import ai.knowly.langtorch.store.memory.Memory;
+import ai.knowly.langtorch.memory.conversation.AutoValue_ConversationMemory;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
 import com.google.auto.value.AutoValue;

@@ -4,10 +4,10 @@ import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.Vector;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.PineconeQueryRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.PineconeQueryResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -27,8 +27,8 @@ final class QueryTest {
                 .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")
                 .build());
 
-    UpsertRequest upsertRequest =
-        UpsertRequest.builder()
+    PineconeUpsertRequest pineconeUpsertRequest =
+        PineconeUpsertRequest.builder()
             .setVectors(
                 Arrays.asList(
                     Vector.builder()
@@ -39,8 +39,8 @@ final class QueryTest {
             .setNamespace("namespace")
             .build();
 
-    QueryRequest queryRequest =
-        QueryRequest.builder()
+    PineconeQueryRequest pineconeQueryRequest =
+        PineconeQueryRequest.builder()
             .setVector(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8))
             .setTopK(3)
             .setNamespace("namespace")
@@ -49,15 +49,15 @@ final class QueryTest {
             .build();
 
     // Act.
-    UpsertResponse response = service.upsert(upsertRequest);
-    QueryResponse queryResponse = service.query(queryRequest);
+    PineconeUpsertResponse response = service.upsert(pineconeUpsertRequest);
+    PineconeQueryResponse pineconeQueryResponse = service.query(pineconeQueryRequest);
 
     // Assert.
     assertThat(response.getUpsertedCount()).isEqualTo(1);
-    assertThat(queryResponse.getMatches()).isNotEmpty();
-    assertThat(queryResponse.getMatches().get(0).getId()).isEqualTo("test2");
-    assertThat(queryResponse.getMatches().get(0).getValues()).isNotEmpty();
-    assertThat(queryResponse.getMatches().get(0).getMetadata()).isNotEmpty();
-    assertThat(queryResponse.getNamespace()).isEqualTo("namespace");
+    assertThat(pineconeQueryResponse.getMatches()).isNotEmpty();
+    assertThat(pineconeQueryResponse.getMatches().get(0).getId()).isEqualTo("test2");
+    assertThat(pineconeQueryResponse.getMatches().get(0).getValues()).isNotEmpty();
+    assertThat(pineconeQueryResponse.getMatches().get(0).getMetadata()).isNotEmpty();
+    assertThat(pineconeQueryResponse.getNamespace()).isEqualTo("namespace");
   }
 }

@@ -8,7 +8,7 @@ import lombok.Data;
 
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class DeleteRequest {
+public class PineconeDeleteRequest {
   @JsonProperty("ids")
   private List<String> ids;
 

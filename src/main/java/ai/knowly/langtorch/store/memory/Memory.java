@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.memory;
+package ai.knowly.langtorch.store.memory;
 
 import com.google.common.collect.Multimap;
 import java.util.List;

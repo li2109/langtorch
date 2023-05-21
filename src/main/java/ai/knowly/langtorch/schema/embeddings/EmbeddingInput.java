@@ -1,5 +1,6 @@
-package ai.knowly.langtorch.schema.io;
+package ai.knowly.langtorch.schema.embeddings;
 
+import ai.knowly.langtorch.schema.io.Input;
 import java.util.List;
 
 public class EmbeddingInput implements Input {

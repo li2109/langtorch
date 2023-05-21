@@ -5,9 +5,9 @@ import static com.google.common.truth.Truth.assertThat;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.Vector;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.PineconeFetchResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -34,18 +34,18 @@ class FetchTest {
             .setMetadata(ImmutableMap.of("key", "val"))
             .build();
 
-    UpsertRequest upsertRequest =
-        UpsertRequest.builder().setVectors(Arrays.asList(vector)).setNamespace("namespace").build();
+    PineconeUpsertRequest pineconeUpsertRequest =
+        PineconeUpsertRequest.builder().setVectors(Arrays.asList(vector)).setNamespace("namespace").build();
 
     FetchRequest fetchRequest =
         FetchRequest.builder().setIds(Arrays.asList("test2")).setNamespace("namespace").build();
 
     // Act.
-    UpsertResponse response = service.upsert(upsertRequest);
-    FetchResponse fetchResponse = service.fetch(fetchRequest);
+    PineconeUpsertResponse response = service.upsert(pineconeUpsertRequest);
+    PineconeFetchResponse pineconeFetchResponse = service.fetch(fetchRequest);
 
     // Assert.
     assertThat(response.getUpsertedCount()).isEqualTo(1);
-    assertThat(fetchResponse.getVectors().get("test2")).isEqualTo(vector);
+    assertThat(pineconeFetchResponse.getVectors().get("test2")).isEqualTo(vector);
   }
 }

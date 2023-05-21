@@ -11,7 +11,7 @@ public final class OpenAIEmbeddingsProcessorRequestConverter {
       String model,
       List<String> input) {
 
-    EmbeddingRequest embeddingRequest = new EmbeddingRequest();
+    EmbeddingRequest embeddingRequest = EmbeddingRequest.builder().build();
 
     embeddingRequest.setModel(model);
     embeddingRequest.setInput(input);

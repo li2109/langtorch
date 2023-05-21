@@ -5,7 +5,7 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.CompletionRequest;
-import ai.knowly.langtorch.schema.io.SingleText;
+import ai.knowly.langtorch.schema.text.SingleText;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;

@@ -8,7 +8,7 @@ import lombok.NoArgsConstructor;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-public class UpsertResponse {
+public class PineconeUpsertResponse {
   @JsonProperty("upsertedCount")
   long upsertedCount;
 }

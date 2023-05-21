@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.parser;
 
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
-import ai.knowly.langtorch.schema.io.SingleText;
+import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.truth.Truth;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;

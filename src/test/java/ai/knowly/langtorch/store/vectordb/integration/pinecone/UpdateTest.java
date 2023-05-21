@@ -5,11 +5,11 @@ import static com.google.common.truth.Truth.assertThat;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.Vector;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.UpdateRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.UpdateResponse;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.PineconeFetchResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.PineconeUpdateRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.PineconeUpdateResponse;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.PineconeUpsertResponse;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
@@ -29,8 +29,8 @@ class UpdateTest {
                 .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")
                 .build());
 
-    UpsertRequest upsertRequest =
-        UpsertRequest.builder()
+    PineconeUpsertRequest pineconeUpsertRequest =
+        PineconeUpsertRequest.builder()
             .setVectors(
                 Arrays.asList(
                     Vector.builder()
@@ -41,8 +41,8 @@ class UpdateTest {
             .setNamespace("testr2")
             .build();
 
-    UpdateRequest updateRequest =
-        UpdateRequest.builder()
+    PineconeUpdateRequest pineconeUpdateRequest =
+        PineconeUpdateRequest.builder()
             .setId("test2")
             .setValues(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9))
             .setNamespace("testr2")
@@ -52,12 +52,12 @@ class UpdateTest {
         FetchRequest.builder().setIds(Arrays.asList("test2")).setNamespace("testr2").build();
 
     // Act.
-    UpsertResponse response = service.upsert(upsertRequest);
-    UpdateResponse updateResponse = service.update(updateRequest);
-    FetchResponse fetchResponse = service.fetch(fetchRequest);
+    PineconeUpsertResponse response = service.upsert(pineconeUpsertRequest);
+    PineconeUpdateResponse pineconeUpdateResponse = service.update(pineconeUpdateRequest);
+    PineconeFetchResponse pineconeFetchResponse = service.fetch(fetchRequest);
     // Assert.
     assertThat(response.getUpsertedCount()).isEqualTo(1);
-    assertThat(fetchResponse.getVectors().get("test2").getValues())
+    assertThat(pineconeFetchResponse.getVectors().get("test2").getValues())
         .isEqualTo(Arrays.asList(0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.9));
   }
 }

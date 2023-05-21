@@ -7,7 +7,7 @@ import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.Image;
 import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.image.ImageResult;
 import ai.knowly.langtorch.schema.image.Images;
-import ai.knowly.langtorch.schema.io.SingleText;
+import ai.knowly.langtorch.schema.text.SingleText;
 import java.util.Arrays;
 import java.util.stream.Collectors;
 import org.junit.jupiter.api.BeforeEach;

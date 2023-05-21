@@ -1,10 +1,10 @@
 package ai.knowly.langtorch.schema.embeddings;
 
+import ai.knowly.langtorch.schema.io.Input;
 import ai.knowly.langtorch.schema.io.Output;
-
 import java.util.List;
 
-public class Embedding implements Output {
+public class Embedding implements Input, Output {
 
   private final List<Double> vector;
 

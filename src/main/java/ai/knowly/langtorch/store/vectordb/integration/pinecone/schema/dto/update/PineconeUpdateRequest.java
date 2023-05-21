@@ -10,7 +10,7 @@ import lombok.NonNull;
 
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class UpdateRequest {
+public class PineconeUpdateRequest {
   @JsonProperty("id")
   @NonNull
   private String id;

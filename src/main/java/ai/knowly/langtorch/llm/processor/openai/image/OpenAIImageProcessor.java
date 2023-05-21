@@ -10,7 +10,7 @@ import ai.knowly.langtorch.llm.processor.Processor;
 import ai.knowly.langtorch.llm.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.image.Image;
 import ai.knowly.langtorch.schema.image.Images;
-import ai.knowly.langtorch.schema.io.SingleText;
+import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 

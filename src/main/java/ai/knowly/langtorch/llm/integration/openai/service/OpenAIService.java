@@ -50,6 +50,7 @@ public class OpenAIService {
   private static final MediaType IMAGE_MEDIA_TYPE = MediaType.parse(IMAGE);
 
   private final OpenAIApi api;
+
   /**
    * Creates a new OpenAiService that wraps OpenAiApi
    *
@@ -58,6 +59,7 @@ public class OpenAIService {
   public OpenAIService(final String token) {
     this(OpenAIServiceConfig.builder().setApiKey(token).build());
   }
+
   /**
    * Creates a new OpenAiService that wraps OpenAiApi
    *
@@ -75,6 +77,7 @@ public class OpenAIService {
 
     this.api = retrofit.create(OpenAIApi.class);
   }
+
   /**
    * Creates a new OpenAiService that wraps OpenAiApi. Use this if you need more customization, but
    * use OpenAiService(api, executorService) if you use streaming and want to shut down instantly
@@ -301,8 +304,6 @@ public class OpenAIService {
 
     return execute(api.createImageVariation(builder.build()));
   }
-  
-
 
   public ListenableFuture<ImageResult> createImageVariationAsync(
       CreateImageVariationRequest request, java.io.File image) {

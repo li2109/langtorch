@@ -12,6 +12,7 @@ import java.util.Map;
  */
 public class PromptProcessor {
   private PromptProcessor() {}
+
   /**
    * Create a PromptTemplate using the single Prompt annotation on the class. This method should be
    * used when there is only one Prompt annotation on the class.

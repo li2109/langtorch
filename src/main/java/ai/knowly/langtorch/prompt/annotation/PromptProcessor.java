@@ -11,6 +11,7 @@ import java.util.Map;
  * can create a PromptTemplate based on the annotations and the fields of the annotated class.
  */
 public class PromptProcessor {
+  private PromptProcessor() {}
   /**
    * Create a PromptTemplate using the single Prompt annotation on the class. This method should be
    * used when there is only one Prompt annotation on the class.
@@ -132,7 +133,6 @@ public class PromptProcessor {
     for (String variableName : variableNames) {
       try {
         Field field = clazz.getDeclaredField(variableName);
-        field.setAccessible(true);
         String fieldValue = (String) field.get(instance);
         variableValues.put(variableName, fieldValue);
       } catch (NoSuchFieldException | IllegalAccessException e) {

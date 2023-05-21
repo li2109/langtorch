@@ -2,6 +2,18 @@
 <project version="4">
   <component name="SonarLintProjectSettings">
     <option name="bindingEnabled" value="true" />
+    <option name="fileExclusions">
+      <list>
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/edit/EditResult.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/moderation/Moderation.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/moderation/ModerationCategories.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/moderation/ModerationCategoryScores.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/moderation/ModerationResult.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/OpenAIError.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/llm/integration/openai/service/schema/dto/OpenAIResponse.java" />
+        <option value="FILE:src/main/java/ai/knowly/langtorch/prompt/template/PromptTemplate.java" />
+      </list>
+    </option>
     <option name="projectKey" value="Knowly-ai_langtorch" />
     <option name="serverId" value="https://sonarcloud.io 115" />
   </component>

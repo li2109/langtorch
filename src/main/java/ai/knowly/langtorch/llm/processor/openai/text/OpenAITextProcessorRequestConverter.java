@@ -5,6 +5,8 @@ import ai.knowly.langtorch.llm.integration.openai.service.schema.dto.completion.
 // Converter class to convert OpenAITextProcessorConfig and a prompt string
 // to a CompletionRequest
 public final class OpenAITextProcessorRequestConverter {
+  private OpenAITextProcessorRequestConverter() {}
+
   // Method to convert OpenAITextProcessorConfig and a prompt string
   // to a CompletionRequest
   public static CompletionRequest convert(

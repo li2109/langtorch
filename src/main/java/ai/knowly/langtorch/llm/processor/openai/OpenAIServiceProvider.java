@@ -1,8 +1,8 @@
 package ai.knowly.langtorch.llm.processor.openai;
 
-import ai.knowly.langtorch.utils.ApiKeyUtils;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIApi;
 import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
+import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.flogger.FluentLogger;
 import java.time.Duration;
 import java.util.Optional;
@@ -10,6 +10,8 @@ import java.util.Optional;
 public final class OpenAIServiceProvider {
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+
+  private OpenAIServiceProvider() {}
 
   public static OpenAIApi createOpenAiAPI(String apiKey) {
     return OpenAIService.buildApi(apiKey, DEFAULT_TIMEOUT);

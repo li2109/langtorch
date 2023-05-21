@@ -38,7 +38,7 @@ final class OpenAITextProcessorRequestConverterTest {
   }
 
   @Test
-  public void testConvert() {
+  void testConvert() {
     CompletionRequest completionRequest =
         OpenAITextProcessorRequestConverter.convert(openAITextProcessorConfig, "Test prompt");
 

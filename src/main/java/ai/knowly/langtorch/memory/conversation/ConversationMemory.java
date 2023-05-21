@@ -12,7 +12,7 @@ import java.util.Map.Entry;
 
 /** Implementation of Memory for storing conversation-related key-value pairs. */
 @AutoValue
-public abstract class ConversationMemory extends Memory<Role, ChatMessage> {
+public abstract class ConversationMemory implements Memory<Role, ChatMessage> {
 
   public static ConversationMemory create() {
     return new AutoValue_ConversationMemory(LinkedHashMultimap.create());

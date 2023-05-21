@@ -51,7 +51,7 @@ final class OpenAIImageProcessorTest {
     // Assert.
     assertThat(output.getCreated()).isEqualTo(expectedResult.getCreated());
     assertThat(
-            output.getImages().stream().map(image -> image.getUrl()).collect(Collectors.toList()))
+            output.getImageData().stream().map(image -> image.getUrl()).collect(Collectors.toList()))
         .containsExactlyElementsIn(
             expectedResult.getData().stream()
                 .map(data -> data.getUrl())

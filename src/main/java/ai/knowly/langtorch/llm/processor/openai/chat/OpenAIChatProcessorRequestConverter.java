@@ -6,6 +6,9 @@ import java.util.List;
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages
 // to a ChatCompletionRequest
 public final class OpenAIChatProcessorRequestConverter {
+
+  private OpenAIChatProcessorRequestConverter() {}
+
   // Method to convert OpenAIChatProcessorConfig and a list of chat messages
   // to a ChatCompletionRequest
   public static ChatCompletionRequest convert(

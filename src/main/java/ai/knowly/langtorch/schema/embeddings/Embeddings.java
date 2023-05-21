@@ -1,18 +1,17 @@
 package ai.knowly.langtorch.schema.embeddings;
 
 import ai.knowly.langtorch.schema.io.Output;
-
 import java.util.List;
 
 public class Embeddings implements Output {
 
   private final EmbeddingType type;
 
-  private final List<Embedding> embeddings;
+  private final List<Embedding> value;
 
-  private Embeddings(EmbeddingType type, List<Embedding> embeddings) {
+  private Embeddings(EmbeddingType type, List<Embedding> value) {
     this.type = type;
-    this.embeddings = embeddings;
+    this.value = value;
   }
 
   public static Embeddings of(EmbeddingType type, List<Embedding> embeddings) {
@@ -23,7 +22,7 @@ public class Embeddings implements Output {
     return type;
   }
 
-  public List<Embedding> getEmbeddings() {
-    return embeddings;
+  public List<Embedding> getValue() {
+    return value;
   }
 }

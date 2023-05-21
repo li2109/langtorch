@@ -5,11 +5,11 @@ import java.util.List;
 
 public class Images implements Output {
   Long created;
-  List<Image> images;
+  List<Image> imageData;
 
-  private Images(Long created, List<Image> images) {
+  private Images(Long created, List<Image> imageData) {
     this.created = created;
-    this.images = images;
+    this.imageData = imageData;
   }
 
   public static Images of(Long created, List<Image> images) {
@@ -24,11 +24,11 @@ public class Images implements Output {
     this.created = created;
   }
 
-  public List<Image> getImages() {
-    return images;
+  public List<Image> getImageData() {
+    return imageData;
   }
 
-  public void setImages(List<Image> images) {
-    this.images = images;
+  public void setImageData(List<Image> imageData) {
+    this.imageData = imageData;
   }
 }

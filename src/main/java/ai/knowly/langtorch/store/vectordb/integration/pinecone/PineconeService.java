@@ -1,5 +1,8 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeApiExecutionException;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeHttpParseException;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeInterruptedException;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.DeleteRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.delete.DeleteResponse;
@@ -19,7 +22,6 @@ import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.io.IOException;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.ExecutorService;
 import java.util.concurrent.TimeUnit;
 import okhttp3.*;
 import okhttp3.OkHttpClient.Builder;
@@ -32,9 +34,7 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class PineconeService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
-  private static final ObjectMapper mapper = defaultObjectMapper();
   private final PineconeAPI api;
-  private final ExecutorService executorService;
 
   public PineconeService(final PineconeServiceConfig pineconeServiceConfig) {
     ObjectMapper mapper = defaultObjectMapper();
@@ -42,36 +42,33 @@ public class PineconeService {
     Retrofit retrofit = defaultRetrofit(pineconeServiceConfig.endpoint(), client, mapper);
 
     this.api = retrofit.create(PineconeAPI.class);
-    this.executorService = client.dispatcher().executorService();
   }
 
   public PineconeService(final PineconeAPI api) {
     this.api = api;
-    this.executorService = null;
-  }
-
-  public PineconeService(final PineconeAPI api, final ExecutorService executorService) {
-    this.api = api;
-    this.executorService = executorService;
   }
 
   public static <T> T execute(ListenableFuture<T> apiCall) {
     try {
       return apiCall.get();
     } catch (InterruptedException e) {
-      throw new RuntimeException(e);
+      // Restore the interrupt status
+      Thread.currentThread().interrupt();
+      // Optionally, log or handle the exception here.
+      logger.atSevere().withCause(e).log("Thread was interrupted during API call.");
+      throw new PineconeInterruptedException(e);
     } catch (ExecutionException e) {
       if (e.getCause() instanceof HttpException) {
         HttpException httpException = (HttpException) e.getCause();
         try {
           String errorBody = httpException.response().errorBody().string();
           logger.atSevere().log("HTTP Error: %s", errorBody);
-          throw new RuntimeException(errorBody);
+          throw new PineconeHttpParseException(errorBody);
         } catch (IOException ioException) {
           logger.atSevere().withCause(ioException).log("Error while reading errorBody");
         }
       }
-      throw new RuntimeException(e);
+      throw new PineconeApiExecutionException(e);
     }
   }
 

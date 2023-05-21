@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.integration.openai.service.schema.dto.embedding;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import java.util.List;
 import lombok.Data;
 
@@ -15,7 +16,8 @@ public class Embedding {
   String object;
 
   /** The embedding vector */
-  List<Double> embedding;
+  @JsonProperty("embedding")
+  List<Double> value;
 
   /** The position of this embedding in the list */
   Integer index;

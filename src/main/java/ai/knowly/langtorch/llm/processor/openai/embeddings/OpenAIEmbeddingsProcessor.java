@@ -10,12 +10,9 @@ import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
 import ai.knowly.langtorch.schema.io.EmbeddingInput;
-import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
 
 public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embeddings> {
-
-  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private final OpenAIService openAIService;
 
   private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =
@@ -56,7 +53,7 @@ public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embe
     return Embeddings.of(
         EmbeddingType.OPEN_AI,
         embeddingResult.getData().stream()
-            .map(embedding -> Embedding.of(embedding.getEmbedding()))
+            .map(embedding -> Embedding.of(embedding.getValue()))
             .collect(toImmutableList()));
   }
 

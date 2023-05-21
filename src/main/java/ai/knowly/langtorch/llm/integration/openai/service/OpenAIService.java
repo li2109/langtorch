@@ -46,7 +46,8 @@ public class OpenAIService {
   private static final ObjectMapper mapper = defaultObjectMapper();
   private static final String RESPONSE_FORMAT = "response_format";
   private static final MediaType MULTI_PART_FORM_DATA = MediaType.parse("multipart/form-data");
-  private static final MediaType IMAGE_MEDIA_TYPE = MediaType.parse("image");
+  private static final String IMAGE = "image";
+  private static final MediaType IMAGE_MEDIA_TYPE = MediaType.parse(IMAGE);
 
   private final OpenAIApi api;
   /**
@@ -173,7 +174,7 @@ public class OpenAIService {
         .addFormDataPart("prompt", request.getPrompt())
         .addFormDataPart("size", request.getSize())
         .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
-        .addFormDataPart("image", "image", imageBody);
+        .addFormDataPart(IMAGE, IMAGE, imageBody);
   }
 
   public CompletionResult createCompletion(CompletionRequest request) {
@@ -292,7 +293,7 @@ public class OpenAIService {
             .setType(MULTI_PART_FORM_DATA)
             .addFormDataPart("size", request.getSize())
             .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+            .addFormDataPart(IMAGE, IMAGE, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());
@@ -300,6 +301,8 @@ public class OpenAIService {
 
     return execute(api.createImageVariation(builder.build()));
   }
+  
+
 
   public ListenableFuture<ImageResult> createImageVariationAsync(
       CreateImageVariationRequest request, java.io.File image) {
@@ -310,7 +313,7 @@ public class OpenAIService {
             .setType(MULTI_PART_FORM_DATA)
             .addFormDataPart("size", request.getSize())
             .addFormDataPart(RESPONSE_FORMAT, request.getResponseFormat())
-            .addFormDataPart("image", "image", imageBody);
+            .addFormDataPart(IMAGE, IMAGE, imageBody);
 
     if (request.getN() != null) {
       builder.addFormDataPart("n", request.getN().toString());

@@ -1,0 +1,23 @@
+package ai.knowly.langtorch.processor.module.openai.embeddings;
+
+import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingRequest;
+import java.util.List;
+
+public final class OpenAIEmbeddingsProcessorRequestConverter {
+  private OpenAIEmbeddingsProcessorRequestConverter() {}
+
+  public static EmbeddingRequest convert(
+      OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig,
+      String model,
+      List<String> input) {
+
+    EmbeddingRequest embeddingRequest = new EmbeddingRequest();
+
+    embeddingRequest.setModel(model);
+    embeddingRequest.setInput(input);
+
+    openAIEmbeddingsProcessorConfig.getUser().ifPresent(embeddingRequest::setUser);
+
+    return embeddingRequest;
+  }
+}

@@ -2,10 +2,19 @@ plugins {
     id 'java'
     id 'maven-publish'
     id 'signing'
+    id "org.sonarqube" version "3.5.0.2730"
 }
 
 group 'ai.knowly'
-version '0.0.8'
+version '0.0.10'
+
+sonarqube {
+  properties {
+    property "sonar.projectKey", "Knowly-ai_langtorch"
+    property "sonar.organization", "knowly-ai"
+    property "sonar.host.url", "https://sonarcloud.io"
+  }
+}
 
 ext {
     gpgKey = project.hasProperty('gpgKey') ? project.getProperty('gpgKey') : System.getenv('GPG_PRIVATE_KEY')
@@ -101,14 +110,12 @@ dependencies {
     implementation 'com.google.inject:guice:5.1.0'
     // Environment variables
     implementation 'io.github.cdimascio:java-dotenv:5.2.2'
-    // RxJava
-    implementation 'io.reactivex.rxjava2:rxjava:2.2.21'
-    // Gson retrofit converter
-    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    // Retrofit guava adapter
+    // Retrofit
     implementation 'com.squareup.retrofit2:adapter-guava:2.9.0'
     implementation 'com.squareup.retrofit2:converter-jackson:2.9.0'
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
+    implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
+    implementation "com.squareup.retrofit2:converter-gson:2.9.0"
 }
 
 // Testing related dependencies
@@ -129,5 +136,5 @@ dependencies {
 test {
     useJUnitPlatform()
 }
-sourceCompatibility = JavaVersion.VERSION_11
-targetCompatibility = JavaVersion.VERSION_11
+sourceCompatibility = JavaVersion.VERSION_1_8
+targetCompatibility = JavaVersion.VERSION_1_8

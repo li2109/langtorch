@@ -18,8 +18,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import javax.inject.Inject;
 
 /**
- * OpenAI chat module implementation. Handles chat input and output for the OpenAI Language
- * Model.
+ * OpenAI chat module implementation. Handles chat input and output for the OpenAI Language Model.
  */
 public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMessage> {
   // Logger, default model, and default max tokens for this module

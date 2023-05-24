@@ -13,8 +13,8 @@ import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 
 /**
- * OpenAI text module implementation. Handles single text input and output for the OpenAI
- * Language Model.
+ * OpenAI text module implementation. Handles single text input and output for the OpenAI Language
+ * Model.
  */
 public class OpenAITextProcessor implements Processor<SingleText, SingleText> {
   // Default model, logger, and default max tokens for this module

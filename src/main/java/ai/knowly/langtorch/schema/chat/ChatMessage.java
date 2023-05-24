@@ -24,4 +24,16 @@ public class ChatMessage extends Message {
   public String toString() {
     return String.format("%s: %s", getRole(), getContent());
   }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (!(o instanceof ChatMessage)) return false;
+
+    ChatMessage that = (ChatMessage) o;
+
+    if (getRole() != that.getRole()) return false;
+    return getContent() != null ? getContent().equals(that.getContent()) : that.getContent() == null;
+  }
+
 }

@@ -4,7 +4,12 @@ import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.Co
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionResult;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionResult;
+import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.Embedding;
+import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingResult;
 import com.google.common.collect.ImmutableList;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class OpenAIServiceTestingUtils {
 
@@ -72,6 +77,16 @@ public class OpenAIServiceTestingUtils {
         builder.add(completionChoice);
       }
       return builder.build();
+    }
+  }
+
+  public static class Embeddings {
+    public static EmbeddingResult createEmbeddingResult() {
+      EmbeddingResult embeddingResult = new EmbeddingResult();
+      embeddingResult.setObject("list");
+      List<Embedding> embeddings = new ArrayList<>();
+      embeddingResult.setData(embeddings);
+      return embeddingResult;
     }
   }
 }

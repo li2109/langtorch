@@ -33,7 +33,8 @@ public class ChatMessage extends Message {
     ChatMessage that = (ChatMessage) o;
 
     if (getRole() != that.getRole()) return false;
-    return getContent() != null ? getContent().equals(that.getContent()) : that.getContent() == null;
+    return getContent() != null
+        ? getContent().equals(that.getContent())
+        : that.getContent() == null;
   }
-
 }

@@ -21,33 +21,29 @@ import static org.mockito.Mockito.when;
 @ExtendWith(MockitoExtension.class)
 final class OpenAIEmbeddingTest {
 
-    @Mock
-    private OpenAIService openAIService;
-    private OpenAIEmbeddingsProcessor openAIEmbeddingsProcessor;
+  @Mock private OpenAIService openAIService;
+  private OpenAIEmbeddingsProcessor openAIEmbeddingsProcessor;
 
-    @BeforeEach
-    void setUp() {
-        openAIEmbeddingsProcessor = new OpenAIEmbeddingsProcessor(openAIService);
-    }
+  @BeforeEach
+  void setUp() {
+    openAIEmbeddingsProcessor = new OpenAIEmbeddingsProcessor(openAIService);
+  }
 
-    @Test
-    void testOpenAiEmbeddings() {
+  @Test
+  void testOpenAiEmbeddings() {
 
-        String model = "model";
-        List<String> inputData = new ArrayList<>();
-        String user = "user";
+    String model = "model";
+    List<String> inputData = new ArrayList<>();
+    String user = "user";
 
-        EmbeddingInput input = new EmbeddingInput(model, inputData, user);
+    EmbeddingInput input = new EmbeddingInput(model, inputData, user);
 
-        when(openAIService.createEmbeddings(any()))
-                .thenReturn(
-                        OpenAIServiceTestingUtils.Embeddings.createEmbeddingResult()
-                );
+    when(openAIService.createEmbeddings(any()))
+        .thenReturn(OpenAIServiceTestingUtils.Embeddings.createEmbeddingResult());
 
-        Embeddings result = openAIEmbeddingsProcessor.run(input);
+    Embeddings result = openAIEmbeddingsProcessor.run(input);
 
-        Assertions.assertEquals("OPEN_AI", result.getType().name());
-        Assertions.assertNotNull(result);
-    }
-    
+    Assertions.assertEquals("OPEN_AI", result.getType().name());
+    Assertions.assertNotNull(result);
+  }
 }

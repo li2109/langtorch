@@ -7,46 +7,45 @@ import ai.knowly.langtoch.schema.chat.ChatMessage;
 import ai.knowly.langtoch.schema.io.MultiChatMessage;
 import ai.knowly.langtoch.schema.memory.MemoryKey;
 import ai.knowly.langtoch.schema.memory.MemoryValue;
-
 import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 
 public class ChatCompletionLLMCapability<I, O>
-        implements TextLLMCapability<I, MultiChatMessage, ChatMessage, O> {
+    implements TextLLMCapability<I, MultiChatMessage, ChatMessage, O> {
   private final Processor<MultiChatMessage, ChatMessage> processor;
 
-  private Parser<I, MultiChatMessage> inputParser;
-  private Parser<ChatMessage, O> outputParser;
-  private Memory<MemoryKey, MemoryValue> memory;
+  private Optional<Parser<I, MultiChatMessage>> inputParser;
+  private Optional<Parser<ChatMessage, O>> outputParser;
+  private Optional<Memory<MemoryKey, MemoryValue>> memory;
 
   public ChatCompletionLLMCapability(
-          Processor<MultiChatMessage, ChatMessage> processor,
-          Parser<I, MultiChatMessage> inputParser,
-          Parser<ChatMessage, O> outputParser) {
+      Processor<MultiChatMessage, ChatMessage> processor,
+      Optional<Parser<I, MultiChatMessage>> inputParser,
+      Optional<Parser<ChatMessage, O>> outputParser) {
     this.processor = processor;
     this.inputParser = inputParser;
     this.outputParser = outputParser;
-    this.memory = null;
+    this.memory = Optional.empty();
   }
 
   public static <I, O> ChatCompletionLLMCapability<I, O> of(
       Processor<MultiChatMessage, ChatMessage> processor, Class<O> outputClass) {
-    return new ChatCompletionLLMCapability<>(processor, null, null);
+    return new ChatCompletionLLMCapability<>(processor, Optional.empty(), Optional.empty());
   }
 
   public ChatCompletionLLMCapability<I, O> withInputParser(
       Parser<I, MultiChatMessage> inputParser) {
-    this.inputParser = inputParser;
+    this.inputParser = Optional.of(inputParser);
     return this;
   }
 
   public ChatCompletionLLMCapability<I, O> withOutputParser(Parser<ChatMessage, O> outputParser) {
-    this.outputParser = outputParser;
+    this.outputParser = Optional.of(outputParser);
     return this;
   }
 
   public ChatCompletionLLMCapability<I, O> withMemory(Memory<MemoryKey, MemoryValue> memory) {
-    this.memory = memory;
+    this.memory = Optional.of(memory);
     return this;
   }
 
@@ -54,22 +53,27 @@ public class ChatCompletionLLMCapability<I, O>
   public MultiChatMessage preProcess(I inputData) {
     if (inputData instanceof MultiChatMessage) {
       return (MultiChatMessage) inputData;
+    } else if (inputParser.isPresent()) {
+      return inputParser.get().parse(inputData);
+    } else {
+      throw new IllegalArgumentException(
+          "Input data is not a MultiChatMessage and no input parser is present.");
     }
-    return Optional.ofNullable(inputParser)
-            .orElseThrow(() -> new IllegalArgumentException("Input data is not a MultiChatMessage and no input parser is present."))
-            .parse(inputData);
   }
 
   @Override
   public Optional<Memory<MemoryKey, MemoryValue>> getMemory() {
-    return Optional.ofNullable(this.memory);
+    return this.memory;
   }
 
   @Override
   public O postProcess(ChatMessage outputData) {
-    return Optional.ofNullable(outputParser)
-            .orElseThrow(() -> new IllegalArgumentException("Output data type is not ChatMessage and no output parser is present."))
-            .parse(outputData);
+    if (outputParser.isPresent()) {
+      return outputParser.get().parse(outputData);
+    } else {
+      throw new IllegalArgumentException(
+          "Output data type is not ChatMessage and no output parser is present.");
+    }
   }
 
   @Override

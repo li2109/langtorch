@@ -5,8 +5,8 @@ import static org.junit.Assert.assertThrows;
 import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtorch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtorch.llm.processor.openai.text.OpenAITextProcessor;
+import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
+import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessor;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import com.google.common.collect.ImmutableMap;

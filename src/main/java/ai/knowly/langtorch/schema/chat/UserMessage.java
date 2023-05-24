@@ -1,38 +1,15 @@
 package ai.knowly.langtorch.schema.chat;
 
-/** A message from the user. */
-public class UserMessage extends ChatMessage {
-  private final String content;
+/**
+ * A message from the user.
+ */
+public final class UserMessage {
 
-  public UserMessage(String content) {
-    super(content, Role.USER);
-    this.content = content;
+  private UserMessage() {
   }
 
-  public static UserMessage of(String content) {
-    return new UserMessage(content);
+  public static ChatMessage of(String content) {
+    return new ChatMessage(content, Role.USER);
   }
 
-  @Override
-  public String getContent() {
-    return content;
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s: %s", getRole(), getContent());
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    return (obj instanceof UserMessage && ((UserMessage) obj).getContent().equals(getContent()))
-        || (obj instanceof ChatMessage
-            && ((ChatMessage) obj).getContent().equals(getContent())
-            && ((ChatMessage) obj).getRole().equals(Role.USER));
-  }
-
-  @Override
-  public int hashCode() {
-    return getContent().hashCode();
-  }
 }

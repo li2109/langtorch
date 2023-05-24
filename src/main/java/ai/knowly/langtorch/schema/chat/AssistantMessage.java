@@ -1,24 +1,15 @@
 package ai.knowly.langtorch.schema.chat;
 
-public class AssistantMessage extends ChatMessage {
-  private final String content;
+/**
+ * A message from the assistant.
+ */
+public final class AssistantMessage {
 
-  public AssistantMessage(String content) {
-    super(content, Role.ASSISTANT);
-    this.content = content;
+  private AssistantMessage() {
   }
 
-  public static AssistantMessage of(String content) {
-    return new AssistantMessage(content);
+  public static ChatMessage of(String content) {
+    return new ChatMessage(content, Role.ASSISTANT);
   }
 
-  @Override
-  public String getContent() {
-    return content;
-  }
-
-  @Override
-  public String toString() {
-    return String.format("%s: %s", getRole(), getContent());
-  }
 }

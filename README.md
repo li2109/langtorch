@@ -34,7 +34,7 @@ Join [Discord](https://discord.gg/BUSyZQAPvm) if you would like to chat or contr
 ## 👥 Contribution
 If you would like to contribute, please open a discussion and let's discuss there.
 
-Step 1: Open an discussion about your idea
+Step 1: Open a discussion about your idea
 
 Step 2: Draft your PR and assign the maintainer as reviewr
 

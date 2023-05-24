@@ -3,7 +3,7 @@ package ai.knowly.langtorch.capability.modality.text;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.llm.processor.Processor;
+import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.store.memory.Memory;
 import ai.knowly.langtorch.parser.Parser;
 import ai.knowly.langtorch.schema.text.SingleText;

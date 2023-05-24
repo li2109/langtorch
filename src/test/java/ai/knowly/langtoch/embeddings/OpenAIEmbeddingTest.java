@@ -1,10 +1,10 @@
 package ai.knowly.langtoch.embeddings;
 
-import ai.knowly.langtoch.llm.integration.openai.service.OpenAIService;
-import ai.knowly.langtoch.llm.processor.openai.embeddings.OpenAIEmbeddingsProcessor;
-import ai.knowly.langtoch.schema.embeddings.Embeddings;
-import ai.knowly.langtoch.schema.io.EmbeddingInput;
-import ai.knowly.langtoch.util.OpenAIServiceTestingUtils;
+import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
+import ai.knowly.langtorch.processor.module.openai.embeddings.OpenAIEmbeddingsProcessor;
+import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
+import ai.knowly.langtorch.schema.embeddings.Embeddings;
+import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.BeforeEach;

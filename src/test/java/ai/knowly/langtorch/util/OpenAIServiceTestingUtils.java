@@ -1,18 +1,11 @@
 package ai.knowly.langtorch.util;
 
-<<<<<<< HEAD:src/test/java/ai/knowly/langtoch/util/OpenAIServiceTestingUtils.java
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.CompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionChoice;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.completion.chat.ChatCompletionResult;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.Embedding;
-import ai.knowly.langtoch.llm.integration.openai.service.schema.embedding.EmbeddingResult;
-=======
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionChoice;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionResult;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionResult;
->>>>>>> master:src/test/java/ai/knowly/langtorch/util/OpenAIServiceTestingUtils.java
+import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.Embedding;
+import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingResult;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;

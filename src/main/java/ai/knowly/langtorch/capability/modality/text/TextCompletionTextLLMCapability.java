@@ -5,7 +5,7 @@ import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.store.memory.Memory;
-import ai.knowly.langtorch.parser.Parser;
+import ai.knowly.langtorch.preprocessing.parser.Parser;
 import ai.knowly.langtorch.schema.text.SingleText;
 import ai.knowly.langtorch.schema.memory.MemoryKey;
 import ai.knowly.langtorch.schema.memory.MemoryValue;

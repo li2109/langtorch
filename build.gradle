@@ -116,6 +116,9 @@ dependencies {
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    // Apache commons lang
+    implementation group: 'org.apache.commons', name: 'commons-lang3', version: '3.0'
+
 }
 
 // Testing related dependencies

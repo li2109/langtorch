@@ -1,5 +1,6 @@
-package ai.knowly.langtorch.parser;
+package ai.knowly.langtorch.preprocessing.parser;
 
+import ai.knowly.langtorch.preprocessing.parser.PromptTemplateToSingleTextParser;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.truth.Truth;

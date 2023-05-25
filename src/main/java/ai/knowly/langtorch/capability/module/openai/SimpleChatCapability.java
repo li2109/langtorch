@@ -2,8 +2,8 @@ package ai.knowly.langtorch.capability.module.openai;
 
 import ai.knowly.langtorch.capability.modality.text.ChatCompletionLLMCapability;
 import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessor;
-import ai.knowly.langtorch.parser.ChatMessageToStringParser;
-import ai.knowly.langtorch.parser.StringToMultiChatMessageParser;
+import ai.knowly.langtorch.preprocessing.parser.ChatMessageToStringParser;
+import ai.knowly.langtorch.preprocessing.parser.StringToMultiChatMessageParser;
 import java.util.Optional;
 
 /** A simple chat capability unit that leverages openai api to generate response */

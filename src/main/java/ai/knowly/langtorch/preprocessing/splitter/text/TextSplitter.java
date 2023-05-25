@@ -1,14 +1,16 @@
-package ai.knowly.langtorch.parser.textsplitter;
+package ai.knowly.langtorch.preprocessing.splitter.text;
 
 import ai.knowly.langtorch.schema.io.DomainDocument;
+import ai.knowly.langtorch.schema.io.Metadatas;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 import java.util.stream.Collectors;
 
+/**
+ * The TextSplitter class provides functionality for splitting text into chunks.
+ */
 public abstract class TextSplitter {
 
     public int chunkSize;
@@ -25,14 +27,10 @@ public abstract class TextSplitter {
 
     abstract public List<String> splitText(String text);
 
-    public List<DomainDocument> createDocuments(List<String> texts, @Nullable List<Map<String, String>> metaDatas) {
-        List<Map<String, String>> _metadatas;
+    public List<DomainDocument> createDocuments(List<String> texts, Optional<Metadatas> docMetadatas) {
+        Metadatas metadatas;
 
-        if (metaDatas != null) {
-            _metadatas = metaDatas.size() > 0 ? metaDatas : new ArrayList<>();
-        } else {
-            _metadatas = new ArrayList<>();
-        }
+        metadatas = docMetadatas.filter(value -> value.getValues().size() > 0).orElseGet(() -> new Metadatas(new ArrayList<>()));
         ArrayList<DomainDocument> documents = new ArrayList<>();
 
         for (int i = 0; i < texts.size(); i += 1) {
@@ -43,19 +41,18 @@ public abstract class TextSplitter {
             for (String chunk : splitText(text)) {
                 int numberOfIntermediateNewLines = 0;
                 if (prevChunk != null) {
-                    int indexChunk = text.indexOf(chunk);
-                    int indexEndPrevChunk = text.indexOf(prevChunk) + prevChunk.length();
-                    String removedNewlinesFromSplittingText = text.substring(indexChunk, indexEndPrevChunk);
-                    numberOfIntermediateNewLines = removedNewlinesFromSplittingText.split("\n").length - 1;
+                    int indexChunk = StringUtils.indexOf(text, chunk);
+                    int indexEndPrevChunk = StringUtils.indexOf(text, prevChunk) + prevChunk.length();
+                    String removedNewlinesFromSplittingText = StringUtils.substring(text, indexChunk, indexEndPrevChunk);
+                    numberOfIntermediateNewLines = StringUtils.countMatches(removedNewlinesFromSplittingText, "\n");
                 }
                 lineCounterIndex += numberOfIntermediateNewLines;
-                int newLinesCount = chunk.split("\n").length - 1;
+                int newLinesCount = StringUtils.countMatches(chunk, "\n");
 
                 Map<String, String> loc;
-                //todo should we also check what type of object is "loc"?
-                if (_metadatas.get(i) != null) {
-                    if (!_metadatas.get(i).isEmpty() && _metadatas.get(i).get("loc") != null) {
-                        loc = new HashMap<>(_metadatas.get(i));
+                if (i < metadatas.getValues().size() && metadatas.getValues().get(i) != null) {
+                    if (!metadatas.getValues().get(i).isEmpty() && metadatas.getValues().get(i).get("loc") != null) {
+                        loc = new HashMap<>(metadatas.getValues().get(i));
                     } else {
                         loc = new HashMap<>();
                     }
@@ -67,8 +64,8 @@ public abstract class TextSplitter {
                 loc.put("to", String.valueOf(lineCounterIndex + newLinesCount));
 
                 Map<String, String> metadataWithLinesNumber = new HashMap<>();
-                if (_metadatas.get(i) != null) {
-                    metadataWithLinesNumber.putAll(_metadatas.get(i));
+                if (i < metadatas.getValues().size() && metadatas.getValues().get(i) != null) {
+                    metadataWithLinesNumber.putAll(metadatas.getValues().get(i));
                 }
                 metadataWithLinesNumber.putAll(loc);
 
@@ -87,7 +84,7 @@ public abstract class TextSplitter {
         List<String> texts = selectedDocs.stream().map(DomainDocument::getPageContent).collect(Collectors.toList());
         List<Map<String, String>> metaDatas = selectedDocs.stream().map(DomainDocument::getMetadata).collect(Collectors.toList());
 
-        return this.createDocuments(texts, metaDatas);
+        return this.createDocuments(texts, Optional.of(new Metadatas(metaDatas)));
     }
 
     @Nullable

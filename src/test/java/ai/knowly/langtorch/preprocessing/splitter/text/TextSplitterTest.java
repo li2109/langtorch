@@ -1,13 +1,10 @@
-package ai.knowly.langtorch.parser;
+package ai.knowly.langtorch.preprocessing.splitter.text;
 
-import ai.knowly.langtorch.parser.textsplitter.CharacterTextSplitter;
-import ai.knowly.langtorch.parser.textsplitter.RecursiveCharacterTextSplitter;
-import ai.knowly.langtorch.parser.textsplitter.TextSplitter;
+import ai.knowly.langtorch.preprocessing.splitter.text.CharacterTextSplitter;
+import ai.knowly.langtorch.preprocessing.splitter.text.RecursiveCharacterTextSplitter;
 import ai.knowly.langtorch.schema.io.DomainDocument;
-import org.junit.Assert;
+import ai.knowly.langtorch.schema.io.Metadatas;
 import org.junit.Test;
-import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.junit.jupiter.MockitoExtension;
 
 import java.util.*;
 
@@ -17,14 +14,14 @@ public class TextSplitterTest {
 
     @Test
     public void testCharacterTextSplitter_splitByCharacterCount(){
-        // Arrange
+        // Arrange.
         String text = "foo bar baz 123";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 7, 3);
 
-        // Act
+        // Act.
         List<String> result = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expected = new  ArrayList<>(Arrays.asList("foo bar", "bar baz", "baz 123"));
 
         assertEquals(expected, result);
@@ -32,14 +29,14 @@ public class TextSplitterTest {
 
     @Test
     public void testCharacterTextSplitter_splitByCharacterCountWithNoEmptyDocuments() {
-        // Arrange
+        // Arrange.
         String text = "foo bar";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 2, 0);
 
-        // Act
+        // Act.
         List<String> result = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar"));
 
         assertEquals(expected, result);
@@ -47,14 +44,14 @@ public class TextSplitterTest {
 
     @Test
     public void testCharacterTextSplitter_splitByCharacterCountLongWords() {
-        // Arrange
+        // Arrange.
         String text = "foo bar baz a a";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 1);
 
-        // Act
+        // Act.
         List<String> result = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar", "baz", "a a"));
 
         assertEquals(expected, result);
@@ -62,14 +59,14 @@ public class TextSplitterTest {
 
     @Test
     public void testCharacterTextSplitter_splitByCharacterCountShorterWordsFirst() {
-        // Arrange
+        // Arrange.
         String text = "a a foo bar baz";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 1);
 
-        // Act
+        // Act.
         List<String> result = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("a a", "foo", "bar", "baz"));
 
         assertEquals(expected, result);
@@ -77,14 +74,14 @@ public class TextSplitterTest {
 
     @Test
     public void testCharacterTextSplitter_splitByCharactersSplitsNotFoundEasily() {
-        // Arrange
+        // Arrange.
         String text = "foo bar baz 123";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 1, 0);
 
-        // Act
+        // Act.
         List<String> result = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar", "baz", "123"));
 
         assertEquals(expected, result);
@@ -92,7 +89,7 @@ public class TextSplitterTest {
 
     @Test(expected = IllegalArgumentException.class)
     public void testCharacterTextSplitter_invalidArguments() {
-        // Arrange
+        // Arrange.
         int chunkSize = 2;
         int chunkOverlap = 4;
 
@@ -105,7 +102,7 @@ public class TextSplitterTest {
     //TODO, this unit test will need improving. atm it only checks that length of our list of documents, it does not check the contents
     @Test
     public void testCharacterTextSplitter_createDocuments() {
-        // Arrange
+        // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
         Map<String, String> metadata = new HashMap<>();
@@ -114,10 +111,11 @@ public class TextSplitterTest {
         loc.put("from", String.valueOf(1));
         loc.put("to", String.valueOf(1));
 
-        // Act
-        List<DomainDocument> docs = splitter.createDocuments(texts, Arrays.asList(metadata, metadata));
+        Optional<Metadatas> metadatas = Optional.of(new Metadatas(Arrays.asList(metadata, metadata)));
+        // Act.
+        List<DomainDocument> docs = splitter.createDocuments(texts, metadatas);
 
-        // Assert
+        // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
                 new DomainDocument("foo", metadata),
                 new DomainDocument("bar", metadata),
@@ -130,7 +128,7 @@ public class TextSplitterTest {
     //TODO, this unit test will need improving. atm it only checks that length of our list of documents, it does not check the contents
     @Test
     public void testCharacterTextSplitter_createDocumentsWithMetadata() {
-        // Arrange
+        // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
         List<Map<String, String>> metadataList = Arrays.asList(
@@ -142,10 +140,13 @@ public class TextSplitterTest {
                 }}
         );
 
-        // Act
-        List<DomainDocument> docs = splitter.createDocuments(texts, metadataList);
+        Optional<Metadatas> metadatas = Optional.of(new Metadatas(metadataList));
 
-        // Assert
+
+        // Act.
+        List<DomainDocument> docs = splitter.createDocuments(texts, metadatas);
+
+        // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
                 new DomainDocument("foo", new HashMap<String, String>() {{
                     put("source", "1");
@@ -170,14 +171,14 @@ public class TextSplitterTest {
 
     @Test
     public void testRecursiveCharacterTextSplitter_iterativeTextSplitter() {
-        // Arrange
+        // Arrange.
         String text = "Hi.\n\nI'm Harrison.\n\nHow? Are? You?\nOkay then f f f f.\nThis is a weird text to write, but gotta test the splittingggg some how.\n\nBye!\n\n-H.";
         RecursiveCharacterTextSplitter splitter = new RecursiveCharacterTextSplitter(null, 10, 1);
 
-        // Act
+        // Act.
         List<String> output = splitter.splitText(text);
 
-        // Assert
+        // Assert.
         List<String> expectedOutput = Arrays.asList(
                 "Hi.",
                 "I'm",
@@ -203,14 +204,15 @@ public class TextSplitterTest {
 
     @Test
     public void testTextSplitter_iterativeTextSplitter_linesLoc() {
-        // Arrange
+        // Arrange.
         String text = "Hi.\nI'm Harrison.\n\nHow?\na\nb";
         RecursiveCharacterTextSplitter splitter = new RecursiveCharacterTextSplitter(null, 20, 1);
 
-        // Act
-        List<DomainDocument> docs = splitter.createDocuments(Collections.singletonList(text), null);
+        Optional<Metadatas> metadatas = Optional.ofNullable(null);
+        // Act.
+        List<DomainDocument> docs = splitter.createDocuments(Collections.singletonList(text), metadatas);
 
-        // Assert
+        // Assert.
         DomainDocument doc1 = new DomainDocument("Hi.\nI'm Harrison.", null);
         DomainDocument doc2 = new DomainDocument("How?\na\nb", null);
         List<DomainDocument> expectedDocs = Arrays.asList(doc1, doc2);

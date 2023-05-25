@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.parser;
+package ai.knowly.langtorch.preprocessing.parser;
 
 import static ai.knowly.langtorch.schema.chat.Role.USER;
 

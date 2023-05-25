@@ -1,4 +1,4 @@
-package ai.knowly.langtoch.embeddings;
+package ai.knowly.langtorch.embeddings;
 
 import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
 import ai.knowly.langtorch.processor.module.openai.embeddings.OpenAIEmbeddingsProcessor;

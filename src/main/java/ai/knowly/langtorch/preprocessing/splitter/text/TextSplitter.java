@@ -13,9 +13,9 @@ import java.util.stream.Collectors;
  */
 public abstract class TextSplitter {
 
-    public int chunkSize;
+    public final int chunkSize;
 
-    public int chunkOverlap;
+    public final int chunkOverlap;
 
     public TextSplitter(int chunkSize, int chunkOverlap) {
         this.chunkSize = chunkSize;
@@ -99,9 +99,9 @@ public abstract class TextSplitter {
         int total = 0;
 
         for (String d : splits) {
-            int _len = d.length();
+            int length = d.length();
 
-            if (total + _len + (currentDoc.size() > 0 ? separator.length() : 0) > this.chunkSize) {
+            if (total + length + (currentDoc.size() > 0 ? separator.length() : 0) > this.chunkSize) {
                 if (total > this.chunkSize) {
                     System.out.println("Created a chunk of size " + total + ", which is longer than the specified " + this.chunkSize);
                 }
@@ -112,7 +112,7 @@ public abstract class TextSplitter {
                         docs.add(doc);
                     }
 
-                    while (total > this.chunkOverlap || (total + _len > this.chunkSize && total > 0)) {
+                    while (total > this.chunkOverlap || (total + length > this.chunkSize && total > 0)) {
                         total -= currentDoc.get(0).length();
                         currentDoc.remove(0);
                     }
@@ -120,7 +120,7 @@ public abstract class TextSplitter {
             }
 
             currentDoc.add(d);
-            total += _len;
+            total += length;
         }
 
         String doc = joinDocs(currentDoc, separator);

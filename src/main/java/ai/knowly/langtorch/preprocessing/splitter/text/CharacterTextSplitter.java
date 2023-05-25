@@ -12,7 +12,7 @@ import java.util.List;
 
 public class CharacterTextSplitter extends TextSplitter {
 
-    public String separator = "\n\n";
+    private static String separator = "\n\n";
 
     /**
 
@@ -36,13 +36,8 @@ public class CharacterTextSplitter extends TextSplitter {
      */
     @Override
     public List<String> splitText(String text) {
-        List<String> splits;
-
-        if (StringUtils.isNotEmpty(this.separator)) {
-            splits = Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(text, this.separator));
-        } else {
-            splits = Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(text, ""));
-        }
+        List<String> splits =
+                Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(text, this.separator.isEmpty() ? "" : this.separator));
         return mergeSplits(splits, this.separator);
     }
 }

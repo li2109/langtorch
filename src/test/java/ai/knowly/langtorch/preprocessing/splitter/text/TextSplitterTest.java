@@ -93,10 +93,10 @@ public class TextSplitterTest {
         int chunkSize = 2;
         int chunkOverlap = 4;
 
-        // Act
+        // Act.
         new CharacterTextSplitter(null, chunkSize, chunkOverlap);
 
-        // Expect IllegalArgumentException to be thrown
+        // Expect IllegalArgumentException to be thrown.
     }
 
     //TODO, this unit test will need improving. atm it only checks that length of our list of documents, it does not check the contents

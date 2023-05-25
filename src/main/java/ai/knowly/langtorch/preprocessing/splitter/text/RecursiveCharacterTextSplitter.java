@@ -13,7 +13,7 @@ import java.util.List;
  */
 public class RecursiveCharacterTextSplitter extends TextSplitter {
 
-    private List<String> separators = Arrays.asList("\n\n", "\n", " ", "");
+    private static List<String> separators = Arrays.asList("\n\n", "\n", " ", "");
 
     /**
      Constructs a RecursiveCharacterTextSplitter object with the given list of separators, chunk size, and chunk overlap.

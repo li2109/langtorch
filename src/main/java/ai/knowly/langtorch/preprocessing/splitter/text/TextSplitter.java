@@ -2,6 +2,7 @@ package ai.knowly.langtorch.preprocessing.splitter.text;
 
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
+import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -52,7 +53,8 @@ public abstract class TextSplitter {
                 int newLinesCount = StringUtils.countMatches(chunk, "\n");
 
                 MultiKeyMap<String, String> loc;
-                if (metadatas.get(i).getValue().containsKey("loc")) {
+                //TODO: need to end to end test how metadata is being passed back and forth
+                if (metadatas.get(i).getValue().containsKey("loc", "")) {
                     loc = metadatas.get(i).getValue();
                 } else {
                     loc = new MultiKeyMap<>();

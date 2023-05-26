@@ -1,16 +1,14 @@
 package ai.knowly.langtorch.schema.io;
 
-import javax.annotation.Nullable;
-import java.util.Map;
+import java.util.Optional;
 
 public class DomainDocument implements Input, Output {
 
     private final String pageContent;
 
-    @Nullable
-    private final Map<String, String> metadata;
+    private final Optional<Metadata> metadata;
 
-    public DomainDocument(String pageContent, @Nullable  Map<String, String> metadata) {
+    public DomainDocument(String pageContent, Optional<Metadata> metadata) {
         this.pageContent = pageContent;
         this.metadata = metadata;
     }
@@ -19,7 +17,7 @@ public class DomainDocument implements Input, Output {
         return pageContent;
     }
 
-    public Map<String, String>  getMetadata() {
+    public Optional<Metadata> getMetadata() {
         return metadata;
     }
 }

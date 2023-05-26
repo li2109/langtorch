@@ -1,7 +1,8 @@
 package ai.knowly.langtorch.preprocessing.splitter.text;
 
 import ai.knowly.langtorch.schema.io.DomainDocument;
-import ai.knowly.langtorch.schema.io.Metadatas;
+import ai.knowly.langtorch.schema.io.Metadata;
+import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.annotation.Nullable;
@@ -27,10 +28,11 @@ public abstract class TextSplitter {
 
     abstract public List<String> splitText(String text);
 
-    public List<DomainDocument> createDocuments(List<String> texts, Optional<Metadatas> docMetadatas) {
-        Metadatas metadatas;
+    public List<DomainDocument> createDocuments(List<String> texts, Optional<List<Metadata>> docMetadatas) {
+        List<Metadata> metadatas =
+                (docMetadatas.isPresent() && docMetadatas.get().size() > 0) ?
+                        docMetadatas.get() : Collections.nCopies(texts.size(), Metadata.createEmpty());
 
-        metadatas = docMetadatas.filter(value -> value.getValues().size() > 0).orElseGet(() -> new Metadatas(new ArrayList<>()));
         ArrayList<DomainDocument> documents = new ArrayList<>();
 
         for (int i = 0; i < texts.size(); i += 1) {
@@ -49,27 +51,23 @@ public abstract class TextSplitter {
                 lineCounterIndex += numberOfIntermediateNewLines;
                 int newLinesCount = StringUtils.countMatches(chunk, "\n");
 
-                Map<String, String> loc;
-                if (i < metadatas.getValues().size() && metadatas.getValues().get(i) != null) {
-                    if (!metadatas.getValues().get(i).isEmpty() && metadatas.getValues().get(i).get("loc") != null) {
-                        loc = new HashMap<>(metadatas.getValues().get(i));
-                    } else {
-                        loc = new HashMap<>();
-                    }
+                MultiKeyMap<String, String> loc;
+                if (metadatas.get(i).getValue().containsKey("loc")) {
+                    loc = metadatas.get(i).getValue();
                 } else {
-                    loc = new HashMap<>();
+                    loc = new MultiKeyMap<>();
                 }
 
-                loc.put("from", String.valueOf(lineCounterIndex));
-                loc.put("to", String.valueOf(lineCounterIndex + newLinesCount));
+                loc.put("loc", "from", String.valueOf(lineCounterIndex));
+                loc.put("loc", "to", String.valueOf(lineCounterIndex + newLinesCount));
 
-                Map<String, String> metadataWithLinesNumber = new HashMap<>();
-                if (i < metadatas.getValues().size() && metadatas.getValues().get(i) != null) {
-                    metadataWithLinesNumber.putAll(metadatas.getValues().get(i));
+                Metadata metadataWithLinesNumber = Metadata.createEmpty();
+                if (metadatas.get(i) != null && !metadatas.get(i).getValue().isEmpty()) {
+                    metadataWithLinesNumber.getValue().putAll(metadatas.get(i).getValue());
                 }
-                metadataWithLinesNumber.putAll(loc);
+                metadataWithLinesNumber.getValue().putAll(loc);
 
-                documents.add(new DomainDocument(chunk, metadataWithLinesNumber));
+                documents.add(new DomainDocument(chunk, Optional.of(metadataWithLinesNumber)));
                 lineCounterIndex += newLinesCount;
                 prevChunk = chunk;
             }
@@ -82,9 +80,11 @@ public abstract class TextSplitter {
         List<DomainDocument> selectedDocs = documents.stream().filter(doc -> doc.getPageContent() != null).collect(Collectors.toList());
 
         List<String> texts = selectedDocs.stream().map(DomainDocument::getPageContent).collect(Collectors.toList());
-        List<Map<String, String>> metaDatas = selectedDocs.stream().map(DomainDocument::getMetadata).collect(Collectors.toList());
+        List<Metadata> metadatas =
+                selectedDocs.stream().map(doc -> doc.getMetadata().isPresent() ?
+                        doc.getMetadata().get() : Metadata.createEmpty()).collect(Collectors.toList());
 
-        return this.createDocuments(texts, Optional.of(new Metadatas(metaDatas)));
+        return this.createDocuments(texts, Optional.of(metadatas));
     }
 
     @Nullable

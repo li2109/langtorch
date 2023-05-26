@@ -1,19 +1,17 @@
 package ai.knowly.langtorch.preprocessing.splitter.text;
 
-import ai.knowly.langtorch.preprocessing.splitter.text.CharacterTextSplitter;
-import ai.knowly.langtorch.preprocessing.splitter.text.RecursiveCharacterTextSplitter;
 import ai.knowly.langtorch.schema.io.DomainDocument;
-import ai.knowly.langtorch.schema.io.Metadatas;
+import ai.knowly.langtorch.schema.io.Metadata;
+import com.google.common.truth.Truth;
 import org.junit.Test;
 
 import java.util.*;
 
-import static org.junit.jupiter.api.Assertions.assertEquals;
 
 public class TextSplitterTest {
 
     @Test
-    public void testCharacterTextSplitter_splitByCharacterCount(){
+    public void testCharacterTextSplitter_splitByCharacterCount() {
         // Arrange.
         String text = "foo bar baz 123";
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 7, 3);
@@ -22,9 +20,9 @@ public class TextSplitterTest {
         List<String> result = splitter.splitText(text);
 
         // Assert.
-        List<String> expected = new  ArrayList<>(Arrays.asList("foo bar", "bar baz", "baz 123"));
+        List<String> expected = new ArrayList<>(Arrays.asList("foo bar", "bar baz", "baz 123"));
 
-        assertEquals(expected, result);
+        Truth.assertThat(Objects.equals(expected, result));
     }
 
     @Test
@@ -39,7 +37,7 @@ public class TextSplitterTest {
         // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar"));
 
-        assertEquals(expected, result);
+        Truth.assertThat(Objects.equals(expected, result));
     }
 
     @Test
@@ -54,7 +52,7 @@ public class TextSplitterTest {
         // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar", "baz", "a a"));
 
-        assertEquals(expected, result);
+        Truth.assertThat(Objects.equals(expected, result));
     }
 
     @Test
@@ -69,7 +67,7 @@ public class TextSplitterTest {
         // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("a a", "foo", "bar", "baz"));
 
-        assertEquals(expected, result);
+        Truth.assertThat(Objects.equals(expected, result));
     }
 
     @Test
@@ -84,7 +82,7 @@ public class TextSplitterTest {
         // Assert.
         List<String> expected = new ArrayList<>(Arrays.asList("foo", "bar", "baz", "123"));
 
-        assertEquals(expected, result);
+        Truth.assertThat(Objects.equals(expected, result));
     }
 
     @Test(expected = IllegalArgumentException.class)
@@ -99,73 +97,62 @@ public class TextSplitterTest {
         // Expect IllegalArgumentException to be thrown.
     }
 
-    //TODO, this unit test will need improving. atm it only checks that length of our list of documents, it does not check the contents
     @Test
     public void testCharacterTextSplitter_createDocuments() {
         // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
-        Map<String, String> metadata = new HashMap<>();
+        Metadata metadata = Metadata.createEmpty();
 
-        Map<String, String> loc = new HashMap<>();
-        loc.put("from", String.valueOf(1));
-        loc.put("to", String.valueOf(1));
+        List<Metadata> metadatas = Arrays.asList(metadata, metadata);
 
-        Optional<Metadatas> metadatas = Optional.of(new Metadatas(Arrays.asList(metadata, metadata)));
         // Act.
-        List<DomainDocument> docs = splitter.createDocuments(texts, metadatas);
+        List<DomainDocument> docs = splitter.createDocuments(texts, Optional.of(metadatas));
 
         // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
-                new DomainDocument("foo", metadata),
-                new DomainDocument("bar", metadata),
-                new DomainDocument("baz", metadata)
+                new DomainDocument("foo", Optional.of(metadata)),
+                new DomainDocument("bar", Optional.of(metadata)),
+                new DomainDocument("baz", Optional.of(metadata))
         );
 
-        assertEquals(expectedDocs.size(), docs.size());
+        Truth.assertThat(expectedDocs.size() == docs.size());
+        for (int i = 0; i < docs.size(); i++) {
+            Truth.assertThat(Objects.equals(docs.get(i).getPageContent(), expectedDocs.get(i).getPageContent()));
+        }
     }
 
-    //TODO, this unit test will need improving. atm it only checks that length of our list of documents, it does not check the contents
     @Test
     public void testCharacterTextSplitter_createDocumentsWithMetadata() {
         // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
         CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
-        List<Map<String, String>> metadataList = Arrays.asList(
-                new HashMap<String, String>() {{
-                    put("source", "1");
-                }},
-                new HashMap<String, String>() {{
-                    put("source", "2");
-                }}
-        );
 
-        Optional<Metadatas> metadatas = Optional.of(new Metadatas(metadataList));
 
+        Metadata metadata = Metadata.createEmpty();
+
+        metadata.getValue().put("source", "doc", "1");
+        metadata.getValue().put("loc", "from", "1");
+        metadata.getValue().put("loc", "to", "1");
+
+        List<Metadata> metadataList = Arrays.asList(metadata, metadata);
+
+        Optional<List<Metadata>> metadatas = Optional.of(metadataList);
 
         // Act.
         List<DomainDocument> docs = splitter.createDocuments(texts, metadatas);
 
         // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
-                new DomainDocument("foo", new HashMap<String, String>() {{
-                    put("source", "1");
-                    put("from", String.valueOf(1));
-                    put("to", String.valueOf(1));
-                }}),
-                new DomainDocument("bar", new HashMap<String, String>() {{
-                    put("source", "1");
-                    put("from", String.valueOf(1));
-                    put("to", String.valueOf(1));
-                }}),
-                new DomainDocument("baz", new HashMap<String, String>() {{
-                    put("source", "2");
-                    put("from", String.valueOf(1));
-                    put("to", String.valueOf(1));
-                }})
+                new DomainDocument("foo", Optional.of(metadata)),
+                new DomainDocument("bar", Optional.of(metadata)),
+                new DomainDocument("baz", Optional.of(metadata))
         );
 
-        assertEquals(expectedDocs.size(), docs.size());
+        Truth.assertThat(expectedDocs.size() == docs.size());
+        for (int i = 0; i < docs.size(); i++) {
+            Truth.assertThat(Objects.equals(docs.get(i).getPageContent(), expectedDocs.get(i).getPageContent()));
+        }
     }
 
 
@@ -199,7 +186,7 @@ public class TextSplitterTest {
                 "Bye!\n\n-H."
         );
 
-        assertEquals(expectedOutput, output);
+        Truth.assertThat(Objects.equals(expectedOutput, output));
     }
 
     @Test
@@ -208,7 +195,7 @@ public class TextSplitterTest {
         String text = "Hi.\nI'm Harrison.\n\nHow?\na\nb";
         RecursiveCharacterTextSplitter splitter = new RecursiveCharacterTextSplitter(null, 20, 1);
 
-        Optional<Metadatas> metadatas = Optional.ofNullable(null);
+        Optional<List<Metadata>> metadatas = Optional.ofNullable(null);
         // Act.
         List<DomainDocument> docs = splitter.createDocuments(Collections.singletonList(text), metadatas);
 
@@ -217,12 +204,10 @@ public class TextSplitterTest {
         DomainDocument doc2 = new DomainDocument("How?\na\nb", null);
         List<DomainDocument> expectedDocs = Arrays.asList(doc1, doc2);
 
-        assertEquals(expectedDocs.size(), docs.size());
+        Truth.assertThat(expectedDocs.size() == docs.size());
+        Truth.assertThat(Objects.equals(expectedDocs.get(0).getPageContent(), docs.get(0).getPageContent()));
+        Truth.assertThat(Objects.equals(expectedDocs.get(1).getPageContent(), docs.get(1).getPageContent()));
     }
-
-
-
-
 
 
 }

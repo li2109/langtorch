@@ -16,6 +16,7 @@ final class PDFConnectorTest {
     assertThat(actualContent.trim())
         .isEqualTo(
             "This is a test PDF document. \n"
-                + "If you can read this, you have Adobe Acrobat Reader installed on your computer.");
+                + "If you can read this, you have Adobe Acrobat Reader installed on your"
+                + " computer.");
   }
 }

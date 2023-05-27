@@ -14,7 +14,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_splitByCharacterCount() {
         // Arrange.
         String text = "foo bar baz 123";
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 7, 3);
+        WordSplitter splitter = new WordSplitter(" ", 7, 3);
 
         // Act.
         List<String> result = splitter.splitText(text);
@@ -28,8 +28,8 @@ public class TextSplitterTest {
     @Test
     public void testCharacterTextSplitter_splitByCharacterCountWithNoEmptyDocuments() {
         // Arrange.
-        String text = "foo bar";
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 2, 0);
+        String text = "i,love,langtorchisveryxxxxxxxxx";
+        WordSplitter splitter = new WordSplitter(" ", 2, 0);
 
         // Act.
         List<String> result = splitter.splitText(text);
@@ -44,7 +44,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_splitByCharacterCountLongWords() {
         // Arrange.
         String text = "foo bar baz a a";
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 1);
+        WordSplitter splitter = new WordSplitter(" ", 3, 1);
 
         // Act.
         List<String> result = splitter.splitText(text);
@@ -59,7 +59,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_splitByCharacterCountShorterWordsFirst() {
         // Arrange.
         String text = "a a foo bar baz";
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 1);
+        WordSplitter splitter = new WordSplitter(" ", 3, 1);
 
         // Act.
         List<String> result = splitter.splitText(text);
@@ -74,7 +74,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_splitByCharactersSplitsNotFoundEasily() {
         // Arrange.
         String text = "foo bar baz 123";
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 1, 0);
+        WordSplitter splitter = new WordSplitter(" ", 1, 0);
 
         // Act.
         List<String> result = splitter.splitText(text);
@@ -92,7 +92,7 @@ public class TextSplitterTest {
         int chunkOverlap = 4;
 
         // Act.
-        new CharacterTextSplitter(null, chunkSize, chunkOverlap);
+        new WordSplitter(null, chunkSize, chunkOverlap);
 
         // Expect IllegalArgumentException to be thrown.
     }
@@ -101,7 +101,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_createDocuments() {
         // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
+        WordSplitter splitter = new WordSplitter(" ", 3, 0);
         Metadata metadata = Metadata.createEmpty();
 
         List<Metadata> metadatas = Arrays.asList(metadata, metadata);
@@ -126,7 +126,7 @@ public class TextSplitterTest {
     public void testCharacterTextSplitter_createDocumentsWithMetadata() {
         // Arrange.
         List<String> texts = Arrays.asList("foo bar", "baz");
-        CharacterTextSplitter splitter = new CharacterTextSplitter(" ", 3, 0);
+        WordSplitter splitter = new WordSplitter(" ", 3, 0);
 
 
         Metadata metadata = Metadata.createEmpty();
@@ -160,7 +160,7 @@ public class TextSplitterTest {
     public void testRecursiveCharacterTextSplitter_iterativeTextSplitter() {
         // Arrange.
         String text = "Hi.\n\nI'm Harrison.\n\nHow? Are? You?\nOkay then f f f f.\nThis is a weird text to write, but gotta test the splittingggg some how.\n\nBye!\n\n-H.";
-        RecursiveCharacterTextSplitter splitter = new RecursiveCharacterTextSplitter(null, 10, 1);
+        RecursiveWordTextSplitter splitter = new RecursiveWordTextSplitter(null, 10, 1);
 
         // Act.
         List<String> output = splitter.splitText(text);
@@ -193,7 +193,7 @@ public class TextSplitterTest {
     public void testTextSplitter_iterativeTextSplitter_linesLoc() {
         // Arrange.
         String text = "Hi.\nI'm Harrison.\n\nHow?\na\nb";
-        RecursiveCharacterTextSplitter splitter = new RecursiveCharacterTextSplitter(null, 20, 1);
+        RecursiveWordTextSplitter splitter = new RecursiveWordTextSplitter(null, 20, 1);
 
         Optional<List<Metadata>> metadatas = Optional.ofNullable(null);
         // Act.

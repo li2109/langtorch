@@ -10,7 +10,7 @@ import java.util.List;
  that splits text into chunks based on a specified separator.
  */
 
-public class CharacterTextSplitter extends TextSplitter {
+public class WordSplitter extends TextSplitter {
 
     private static String separator = "\n\n";
 
@@ -22,7 +22,7 @@ public class CharacterTextSplitter extends TextSplitter {
      @param chunkSize The size of each chunk.
      @param chunkOverlap The amount of overlap between adjacent chunks.
      */
-    public CharacterTextSplitter(@Nullable String separator, int chunkSize, int chunkOverlap) {
+    public WordSplitter(@Nullable String separator, int chunkSize, int chunkOverlap) {
         super(chunkSize, chunkOverlap);
         if (separator != null) {
             this.separator = separator;

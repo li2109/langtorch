@@ -2,7 +2,6 @@ package ai.knowly.langtorch.preprocessing.splitter.text;
 
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
-import org.apache.commons.collections4.keyvalue.MultiKey;
 import org.apache.commons.collections4.map.MultiKeyMap;
 import org.apache.commons.lang3.StringUtils;
 
@@ -15,14 +14,20 @@ import java.util.stream.Collectors;
  */
 public abstract class TextSplitter {
 
-    public final int chunkSize;
+    /**
+     * The amount of words inside one chunk
+     */
+    public final int wordCount;
 
-    public final int chunkOverlap;
+    /**
+     * amount of words from previous chunk, it will be empty for the first chunk
+     */
+    public final int wordOverlap;
 
-    public TextSplitter(int chunkSize, int chunkOverlap) {
-        this.chunkSize = chunkSize;
-        this.chunkOverlap = chunkOverlap;
-        if (this.chunkOverlap >= this.chunkSize) {
+    public TextSplitter(int wordCount, int wordOverlap) {
+        this.wordCount = wordCount;
+        this.wordOverlap = wordOverlap;
+        if (this.wordOverlap >= this.wordCount) {
             throw new IllegalArgumentException("chunkOverlap cannot be equal to or greater than chunkSize");
         }
     }
@@ -103,9 +108,9 @@ public abstract class TextSplitter {
         for (String d : splits) {
             int length = d.length();
 
-            if (total + length + (currentDoc.size() > 0 ? separator.length() : 0) > this.chunkSize) {
-                if (total > this.chunkSize) {
-                    System.out.println("Created a chunk of size " + total + ", which is longer than the specified " + this.chunkSize);
+            if (total + length + (currentDoc.size() > 0 ? separator.length() : 0) > this.wordCount) {
+                if (total > this.wordCount) {
+                    System.out.println("Created a chunk of size " + total + ", which is longer than the specified " + this.wordCount);
                 }
 
                 if (currentDoc.size() > 0) {
@@ -114,7 +119,7 @@ public abstract class TextSplitter {
                         docs.add(doc);
                     }
 
-                    while (total > this.chunkOverlap || (total + length > this.chunkSize && total > 0)) {
+                    while (total > this.wordOverlap || (total + length > this.wordCount && total > 0)) {
                         total -= currentDoc.get(0).length();
                         currentDoc.remove(0);
                     }

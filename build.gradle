@@ -9,11 +9,11 @@ group 'ai.knowly'
 version '0.0.10'
 
 sonarqube {
-  properties {
-    property "sonar.projectKey", "Knowly-ai_langtorch"
-    property "sonar.organization", "knowly-ai"
-    property "sonar.host.url", "https://sonarcloud.io"
-  }
+    properties {
+        property "sonar.projectKey", "Knowly-ai_langtorch"
+        property "sonar.organization", "knowly-ai"
+        property "sonar.host.url", "https://sonarcloud.io"
+    }
 }
 
 ext {
@@ -116,6 +116,12 @@ dependencies {
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
+    // Reading PDF
+    implementation 'org.apache.pdfbox:pdfbox:2.0.28'
+    // Reading CSV
+    implementation 'org.apache.commons:commons-csv:1.10.0'
+
+
 }
 
 // Testing related dependencies

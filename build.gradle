@@ -116,8 +116,11 @@ dependencies {
     testImplementation 'com.squareup.retrofit2:retrofit-mock:2.9.0'
     implementation 'com.squareup.okhttp3:logging-interceptor:4.9.2'
     implementation "com.squareup.retrofit2:converter-gson:2.9.0"
-    // PDFBox
+    // Reading PDF
     implementation 'org.apache.pdfbox:pdfbox:2.0.28'
+    // Reading CSV
+    implementation 'org.apache.commons:commons-csv:1.10.0'
+
 
 }
 

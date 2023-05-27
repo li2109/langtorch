@@ -12,18 +12,18 @@ import java.util.List;
 
 public class WordSplitter extends TextSplitter {
 
-    private static String separator = "\n\n";
+    private String separator = "\n\n";
 
     /**
 
      Constructs a CharacterTextSplitter object with the given separator, chunk size, and chunk overlap.
      If the separator is null, the default separator "\n\n" is used.
      @param separator The separator used for splitting the text into chunks.
-     @param chunkSize The size of each chunk.
-     @param chunkOverlap The amount of overlap between adjacent chunks.
+     @param wordCount The size of each chunk.
+     @param wordOverlap The amount of overlap between adjacent chunks.
      */
-    public WordSplitter(@Nullable String separator, int chunkSize, int chunkOverlap) {
-        super(chunkSize, chunkOverlap);
+    public WordSplitter(@Nullable String separator, int wordCount, int wordOverlap) {
+        super(wordCount, wordOverlap);
         if (separator != null) {
             this.separator = separator;
         }
@@ -36,6 +36,7 @@ public class WordSplitter extends TextSplitter {
      */
     @Override
     public List<String> splitText(String text) {
+
         List<String> splits =
                 Arrays.asList(StringUtils.splitByWholeSeparatorPreserveAllTokens(text, this.separator.isEmpty() ? "" : this.separator));
         return mergeSplits(splits, this.separator);

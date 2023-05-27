@@ -23,11 +23,14 @@ public class CSVConnector extends DocumentConnector<CSVReadOption> {
   @Override
   protected String read(CSVReadOption readOption) throws IOException {
     StringBuilder sb = new StringBuilder();
-
     try (FileReader fileReader = new FileReader(readOption.getFilePath())) {
       CSVParser csvParser = new CSVParser(fileReader, convertCSVFormat(readOption.getCsvFormat()));
       for (CSVRecord csvRecord : csvParser) {
-        sb.append(csvRecord.toString()).append("\n");
+        sb.append(csvRecord.toString())
+            .append(
+                readOption.getSeparatorForEachLine() == null
+                    ? "\n"
+                    : readOption.getSeparatorForEachLine());
       }
     }
 

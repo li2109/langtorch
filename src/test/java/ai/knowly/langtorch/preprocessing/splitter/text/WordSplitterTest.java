@@ -6,6 +6,7 @@ import com.google.common.truth.Truth;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 
 public class WordSplitterTest {
@@ -21,6 +22,7 @@ public class WordSplitterTest {
             Truth.assertThat(result.get(i)).isEqualTo(expectedResult.get(i));
         }
     }
+
     @Test
     public void testWordSplitter_splitByWordCount() {
         // Arrange.
@@ -122,20 +124,19 @@ public class WordSplitterTest {
     @Test
     public void testWordSplitter_createDocuments() {
         // Arrange.
-        List<String> texts = Arrays.asList("foo bar", "baz");
         WordSplitter splitter = new WordSplitter(" ", 3, 0);
-        Metadata metadata = Metadata.createEmpty();
-
-        List<Metadata> metadatas = Arrays.asList(metadata, metadata);
+        List<DomainDocument> docsToSplit =
+                Arrays.asList("foo bar", "baz").stream()
+                        .map(text -> new DomainDocument(text, Optional.of(Metadata.create()))).collect(Collectors.toList());
 
         // Act.
-        List<DomainDocument> docs = splitter.createDocuments(texts, Optional.of(metadatas));
+        List<DomainDocument> docs = splitter.createDocumentsSplitFromList(docsToSplit);
 
         // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
-                new DomainDocument("foo", Optional.of(metadata)),
-                new DomainDocument("bar", Optional.of(metadata)),
-                new DomainDocument("baz", Optional.of(metadata))
+                new DomainDocument("foo", Optional.of(Metadata.create())),
+                new DomainDocument("bar", Optional.of(Metadata.create())),
+                new DomainDocument("baz", Optional.of(Metadata.create()))
         );
 
         Truth.assertThat(expectedDocs.size() == docs.size());
@@ -147,22 +148,20 @@ public class WordSplitterTest {
     @Test
     public void testWordSplitter_createDocumentsWithMetadata() {
         // Arrange.
-        List<String> texts = Arrays.asList("foo bar", "baz");
         WordSplitter splitter = new WordSplitter(" ", 3, 0);
 
-
-        Metadata metadata = Metadata.createEmpty();
+        Metadata metadata = Metadata.create();
 
         metadata.getValue().put("source", "doc", "1");
         metadata.getValue().put("loc", "from", "1");
         metadata.getValue().put("loc", "to", "1");
 
-        List<Metadata> metadataList = Arrays.asList(metadata, metadata);
-
-        Optional<List<Metadata>> metadatas = Optional.of(metadataList);
+        List<DomainDocument> docsToSplit =
+                Arrays.asList("foo bar", "baz").stream()
+                        .map(text -> new DomainDocument(text, Optional.of(metadata))).collect(Collectors.toList());
 
         // Act.
-        List<DomainDocument> docs = splitter.createDocuments(texts, metadatas);
+        List<DomainDocument> docs = splitter.createDocumentsSplitFromList(docsToSplit);
 
         // Assert.
         List<DomainDocument> expectedDocs = Arrays.asList(
@@ -177,7 +176,6 @@ public class WordSplitterTest {
             Truth.assertThat(docs.get(i).getMetadata()).isEqualTo(expectedDocs.get(i).getMetadata());
         }
     }
-
 
 
     private List<String> sampleTextExpectedSplit() {

@@ -34,7 +34,7 @@ public abstract class TextSplitter {
         }
     }
 
-    abstract public List<String> splitText(String text);
+    public abstract List<String> splitText(String text);
 
     public List<DomainDocument> createDocumentsSplitFromSingle(DomainDocument document) {
         String text = document.getPageContent();
@@ -76,7 +76,6 @@ public abstract class TextSplitter {
             int newLinesCount = StringUtils.countMatches(chunk, "\n");
 
             MultiKeyMap<String, String> loc;
-            //TODO: need to end to end test how metadata is being passed back and forth
             if (metadata.getValue().containsKey("loc", "")) {
                 loc = metadata.getValue();
             } else {

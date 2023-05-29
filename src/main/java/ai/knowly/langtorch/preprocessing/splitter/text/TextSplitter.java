@@ -38,8 +38,7 @@ public abstract class TextSplitter {
 
     public List<DomainDocument> createDocumentsSplitFromSingle(DomainDocument document) {
         String text = document.getPageContent();
-        Metadata metadata = document.getMetadata().isPresent() ? document.getMetadata().get() : Metadata.create();
-
+        Metadata metadata = document.getMetadata().orElse(Metadata.create());
         ArrayList<DomainDocument> docsToReturn = new ArrayList<>();
 
         addDocumentFromWordChunk(docsToReturn, text, metadata);
@@ -52,15 +51,16 @@ public abstract class TextSplitter {
 
         for (DomainDocument document : documents) {
             String text = document.getPageContent();
-            Metadata metadata = document.getMetadata().isPresent() ? document.getMetadata().get() : Metadata.create();
-            int lineCounterIndex = 1;
-
+            Metadata metadata = document.getMetadata().orElse(Metadata.create());
             addDocumentFromWordChunk(docsToReturn, text, metadata);
         }
         return docsToReturn;
     }
 
-    private void addDocumentFromWordChunk(ArrayList<DomainDocument> docsToReturn, String text, Metadata metadata) {
+    private void addDocumentFromWordChunk(
+            ArrayList<DomainDocument> docsToReturn,
+            String text,
+            Metadata metadata) {
         String prevChunk = null;
         int lineCounterIndex = 1;
 

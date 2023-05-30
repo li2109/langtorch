@@ -2,8 +2,11 @@ package ai.knowly.langtorch.capability.module.openai;
 
 import ai.knowly.langtorch.capability.modality.text.ChatCompletionLLMCapability;
 import ai.knowly.langtorch.parser.ChatMessageToStringParser;
+import ai.knowly.langtorch.parser.Parser;
 import ai.knowly.langtorch.parser.StringToMultiChatMessageParser;
 import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessor;
+import ai.knowly.langtorch.schema.chat.ChatMessage;
+import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import java.util.Optional;
 
@@ -41,8 +44,23 @@ public class SimpleChatCapability extends ChatCompletionLLMCapability<String, St
     return this;
   }
 
+  @Override
   public SimpleChatCapability withVerboseMode() {
     super.withVerboseMode();
+    return this;
+  }
+
+  @Override
+  public ChatCompletionLLMCapability<String, String> withInputParser(
+      Parser<String, MultiChatMessage> inputParser) {
+    super.withInputParser(inputParser);
+    return this;
+  }
+
+  @Override
+  public ChatCompletionLLMCapability<String, String> withOutputParser(
+      Parser<ChatMessage, String> outputParser) {
+    super.withOutputParser(outputParser);
     return this;
   }
 }

@@ -42,24 +42,25 @@ public class ChatCompletionLLMCapability<I, O>
     return new ChatCompletionLLMCapability<>(processor, Optional.empty(), Optional.empty());
   }
 
-  public ChatCompletionLLMCapability<I, O> withInputParser(
+  protected ChatCompletionLLMCapability<I, O> withInputParser(
       Parser<I, MultiChatMessage> inputParser) {
     this.inputParser = Optional.of(inputParser);
     return this;
   }
 
-  public ChatCompletionLLMCapability<I, O> withOutputParser(Parser<ChatMessage, O> outputParser) {
+  protected ChatCompletionLLMCapability<I, O> withOutputParser(
+      Parser<ChatMessage, O> outputParser) {
     this.outputParser = Optional.of(outputParser);
     return this;
   }
 
-  public ChatCompletionLLMCapability<I, O> withMemory(
+  protected ChatCompletionLLMCapability<I, O> withMemory(
       Memory<ChatMessage, ConversationMemoryContext> memory) {
     this.memory = Optional.of(memory);
     return this;
   }
 
-  public ChatCompletionLLMCapability<I, O> withVerboseMode() {
+  protected ChatCompletionLLMCapability<I, O> withVerboseMode() {
     this.verbose = true;
     return this;
   }

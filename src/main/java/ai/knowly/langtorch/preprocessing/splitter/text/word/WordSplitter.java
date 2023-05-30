@@ -1,19 +1,19 @@
 package ai.knowly.langtorch.preprocessing.splitter.text.word;
 
-import ai.knowly.langtorch.preprocessing.splitter.text.BaseTextSplitter;
+import ai.knowly.langtorch.preprocessing.splitter.text.TextSplitter;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableList.Builder;
 import java.util.List;
 
 /** Splits text into chunks of words. */
-public class WordLevelSplitter implements BaseTextSplitter<WordLevelSplitterOption> {
+public class WordSplitter implements TextSplitter<WordSplitterOption> {
 
-  public static WordLevelSplitter create() {
-    return new WordLevelSplitter();
+  public static WordSplitter create() {
+    return new WordSplitter();
   }
 
   @Override
-  public List<String> splitText(WordLevelSplitterOption option) {
+  public List<String> splitText(WordSplitterOption option) {
     int maxLengthPerChunk = option.getMaxLengthPerChunk();
     String text = option.getText();
 

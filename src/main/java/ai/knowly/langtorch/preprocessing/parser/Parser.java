@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.parser;
+package ai.knowly.langtorch.preprocessing.parser;
 
 @FunctionalInterface
 public interface Parser<T, R> {

@@ -1,41 +1,22 @@
 package ai.knowly.langtorch.store.memory;
 
-import com.google.common.collect.Multimap;
 import java.util.List;
 
-/**
- * Interface for a generic memory structure with key-value pairs.
- *
- * @param <K> the type of keys maintained by this memory
- * @param <Y> the type of values maintained by this memory
- */
-public interface Memory<K, Y> {
+/** Interface for a generic memory structure. */
+public interface Memory<V extends MemoryValue, C extends MemoryContext> {
   /**
-   * Adds a key-value pair to the memory.
+   * Adds a value to the memory.
    *
-   * @param key the key to add
-   * @param value the value to associate with the key
+   * @param value the value
    */
-  void add(K key, Y value);
+  void add(V value);
 
-  /**
-   * Retrieves values associated with the specified key, if present.
-   *
-   * @param key the key whose associated value is to be returned
-   * @return List of values associated with the key
-   */
-  List<Y> get(K key);
+  /** Retrieves all values added into the memory. */
+  List<V> getAll();
 
-  /** Removes all key-value pairs from the memory. */
+  /** Removes all values from the memory. */
   void clear();
 
-  /**
-   * Returns the memory.
-   *
-   * @return the memory
-   */
-  Multimap<K, Y> getMemory();
-
-  /** Returns the prompt based on entries in the memory. */
-  String getMemoryContext();
+  /** Returns the context based on entries in the memory. */
+  C getMemoryContext();
 }

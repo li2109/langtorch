@@ -8,8 +8,7 @@ import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.UserMessage;
 import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
-import com.google.common.collect.ImmutableList;
-import java.util.Map.Entry;
+import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -21,60 +20,73 @@ final class ConversationMemoryTest {
 
   @BeforeEach
   void setUp() {
-    conversationMemory = ConversationMemory.create();
+    conversationMemory = ConversationMemory.builder().build();
   }
 
   @Test
   void testAddAndGet() {
-    // Arrange
-    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
+    // Arrange.
+    conversationMemory.add(UserMessage.of("Hi, how's whether like today?"));
 
-    // Act
-    Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
+    // Act.
+    Iterable<ChatMessage> messages = conversationMemory.getAll();
 
-    // Assert
+    // Assert.
     assertThat(messages).containsExactly(UserMessage.of("Hi, how's whether like today?"));
   }
 
   @Test
   void testGetNotPresent() {
-    // Act
-    Iterable<ChatMessage> messages = conversationMemory.get(Role.USER);
+    // Act.
+    Iterable<ChatMessage> messages = conversationMemory.getAll();
 
-    // Assert
+    // Assert.
     assertThat(messages).isEmpty();
   }
 
   @Test
+  void emptyMemoryContext() {
+    // Act.
+    String context = conversationMemory.getMemoryContext().get();
+
+    // Assert.
+    assertThat(context).isEmpty();
+  }
+
+  @Test
   void testClear() {
-    // Arrange
-    conversationMemory.add(Role.USER, UserMessage.of("Hi, how's whether like today?"));
-    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
+    // Arrange.
+    conversationMemory.add(UserMessage.of("Hi, how's whether like today?"));
+    conversationMemory.add(AssistantMessage.of("It's sunny in Mountain View, CA."));
     conversationMemory.clear();
 
-    // Act
-    Iterable<ChatMessage> userMessages = conversationMemory.get(Role.USER);
-    Iterable<ChatMessage> assistantMessages = conversationMemory.get(Role.ASSISTANT);
+    // Act.
+    Iterable<ChatMessage> userMessages =
+        conversationMemory.getAll().stream()
+            .filter(chatMessage -> chatMessage.getRole() == Role.USER)
+            .collect(toImmutableList());
 
-    // Assert
+    Iterable<ChatMessage> assistantMessages =
+        conversationMemory.getAll().stream()
+            .filter(chatMessage -> chatMessage.getRole() == Role.ASSISTANT)
+            .collect(toImmutableList());
+
+    // Assert.
     assertThat(userMessages).isEmpty();
     assertThat(assistantMessages).isEmpty();
   }
 
   @Test
   void testPreserveInsertionOrder() {
-    // Arrange
-    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("Hi, how can i help you today?"));
-    conversationMemory.add(Role.USER, UserMessage.of("how's whether like today?"));
-    conversationMemory.add(Role.ASSISTANT, AssistantMessage.of("It's sunny in Mountain View, CA."));
+    // Arrange.
+    conversationMemory.add(AssistantMessage.of("Hi, how can i help you today?"));
+    conversationMemory.add(UserMessage.of("how's whether like today?"));
+    conversationMemory.add(AssistantMessage.of("It's sunny in Mountain View, CA."));
 
-    // Act
-    ImmutableList<ChatMessage> actual =
-        conversationMemory.getMemory().entries().stream()
-            .map(Entry::getValue)
-            .collect(toImmutableList());
+    // Act.
+    List<ChatMessage> actual = conversationMemory.getAll();
 
-    // Assert
+    // Assert.
     assertThat(actual.get(0).getContent()).isEqualTo("Hi, how can i help you today?");
     assertThat(actual.get(0).getRole()).isEqualTo(Role.ASSISTANT);
 

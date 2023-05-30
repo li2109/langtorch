@@ -9,7 +9,7 @@ build/
 .idea/jarRepositories.xml
 .idea/compiler.xml
 .idea/libraries/
-.idea/sonarlint/
+.idea/sonarlint/**/*
 .idea/workspace.xml
 *.iws
 *.iml

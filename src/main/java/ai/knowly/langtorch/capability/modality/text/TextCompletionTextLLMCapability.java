@@ -3,12 +3,9 @@ package ai.knowly.langtorch.capability.modality.text;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.processor.module.Processor;
-import ai.knowly.langtorch.store.memory.Memory;
 import ai.knowly.langtorch.parser.Parser;
+import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.schema.text.SingleText;
-import ai.knowly.langtorch.schema.memory.MemoryKey;
-import ai.knowly.langtorch.schema.memory.MemoryValue;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
 import java.util.Optional;
@@ -19,13 +16,11 @@ public class TextCompletionTextLLMCapability<I, O>
 
   private Optional<Parser<I, SingleText>> inputParser;
   private Optional<Parser<SingleText, O>> outputParser;
-  private Optional<Memory<MemoryKey, MemoryValue>> memory;
 
   public TextCompletionTextLLMCapability(Processor<SingleText, SingleText> processor) {
     this.processor = processor;
     this.inputParser = Optional.empty();
     this.outputParser = Optional.empty();
-    this.memory = Optional.empty();
   }
 
   public static <I, O> TextCompletionTextLLMCapability<I, O> of(
@@ -44,11 +39,6 @@ public class TextCompletionTextLLMCapability<I, O>
     return this;
   }
 
-  public TextCompletionTextLLMCapability<I, O> withMemory(Memory<MemoryKey, MemoryValue> memory) {
-    this.memory = Optional.of(memory);
-    return this;
-  }
-
   @Override
   public SingleText preProcess(I inputData) {
     if (inputData instanceof SingleText) {
@@ -59,11 +49,6 @@ public class TextCompletionTextLLMCapability<I, O>
       throw new IllegalArgumentException(
           "Input data is not a SingleText and no input parser is present.");
     }
-  }
-
-  @Override
-  public Optional<Memory<MemoryKey, MemoryValue>> getMemory() {
-    return this.memory;
   }
 
   @Override

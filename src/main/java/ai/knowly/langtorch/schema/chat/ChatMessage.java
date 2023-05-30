@@ -1,9 +1,10 @@
 package ai.knowly.langtorch.schema.chat;
 
+import ai.knowly.langtorch.store.memory.MemoryValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
-public class ChatMessage extends Message {
+public class ChatMessage extends Message implements MemoryValue {
   private final Role role;
 
   @JsonCreator

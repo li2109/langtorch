@@ -22,7 +22,7 @@ final class PromptTemplateCapabilityTest {
   @Mock private OpenAIService openAIService;
 
   @Test
-  void simpleTest() throws ExecutionException, InterruptedException {
+  void simpleTest() {
     // Arrange.
     when(openAIService.createCompletion(any()))
         .thenReturn(OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("Google"));

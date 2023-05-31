@@ -4,7 +4,6 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingResult;
-import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
@@ -12,7 +11,7 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
 import com.google.common.util.concurrent.ListenableFuture;
 
-public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embeddings> {
+public class OpenAIEmbeddingsProcessor implements EmbeddingsProcessor {
   private final OpenAIService openAIService;
 
   private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =

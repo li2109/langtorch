@@ -47,62 +47,58 @@ public class PineconeVectorStore implements VectorStore {
         this.model = model;
     }
 
-    public static PineconeVectorStore ofOpenAI(PineconeServiceConfig config) {
+    public static PineconeVectorStore ofOpenAI(
+            PineconeServiceConfig config,
+            Optional<String> namespace,
+            Optional<String> textKey,
+            Optional<String> model
+    ) {
         return new PineconeVectorStore(
                 OpenAIEmbeddingsProcessor.create(),
                 new PineconeService(config),
-                Optional.of("chatbot"),
-                Optional.of("text"),
-                Optional.empty()
+                namespace,
+                textKey,
+                model
         );
     }
 
-    public static PineconeVectorStore ofOpenAI(FluentLogger logger) {
+    public static PineconeVectorStore ofOpenAI(
+            FluentLogger logger,
+            Optional<String> model
+    ) {
+        Optional<String> namespace = Optional.of("");
+        Optional<String> textKey = Optional.of("");
+
         PineconeServiceConfig config = PineconeServiceConfig
                 .builder()
-                .setEndpoint("chatbot-6b96287.svc.asia-southeast1-gcp-free.pinecone.io")
+                .setEndpoint(ApiKeyUtils.getPineconeEndPointFromEnv(Optional.ofNullable(logger)))
                 .setApiKey(ApiKeyUtils.getPineconeKeyFromEnv(Optional.ofNullable(logger)))
                 .build();
-        return ofOpenAI(config);
+        return ofOpenAI(config, namespace, textKey, model);
     }
 
+    public void addDocuments(List<DomainDocument> documents) {
+        documents.forEach(this::addDocument);
+    }
 
-
-    public void addDocuments(List<DomainDocument> documents, @Nullable List<String> ids) {
-        List<String> texts = documents.stream().map(DomainDocument::getPageContent).collect(Collectors.toList());
-        EmbeddingInput embeddingInput = new EmbeddingInput(model.orElse(DEFAULT_MODEL), texts, null);
+    public void addDocument(DomainDocument document) {
+        String text = document.getPageContent();
+        EmbeddingInput embeddingInput = new EmbeddingInput(model.orElse(DEFAULT_MODEL), Collections.singletonList(text), null);
         Embeddings embeddings = processor.run(embeddingInput);
-        addVectors(embeddings, documents, ids);
+        addVector(embeddings, document);
     }
 
-    public void addVectors(Embeddings embeddings, List<DomainDocument> documents, @Nullable List<String> ids) {
-        List<String> documentIds =
-                ids == null ? documents.stream().map(document -> UUID.randomUUID().toString()).collect(Collectors.toList()) : ids;
-
-        List<Vector> pineconeVectors = new ArrayList<>();
-
-
-        for (int i = 0; i < embeddings.getValue().size(); i++) {
-            if (!textKey.isPresent()) continue;
-
-            Embedding embedding = embeddings.getValue().get(i);
-            Map<String, String> metadata = new HashMap<>();
-            metadata.put(textKey.get(), documents.get(i).getPageContent());
-            Vector vector = Vector.builder()
-                    .setId(documentIds.get(i))
-                    .setMetadata(flattenMetadata(documents.get(i), metadata))
-                    .setValues(embedding.getVector())
-                    .build();
-            pineconeVectors.add(vector);
-        }
-
+    private void addVector(Embeddings embeddings, DomainDocument document) {
+        Vector vector = Vector.builder()
+                .setId(document.getId().orElse(UUID.randomUUID().toString()))
+                .setMetadata(document.getMetadata().orElse(Metadata.create()).getValue())
+                .setValues(embeddings.getValue().get(0).getVector())
+                .build();
         UpsertRequest.UpsertRequestBuilder upsertRequestBuilder =
                 UpsertRequest.builder()
-                        .setVectors(pineconeVectors);
-
+                        .setVectors(Collections.singletonList(vector));
         namespace.ifPresent(upsertRequestBuilder::setNamespace);
         pineconeService.upsert(upsertRequestBuilder.build());
-
     }
 
     public List<Pair<DomainDocument, Double>> similaritySearchVectorWithScore(List<Double> query, Long k, @Nullable Map<String, String> filter) {
@@ -126,31 +122,16 @@ public class PineconeVectorStore implements VectorStore {
         if (response.getMatches() != null) {
             for (Match match : response.getMatches()) {
                 if (!textKey.isPresent()) continue;
-                Metadata metadata = match.getMetadata() == null ?  Metadata.create() : Metadata.create(match.getMetadata());
+                Metadata metadata = match.getMetadata() == null ? Metadata.create() : Metadata.create(match.getMetadata());
                 String key = textKey.get();
-                String pageContent = metadata.getValue().get(key, "");
+                String pageContent = metadata.getValue().get(key);
                 if (match.getScore() != null) {
-                    result.add(new Pair<>(new DomainDocument(pageContent, Optional.of(metadata)), match.getScore()));
+                    result.add(new Pair<>(new DomainDocument(pageContent, Optional.of(metadata), Optional.empty()), match.getScore()));
                 }
             }
         }
 
         return result;
-    }
-
-    public PineconeVectorStore fromTexts(
-            List<String> texts,
-            List<Map<String, String>> metadatas,
-            EmbeddingsProcessor processor,
-            PineconeService service,
-            Optional<String> namespace,
-            Optional<String> textKey) {
-        List<DomainDocument> documents = new ArrayList<>();
-        for (int i = 0; i < texts.size(); i += 1) {
-            documents.add(new DomainDocument(texts.get(i), Optional.of(Metadata.create(metadatas.get(i)))));
-        }
-
-        return fromDocuments(documents, processor, service, namespace, textKey, Optional.empty());
     }
 
     public static PineconeVectorStore fromDocuments(
@@ -162,19 +143,8 @@ public class PineconeVectorStore implements VectorStore {
             Optional<String> model
     ) {
         PineconeVectorStore pineconeVectorStore = new PineconeVectorStore(processor, service, namespace, textKey, model);
-        pineconeVectorStore.addDocuments(documents, null);
+        pineconeVectorStore.addDocuments(documents);
         return pineconeVectorStore;
     }
-
-
-    // Pinecone doesn't support nested objects, so we must flatten them
-    private Map<String, String> flattenMetadata(DomainDocument document, Map<String, String> metaData) {
-        Map<String, String> flattenedMetadata = new HashMap<>();
-        flattenedMetadata.putAll(document.getMetadata());
-        flattenedMetadata.putAll(metaData);
-        flattenedMetadata.entrySet().removeIf(entry -> entry.getValue() == null);
-        return flattenedMetadata;
-    }
-
 
 }

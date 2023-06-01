@@ -4,6 +4,9 @@ import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
 
-public interface EmbeddingsProcessor extends Processor<EmbeddingInput, Embeddings> {
+/**
+ EmbeddingsOutput is a shared interface for embedding output.
+ */
+public interface EmbeddingsOutput extends Processor<EmbeddingInput, Embeddings> {
 
 }

@@ -1,5 +1,5 @@
 package ai.knowly.langtorch.utils;
 
-public enum ApiEndpoint {
+public enum VectorStoreApiEndpoint {
     PINECONE_ENDPOINT
 }

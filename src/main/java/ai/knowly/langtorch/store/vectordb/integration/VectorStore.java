@@ -1,4 +1,6 @@
 package ai.knowly.langtorch.store.vectordb.integration;
 
-public interface VectorStore {
-}
+/**
+ * A shared interface for all Vector Store Databases
+ */
+public interface VectorStore { }

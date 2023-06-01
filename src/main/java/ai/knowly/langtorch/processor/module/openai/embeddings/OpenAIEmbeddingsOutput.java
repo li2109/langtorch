@@ -11,33 +11,37 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
 import com.google.common.util.concurrent.ListenableFuture;
 
+<<<<<<< HEAD:src/main/java/ai/knowly/langtorch/processor/module/openai/embeddings/OpenAIEmbeddingsProcessor.java
 public class OpenAIEmbeddingsProcessor implements EmbeddingsProcessor {
+=======
+public class OpenAIEmbeddingsOutput implements EmbeddingsOutput {
+>>>>>>> pinecone-vectorstore:src/main/java/ai/knowly/langtorch/processor/module/openai/embeddings/OpenAIEmbeddingsOutput.java
   private final OpenAIService openAIService;
 
   private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =
       OpenAIEmbeddingsProcessorConfig.builder().build();
 
-  public OpenAIEmbeddingsProcessor(OpenAIService openAiApi) {
+  public OpenAIEmbeddingsOutput(OpenAIService openAiApi) {
     this.openAIService = openAiApi;
   }
 
-  private OpenAIEmbeddingsProcessor() {
+  private OpenAIEmbeddingsOutput() {
     this.openAIService = OpenAIServiceProvider.createOpenAIService();
   }
 
-  public static OpenAIEmbeddingsProcessor create(OpenAIService openAIService) {
-    return new OpenAIEmbeddingsProcessor(openAIService);
+  public static OpenAIEmbeddingsOutput create(OpenAIService openAIService) {
+    return new OpenAIEmbeddingsOutput(openAIService);
   }
 
-  public static OpenAIEmbeddingsProcessor create(String openAIKey) {
-    return new OpenAIEmbeddingsProcessor(OpenAIServiceProvider.createOpenAIService(openAIKey));
+  public static OpenAIEmbeddingsOutput create(String openAIKey) {
+    return new OpenAIEmbeddingsOutput(OpenAIServiceProvider.createOpenAIService(openAIKey));
   }
 
-  public static OpenAIEmbeddingsProcessor create() {
-    return new OpenAIEmbeddingsProcessor();
+  public static OpenAIEmbeddingsOutput create() {
+    return new OpenAIEmbeddingsOutput();
   }
 
-  public OpenAIEmbeddingsProcessor withConfig(
+  public OpenAIEmbeddingsOutput withConfig(
       OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
     this.openAIEmbeddingsProcessorConfig = openAIEmbeddingsProcessorConfig;
     return this;

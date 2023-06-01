@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.csv;
+package ai.knowly.langtorch.connector.spreadsheet;
 
 import ai.knowly.langtorch.connector.DocumentConnector;
 import java.io.FileReader;

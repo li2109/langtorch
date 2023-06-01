@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.csv;
+package ai.knowly.langtorch.connector.spreadsheet;
 
 import static com.google.common.truth.Truth.assertThat;
 

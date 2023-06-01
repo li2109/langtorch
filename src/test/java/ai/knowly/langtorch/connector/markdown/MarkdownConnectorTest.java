@@ -1,21 +1,14 @@
 package ai.knowly.langtorch.connector.markdown;
 
-import ai.knowly.langtorch.connector.csv.CSVConnector;
-import ai.knowly.langtorch.connector.md.MdConnector;
-import com.google.common.base.Supplier;
-import org.junit.Rule;
+import ai.knowly.langtorch.connector.md.MarkdownConnector;
 import org.junit.jupiter.api.Test;
-import org.junit.rules.ExpectedException;
 
 import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.NoSuchFileException;
-import java.nio.file.Paths;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MdConnectorTest {
+public class MarkdownConnectorTest {
 
     @Test
     void testMdNotExist() throws IOException {
@@ -23,7 +16,7 @@ public class MdConnectorTest {
         String testFilePath = "src/test/resources/test1.md";
 
         // Act.
-        IOException e = assertThrows(IOException.class, () -> MdConnector.create().read(testFilePath));
+        IOException e = assertThrows(IOException.class, () -> MarkdownConnector.create().read(testFilePath));
 
         // Assert.
         assertThat(e).hasMessageThat().contains(testFilePath);
@@ -35,7 +28,7 @@ public class MdConnectorTest {
         String testFilePath = "src/test/resources/test.md";
 
         // Act.
-        String result = MdConnector.create().read(testFilePath);
+        String result = MarkdownConnector.create().read(testFilePath);
 
         // Assert.
         String expectedContent =

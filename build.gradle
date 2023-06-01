@@ -120,9 +120,6 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:2.0.28'
     // Reading CSV
     implementation 'org.apache.commons:commons-csv:1.10.0'
-    // Reading Markdown
-    implementation 'com.vladsch.flexmark:flexmark-all:0.62.2'
-
 
     // Apache commons lang
     implementation 'org.apache.commons:commons-lang3:3.0'

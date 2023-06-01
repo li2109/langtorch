@@ -7,6 +7,6 @@ import lombok.Data;
 /** Implementation of ReadOption for Markdown files. */
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class MdReadOption implements ReadOption {
+public class MarkdownReadOption implements ReadOption {
     private String filePath;
 }

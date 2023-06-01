@@ -5,14 +5,14 @@ import static com.google.common.truth.Truth.assertThat;
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class CSVConnectorTest {
+class SpreadSheetConnectorTest {
   @Test
   void testReadCSV() throws IOException {
     // Arrange.
     String testFilePath = "src/test/resources/test.csv";
 
     // Act.
-    String result = CSVConnector.create().read(testFilePath);
+    String result = SpreadSheetConnector.create().read(testFilePath);
 
     // Assert.
     String expectedContent =
@@ -34,9 +34,9 @@ class CSVConnectorTest {
 
     // Act.
     String result =
-        CSVConnector.create()
+        SpreadSheetConnector.create()
             .read(
-                CSVReadOption.builder()
+                SpreadSheetReadOption.builder()
                     .setSeparatorForEachLine("\n\n")
                     .setFilePath(testFilePath)
                     .build());

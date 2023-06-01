@@ -11,6 +11,8 @@ build/
 .idea/libraries/
 .idea/sonarlint/**/*
 .idea/workspace.xml
+.idea/git_toolbox_prj.xml
+.idea/shelf/
 *.iws
 *.iml
 *.ipr

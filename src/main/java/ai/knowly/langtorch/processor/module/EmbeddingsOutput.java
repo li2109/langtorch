@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.openai.embeddings;
+package ai.knowly.langtorch.processor.module;
 
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;

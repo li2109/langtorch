@@ -1,6 +1,5 @@
 package ai.knowly.langtorch.connector.markdown;
 
-import ai.knowly.langtorch.connector.md.MarkdownConnector;
 import org.junit.jupiter.api.Test;
 
 import java.io.IOException;

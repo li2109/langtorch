@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.md;
+package ai.knowly.langtorch.connector.markdown;
 
 import ai.knowly.langtorch.connector.ReadOption;
 import lombok.Builder;

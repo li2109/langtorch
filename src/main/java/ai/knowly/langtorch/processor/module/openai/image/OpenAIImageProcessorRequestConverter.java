@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.module.openai.image;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.image.CreateImageRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageRequest;
 
 public final class OpenAIImageProcessorRequestConverter {
   private OpenAIImageProcessorRequestConverter() {}

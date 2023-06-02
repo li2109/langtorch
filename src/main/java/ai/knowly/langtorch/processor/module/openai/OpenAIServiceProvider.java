@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.processor.module.openai;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIApi;
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
+import ai.knowly.langtorch.llm.openai.OpenAIApi;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.flogger.FluentLogger;
 import java.time.Duration;

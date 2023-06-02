@@ -2,7 +2,7 @@ package ai.knowly.langtorch.processor.module.openai.text;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;

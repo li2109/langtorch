@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.module.openai.text;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
 
 // Converter class to convert OpenAITextProcessorConfig and a prompt string
 // to a CompletionRequest

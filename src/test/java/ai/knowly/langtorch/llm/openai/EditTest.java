@@ -2,11 +2,11 @@ package ai.knowly.langtorch.llm.openai;
 
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.OpenAIHttpParseException;
 import ai.knowly.langtorch.llm.openai.schema.dto.edit.EditRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.edit.EditResult;
-import ai.knowly.langtorch.utils.ApiKeyUtils;
+import ai.knowly.langtorch.utils.Environment;
+import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
@@ -15,7 +15,7 @@ class EditTest {
 
   @Test
   void edit() throws OpenAIHttpParseException {
-    String token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
+    String token = OpenAIKeyUtil.getKey(Environment.TEST);
     OpenAIService service = new OpenAIService(token);
     EditRequest request =
         EditRequest.builder()

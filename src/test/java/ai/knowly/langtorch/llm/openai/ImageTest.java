@@ -3,12 +3,12 @@ package ai.knowly.langtorch.llm.openai;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
-import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageEditRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageVariationRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.Image;
-import ai.knowly.langtorch.utils.ApiKeyUtils;
+import ai.knowly.langtorch.utils.Environment;
+import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -26,7 +26,7 @@ class ImageTest {
 
   @BeforeEach
   void setUp() {
-    token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
+    token = OpenAIKeyUtil.getKey(Environment.TEST);
     service = new OpenAIService(token);
   }
 

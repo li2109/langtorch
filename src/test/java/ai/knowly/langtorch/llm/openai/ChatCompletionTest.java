@@ -2,12 +2,12 @@ package ai.knowly.langtorch.llm.openai;
 
 import static org.junit.jupiter.api.Assertions.*;
 
-import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionChoice;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.SystemMessage;
-import ai.knowly.langtorch.utils.ApiKeyUtils;
+import ai.knowly.langtorch.utils.Environment;
+import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -19,7 +19,7 @@ class ChatCompletionTest {
 
   @Test
   void createChatCompletion() {
-    String token = ApiKeyUtils.getOpenAIApiKeyFromEnv();
+    String token = OpenAIKeyUtil.getKey(Environment.TEST);
     OpenAIService service = new OpenAIService(token);
     final List<ChatMessage> messages = new ArrayList<>();
     messages.add(SystemMessage.of("You are a dog and will speak as such."));

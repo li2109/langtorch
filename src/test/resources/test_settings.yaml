@@ -6,4 +6,4 @@ test:
       llm-service:
         openai: false
       vector-store-service:
-        pinecone: true
+        pinecone: false

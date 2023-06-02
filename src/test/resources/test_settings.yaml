@@ -1,3 +1,9 @@
 # If true, test will be executed with real HTTP request(Mainly for LLM client llm test).
 # requires API Key under .env under resources folder in Test Directory
-test.unit_test.enable_test_with_http_request: false
+test:
+  unit-test:
+    live-traffic:
+      llm-service:
+        openai: false
+      vector-store-service:
+        pinecone: true

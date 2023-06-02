@@ -11,7 +11,7 @@ import java.util.List;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
-@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
+@EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableOpenAILLMServiceLiveTrafficTest")
 class EmbeddingTest {
 
   @Test

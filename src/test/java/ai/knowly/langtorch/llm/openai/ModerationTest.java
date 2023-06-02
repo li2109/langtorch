@@ -9,7 +9,7 @@ import ai.knowly.langtorch.utils.ApiKeyUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
-@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
+@EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableOpenAILLMServiceLiveTrafficTest")
 class ModerationTest {
   @Test
   void createModeration() {

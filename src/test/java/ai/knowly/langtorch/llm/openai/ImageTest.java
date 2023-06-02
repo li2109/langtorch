@@ -14,7 +14,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
-@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
+@EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableOpenAILLMServiceLiveTrafficTest")
 class ImageTest {
 
   static String filePath = "src/test/resources/penguin.png";

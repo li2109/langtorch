@@ -14,7 +14,7 @@ import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
-@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
+@EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enablePineconeVectorStoreLiveTrafficTest")
 class FetchTest {
   @Test
   void test() {

@@ -1,9 +1,9 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
-import ai.knowly.langtorch.processor.module.EmbeddingsOutput;
-import ai.knowly.langtorch.processor.module.openai.embeddings.OpenAIEmbeddingsOutput;
+import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
+import ai.knowly.langtorch.processor.module.openai.embeddings.OpenAIEmbeddingsProcessor;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
-import ai.knowly.langtorch.schema.embeddings.Embeddings;
+import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
 import ai.knowly.langtorch.store.vectordb.integration.VectorStore;
@@ -32,7 +32,7 @@ public class PineconeVectorStore implements VectorStore {
     private static final String DEFAULT_MODEL = "text-embedding-ada-002";
 
     // Instance variables
-    private final EmbeddingsOutput embeddingsOutput;
+    private final EmbeddingsProcessor embeddingsProcessor;
     private final PineconeService pineconeService;
     private final Optional<String> namespace;
     private final Optional<String> textKey;
@@ -42,20 +42,20 @@ public class PineconeVectorStore implements VectorStore {
     /**
      * Private constructor used by the static factory methods to create a new instance of PineconeVectorStore.
      *
-     * @param embeddingsOutput The embeddings output processor.
+     * @param embeddingsProcessor The embeddings output processor.
      * @param service   The Pinecone service.
      * @param namespace The optional namespace for the Pinecone service.
      * @param textKey   The optional text key for the Pinecone service.
      * @param model     The optional model for embeddings.
      */
     private PineconeVectorStore(
-            EmbeddingsOutput embeddingsOutput,
+            EmbeddingsProcessor embeddingsProcessor,
             PineconeService service,
             Optional<String> namespace,
             Optional<String> textKey,
             Optional<String> model
     ) {
-        this.embeddingsOutput = embeddingsOutput;
+        this.embeddingsProcessor = embeddingsProcessor;
         this.pineconeService = service;
         this.namespace = namespace;
         this.textKey = textKey;
@@ -78,7 +78,7 @@ public class PineconeVectorStore implements VectorStore {
             Optional<String> model
     ) {
         return create(
-                OpenAIEmbeddingsOutput.create(),
+                OpenAIEmbeddingsProcessor.create(),
                 pineconeService,
                 namespace,
                 textKey,
@@ -98,7 +98,7 @@ public class PineconeVectorStore implements VectorStore {
      * @return A new instance of PineconeVectorStore.
      */
     public static PineconeVectorStore create(
-            EmbeddingsOutput output,
+            EmbeddingsProcessor output,
             PineconeService pineconeService,
             Optional<String> namespace,
             Optional<String> textKey,
@@ -159,11 +159,11 @@ public class PineconeVectorStore implements VectorStore {
     private Vector createVector(DomainDocument document) {
         String text = document.getPageContent();
         EmbeddingInput embeddingInput = new EmbeddingInput(model.orElse(DEFAULT_MODEL), Collections.singletonList(text), null);
-        Embeddings embeddings = embeddingsOutput.run(embeddingInput);
+        EmbeddingOutput embeddingOutput = embeddingsProcessor.run(embeddingInput);
         return Vector.builder()
                 .setId(document.getId().orElse(UUID.randomUUID().toString()))
                 .setMetadata(document.getMetadata().orElse(Metadata.create()).getValue())
-                .setValues(embeddings.getValue().get(0).getVector())
+                .setValues(embeddingOutput.getValue().get(0).getVector())
                 .build();
     }
 
@@ -226,7 +226,7 @@ public class PineconeVectorStore implements VectorStore {
      */
     public static PineconeVectorStore fromDocuments(
             List<DomainDocument> documents,
-            EmbeddingsOutput processor,
+            EmbeddingsProcessor processor,
             PineconeService service,
             Optional<String> namespace,
             Optional<String> textKey,

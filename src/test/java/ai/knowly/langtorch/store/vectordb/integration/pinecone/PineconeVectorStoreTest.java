@@ -1,10 +1,10 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
 
-import ai.knowly.langtorch.processor.module.EmbeddingsOutput;
+import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
-import ai.knowly.langtorch.schema.embeddings.Embeddings;
+import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.SparseValues;
@@ -34,16 +34,16 @@ final class PineconeVectorStoreTest {
 
     private PineconeService pineconeService;
 
-    private EmbeddingsOutput embeddingsOutput;
+    private EmbeddingsProcessor embeddingsProcessor;
 
     @BeforeEach
     void setUp() {
         textKey = "textKey";
         pineconeService = Mockito.mock(PineconeService.class);
-        embeddingsOutput = Mockito.mock(EmbeddingsOutput.class);
+        embeddingsProcessor = Mockito.mock(EmbeddingsProcessor.class);
 
         pineconeVectorStore = PineconeVectorStore.create(
-                embeddingsOutput,
+            embeddingsProcessor,
                 pineconeService,
                 Optional.empty(),
                 Optional.of(textKey),
@@ -53,8 +53,8 @@ final class PineconeVectorStoreTest {
 
     @Test
     void testAddDocuments() {
-        Embeddings embeddings = Embeddings.of(EmbeddingType.OPEN_AI, getEmbeddings());
-        Mockito.when(embeddingsOutput.run(ArgumentMatchers.any())).thenReturn(embeddings);
+        EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
+        Mockito.when(embeddingsProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
         UpsertResponse upsertResponse = new UpsertResponse(1);
         Mockito.when(pineconeService.upsert(ArgumentMatchers.any())).thenReturn(upsertResponse);
 

@@ -51,4 +51,3 @@ public class DomainDocument implements Input, Output {
     }
   }
 }
-

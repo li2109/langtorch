@@ -13,8 +13,7 @@ public class ApiKeyUtils {
   }
 
   public static void logEndPoint(FluentLogger logger, String provider, String endpoint) {
-    logger.atInfo().log(
-            "Using %s endpoint: ***************" + endpoint);
+    logger.atInfo().log("Using %s endpoint: ***************" + endpoint);
   }
 
   public static String getOpenAIApiKeyFromEnv() {

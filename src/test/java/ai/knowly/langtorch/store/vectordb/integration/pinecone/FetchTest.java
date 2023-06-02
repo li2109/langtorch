@@ -22,7 +22,7 @@ class FetchTest {
     // Arrange.
     String token = PineconeKeyUtil.getKey(Environment.TEST);
     PineconeService service =
-        new PineconeService(
+         PineconeService.create(
             PineconeServiceConfig.builder()
                 .setApiKey(token)
                 .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")

@@ -31,12 +31,13 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+/** Pinecone llm. */
 public class PineconeService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final PineconeAPI api;
 
-  public PineconeService(final PineconeServiceConfig pineconeServiceConfig) {
+  private PineconeService(final PineconeServiceConfig pineconeServiceConfig) {
     ObjectMapper mapper = defaultObjectMapper();
     OkHttpClient client = buildClient(pineconeServiceConfig);
     Retrofit retrofit = defaultRetrofit(pineconeServiceConfig.endpoint(), client, mapper);
@@ -44,8 +45,16 @@ public class PineconeService {
     this.api = retrofit.create(PineconeAPI.class);
   }
 
-  public PineconeService(final PineconeAPI api) {
+  private PineconeService(final PineconeAPI api) {
     this.api = api;
+  }
+
+  public static PineconeService create(PineconeAPI api) {
+    return new PineconeService(api);
+  }
+
+  public static PineconeService create(PineconeServiceConfig pineconeServiceConfig) {
+    return new PineconeService(pineconeServiceConfig);
   }
 
   public static <T> T execute(ListenableFuture<T> apiCall) {

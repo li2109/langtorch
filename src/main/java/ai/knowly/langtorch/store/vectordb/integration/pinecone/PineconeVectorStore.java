@@ -13,13 +13,14 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import ai.knowly.langtorch.utils.ApiEndPointUtils;
 import ai.knowly.langtorch.utils.ApiKeyUtils;
 import com.google.common.flogger.FluentLogger;
 import kotlin.Pair;
-
 import javax.annotation.Nullable;
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * The PineconeVectorStore class is an implementation of the VectorStore interface, which provides integration with
@@ -64,25 +65,46 @@ public class PineconeVectorStore implements VectorStore {
     /**
      * Creates a new instance of PineconeVectorStore with OpenAI embeddings.
      *
-     * @param config    The PineconeServiceConfig containing the Pinecone service configuration.
+     * @param pineconeService The PineconeService for Pinecone API calls.
      * @param namespace The optional namespace for the Pinecone service.
      * @param textKey   The optional text key for the Pinecone service.
      * @param model     The optional LLM model for embeddings.
      * @return A new instance of PineconeVectorStore.
      */
     public static PineconeVectorStore ofOpenAI(
-            PineconeServiceConfig config,
+            PineconeService pineconeService,
             Optional<String> namespace,
             Optional<String> textKey,
             Optional<String> model
     ) {
-        return new PineconeVectorStore(
+        return create(
                 OpenAIEmbeddingsOutput.create(),
-                new PineconeService(config),
+                pineconeService,
                 namespace,
                 textKey,
                 model
         );
+    }
+
+
+    /**
+     * Creates a new instance of PineconeVectorStore with OpenAI embeddings.
+     *
+     * @param output    The LLM Processor for embeddings
+     * @param pineconeService The PineconeService for Pinecone API calls.
+     * @param namespace The optional namespace for the Pinecone service.
+     * @param textKey   The optional text key for the Pinecone service.
+     * @param model     The optional LLM model for embeddings.
+     * @return A new instance of PineconeVectorStore.
+     */
+    public static PineconeVectorStore create(
+            EmbeddingsOutput output,
+            PineconeService pineconeService,
+            Optional<String> namespace,
+            Optional<String> textKey,
+            Optional<String> model
+    ) {
+        return new PineconeVectorStore(output, pineconeService, namespace, textKey, model);
     }
 
     /**
@@ -104,40 +126,45 @@ public class PineconeVectorStore implements VectorStore {
                 .setEndpoint(ApiEndPointUtils.getPineconeEndPointFromEnv(Optional.ofNullable(logger)))
                 .setApiKey(ApiKeyUtils.getPineconeKeyFromEnv(Optional.ofNullable(logger)))
                 .build();
-        return ofOpenAI(config, namespace, textKey, model);
+        return ofOpenAI(new PineconeService(config), namespace, textKey, model);
     }
 
     /**
      * Adds the specified documents to the Pinecone vector store database.
      */
-    public void addDocuments(List<DomainDocument> documents) {
-        documents.forEach(this::addDocument);
+    public UpsertResponse addDocuments(List<DomainDocument> documents) {
+        if (documents.isEmpty()) return null;
+        List<Vector> vectors = documents.stream()
+                .map(this::createVector)
+                .collect(Collectors.toCollection(ArrayList::new));
+
+        return addVectors(vectors);
     }
 
     /**
-     * Creates embeddings from a document to be added to the vector store.
+     * Adds a list of vectors to the Pinecone vector store database.
      */
-    public void addDocument(DomainDocument document) {
+    private UpsertResponse addVectors(List<Vector> vectors) {
+        UpsertRequest.UpsertRequestBuilder upsertRequestBuilder = UpsertRequest.builder()
+                        .setVectors(vectors);
+        namespace.ifPresent(upsertRequestBuilder::setNamespace);
+        return pineconeService.upsert(upsertRequestBuilder.build());
+    }
+
+    /**
+     * Creates an instance of Vector from given DomainDocument
+     * @param document the document from which a Vector will be created
+     * @return an instance of {@link Vector}
+     */
+    private Vector createVector(DomainDocument document) {
         String text = document.getPageContent();
         EmbeddingInput embeddingInput = new EmbeddingInput(model.orElse(DEFAULT_MODEL), Collections.singletonList(text), null);
         Embeddings embeddings = embeddingsOutput.run(embeddingInput);
-        addVector(embeddings, document);
-    }
-
-    /**
-     * Adds a single vector to the Pinecone vector store database.
-     */
-    private void addVector(Embeddings embeddings, DomainDocument document) {
-        Vector vector = Vector.builder()
+        return Vector.builder()
                 .setId(document.getId().orElse(UUID.randomUUID().toString()))
                 .setMetadata(document.getMetadata().orElse(Metadata.create()).getValue())
                 .setValues(embeddings.getValue().get(0).getVector())
                 .build();
-        UpsertRequest.UpsertRequestBuilder upsertRequestBuilder =
-                UpsertRequest.builder()
-                        .setVectors(Collections.singletonList(vector));
-        namespace.ifPresent(upsertRequestBuilder::setNamespace);
-        pineconeService.upsert(upsertRequestBuilder.build());
     }
 
     /**

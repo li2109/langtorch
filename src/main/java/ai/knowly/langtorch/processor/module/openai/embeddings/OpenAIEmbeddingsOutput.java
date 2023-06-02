@@ -4,7 +4,7 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
 import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingResult;
-import ai.knowly.langtorch.processor.module.Processor;
+import ai.knowly.langtorch.processor.module.EmbeddingsOutput;
 import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
@@ -12,33 +12,33 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.Embeddings;
 import com.google.common.util.concurrent.ListenableFuture;
 
-public class OpenAIEmbeddingsProcessor implements Processor<EmbeddingInput, Embeddings> {
+public class OpenAIEmbeddingsOutput implements EmbeddingsOutput {
   private final OpenAIService openAIService;
 
   private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =
       OpenAIEmbeddingsProcessorConfig.builder().build();
 
-  public OpenAIEmbeddingsProcessor(OpenAIService openAiApi) {
+  public OpenAIEmbeddingsOutput(OpenAIService openAiApi) {
     this.openAIService = openAiApi;
   }
 
-  private OpenAIEmbeddingsProcessor() {
+  private OpenAIEmbeddingsOutput() {
     this.openAIService = OpenAIServiceProvider.createOpenAIService();
   }
 
-  public static OpenAIEmbeddingsProcessor create(OpenAIService openAIService) {
-    return new OpenAIEmbeddingsProcessor(openAIService);
+  public static OpenAIEmbeddingsOutput create(OpenAIService openAIService) {
+    return new OpenAIEmbeddingsOutput(openAIService);
   }
 
-  public static OpenAIEmbeddingsProcessor create(String openAIKey) {
-    return new OpenAIEmbeddingsProcessor(OpenAIServiceProvider.createOpenAIService(openAIKey));
+  public static OpenAIEmbeddingsOutput create(String openAIKey) {
+    return new OpenAIEmbeddingsOutput(OpenAIServiceProvider.createOpenAIService(openAIKey));
   }
 
-  public static OpenAIEmbeddingsProcessor create() {
-    return new OpenAIEmbeddingsProcessor();
+  public static OpenAIEmbeddingsOutput create() {
+    return new OpenAIEmbeddingsOutput();
   }
 
-  public OpenAIEmbeddingsProcessor withConfig(
+  public OpenAIEmbeddingsOutput withConfig(
       OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
     this.openAIEmbeddingsProcessorConfig = openAIEmbeddingsProcessorConfig;
     return this;

@@ -10,20 +10,21 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
-import ai.knowly.langtorch.utils.ApiKeyUtils;
+import ai.knowly.langtorch.utils.Environment;
+import ai.knowly.langtorch.utils.api.key.PineconeKeyUtil;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
-@EnabledIf("ai.knowly.langtorch.TestingUtils#testWithHttpRequestEnabled")
+@EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enablePineconeVectorStoreLiveTrafficTest")
 final class DeleteTest {
   @Test
   void test() {
     // Arrange.
-    String token = ApiKeyUtils.getPineconeKeyFromEnv();
+    String token = PineconeKeyUtil.getKey(Environment.TEST);
     PineconeService service =
-        new PineconeService(
+        PineconeService.create(
             PineconeServiceConfig.builder()
                 .setApiKey(token)
                 .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")

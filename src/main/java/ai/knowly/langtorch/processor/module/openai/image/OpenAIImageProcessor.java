@@ -3,9 +3,9 @@ package ai.knowly.langtorch.processor.module.openai.image;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.image.CreateImageRequest;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.image.ImageResult;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
+import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.image.ImageResult;
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.image.Image;

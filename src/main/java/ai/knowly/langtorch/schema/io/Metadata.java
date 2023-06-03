@@ -4,30 +4,14 @@ import java.util.HashMap;
 import java.util.Map;
 import lombok.*;
 
-@Getter
-@EqualsAndHashCode
-@ToString
+@Data
+@Builder(toBuilder = true, setterPrefix = "set")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Metadata {
-  private final Map<String, String> value;
+  private static final Metadata DEFAULT_INSTANCE = Metadata.builder().build();
+  @Builder.Default private final Map<String, String> value = new HashMap<>();
 
-  private Metadata(Map<String, String> values) {
-    this.value = values;
-  }
-
-  public static Metadata create() {
-    return new Metadata(new HashMap<>());
-  }
-
-  public static Metadata create(Map<String, String> values) {
-    return new Metadata(new HashMap<>(values));
-  }
-
-  public Metadata set(String key, String value) {
-    this.value.put(key, value);
-    return this;
-  }
-
-  public static Metadata copyOf(Map<String, String> values) {
-    return new Metadata(new HashMap<>(values));
+  public static Metadata getDefaultInstance() {
+    return DEFAULT_INSTANCE;
   }
 }

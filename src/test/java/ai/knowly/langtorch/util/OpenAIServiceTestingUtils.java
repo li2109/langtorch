@@ -1,11 +1,11 @@
 package ai.knowly.langtorch.util;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionChoice;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionResult;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionChoice;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionResult;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.Embedding;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingResult;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionChoice;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionResult;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionChoice;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
+import ai.knowly.langtorch.llm.openai.schema.dto.embedding.Embedding;
+import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
 import com.google.common.collect.ImmutableList;
 
 import java.util.ArrayList;

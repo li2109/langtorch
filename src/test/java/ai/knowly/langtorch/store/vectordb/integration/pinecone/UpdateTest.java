@@ -1,8 +1,8 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
+import static ai.knowly.langtorch.util.PineconeTestingUtils.PINECONE_TESTING_SERVICE;
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeServiceConfig;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.Vector;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.fetch.FetchResponse;
@@ -10,8 +10,6 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.update.UpdateResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
-import ai.knowly.langtorch.utils.Environment;
-import ai.knowly.langtorch.utils.api.key.PineconeKeyUtil;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import org.junit.jupiter.api.Test;
@@ -22,13 +20,7 @@ class UpdateTest {
   @Test
   void test() {
     // Arrange.
-    String token = PineconeKeyUtil.getKey(Environment.TEST);
-    PineconeService service =
-        PineconeService.create(
-            PineconeServiceConfig.builder()
-                .setApiKey(token)
-                .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")
-                .build());
+    PineconeService service = PINECONE_TESTING_SERVICE;
 
     UpsertRequest upsertRequest =
         UpsertRequest.builder()

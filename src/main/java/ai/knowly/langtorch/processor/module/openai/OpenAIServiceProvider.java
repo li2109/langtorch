@@ -23,10 +23,10 @@ public final class OpenAIServiceProvider {
   }
 
   public static OpenAIService createOpenAIService(String apiKey) {
-    return new OpenAIService(createOpenAiAPI(apiKey));
+    return OpenAIService.create(createOpenAiAPI(apiKey));
   }
 
   public static OpenAIService createOpenAIService() {
-    return new OpenAIService(createOpenAiAPI());
+    return OpenAIService.create(createOpenAiAPI());
   }
 }

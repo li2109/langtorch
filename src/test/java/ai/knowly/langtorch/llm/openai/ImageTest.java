@@ -15,7 +15,7 @@ import org.junit.jupiter.api.condition.EnabledIf;
 @EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableOpenAILLMServiceLiveTrafficTest")
 class ImageTest {
 
-  private final static OpenAIService service = OPENAI_TESTING_SERVICE;
+  private static final OpenAIService service = OPENAI_TESTING_SERVICE;
   static String filePath = "src/test/resources/penguin.png";
   static String fileWithAlphaPath = "src/test/resources/penguin_with_alpha.png";
   static String maskPath = "src/test/resources/mask.png";

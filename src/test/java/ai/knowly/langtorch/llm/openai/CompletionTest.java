@@ -5,8 +5,6 @@ import static org.junit.jupiter.api.Assertions.*;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionChoice;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
-import ai.knowly.langtorch.utils.Environment;
-import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import java.util.HashMap;
 import java.util.List;
 import org.junit.jupiter.api.Test;

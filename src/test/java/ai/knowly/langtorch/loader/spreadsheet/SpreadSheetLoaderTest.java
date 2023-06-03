@@ -1,18 +1,18 @@
-package ai.knowly.langtorch.connector.spreadsheet;
+package ai.knowly.langtorch.loader.spreadsheet;
 
 import static com.google.common.truth.Truth.assertThat;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-class SpreadSheetConnectorTest {
+class SpreadSheetLoaderTest {
   @Test
   void testReadCSV() throws IOException {
     // Arrange.
     String testFilePath = "src/test/resources/test.csv";
 
     // Act.
-    String result = SpreadSheetConnector.create().read(testFilePath);
+    String result = SpreadSheetLoader.create().read(testFilePath);
 
     // Assert.
     String expectedContent =
@@ -34,9 +34,9 @@ class SpreadSheetConnectorTest {
 
     // Act.
     String result =
-        SpreadSheetConnector.create()
+        SpreadSheetLoader.create()
             .read(
-                SpreadSheetReadOption.builder()
+                SpreadSheetLoadOption.builder()
                     .setSeparatorForEachLine("\n\n")
                     .setFilePath(testFilePath)
                     .build());

@@ -1,16 +1,16 @@
-package ai.knowly.langtorch.connector.pdf;
+package ai.knowly.langtorch.loader.pdf;
 
 import static com.google.common.truth.Truth.assertThat;
 
 import java.io.IOException;
 import org.junit.jupiter.api.Test;
 
-final class PDFConnectorTest {
+final class PDFLoaderTest {
   @Test
   void testPDFConnector() throws IOException {
     // Arrange.
     // Act.
-    String actualContent = PDFConnector.create().read("src/test/resources/test.pdf");
+    String actualContent = PDFLoader.create().read("src/test/resources/test.pdf");
 
     // Assert.
     assertThat(actualContent.trim())

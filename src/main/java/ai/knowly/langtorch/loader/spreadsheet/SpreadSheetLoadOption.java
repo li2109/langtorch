@@ -1,6 +1,6 @@
-package ai.knowly.langtorch.connector.spreadsheet;
+package ai.knowly.langtorch.loader.spreadsheet;
 
-import ai.knowly.langtorch.connector.ReadOption;
+import ai.knowly.langtorch.loader.LoadOption;
 import java.util.Optional;
 import lombok.Builder;
 import lombok.Data;
@@ -9,7 +9,7 @@ import lombok.NonNull;
 /** Implementation of ReadOption for CSV files. */
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class SpreadSheetReadOption implements ReadOption {
+public class SpreadSheetLoadOption implements LoadOption {
   @NonNull private String filePath;
   // \n will be used by default if not specified.
   private String separatorForEachLine;

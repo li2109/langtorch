@@ -1,7 +1,7 @@
-package ai.knowly.langtorch.connector.spreadsheet;
+package ai.knowly.langtorch.loader.spreadsheet;
 
-import ai.knowly.langtorch.connector.DocumentConnector;
-import ai.knowly.langtorch.connector.spreadsheet.SpreadSheetReadOption.SpreadSheetFormat;
+import ai.knowly.langtorch.loader.DocumentLoader;
+import ai.knowly.langtorch.loader.spreadsheet.SpreadSheetLoadOption.SpreadSheetFormat;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;
@@ -10,20 +10,20 @@ import org.apache.commons.csv.CSVParser;
 import org.apache.commons.csv.CSVRecord;
 
 /** Implementation of DocumentConnector for CSV files. */
-public class SpreadSheetConnector extends DocumentConnector<SpreadSheetReadOption> {
+public class SpreadSheetLoader extends DocumentLoader<SpreadSheetLoadOption> {
 
-  private SpreadSheetConnector() {}
+  private SpreadSheetLoader() {}
 
-  public static SpreadSheetConnector create() {
-    return new SpreadSheetConnector();
+  public static SpreadSheetLoader create() {
+    return new SpreadSheetLoader();
   }
 
   public String read(String filePath) throws IOException {
-    return read(SpreadSheetReadOption.builder().setFilePath(filePath).build());
+    return read(SpreadSheetLoadOption.builder().setFilePath(filePath).build());
   }
 
   @Override
-  protected String read(SpreadSheetReadOption readOption) throws IOException {
+  protected String read(SpreadSheetLoadOption readOption) throws IOException {
     StringBuilder sb = new StringBuilder();
     try (FileReader fileReader = new FileReader(readOption.getFilePath())) {
       CSVParser csvParser =

@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.sql;
+package ai.knowly.langtorch.loader.sql;
 
 /** Exception thrown when an error occurs during SQL execution. */
 public class SQLExecutionException extends RuntimeException {

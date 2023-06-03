@@ -5,10 +5,11 @@ import static ai.knowly.langtorch.utils.Constants.TEST_RESOURCE_FOLDER;
 import ai.knowly.langtorch.utils.Environment;
 import com.google.common.flogger.FluentLogger;
 import io.github.cdimascio.dotenv.Dotenv;
+import lombok.NoArgsConstructor;
 
 /** Utility class for getting endpoints from .env file */
-public class endpointUtil {
-  private endpointUtil() {}
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+public class EndpointUtil {
 
   public static String getEndPoint(VectorStoreApiEndpoint apiEndpoint, Environment environment) {
     Dotenv dotenv;

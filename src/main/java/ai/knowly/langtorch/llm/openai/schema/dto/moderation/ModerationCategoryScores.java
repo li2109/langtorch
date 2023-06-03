@@ -11,21 +11,21 @@ import lombok.Data;
 @Data
 public class ModerationCategoryScores {
 
-  public double hate;
+  private double hate;
 
   @JsonProperty("hate/threatening")
-  public double hateThreatening;
+  private double hateThreatening;
 
   @JsonProperty("self-harm")
-  public double selfHarm;
+  private double selfHarm;
 
-  public double sexual;
+  private double sexual;
 
   @JsonProperty("sexual/minors")
-  public double sexualMinors;
+  private double sexualMinors;
 
-  public double violence;
+  private double violence;
 
   @JsonProperty("violence/graphic")
-  public double violenceGraphic;
+  private double violenceGraphic;
 }

@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.utils.api.endpoint;
 
-import static ai.knowly.langtorch.utils.api.endpoint.endpointUtil.logEndPoint;
+import static ai.knowly.langtorch.utils.api.endpoint.EndpointUtil.logEndPoint;
 
 import ai.knowly.langtorch.utils.Environment;
 import com.google.common.flogger.FluentLogger;
@@ -21,7 +21,7 @@ public class PineconeEnvUtil {
   private static String getPineconeEndPointFromEnv(
       Optional<FluentLogger> logger, Environment environment) {
     String endpointFromEnv =
-        endpointUtil.getEndPoint(VectorStoreApiEndpoint.PINECONE_ENDPOINT, environment);
+        EndpointUtil.getEndPoint(VectorStoreApiEndpoint.PINECONE_ENDPOINT, environment);
     logger.ifPresent(
         l -> logEndPoint(l, VectorStoreApiEndpoint.PINECONE_ENDPOINT.name(), endpointFromEnv));
     return endpointFromEnv;

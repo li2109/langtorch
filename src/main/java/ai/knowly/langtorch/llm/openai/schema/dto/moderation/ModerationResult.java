@@ -11,11 +11,11 @@ import lombok.Data;
 @Data
 public class ModerationResult {
   /** A unique id assigned to this moderation. */
-  public String id;
+  private String id;
 
   /** The model used. */
-  public String model;
+  private String model;
 
   /** A list of moderation scores. */
-  public List<Moderation> results;
+  private List<Moderation> results;
 }

@@ -10,24 +10,24 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class OpenAIError {
 
-  public OpenAiErrorDetails error;
+  private OpenAiErrorDetails error;
 
   @Data
   @NoArgsConstructor
   @AllArgsConstructor
   public static class OpenAiErrorDetails {
     /** Human-readable error message */
-    String message;
+    private String message;
 
     /**
      * OpenAI error type, for example "invalid_request_error"
      * https://platform.openai.com/docs/guides/error-codes/python-library-error-types
      */
-    String type;
+    private String type;
 
-    String param;
+    private String param;
 
     /** OpenAI error code, for example "invalid_api_key" */
-    String code;
+    private String code;
   }
 }

@@ -7,8 +7,8 @@ import lombok.Data;
 @Data
 public class OpenAIResponse<T> {
   /** A list containing the actual results */
-  public List<T> data;
+  private List<T> data;
 
   /** The type of object returned, should be "list" */
-  public String object;
+  private String object;
 }

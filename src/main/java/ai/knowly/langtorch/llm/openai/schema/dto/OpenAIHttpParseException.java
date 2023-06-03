@@ -17,10 +17,10 @@ public class OpenAIHttpParseException extends RuntimeException {
   public final String type;
 
   public OpenAIHttpParseException(OpenAIError error, Exception parent, int statusCode) {
-    super(error.error.message, parent);
+    super(error.getError().getMessage(), parent);
     this.statusCode = statusCode;
-    this.code = error.error.code;
-    this.param = error.error.param;
-    this.type = error.error.type;
+    this.code = error.getError().getCode();
+    this.param = error.getError().getParam();
+    this.type = error.getError().getType();
   }
 }

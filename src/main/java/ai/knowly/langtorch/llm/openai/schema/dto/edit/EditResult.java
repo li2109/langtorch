@@ -13,14 +13,14 @@ import lombok.Data;
 public class EditResult {
 
   /** The type of object returned, should be "edit" */
-  public String object;
+  private String object;
 
   /** The creation time in epoch milliseconds. */
-  public long created;
+  private long created;
 
   /** A list of generated edits. */
-  public List<EditChoice> choices;
+  private List<EditChoice> choices;
 
   /** The API usage for this request */
-  public Usage usage;
+  private Usage usage;
 }

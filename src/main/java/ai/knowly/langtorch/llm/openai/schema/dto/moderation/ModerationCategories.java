@@ -11,21 +11,21 @@ import lombok.Data;
 @Data
 public class ModerationCategories {
 
-  public boolean hate;
+  private boolean hate;
 
   @JsonProperty("hate/threatening")
-  public boolean hateThreatening;
+  private boolean hateThreatening;
 
   @JsonProperty("self-harm")
-  public boolean selfHarm;
+  private boolean selfHarm;
 
-  public boolean sexual;
+  private boolean sexual;
 
   @JsonProperty("sexual/minors")
-  public boolean sexualMinors;
+  private boolean sexualMinors;
 
-  public boolean violence;
+  private boolean violence;
 
   @JsonProperty("violence/graphic")
-  public boolean violenceGraphic;
+  private boolean violenceGraphic;
 }

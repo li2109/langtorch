@@ -1,13 +1,12 @@
 package ai.knowly.langtorch.loader.markdown;
 
-import org.junit.jupiter.api.Test;
-
-import java.io.IOException;
-
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MarkdownLoaderTest {
+import java.io.IOException;
+import org.junit.jupiter.api.Test;
+
+class MarkdownLoaderTest {
 
   @Test
   void testMdNotExist() throws IOException {

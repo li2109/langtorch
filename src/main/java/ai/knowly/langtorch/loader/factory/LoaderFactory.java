@@ -5,8 +5,10 @@ import ai.knowly.langtorch.loader.Loader;
 import ai.knowly.langtorch.loader.pdf.PDFLoader;
 import ai.knowly.langtorch.loader.spreadsheet.SpreadSheetLoader;
 import ai.knowly.langtorch.loader.sql.MySQLLoader;
+import lombok.NoArgsConstructor;
 
 @SuppressWarnings("unchecked")
+@NoArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class LoaderFactory {
   public static <O, R extends LoadOption> Loader<O, R> createLoader(LoadType loadType) {
     switch (loadType) {

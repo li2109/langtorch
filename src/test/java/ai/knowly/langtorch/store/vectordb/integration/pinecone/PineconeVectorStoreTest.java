@@ -1,28 +1,29 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
+import static com.google.common.truth.Truth.assertThat;
+import static java.util.Collections.emptyList;
+
 import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
-import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
+import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeSimilaritySearchQuery;
+import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeVectorStoreSpec;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.SparseValues;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.Match;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import com.google.common.collect.ImmutableMap;
-import kotlin.Pair;
+import java.util.*;
+import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.ArgumentMatchers;
 import org.mockito.Mockito;
 import org.mockito.junit.jupiter.MockitoExtension;
-
-import java.util.*;
-
-import static com.google.common.truth.Truth.assertThat;
-import static java.util.Collections.emptyList;
 
 @ExtendWith(MockitoExtension.class)
 final class PineconeVectorStoreTest {
@@ -42,12 +43,12 @@ final class PineconeVectorStoreTest {
     embeddingsProcessor = Mockito.mock(EmbeddingsProcessor.class);
 
     pineconeVectorStore =
-        PineconeVectorStore.create(
+        PineconeVectorStore.of(
             embeddingsProcessor,
-            pineconeService,
-            Optional.empty(),
-            Optional.of(textKey),
-            Optional.empty());
+            PineconeVectorStoreSpec.builder()
+                .setPineconeService(pineconeService)
+                .setTextKey(textKey)
+                .build());
   }
 
   @Test
@@ -91,11 +92,11 @@ final class PineconeVectorStoreTest {
     // Act.
     List<Pair<DomainDocument, Double>> result =
         pineconeVectorStore.similaritySearchVectorWithScore(
-            emptyList(), 0L, Collections.emptyMap());
+            PineconeSimilaritySearchQuery.builder().setQuery(emptyList()).setK(0L).build());
     // Assert.
     assertThat(result).isNotEmpty();
-    assertThat(result.get(0).getFirst().getPageContent()).isEqualTo(content);
-    assertThat(result.get(0).getSecond()).isEqualTo(score);
+    assertThat(result.get(0).getLeft().getPageContent()).isEqualTo(content);
+    assertThat(result.get(0).getRight()).isEqualTo(score);
   }
 
   @Test
@@ -105,7 +106,7 @@ final class PineconeVectorStoreTest {
     // Act.
     List<Pair<DomainDocument, Double>> result =
         pineconeVectorStore.similaritySearchVectorWithScore(
-            emptyList(), 0L, Collections.emptyMap());
+            PineconeSimilaritySearchQuery.builder().setQuery(emptyList()).setK(0L).build());
     // Assert.
     assertThat(result).isEmpty();
   }
@@ -114,10 +115,10 @@ final class PineconeVectorStoreTest {
     ArrayList<DomainDocument> documents = new ArrayList<>();
     for (int i = 0; i < 3; i++) {
       DomainDocument document =
-          new DomainDocument.Builder()
-              .setId(Optional.of(UUID.randomUUID().toString()))
+          DomainDocument.builder()
+              .setId(UUID.randomUUID().toString())
               .setPageContent("content" + i)
-              .setMetadata(Optional.of(Metadata.create(ImmutableMap.of("key", "val"))))
+              .setMetadata(Metadata.builder().setValue(ImmutableMap.of("key", "val")).build())
               .build();
       documents.add(document);
     }

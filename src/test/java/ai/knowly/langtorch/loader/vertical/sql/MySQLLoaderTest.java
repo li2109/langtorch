@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.sql;
+package ai.knowly.langtorch.loader.vertical.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

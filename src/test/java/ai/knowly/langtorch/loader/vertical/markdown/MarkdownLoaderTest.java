@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.markdown;
+package ai.knowly.langtorch.loader.vertical.markdown;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;

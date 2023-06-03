@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.sql;
+package ai.knowly.langtorch.loader.vertical.sql;
 
 import ai.knowly.langtorch.loader.LoadOption;
 import java.util.Optional;

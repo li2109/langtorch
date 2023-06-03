@@ -1,12 +1,12 @@
-package ai.knowly.langtorch.loader.markdown;
+package ai.knowly.langtorch.loader.vertical.pdf;
 
 import ai.knowly.langtorch.loader.LoadOption;
 import lombok.Builder;
 import lombok.Data;
 
-/** Implementation of ReadOption for Markdown files. */
+/** Implementation of ReadOption for PDF files. */
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class MarkdownLoadOption implements LoadOption {
+public class PDFLoadOption implements LoadOption {
   private String filePath;
 }

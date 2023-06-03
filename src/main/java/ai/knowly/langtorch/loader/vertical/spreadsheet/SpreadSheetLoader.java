@@ -1,7 +1,7 @@
-package ai.knowly.langtorch.loader.spreadsheet;
+package ai.knowly.langtorch.loader.vertical.spreadsheet;
 
-import ai.knowly.langtorch.loader.DocumentLoader;
-import ai.knowly.langtorch.loader.spreadsheet.SpreadSheetLoadOption.SpreadSheetFormat;
+import ai.knowly.langtorch.loader.vertical.DocumentLoader;
+import ai.knowly.langtorch.loader.vertical.spreadsheet.SpreadSheetLoadOption.SpreadSheetFormat;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.Optional;

@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.spreadsheet;
+package ai.knowly.langtorch.loader.vertical.spreadsheet;
 
 import static com.google.common.truth.Truth.assertThat;
 

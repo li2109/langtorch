@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.sql;
+package ai.knowly.langtorch.loader.vertical.sql;
 
 import com.google.common.flogger.FluentLogger;
 import java.sql.Connection;
@@ -11,7 +11,7 @@ import java.util.Optional;
 /** MySQL loader. */
 public class MySQLLoader<S extends StorageObject> extends SQLLoader<SQLLoadOption<S>, S> {
   FluentLogger logger = FluentLogger.forEnclosingClass();
-  private Optional<Connection> connection;
+  private final Optional<Connection> connection;
 
   private MySQLLoader(Connection connection) {
     this.connection = Optional.of(connection);

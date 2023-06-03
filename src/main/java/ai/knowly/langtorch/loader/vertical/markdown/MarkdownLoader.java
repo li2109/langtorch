@@ -1,7 +1,6 @@
-package ai.knowly.langtorch.loader.markdown;
+package ai.knowly.langtorch.loader.vertical.markdown;
 
-import ai.knowly.langtorch.loader.DocumentLoader;
-
+import ai.knowly.langtorch.loader.vertical.DocumentLoader;
 import java.io.IOException;
 import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;

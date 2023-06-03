@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.sql;
+package ai.knowly.langtorch.loader.vertical.sql;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;

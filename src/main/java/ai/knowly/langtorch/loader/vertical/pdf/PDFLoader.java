@@ -1,6 +1,6 @@
-package ai.knowly.langtorch.loader.pdf;
+package ai.knowly.langtorch.loader.vertical.pdf;
 
-import ai.knowly.langtorch.loader.DocumentLoader;
+import ai.knowly.langtorch.loader.vertical.DocumentLoader;
 import com.google.common.flogger.FluentLogger;
 import java.io.File;
 import java.io.IOException;

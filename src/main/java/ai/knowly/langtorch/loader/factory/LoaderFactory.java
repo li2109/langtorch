@@ -2,9 +2,9 @@ package ai.knowly.langtorch.loader.factory;
 
 import ai.knowly.langtorch.loader.LoadOption;
 import ai.knowly.langtorch.loader.Loader;
-import ai.knowly.langtorch.loader.pdf.PDFLoader;
-import ai.knowly.langtorch.loader.spreadsheet.SpreadSheetLoader;
-import ai.knowly.langtorch.loader.sql.MySQLLoader;
+import ai.knowly.langtorch.loader.vertical.pdf.PDFLoader;
+import ai.knowly.langtorch.loader.vertical.spreadsheet.SpreadSheetLoader;
+import ai.knowly.langtorch.loader.vertical.sql.MySQLLoader;
 import lombok.NoArgsConstructor;
 
 @SuppressWarnings("unchecked")

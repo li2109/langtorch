@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.spreadsheet;
+package ai.knowly.langtorch.loader.vertical.spreadsheet;
 
 import ai.knowly.langtorch.loader.LoadOption;
 import java.util.Optional;

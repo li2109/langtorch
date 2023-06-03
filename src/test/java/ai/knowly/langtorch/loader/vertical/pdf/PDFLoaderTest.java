@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.loader.pdf;
+package ai.knowly.langtorch.loader.vertical.pdf;
 
 import static com.google.common.truth.Truth.assertThat;
 

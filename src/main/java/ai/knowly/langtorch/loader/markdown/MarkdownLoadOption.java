@@ -1,12 +1,12 @@
-package ai.knowly.langtorch.connector.markdown;
+package ai.knowly.langtorch.loader.markdown;
 
-import ai.knowly.langtorch.connector.ReadOption;
+import ai.knowly.langtorch.loader.LoadOption;
 import lombok.Builder;
 import lombok.Data;
 
 /** Implementation of ReadOption for Markdown files. */
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class MarkdownReadOption implements ReadOption {
+public class MarkdownLoadOption implements LoadOption {
   private String filePath;
 }

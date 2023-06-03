@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.sql;
+package ai.knowly.langtorch.loader.sql;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
@@ -10,7 +10,7 @@ import java.sql.Statement;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class MySQLConnectorTest {
+class MySQLLoaderTest {
   private static final StorageObjectTransformFunction<TestStorageObject> EXTRACT_TEST_STORAGE_FUNC =
       resultSet -> {
         if (resultSet.next()) {
@@ -19,7 +19,7 @@ class MySQLConnectorTest {
           return TestStorageObject.EMPTY;
         }
       };
-  private MySQLConnector<TestStorageObject> connector;
+  private MySQLLoader<TestStorageObject> loader;
   private Connection conn;
 
   @BeforeEach
@@ -37,7 +37,7 @@ class MySQLConnectorTest {
       stmt.execute("INSERT INTO test_table(id, name) VALUES(1, 'Test')");
 
       // Connect to the in-memory H2 database for testing
-      connector = MySQLConnector.create(conn);
+      loader = MySQLLoader.create(conn);
     } catch (SQLException e) {
       throw new RuntimeException("Error initializing database", e);
     }
@@ -45,10 +45,13 @@ class MySQLConnectorTest {
 
   @Test
   void testRead() {
-    SQLReadOption<TestStorageObject> readOption =
-        new SQLReadOption<>("SELECT * FROM test_table WHERE id = 1", EXTRACT_TEST_STORAGE_FUNC);
+    SQLLoadOption<TestStorageObject> readOption =
+        SQLLoadOption.<TestStorageObject>builder()
+            .setQuery("SELECT * FROM test_table WHERE id = 1")
+            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
+            .build();
 
-    TestStorageObject objectOptional = connector.read(readOption);
+    TestStorageObject objectOptional = loader.read(readOption);
 
     assertThat(objectOptional.getId()).isEqualTo(1);
     assertThat(objectOptional.getName()).isEqualTo("Test");
@@ -56,10 +59,13 @@ class MySQLConnectorTest {
 
   @Test
   void testRead_NoResult() {
-    SQLReadOption<TestStorageObject> readOption =
-        new SQLReadOption<>("SELECT * FROM test_table WHERE id = 2", EXTRACT_TEST_STORAGE_FUNC);
+    SQLLoadOption<TestStorageObject> readOption =
+        SQLLoadOption.<TestStorageObject>builder()
+            .setQuery("SELECT * FROM test_table WHERE id = 2")
+            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
+            .build();
 
-    TestStorageObject objectOptional = connector.read(readOption);
+    TestStorageObject objectOptional = loader.read(readOption);
 
     assertThat(objectOptional).isEqualTo(TestStorageObject.EMPTY);
   }
@@ -70,10 +76,13 @@ class MySQLConnectorTest {
     stmt.execute("INSERT INTO test_table(id, name) VALUES(2, 'Test2')");
     stmt.execute("INSERT INTO test_table(id, name) VALUES(3, 'Test3')");
 
-    SQLReadOption<TestStorageObject> readOption =
-        new SQLReadOption<>("SELECT * FROM test_table", EXTRACT_TEST_STORAGE_FUNC);
+    SQLLoadOption<TestStorageObject> readOption =
+        SQLLoadOption.<TestStorageObject>builder()
+            .setQuery("SELECT * FROM test_table")
+            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
+            .build();
 
-    TestStorageObject objectOptional = connector.read(readOption);
+    TestStorageObject objectOptional = loader.read(readOption);
 
     assertThat(objectOptional.getId()).isEqualTo(1);
     assertThat(objectOptional.getName()).isEqualTo("Test");
@@ -81,10 +90,13 @@ class MySQLConnectorTest {
 
   @Test
   void testRead_SQLException() {
-    SQLReadOption<TestStorageObject> readOption =
-        new SQLReadOption<>("SELECT * FROM non_existent_table", EXTRACT_TEST_STORAGE_FUNC);
+    SQLLoadOption<TestStorageObject> readOption =
+        SQLLoadOption.<TestStorageObject>builder()
+            .setQuery("SELECT * FROM non_existent_table")
+            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
+            .build();
 
-    assertThrows(RuntimeException.class, () -> connector.read(readOption));
+    assertThrows(RuntimeException.class, () -> loader.read(readOption));
   }
 
   private static class TestStorageObject implements StorageObject {

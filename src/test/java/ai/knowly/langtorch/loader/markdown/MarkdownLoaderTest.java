@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.connector.markdown;
+package ai.knowly.langtorch.loader.markdown;
 
 import org.junit.jupiter.api.Test;
 
@@ -7,7 +7,7 @@ import java.io.IOException;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-public class MarkdownConnectorTest {
+public class MarkdownLoaderTest {
 
   @Test
   void testMdNotExist() throws IOException {
@@ -16,7 +16,7 @@ public class MarkdownConnectorTest {
 
     // Act.
     IOException e =
-        assertThrows(IOException.class, () -> MarkdownConnector.create().read(testFilePath));
+        assertThrows(IOException.class, () -> MarkdownLoader.create().read(testFilePath));
 
     // Assert.
     assertThat(e).hasMessageThat().contains(testFilePath);
@@ -28,7 +28,7 @@ public class MarkdownConnectorTest {
     String testFilePath = "src/test/resources/test.md";
 
     // Act.
-    String result = MarkdownConnector.create().read(testFilePath);
+    String result = MarkdownLoader.create().read(testFilePath);
 
     // Assert.
     String expectedContent =

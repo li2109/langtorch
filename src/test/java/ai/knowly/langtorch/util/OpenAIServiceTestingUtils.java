@@ -16,7 +16,7 @@ import java.util.List;
 
 public class OpenAIServiceTestingUtils {
   public static final OpenAIService OPENAI_TESTING_SERVICE =
-      new OpenAIService(OpenAIKeyUtil.getKey(Environment.TEST), Duration.ofSeconds(60));
+      OpenAIService.create(OpenAIKeyUtil.getKey(Environment.TEST), Duration.ofSeconds(60));
   // ChatCompletion related utils
   public static class ChatCompletion {
     public static ChatCompletionResult createChatCompletionResult(

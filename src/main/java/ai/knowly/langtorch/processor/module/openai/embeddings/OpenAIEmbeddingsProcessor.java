@@ -57,7 +57,6 @@ public class OpenAIEmbeddingsProcessor implements EmbeddingsProcessor {
             .collect(toImmutableList()));
   }
 
-  
   @Override
   public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
     return null;

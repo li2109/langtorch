@@ -24,7 +24,7 @@ class UpdateTest {
     // Arrange.
     String token = PineconeKeyUtil.getKey(Environment.TEST);
     PineconeService service =
-         PineconeService.create(
+        PineconeService.create(
             PineconeServiceConfig.builder()
                 .setApiKey(token)
                 .setEndpoint("https://test1-c4943a1.svc.us-west4-gcp-free.pinecone.io")

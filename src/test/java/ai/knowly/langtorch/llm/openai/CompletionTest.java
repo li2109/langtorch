@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.openai;
 
+import static ai.knowly.langtorch.util.OpenAIServiceTestingUtils.OPENAI_TESTING_SERVICE;
 import static org.junit.jupiter.api.Assertions.*;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionChoice;
@@ -16,8 +17,7 @@ class CompletionTest {
 
   @Test
   void createCompletion() {
-    String token = OpenAIKeyUtil.getKey(Environment.TEST);
-    OpenAIService service = new OpenAIService(token);
+    OpenAIService service = OPENAI_TESTING_SERVICE;
     CompletionRequest completionRequest =
         CompletionRequest.builder()
             .model("ada")

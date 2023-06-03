@@ -1,11 +1,10 @@
 package ai.knowly.langtorch.llm.openai;
 
+import static ai.knowly.langtorch.util.OpenAIServiceTestingUtils.OPENAI_TESTING_SERVICE;
 import static org.junit.jupiter.api.Assertions.assertFalse;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.Embedding;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingRequest;
-import ai.knowly.langtorch.utils.Environment;
-import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import java.util.Collections;
 import java.util.List;
 import org.junit.jupiter.api.Test;
@@ -16,8 +15,7 @@ class EmbeddingTest {
 
   @Test
   void createEmbeddings() {
-    String token = OpenAIKeyUtil.getKey(Environment.TEST);
-    OpenAIService service = new OpenAIService(token);
+    OpenAIService service = OPENAI_TESTING_SERVICE;
     EmbeddingRequest embeddingRequest =
         EmbeddingRequest.builder()
             .model("text-similarity-babbage-001")

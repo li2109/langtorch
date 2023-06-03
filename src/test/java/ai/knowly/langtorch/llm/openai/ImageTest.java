@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.openai;
 
+import static ai.knowly.langtorch.util.OpenAIServiceTestingUtils.OPENAI_TESTING_SERVICE;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertNotNull;
 
@@ -7,28 +8,17 @@ import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageEditRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageVariationRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.image.Image;
-import ai.knowly.langtorch.utils.Environment;
-import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import java.util.List;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
 
 @EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableOpenAILLMServiceLiveTrafficTest")
 class ImageTest {
 
+  private final static OpenAIService service = OPENAI_TESTING_SERVICE;
   static String filePath = "src/test/resources/penguin.png";
   static String fileWithAlphaPath = "src/test/resources/penguin_with_alpha.png";
   static String maskPath = "src/test/resources/mask.png";
-
-  private String token;
-  private OpenAIService service;
-
-  @BeforeEach
-  void setUp() {
-    token = OpenAIKeyUtil.getKey(Environment.TEST);
-    service = new OpenAIService(token);
-  }
 
   @Test
   void createImageUrl() {

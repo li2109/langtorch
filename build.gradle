@@ -120,10 +120,15 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:2.0.28'
     // Reading CSV
     implementation 'org.apache.commons:commons-csv:1.10.0'
-
     // Apache commons lang
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
+
+    // Youtube API
+    implementation 'com.google.api-client:google-api-client:1.23.0'
+    implementation 'com.google.oauth-client:google-oauth-client-jetty:1.23.0'
+    implementation 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
+
 
 }
 

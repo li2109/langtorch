@@ -3,6 +3,7 @@ package ai.knowly.langtorch.loader.vertical.spreadsheet;
 import static com.google.common.truth.Truth.assertThat;
 
 import java.io.IOException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class SpreadSheetLoaderTest {
@@ -12,7 +13,9 @@ class SpreadSheetLoaderTest {
     String testFilePath = "src/test/resources/test.csv";
 
     // Act.
-    String result = SpreadSheetLoader.create().read(testFilePath);
+    Optional<String> result =
+        SpreadSheetLoader.create(SpreadSheetLoadOption.builder().setFilePath(testFilePath).build())
+            .read();
 
     // Assert.
     String expectedContent =
@@ -24,7 +27,7 @@ class SpreadSheetLoaderTest {
             + " 97,    23,    23,  \"W\",  \"Yankton\",  SD]]\n"
             + "CSVRecord [comment='null', recordNumber=4, values=[   46,    35,    59,  \"N\",    "
             + " 120,    30,    36,  \"W\",  \"Yakima\",  WA]]\n";
-    assertThat(result).isEqualTo(expectedContent);
+    assertThat(result.get()).isEqualTo(expectedContent);
   }
 
   @Test
@@ -33,13 +36,13 @@ class SpreadSheetLoaderTest {
     String testFilePath = "src/test/resources/test.csv";
 
     // Act.
-    String result =
-        SpreadSheetLoader.create()
-            .read(
+    Optional<String> result =
+        SpreadSheetLoader.create(
                 SpreadSheetLoadOption.builder()
                     .setSeparatorForEachLine("\n\n")
                     .setFilePath(testFilePath)
-                    .build());
+                    .build())
+            .read();
 
     // Assert.
     String expectedContent =
@@ -51,6 +54,6 @@ class SpreadSheetLoaderTest {
             + " 97,    23,    23,  \"W\",  \"Yankton\",  SD]]\n\n"
             + "CSVRecord [comment='null', recordNumber=4, values=[   46,    35,    59,  \"N\",    "
             + " 120,    30,    36,  \"W\",  \"Yakima\",  WA]]\n\n";
-    assertThat(result).isEqualTo(expectedContent);
+    assertThat(result.get()).isEqualTo(expectedContent);
   }
 }

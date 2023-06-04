@@ -1,6 +1,7 @@
 package ai.knowly.langtorch.loader.vertical.sql;
 
 import ai.knowly.langtorch.loader.LoadOption;
+import java.sql.Connection;
 import java.util.Optional;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -10,23 +11,16 @@ import lombok.NonNull;
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
-public class SQLLoadOption<S extends StorageObject> implements LoadOption {
+public class SQLLoadOption implements LoadOption {
   @NonNull private String query;
-  @NonNull private StorageObjectTransformFunction<S> storageObjectTransformFunction;
+  private Connection connection;
+  private ConnectionDetail connectionDetail;
 
-  private String url;
-  private String user;
-  private String password;
-
-  public Optional<String> getUrl() {
-    return Optional.ofNullable(url);
+  public Optional<Connection> getConnection() {
+    return Optional.ofNullable(connection);
   }
 
-  public Optional<String> getUser() {
-    return Optional.ofNullable(user);
-  }
-
-  public Optional<String> getPassword() {
-    return Optional.ofNullable(password);
+  public Optional<ConnectionDetail> getConnectionDetail() {
+    return Optional.ofNullable(connectionDetail);
   }
 }

@@ -7,19 +7,12 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.Optional;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
 class MySQLLoaderTest {
-  private static final StorageObjectTransformFunction<TestStorageObject> EXTRACT_TEST_STORAGE_FUNC =
-      resultSet -> {
-        if (resultSet.next()) {
-          return new TestStorageObject(resultSet.getInt("id"), resultSet.getString("name"));
-        } else {
-          return TestStorageObject.EMPTY;
-        }
-      };
-  private MySQLLoader<TestStorageObject> loader;
+
   private Connection conn;
 
   @BeforeEach
@@ -35,9 +28,6 @@ class MySQLLoaderTest {
       stmt.execute("DROP TABLE IF EXISTS TEST_TABLE");
       stmt.execute("CREATE TABLE test_table(id INT PRIMARY KEY, name VARCHAR(255))");
       stmt.execute("INSERT INTO test_table(id, name) VALUES(1, 'Test')");
-
-      // Connect to the in-memory H2 database for testing
-      loader = MySQLLoader.create(conn);
     } catch (SQLException e) {
       throw new RuntimeException("Error initializing database", e);
     }
@@ -45,29 +35,32 @@ class MySQLLoaderTest {
 
   @Test
   void testRead() {
-    SQLLoadOption<TestStorageObject> readOption =
-        SQLLoadOption.<TestStorageObject>builder()
-            .setQuery("SELECT * FROM test_table WHERE id = 1")
-            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
-            .build();
+    MySQLLoader loader =
+        MySQLLoader.create(
+            SQLLoadOption.builder()
+                .setQuery("SELECT * FROM test_table WHERE id = 1")
+                .setConnection(conn)
+                .build());
 
-    TestStorageObject objectOptional = loader.read(readOption);
+    Optional<Records> records = loader.read();
 
-    assertThat(objectOptional.getId()).isEqualTo(1);
-    assertThat(objectOptional.getName()).isEqualTo("Test");
+    assertThat(records.isPresent()).isTrue();
+    assertThat(records.get().getRows().get(0).getColumn("ID").get()).isEqualTo(1);
+    assertThat(records.get().getRows().get(0).getColumn("NAME").get()).isEqualTo("Test");
   }
 
   @Test
   void testRead_NoResult() {
-    SQLLoadOption<TestStorageObject> readOption =
-        SQLLoadOption.<TestStorageObject>builder()
-            .setQuery("SELECT * FROM test_table WHERE id = 2")
-            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
-            .build();
+    MySQLLoader loader =
+        MySQLLoader.create(
+            SQLLoadOption.builder()
+                .setQuery("SELECT * FROM test_table WHERE id = 2")
+                .setConnection(conn)
+                .build());
 
-    TestStorageObject objectOptional = loader.read(readOption);
+    Optional<Records> records = loader.read();
 
-    assertThat(objectOptional).isEqualTo(TestStorageObject.EMPTY);
+    assertThat(records.get().getRows()).isEmpty();
   }
 
   @Test
@@ -76,47 +69,28 @@ class MySQLLoaderTest {
     stmt.execute("INSERT INTO test_table(id, name) VALUES(2, 'Test2')");
     stmt.execute("INSERT INTO test_table(id, name) VALUES(3, 'Test3')");
 
-    SQLLoadOption<TestStorageObject> readOption =
-        SQLLoadOption.<TestStorageObject>builder()
-            .setQuery("SELECT * FROM test_table")
-            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
-            .build();
+    MySQLLoader loader =
+        MySQLLoader.create(
+            SQLLoadOption.builder()
+                .setQuery("SELECT * FROM test_table")
+                .setConnection(conn)
+                .build());
 
-    TestStorageObject objectOptional = loader.read(readOption);
+    Optional<Records> records = loader.read();
 
-    assertThat(objectOptional.getId()).isEqualTo(1);
-    assertThat(objectOptional.getName()).isEqualTo("Test");
+    assertThat(records.get().getRows().get(0).getColumn("ID").get()).isEqualTo(1);
+    assertThat(records.get().getRows().get(0).getColumn("NAME").get()).isEqualTo("Test");
   }
 
   @Test
   void testRead_SQLException() {
-    SQLLoadOption<TestStorageObject> readOption =
-        SQLLoadOption.<TestStorageObject>builder()
-            .setQuery("SELECT * FROM non_existent_table")
-            .setStorageObjectTransformFunction(EXTRACT_TEST_STORAGE_FUNC)
-            .build();
+    MySQLLoader loader =
+        MySQLLoader.create(
+            SQLLoadOption.builder()
+                .setQuery("SELECT * FROM non_existent_table")
+                .setConnection(conn)
+                .build());
 
-    assertThrows(RuntimeException.class, () -> loader.read(readOption));
-  }
-
-  private static class TestStorageObject implements StorageObject {
-    public static final TestStorageObject EMPTY = new TestStorageObject();
-    private int id;
-    private String name;
-
-    public TestStorageObject(int id, String name) {
-      this.id = id;
-      this.name = name;
-    }
-
-    public TestStorageObject() {}
-
-    public int getId() {
-      return id;
-    }
-
-    public String getName() {
-      return name;
-    }
+    assertThrows(RuntimeException.class, () -> loader.read());
   }
 }

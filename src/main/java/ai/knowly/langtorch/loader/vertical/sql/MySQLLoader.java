@@ -1,5 +1,8 @@
 package ai.knowly.langtorch.loader.vertical.sql;
 
+import static ai.knowly.langtorch.loader.vertical.sql.ResultSetTransform.transform;
+
+import ai.knowly.langtorch.loader.Loader;
 import com.google.common.flogger.FluentLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -7,45 +10,39 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
 /** MySQL loader. */
-public class MySQLLoader<S extends StorageObject> extends SQLLoader<SQLLoadOption<S>, S> {
-  FluentLogger logger = FluentLogger.forEnclosingClass();
-  private final Optional<Connection> connection;
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+public class MySQLLoader implements Loader<Records> {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  @NonNull private SQLLoadOption readOption;
 
-  private MySQLLoader(Connection connection) {
-    this.connection = Optional.of(connection);
-  }
-
-  private MySQLLoader() {
-    this.connection = Optional.empty();
-  }
-
-  public static <S extends StorageObject> MySQLLoader<S> create(Connection connection) {
-    return new MySQLLoader<>(connection);
-  }
-
-  public static <S extends StorageObject> MySQLLoader<S> create() {
-    return new MySQLLoader<>();
+  public static MySQLLoader create(SQLLoadOption readOption) {
+    return new MySQLLoader(readOption);
   }
 
   @Override
-  protected S read(SQLLoadOption<S> readOption) {
+  public Optional<Records> read() {
     Optional<Connection> newConnection = openConnection(readOption);
-    assert newConnection.isPresent();
+    if (!newConnection.isPresent()) {
+      logger.atSevere().log("Error opening a connection to database");
+      return Optional.empty();
+    }
 
-    try (Statement stmt = connection.get().createStatement()) {
+    try (Statement stmt = newConnection.get().createStatement()) {
       ResultSet resultSet = stmt.executeQuery(readOption.getQuery());
-      return readOption.getStorageObjectTransformFunction().transform(resultSet);
+      return Optional.ofNullable(transform(resultSet));
     } catch (SQLException e) {
       logger.atSevere().withCause(e).log("Error executing query in the MySQL Database");
       throw new SQLExecutionException("Error executing query in the MySQL Database", e);
     }
   }
 
-  private Optional<Connection> openConnection(SQLLoadOption<S> readOption) {
-    if (connection.isPresent()) {
-      return connection;
+  private Optional<Connection> openConnection(SQLLoadOption readOption) {
+    if (readOption.getConnection().isPresent()) {
+      return readOption.getConnection();
     }
 
     if (!isEligibleForConnection(readOption)) {
@@ -55,16 +52,19 @@ public class MySQLLoader<S extends StorageObject> extends SQLLoader<SQLLoadOptio
     try {
       return Optional.of(
           DriverManager.getConnection(
-              readOption.getQuery(), readOption.getUser().get(), readOption.getPassword().get()));
+              readOption.getConnectionDetail().get().getUrl().get(),
+              readOption.getConnectionDetail().get().getUser().get(),
+              readOption.getConnectionDetail().get().getPassword().get()));
     } catch (SQLException e) {
       logger.atSevere().withCause(e).log("Error opening a connection to database");
       throw new SQLExecutionException("Error opening a connection to database", e);
     }
   }
 
-  private boolean isEligibleForConnection(SQLLoadOption<S> readOption) {
-    return readOption.getUrl().isPresent()
-        && readOption.getUser().isPresent()
-        && readOption.getPassword().isPresent();
+  private boolean isEligibleForConnection(SQLLoadOption readOption) {
+    return readOption.getConnectionDetail().isPresent()
+        && readOption.getConnectionDetail().get().getUrl().isPresent()
+        && readOption.getConnectionDetail().get().getUser().isPresent()
+        && readOption.getConnectionDetail().get().getPassword().isPresent();
   }
 }

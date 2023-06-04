@@ -4,18 +4,24 @@ import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.io.IOException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class MarkdownLoaderTest {
 
   @Test
-  void testMdNotExist() throws IOException {
+  void testMdNotExist() {
     // Arrange.
     String testFilePath = "src/test/resources/test1.md";
 
     // Act.
-    IOException e =
-        assertThrows(IOException.class, () -> MarkdownLoader.create().read(testFilePath));
+    MarkdownReadException e =
+        assertThrows(
+            MarkdownReadException.class,
+            () ->
+                MarkdownLoader.create(
+                        MarkdownLoadOption.builder().setFilePath(testFilePath).build())
+                    .read());
 
     // Assert.
     assertThat(e).hasMessageThat().contains(testFilePath);
@@ -27,7 +33,9 @@ class MarkdownLoaderTest {
     String testFilePath = "src/test/resources/test.md";
 
     // Act.
-    String result = MarkdownLoader.create().read(testFilePath);
+    Optional<String> result =
+        MarkdownLoader.create(MarkdownLoadOption.builder().setFilePath(testFilePath).build())
+            .read();
 
     // Assert.
     String expectedContent =
@@ -50,6 +58,6 @@ class MarkdownLoaderTest {
             + "        System.out.println(\"Hello, world!\");\n"
             + "    }\n"
             + "}";
-    assertThat(result).isEqualTo(expectedContent);
+    assertThat(result.get()).isEqualTo(expectedContent);
   }
 }

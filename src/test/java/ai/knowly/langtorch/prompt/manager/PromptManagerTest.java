@@ -76,7 +76,7 @@ final class PromptManagerTest {
     // Save the configuration to JSON
     promptManager.toFile(tempFolderPath, fileName);
 
-    // Load the configuration from JSON
+    // load the configuration from JSON
     PromptManager loadedPromptManager = PromptManager.fromFile(tempFolderPath, fileName);
 
     // Check if the loaded configuration matches the original one

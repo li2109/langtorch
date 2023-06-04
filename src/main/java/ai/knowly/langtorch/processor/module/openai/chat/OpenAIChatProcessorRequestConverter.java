@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.module.openai.chat;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionRequest;
 import java.util.List;
 
 // Converter class to convert OpenAIChatProcessorConfig and a list of chat messages

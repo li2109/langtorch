@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.module.openai.embeddings;
 
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.embedding.EmbeddingRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingRequest;
 import java.util.List;
 
 public final class OpenAIEmbeddingsProcessorRequestConverter {

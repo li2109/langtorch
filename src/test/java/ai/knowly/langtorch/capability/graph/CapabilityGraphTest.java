@@ -3,7 +3,7 @@ package ai.knowly.langtorch.capability.graph;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.Assert.assertThrows;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
 import com.google.common.collect.Streams;
 import java.util.Arrays;
 import java.util.HashMap;

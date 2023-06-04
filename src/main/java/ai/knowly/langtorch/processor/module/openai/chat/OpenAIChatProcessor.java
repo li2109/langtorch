@@ -2,9 +2,9 @@ package ai.knowly.langtorch.processor.module.openai.chat;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionRequest;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.chat.ChatCompletionResult;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.chat.AssistantMessage;

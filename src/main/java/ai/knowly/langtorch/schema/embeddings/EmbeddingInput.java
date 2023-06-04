@@ -1,35 +1,21 @@
 package ai.knowly.langtorch.schema.embeddings;
 
 import ai.knowly.langtorch.schema.io.Input;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
+import lombok.Builder;
+import lombok.Data;
+import lombok.NonNull;
 
+@Data
+@Builder(toBuilder = true, setterPrefix = "set")
 public class EmbeddingInput implements Input {
+  @Builder.Default private final List<String> input = new ArrayList<>();
+  @NonNull private String model;
+  private String user;
 
-  private final String model;
-
-  private final List<String> input;
-
-  private final String user;
-
-  public EmbeddingInput(String model, List<String> input, String user) {
-    this.model = model;
-    this.input = input;
-    this.user = user;
-  }
-
-  public static EmbeddingInput of(String model, List<String> input, String user) {
-    return new EmbeddingInput(model, input, user);
-  }
-
-  public String getModel() {
-    return model;
-  }
-
-  public List<String> getInput() {
-    return input;
-  }
-
-  public String getUser() {
-    return user;
+  public Optional<String> getUser() {
+    return Optional.ofNullable(user);
   }
 }

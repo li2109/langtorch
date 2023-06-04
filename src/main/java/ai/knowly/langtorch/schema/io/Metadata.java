@@ -1,48 +1,17 @@
 package ai.knowly.langtorch.schema.io;
 
-import org.apache.commons.collections4.keyvalue.MultiKey;
-import org.apache.commons.collections4.map.MultiKeyMap;
+import java.util.HashMap;
+import java.util.Map;
+import lombok.*;
 
-import java.util.Objects;
-
+@Data
+@Builder(toBuilder = true, setterPrefix = "set")
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Metadata {
-  private final MultiKeyMap<String, String> value;
+  private static final Metadata DEFAULT_INSTANCE = Metadata.builder().build();
+  @Builder.Default private final Map<String, String> value = new HashMap<>();
 
-  public Metadata(MultiKeyMap<String, String> values) {
-    this.value = values;
-  }
-
-  public MultiKeyMap<String, String> getValue() {
-    return value;
-  }
-
-  public static Metadata create() {
-    return new Metadata(new MultiKeyMap<>());
-  }
-
-  public Metadata set(MultiKey<String> key, String value) {
-    this.value.put(key, value);
-    return this;
-  }
-
-  public static Metadata copyOf(MultiKeyMap<String, String> values) {
-    return new Metadata(values);
-  }
-
-  @Override
-  public boolean equals(Object obj) {
-    if (this == obj) {
-      return true;
-    }
-    if (obj == null || getClass() != obj.getClass()) {
-      return false;
-    }
-    Metadata other = (Metadata) obj;
-    return Objects.equals(value, other.value);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(value);
+  public static Metadata getDefaultInstance() {
+    return DEFAULT_INSTANCE;
   }
 }

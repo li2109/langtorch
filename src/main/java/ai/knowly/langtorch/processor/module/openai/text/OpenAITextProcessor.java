@@ -2,9 +2,9 @@ package ai.knowly.langtorch.processor.module.openai.text;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionRequest;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.completion.CompletionResult;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionResult;
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.text.SingleText;

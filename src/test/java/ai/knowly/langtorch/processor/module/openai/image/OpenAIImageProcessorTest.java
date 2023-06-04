@@ -3,9 +3,9 @@ package ai.knowly.langtorch.processor.module.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtorch.processor.llm.openai.service.OpenAIService;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.image.Image;
-import ai.knowly.langtorch.processor.llm.openai.service.schema.dto.image.ImageResult;
+import ai.knowly.langtorch.llm.openai.OpenAIService;
+import ai.knowly.langtorch.llm.openai.schema.dto.image.Image;
+import ai.knowly.langtorch.llm.openai.schema.dto.image.ImageResult;
 import ai.knowly.langtorch.schema.image.Images;
 import ai.knowly.langtorch.schema.text.SingleText;
 import java.util.Arrays;

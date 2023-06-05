@@ -23,7 +23,12 @@ class ImageTest {
   @Test
   void createImageUrl() {
     CreateImageRequest createImageRequest =
-        CreateImageRequest.builder().prompt("penguin").n(3).size("256x256").user("testing").build();
+        CreateImageRequest.builder()
+            .setPrompt("penguin")
+            .setN(3)
+            .setSize("256x256")
+            .setUser("testing")
+            .build();
 
     List<Image> images = service.createImage(createImageRequest).getData();
     assertEquals(3, images.size());
@@ -34,9 +39,9 @@ class ImageTest {
   void createImageBase64() {
     CreateImageRequest createImageRequest =
         CreateImageRequest.builder()
-            .prompt("penguin")
-            .responseFormat("b64_json")
-            .user("testing")
+            .setPrompt("penguin")
+            .setResponseFormat("b64_json")
+            .setUser("testing")
             .build();
 
     List<Image> images = service.createImage(createImageRequest).getData();

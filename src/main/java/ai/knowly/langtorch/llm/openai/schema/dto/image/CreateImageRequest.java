@@ -8,8 +8,7 @@ import lombok.*;
  *
  * <p>https://beta.openai.com/docs/api-reference/images/create
  */
-@Builder
-@NoArgsConstructor
+@Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor
 @Data
 public class CreateImageRequest {

@@ -12,6 +12,9 @@ import ai.knowly.langtorch.hub.domain.TorchScopeValue;
 import ai.knowly.langtorch.hub.domain.TorchletDefinition;
 import ai.knowly.langtorch.hub.domain.TorchletDefinition.TorchletDefinitionBuilder;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
+import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
+import ai.knowly.langtorch.hub.exception.TorchletDefinitionNotFoundException;
+import ai.knowly.langtorch.hub.exception.TorchletInstantiationException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.flogger.FluentLogger;
@@ -152,13 +155,13 @@ public class TorchContext {
 
     } catch (Exception e) {
       logger.atSevere().log("Error instantiating class %s: %s", clazz.getName(), e.getMessage());
-      throw new RuntimeException(e);
+      throw new TorchletInstantiationException(e);
     }
   }
 
   public Object getTorchlet(Class<?> aClass) {
     if (!aClass.isAnnotationPresent(Torchlet.class)) {
-      throw new RuntimeException(
+      throw new AnnotationNotFoundException(
           String.format("Class %s is not annotated with @Torchlet.", aClass.getName()));
     }
 
@@ -171,7 +174,7 @@ public class TorchContext {
 
   public Object getTorchlet(String torchletName) {
     if (!torchletDefinitions.containsKey(torchletName)) {
-      throw new RuntimeException(
+      throw new TorchletDefinitionNotFoundException(
           String.format("Torchlet %s is not found in the context.", torchletName));
     }
 
@@ -196,7 +199,9 @@ public class TorchContext {
     TorchletDefinition torchComponentDefinition = createTorchletDefinition(aClass);
     String torchletName = generateTorchletName(aClass);
     this.torchletDefinitions.put(torchletName, torchComponentDefinition);
-    logger.atInfo().log("Created torchlet definition: %s\n", torchletName);
+    if (verbose) {
+      logger.atInfo().log("Created torchlet definition: %s\n", torchletName);
+    }
 
     updateDependencyGraph(aClass);
   }
@@ -214,11 +219,12 @@ public class TorchContext {
               .collect(Collectors.toList());
     }
     dependencyGraph.put(torchletName, dependencies);
-    logger.atInfo().log("%s dependencies -> %s\n", torchletName, dependencies);
+    if (verbose) {
+      logger.atInfo().log("%s dependencies -> %s\n", torchletName, dependencies);
+    }
   }
 
   private ImmutableList<Constructor<?>> getInjectableConstructor(Class<?> aClass) {
-    String torchletName = generateTorchletName(aClass);
     // Getting all constructors with @TorchInject annotation.
     ImmutableList<Constructor<?>> constructors =
         Arrays.stream(aClass.getConstructors())
@@ -226,7 +232,8 @@ public class TorchContext {
             .collect(toImmutableList());
 
     if (constructors.size() > 1) {
-      throw new RuntimeException("Multiple constructors with @TorchInject annotation.");
+      throw new MultipleConstructorInjectionException(
+          "Multiple constructors with @TorchInject annotation.");
     }
     return constructors;
   }

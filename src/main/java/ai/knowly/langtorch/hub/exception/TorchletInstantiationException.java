@@ -5,4 +5,8 @@ public class TorchletInstantiationException extends RuntimeException {
   public TorchletInstantiationException(Exception e) {
     super(e);
   }
+
+  public TorchletInstantiationException(String e) {
+    super(e);
+  }
 }

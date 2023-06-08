@@ -1,13 +1,20 @@
 package ai.knowly.langtorch.hub;
 
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
 /** LangtorchHub is the entry point for the Langtorch framework. */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class LangtorchHub {
   private final LangtorchContext langtorchContext;
 
-  public LangtorchHub(LangtorchHubConfig langtorchHubConfig) {
+  private LangtorchHub(LangtorchHubConfig langtorchHubConfig) {
     this.langtorchContext = new LangtorchContext(langtorchHubConfig);
+  }
+
+  public static LangtorchHub create(LangtorchHubConfig langtorchHubConfig) {
+    return new LangtorchHub(langtorchHubConfig);
   }
 
   public LangtorchHub run(Class<?> clazz) {

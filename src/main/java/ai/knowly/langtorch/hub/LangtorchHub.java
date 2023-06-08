@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.hub;
 
-import ai.knowly.langtorch.hub.domain.TorchContextConfig;
+import ai.knowly.langtorch.hub.schema.TorchContextConfig;
 
 /** LangtorchHub is the entry point for the Langtorch framework. */
 public class LangtorchHub {

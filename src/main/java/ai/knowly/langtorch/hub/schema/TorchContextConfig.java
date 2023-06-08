@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.hub.domain;
+package ai.knowly.langtorch.hub.schema;
 
 import lombok.Builder;
 import lombok.Builder.Default;

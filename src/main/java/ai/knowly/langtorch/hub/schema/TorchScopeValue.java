@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.hub.domain;
+package ai.knowly.langtorch.hub.schema;
 
 public enum TorchScopeValue {
   SINGLETON,

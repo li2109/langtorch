@@ -104,7 +104,7 @@ public class PineconeVectorStore implements VectorStore {
 
   /**
    * Performs a similarity search using a vector query and returns a list of pairs containing the
-   * domain documents and their corresponding similarity scores.
+   * schema documents and their corresponding similarity scores.
    */
   public List<Pair<DomainDocument, Double>> similaritySearchVectorWithScore(
       PineconeSimilaritySearchQuery pineconeSimilaritySearchQuery) {
@@ -122,7 +122,7 @@ public class PineconeVectorStore implements VectorStore {
 
     List<Pair<DomainDocument, Double>> result = new ArrayList<>();
 
-    // create mapping of PineCone metadata to domain meta data
+    // create mapping of PineCone metadata to schema meta data
     if (response.getMatches() != null) {
       for (Match match : response.getMatches()) {
         if (!pineconeVectorStoreSpec.getTextKey().isPresent()) {

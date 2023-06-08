@@ -2,7 +2,7 @@ package ai.knowly.langtorch.hub;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtorch.hub.domain.TorchContextConfig;
+import ai.knowly.langtorch.hub.schema.TorchContextConfig;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.testclass.TorchHubClass;
 import ai.knowly.langtorch.hub.testclass.TorchletClass;

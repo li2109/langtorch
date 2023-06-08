@@ -244,7 +244,8 @@ public class LangtorchContext {
 
   private String getToScanPackageName(Class<?> tochHubClass) {
     // Searching for @TorchHub annotation.
-    LangtorchHubApplication torchHubAnnotation = tochHubClass.getAnnotation(LangtorchHubApplication.class);
+    LangtorchHubApplication torchHubAnnotation =
+        tochHubClass.getAnnotation(LangtorchHubApplication.class);
     if (torchHubAnnotation == null) {
       throw new AnnotationNotFoundException(
           String.format(

@@ -1,8 +1,14 @@
 package ai.knowly.langtorch.connector;
 
-import java.io.IOException;
+import java.util.Optional;
 
 /** Connector for loading data from a source. */
-public abstract class Connector<O, R extends ConnectorOption> {
-  protected abstract O read(R loadOption) throws IOException;
+public interface Connector<T> {
+
+  /**
+   * Load data from a source.
+   *
+   * @return The loaded data.
+   */
+  Optional<T> read();
 }

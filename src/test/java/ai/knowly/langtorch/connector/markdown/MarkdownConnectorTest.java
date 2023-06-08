@@ -3,31 +3,39 @@ package ai.knowly.langtorch.connector.markdown;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import java.io.IOException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class MarkdownConnectorTest {
 
   @Test
-  void testMdNotExist() throws IOException {
+  void testMdNotExist() {
     // Arrange.
     String testFilePath = "src/test/resources/test1.md";
 
     // Act.
-    IOException e =
-        assertThrows(IOException.class, () -> MarkdownConnector.create().read(testFilePath));
+    MarkdownReadException e =
+        assertThrows(
+            MarkdownReadException.class,
+            () ->
+                MarkdownConnector.create(
+                        MarkdownConnectorOption.builder().setFilePath(testFilePath).build())
+                    .read());
 
     // Assert.
     assertThat(e).hasMessageThat().contains(testFilePath);
   }
 
   @Test
-  void testReadMd() throws IOException {
+  void testReadMd() {
     // Arrange.
     String testFilePath = "src/test/resources/test.md";
 
     // Act.
-    String result = MarkdownConnector.create().read(testFilePath);
+    Optional<String> result =
+        MarkdownConnector.create(
+                MarkdownConnectorOption.builder().setFilePath(testFilePath).build())
+            .read();
 
     // Assert.
     String expectedContent =
@@ -50,6 +58,6 @@ class MarkdownConnectorTest {
             + "        System.out.println(\"Hello, world!\");\n"
             + "    }\n"
             + "}";
-    assertThat(result).isEqualTo(expectedContent);
+    assertThat(result.get()).isEqualTo(expectedContent);
   }
 }

@@ -3,6 +3,7 @@ package ai.knowly.langtorch.connector.pdf;
 import static com.google.common.truth.Truth.assertThat;
 
 import java.io.IOException;
+import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 final class PDFConnectorTest {
@@ -10,10 +11,13 @@ final class PDFConnectorTest {
   void testPDFConnector() throws IOException {
     // Arrange.
     // Act.
-    String actualContent = PDFConnector.create().read("src/test/resources/test.pdf");
+    Optional<String> actualContent =
+        PDFConnector.create(
+                PDFConnectorOption.builder().setFilePath("src/test/resources/test.pdf").build())
+            .read();
 
     // Assert.
-    assertThat(actualContent.trim())
+    assertThat(actualContent.get().trim())
         .isEqualTo(
             "This is a test PDF document. \n"
                 + "If you can read this, you have Adobe Acrobat Reader installed on your"

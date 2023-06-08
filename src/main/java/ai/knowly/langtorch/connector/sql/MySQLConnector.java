@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.connector.sql;
 
+import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -9,63 +10,62 @@ import java.sql.Statement;
 import java.util.Optional;
 
 /** MySQL connector. */
-public class MySQLConnector<S extends StorageObject>
-    extends SQLConnector<SQLConnectorOption<S>, S> {
-  FluentLogger logger = FluentLogger.forEnclosingClass();
-  private Optional<Connection> connection;
+import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
 
-  private MySQLConnector(Connection connection) {
-    this.connection = Optional.of(connection);
-  }
+import lombok.AllArgsConstructor;
+import lombok.NonNull;
 
-  private MySQLConnector() {
-    this.connection = Optional.empty();
-  }
+/** MySQL loader. */
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+public class MySQLConnector implements Connector<Records> {
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
+  @NonNull private SQLConnectorOption readOption;
 
-  public static <S extends StorageObject> MySQLConnector<S> create(Connection connection) {
-    return new MySQLConnector<>(connection);
-  }
-
-  public static <S extends StorageObject> MySQLConnector<S> create() {
-    return new MySQLConnector<>();
+  public static MySQLConnector create(SQLConnectorOption readOption) {
+    return new MySQLConnector(readOption);
   }
 
   @Override
-  protected S read(SQLConnectorOption<S> readOption) {
+  public Optional<Records> read() {
     Optional<Connection> newConnection = openConnection(readOption);
-    assert newConnection.isPresent();
+    if (!newConnection.isPresent()) {
+      logger.atSevere().log("Error opening a connection to database");
+      return Optional.empty();
+    }
 
-    try (Statement stmt = connection.get().createStatement()) {
+    try (Statement stmt = newConnection.get().createStatement()) {
       ResultSet resultSet = stmt.executeQuery(readOption.getQuery());
-      return readOption.getStorageObjectTransformFunction().transform(resultSet);
+      return Optional.ofNullable(transform(resultSet));
     } catch (SQLException e) {
       logger.atSevere().withCause(e).log("Error executing query in the MySQL Database");
       throw new SQLExecutionException("Error executing query in the MySQL Database", e);
     }
   }
 
-  private Optional<Connection> openConnection(SQLConnectorOption<S> readOption) {
-    if (connection.isPresent()) {
-      return connection;
+  private Optional<Connection> openConnection(SQLConnectorOption readOption) {
+    if (readOption.getConnection().isPresent()) {
+      return readOption.getConnection();
     }
 
     if (!isEligibleForConnection(readOption)) {
-      return Optional.empty();
+      try {
+        return Optional.of(
+            DriverManager.getConnection(
+                readOption.getConnectionDetail().get().getUrl().get(),
+                readOption.getConnectionDetail().get().getUser().get(),
+                readOption.getConnectionDetail().get().getPassword().get()));
+      } catch (SQLException e) {
+        logger.atSevere().withCause(e).log("Error opening a connection to database");
+        throw new SQLExecutionException("Error opening a connection to database", e);
+      }
     }
-
-    try {
-      return Optional.of(
-          DriverManager.getConnection(
-              readOption.getQuery(), readOption.getUser().get(), readOption.getPassword().get()));
-    } catch (SQLException e) {
-      logger.atSevere().withCause(e).log("Error opening a connection to database");
-      throw new SQLExecutionException("Error opening a connection to database", e);
-    }
+    return Optional.empty();
   }
 
-  private boolean isEligibleForConnection(SQLConnectorOption<S> readOption) {
-    return readOption.getUrl().isPresent()
-        && readOption.getUser().isPresent()
-        && readOption.getPassword().isPresent();
+  private boolean isEligibleForConnection(SQLConnectorOption readOption) {
+    return readOption.getConnectionDetail().isPresent()
+        && readOption.getConnectionDetail().get().getUrl().isPresent()
+        && readOption.getConnectionDetail().get().getUser().isPresent()
+        && readOption.getConnectionDetail().get().getPassword().isPresent();
   }
 }

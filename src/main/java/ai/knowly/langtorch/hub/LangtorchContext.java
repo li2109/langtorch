@@ -209,7 +209,8 @@ public class LangtorchContext {
       classInstance = providerClass.getDeclaredConstructor().newInstance();
     } catch (Exception e) {
       logger.atSevere().log(
-          "Error creating instance of class: %s. Class with @TorchletProvider should only have no-arg constructor",
+          "Error creating instance of class: %s. Class with @TorchletProvider should only have"
+              + " no-arg constructor",
           providerClass.getName());
       throw new ClassInstantiationException(e);
     }

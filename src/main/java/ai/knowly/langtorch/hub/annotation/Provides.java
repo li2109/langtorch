@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.hub.schema;
+package ai.knowly.langtorch.hub.annotation;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;
@@ -6,7 +6,7 @@ import java.lang.annotation.RetentionPolicy;
 import java.lang.annotation.Target;
 
 @Retention(RetentionPolicy.RUNTIME)
-@Target({ElementType.TYPE, ElementType.METHOD})
-public @interface TorchScope {
-  TorchScopeValue value() default TorchScopeValue.SINGLETON;
+@Target({ElementType.METHOD})
+public @interface Provides {
+  String value() default "";
 }

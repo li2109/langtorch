@@ -5,28 +5,34 @@ import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.hub.annotation.Inject;
 import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
+import ai.knowly.langtorch.hub.annotation.Provides;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
+import ai.knowly.langtorch.hub.annotation.TorchletProvider;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
+import ai.knowly.langtorch.hub.exception.ClassInstantiationException;
 import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
 import ai.knowly.langtorch.hub.exception.TorchletDefinitionNotFoundException;
 import ai.knowly.langtorch.hub.exception.TorchletInstantiationException;
+import ai.knowly.langtorch.hub.schema.Definition;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.schema.TorchScope;
 import ai.knowly.langtorch.hub.schema.TorchScopeValue;
 import ai.knowly.langtorch.hub.schema.TorchletDefinition;
 import ai.knowly.langtorch.hub.schema.TorchletDefinition.TorchletDefinitionBuilder;
+import ai.knowly.langtorch.hub.schema.TorchletProviderDefinition;
+import ai.knowly.langtorch.hub.schema.TorchletProviderDefinition.TorchletProviderDefinitionBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.flogger.FluentLogger;
 import com.google.mu.util.Optionals;
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 import java.util.concurrent.ConcurrentHashMap;
-import java.util.stream.Collectors;
 
 /** Torch context contains information about the torchlet and its dependencies. */
 public class LangtorchContext {
@@ -35,16 +41,16 @@ public class LangtorchContext {
   private final boolean verbose;
 
   private final ConcurrentHashMap<String, Object> singletonTorchlets;
-  private final ConcurrentHashMap<String, TorchletDefinition> torchletDefinitions;
+  private final ConcurrentHashMap<String, Definition> componentDefinitions;
   private final ConcurrentHashMap<String, List<String>> dependencyGraph;
 
-  public LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
+  protected LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
     // Deconstruct the config.
     this.verbose = langtorchHubConfig.isVerbose();
 
     // Initialize the context.
     this.singletonTorchlets = new ConcurrentHashMap<>();
-    this.torchletDefinitions = new ConcurrentHashMap<>();
+    this.componentDefinitions = new ConcurrentHashMap<>();
     this.dependencyGraph = new ConcurrentHashMap<>();
 
     if (verbose) {
@@ -66,10 +72,20 @@ public class LangtorchContext {
   }
 
   private static String generateTorchletName(Class<?> aClass) {
+    boolean hasTorchletAnnotationValue =
+        aClass.isAnnotationPresent(Torchlet.class)
+            && !aClass.getDeclaredAnnotation(Torchlet.class).value().isEmpty();
+    if (hasTorchletAnnotationValue) {
+      return aClass.getDeclaredAnnotation(Torchlet.class).value();
+    }
+    return aClass.getName();
+  }
+
+  private static String generateTorchletFromProvider(Method method) {
     return Optionals.optional(
-            !aClass.getDeclaredAnnotation(Torchlet.class).value().isEmpty(),
-            aClass.getDeclaredAnnotation(Torchlet.class).value())
-        .orElse(aClass.getName());
+            !method.getDeclaredAnnotation(Provides.class).value().isEmpty(),
+            method.getDeclaredAnnotation(Provides.class).value())
+        .orElse(method.getReturnType().getName());
   }
 
   public void init(Class<?> tochHubClass) {
@@ -95,13 +111,13 @@ public class LangtorchContext {
         if (file.isDirectory()) {
           scanDirectory(file, String.format("%s.%s", packageName, file.getName()), classLoader);
         } else {
-          registerComponent(packageName, classLoader, file);
+          registerDefinition(packageName, classLoader, file);
         }
       }
     }
   }
 
-  private void registerComponent(String packageName, ClassLoader classLoader, File file) {
+  private void registerDefinition(String packageName, ClassLoader classLoader, File file) {
     String className = file.getName().replace(".class", "");
     Class<?> aClass;
     try {
@@ -116,21 +132,97 @@ public class LangtorchContext {
         logger.atInfo().log(String.format("Found Torchlet Class: %s", aClass.getName()) + "\n");
       }
       registerTorchletDefinition(aClass);
+      return;
+    }
+    // Register the class with the TorchletProvider annotation.
+    if (aClass.isAnnotationPresent(TorchletProvider.class)) {
+      if (verbose) {
+        logger.atInfo().log(
+            String.format("Found TorchletProvider Class: %s", aClass.getName()) + "\n");
+      }
+      registerTorchletProviderDefinition(aClass);
+    }
+  }
+
+  private void registerTorchletProviderDefinition(Class<?> aClass) {
+    for (Method method : aClass.getDeclaredMethods()) {
+      if (method.isAnnotationPresent(Provides.class)) {
+        TorchletProviderDefinitionBuilder torchletProviderDefinition =
+            TorchletProviderDefinition.builder().setMethod(method).setProviderClass(aClass);
+        if (method.isAnnotationPresent(TorchScope.class)) {
+          torchletProviderDefinition.setScope(
+              method.getDeclaredAnnotation(TorchScope.class).value());
+        } else {
+          torchletProviderDefinition.setScope(TorchScopeValue.SINGLETON);
+        }
+        String torchletName = generateTorchletFromProvider(method);
+        componentDefinitions.put(
+            torchletName,
+            Definition.builder()
+                .setTorchletProviderDefinition(torchletProviderDefinition.build())
+                .build());
+        dependencyGraph.put(torchletName, new ArrayList<>());
+        if (verbose) {
+          logger.atInfo().log(
+              "Created torchlet definition from provider %s: %s\n", aClass.getName(), torchletName);
+          logger.atInfo().log("%s dependencies -> %s\n", torchletName, new ArrayList<>());
+        }
+      }
     }
   }
 
   private void registerSingletonTorchlets() {
-    List<String> strings = topologicalSort(dependencyGraph);
-    strings.stream()
-        .map(torchletDefinitions::get)
+    topologicalSort(dependencyGraph).stream()
+        .map(componentDefinitions::get)
         .forEach(
-            torchletDefinition -> {
-              if (torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
-                Object instance = instantiateTorchlet(torchletDefinition);
-                singletonTorchlets.put(
-                    generateTorchletName(torchletDefinition.getClazz()), instance);
+            definition -> {
+              if (definition.getTorchletDefinition().isPresent()) {
+                TorchletDefinition torchletDefinition = definition.getTorchletDefinition().get();
+                if (torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
+                  Object instance = instantiateTorchlet(torchletDefinition);
+                  singletonTorchlets.put(
+                      generateTorchletName(torchletDefinition.getClazz()), instance);
+                }
+                return;
+              }
+
+              if (definition.getTorchletProviderDefinition().isPresent()) {
+                TorchletProviderDefinition torchletProviderDefinition =
+                    definition.getTorchletProviderDefinition().get();
+                if (torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
+                  Object instance = instantiateTorchletProvider(torchletProviderDefinition);
+                  singletonTorchlets.put(
+                      generateTorchletFromProvider(torchletProviderDefinition.getMethod()),
+                      instance);
+                }
               }
             });
+  }
+
+  private Object instantiateTorchletProvider(
+      TorchletProviderDefinition torchletProviderDefinition) {
+    Class<?> providerClass = torchletProviderDefinition.getProviderClass();
+    Method method = torchletProviderDefinition.getMethod();
+
+    Object classInstance;
+    try {
+      classInstance = providerClass.getDeclaredConstructor().newInstance();
+    } catch (Exception e) {
+      logger.atSevere().log(
+          "Error creating instance of class: %s. Class with @TorchletProvider should only have no-arg constructor",
+          providerClass.getName());
+      throw new ClassInstantiationException(e);
+    }
+
+    Object methodInstance;
+    try {
+      methodInstance = method.invoke(classInstance);
+    } catch (Exception e) {
+      logger.atSevere().log("Error registering bean from @Provides method: %s", method.getName());
+      throw new TorchletInstantiationException(e);
+    }
+
+    return methodInstance;
   }
 
   private Object instantiateTorchlet(TorchletDefinition torchletDefinition) {
@@ -160,26 +252,59 @@ public class LangtorchContext {
   }
 
   public Object getTorchlet(Class<?> aClass) {
-    if (!aClass.isAnnotationPresent(Torchlet.class)) {
-      throw new AnnotationNotFoundException(
-          String.format("Class %s is not annotated with @Torchlet.", aClass.getName()));
+    // Registered from @Torchlet annotation
+    if (aClass.isAnnotationPresent(Torchlet.class)) {
+      String torchletName = generateTorchletName(aClass);
+      if (verbose) {
+        logger.atInfo().log(String.format("Getting Torchlet: %s", torchletName) + "\n");
+      }
+      return getTorchlet(torchletName);
     }
 
-    String torchletName = generateTorchletName(aClass);
-    if (verbose) {
-      logger.atInfo().log(String.format("Getting Torchlet: %s", torchletName) + "\n");
-    }
-    return getTorchlet(torchletName);
+    // Registered from class with @TorchletProvider and method from @Provides annotation
+    return getTorchlet(aClass.getName());
   }
 
   public Object getTorchlet(String torchletName) {
-    if (!torchletDefinitions.containsKey(torchletName)) {
+    if (!componentDefinitions.containsKey(torchletName)) {
       throw new TorchletDefinitionNotFoundException(
           String.format("Torchlet %s is not found in the context.", torchletName));
     }
 
-    TorchletDefinition torchletDefinition = torchletDefinitions.get(torchletName);
+    Definition definition = componentDefinitions.get(torchletName);
 
+    if (definition.getTorchletDefinition().isPresent()) {
+      return processTorchletDefinition(torchletName, definition.getTorchletDefinition().get());
+    }
+
+    if (definition.getTorchletProviderDefinition().isPresent()) {
+      return processTorchletProviderDefinition(
+          torchletName, definition.getTorchletProviderDefinition().get());
+    }
+
+    throw new TorchletInstantiationException(
+        String.format("Torchlet %s is not found.", torchletName));
+  }
+
+  private Object processTorchletProviderDefinition(
+      String torchletName, TorchletProviderDefinition torchletProviderDefinition) {
+    // If a singleton instance exists, return it.
+    if (singletonTorchlets.containsKey(torchletName)
+        && torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
+      return singletonTorchlets.get(torchletName);
+    } else {
+      // Else, instantiate a new instance.
+      Object component = instantiateTorchletProvider(torchletProviderDefinition);
+      // If the scope is SINGLETON, also save this instance for future requests.
+      if (torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
+        singletonTorchlets.put(torchletName, component);
+      }
+      return component;
+    }
+  }
+
+  private Object processTorchletDefinition(
+      String torchletName, TorchletDefinition torchletDefinition) {
     // If a singleton instance exists, return it.
     if (singletonTorchlets.containsKey(torchletName)
         && torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
@@ -196,9 +321,10 @@ public class LangtorchContext {
   }
 
   private void registerTorchletDefinition(Class<?> aClass) {
-    TorchletDefinition torchComponentDefinition = createTorchletDefinition(aClass);
     String torchletName = generateTorchletName(aClass);
-    this.torchletDefinitions.put(torchletName, torchComponentDefinition);
+    this.componentDefinitions.put(
+        torchletName,
+        Definition.builder().setTorchletDefinition(createTorchletDefinition(aClass)).build());
     if (verbose) {
       logger.atInfo().log("Created torchlet definition: %s\n", torchletName);
     }
@@ -213,10 +339,11 @@ public class LangtorchContext {
     List<String> dependencies = new ArrayList<>();
     if (!constructors.isEmpty()) {
       // Getting all dependencies from the constructor.
-      dependencies =
-          Arrays.stream(Iterables.getOnlyElement(constructors).getParameterTypes())
-              .map(LangtorchContext::generateTorchletName)
-              .collect(Collectors.toList());
+      Class<?>[] parameterTypes = Iterables.getOnlyElement(constructors).getParameterTypes();
+      for (Class<?> parameterType : parameterTypes) {
+        String tn = generateTorchletName(parameterType);
+        dependencies.add(tn);
+      }
     }
     dependencyGraph.put(torchletName, dependencies);
     if (verbose) {

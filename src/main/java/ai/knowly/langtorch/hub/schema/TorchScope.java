@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.hub.domain;
+package ai.knowly.langtorch.hub.schema;
 
 import java.lang.annotation.ElementType;
 import java.lang.annotation.Retention;

@@ -3,18 +3,18 @@ package ai.knowly.langtorch.hub;
 import static ai.knowly.langtorch.utils.graph.TopologicalSorter.topologicalSort;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
-import ai.knowly.langtorch.hub.annotation.TorchHub;
-import ai.knowly.langtorch.hub.annotation.TorchInject;
+import ai.knowly.langtorch.hub.annotation.Inject;
+import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
-import ai.knowly.langtorch.hub.domain.TorchContextConfig;
-import ai.knowly.langtorch.hub.domain.TorchScope;
-import ai.knowly.langtorch.hub.domain.TorchScopeValue;
-import ai.knowly.langtorch.hub.domain.TorchletDefinition;
-import ai.knowly.langtorch.hub.domain.TorchletDefinition.TorchletDefinitionBuilder;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
 import ai.knowly.langtorch.hub.exception.TorchletDefinitionNotFoundException;
 import ai.knowly.langtorch.hub.exception.TorchletInstantiationException;
+import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
+import ai.knowly.langtorch.hub.schema.TorchScope;
+import ai.knowly.langtorch.hub.schema.TorchScopeValue;
+import ai.knowly.langtorch.hub.schema.TorchletDefinition;
+import ai.knowly.langtorch.hub.schema.TorchletDefinition.TorchletDefinitionBuilder;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.flogger.FluentLogger;
@@ -29,7 +29,7 @@ import java.util.concurrent.ConcurrentHashMap;
 import java.util.stream.Collectors;
 
 /** Torch context contains information about the torchlet and its dependencies. */
-public class TorchContext {
+public class LangtorchContext {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final boolean verbose;
@@ -38,9 +38,9 @@ public class TorchContext {
   private final ConcurrentHashMap<String, TorchletDefinition> torchletDefinitions;
   private final ConcurrentHashMap<String, List<String>> dependencyGraph;
 
-  public TorchContext(TorchContextConfig torchContextConfig) {
+  public LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
     // Deconstruct the config.
-    this.verbose = torchContextConfig.isVerbose();
+    this.verbose = langtorchHubConfig.isVerbose();
 
     // Initialize the context.
     this.singletonTorchlets = new ConcurrentHashMap<>();
@@ -82,7 +82,7 @@ public class TorchContext {
   }
 
   private void scanPackageAndRegisterTorchletDefinitions(String packageName) {
-    ClassLoader classLoader = TorchContext.class.getClassLoader();
+    ClassLoader classLoader = LangtorchContext.class.getClassLoader();
     URL resource = classLoader.getResource(packageNameToPath(packageName));
     File directory = new File(resource.getFile());
     scanDirectory(directory, packageName, classLoader);
@@ -215,7 +215,7 @@ public class TorchContext {
       // Getting all dependencies from the constructor.
       dependencies =
           Arrays.stream(Iterables.getOnlyElement(constructors).getParameterTypes())
-              .map(TorchContext::generateTorchletName)
+              .map(LangtorchContext::generateTorchletName)
               .collect(Collectors.toList());
     }
     dependencyGraph.put(torchletName, dependencies);
@@ -228,7 +228,7 @@ public class TorchContext {
     // Getting all constructors with @TorchInject annotation.
     ImmutableList<Constructor<?>> constructors =
         Arrays.stream(aClass.getConstructors())
-            .filter(c -> c.isAnnotationPresent(TorchInject.class))
+            .filter(c -> c.isAnnotationPresent(Inject.class))
             .collect(toImmutableList());
 
     if (constructors.size() > 1) {
@@ -244,7 +244,7 @@ public class TorchContext {
 
   private String getToScanPackageName(Class<?> tochHubClass) {
     // Searching for @TorchHub annotation.
-    TorchHub torchHubAnnotation = tochHubClass.getAnnotation(TorchHub.class);
+    LangtorchHubApplication torchHubAnnotation = tochHubClass.getAnnotation(LangtorchHubApplication.class);
     if (torchHubAnnotation == null) {
       throw new AnnotationNotFoundException(
           String.format(

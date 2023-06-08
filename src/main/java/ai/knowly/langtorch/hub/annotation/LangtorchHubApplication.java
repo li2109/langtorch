@@ -5,7 +5,7 @@ import java.lang.annotation.RetentionPolicy;
 
 // TorchHub is a marker annotation for the main class of a torchlet.
 @Retention(RetentionPolicy.RUNTIME)
-public @interface TorchHub {
+public @interface LangtorchHubApplication {
   // The top-level package name to be scanned for torchlets.
   String value() default "";
 }

@@ -44,7 +44,7 @@ public class LangtorchContext {
   private final ConcurrentHashMap<String, Definition> componentDefinitions;
   private final ConcurrentHashMap<String, List<String>> dependencyGraph;
 
-  public LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
+  protected LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
     // Deconstruct the config.
     this.verbose = langtorchHubConfig.isVerbose();
 
@@ -274,42 +274,50 @@ public class LangtorchContext {
     Definition definition = componentDefinitions.get(torchletName);
 
     if (definition.getTorchletDefinition().isPresent()) {
-      TorchletDefinition torchletDefinition = definition.getTorchletDefinition().get();
-      // If a singleton instance exists, return it.
-      if (singletonTorchlets.containsKey(torchletName)
-          && torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
-        return singletonTorchlets.get(torchletName);
-      } else {
-        // Else, instantiate a new instance.
-        Object component = instantiateTorchlet(torchletDefinition);
-        // If the scope is SINGLETON, also save this instance for future requests.
-        if (torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
-          singletonTorchlets.put(torchletName, component);
-        }
-        return component;
-      }
+      return processTorchletDefinition(torchletName, definition.getTorchletDefinition().get());
     }
 
     if (definition.getTorchletProviderDefinition().isPresent()) {
-      TorchletProviderDefinition torchletProviderDefinition =
-          definition.getTorchletProviderDefinition().get();
-      // If a singleton instance exists, return it.
-      if (singletonTorchlets.containsKey(torchletName)
-          && torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
-        return singletonTorchlets.get(torchletName);
-      } else {
-        // Else, instantiate a new instance.
-        Object component = instantiateTorchletProvider(torchletProviderDefinition);
-        // If the scope is SINGLETON, also save this instance for future requests.
-        if (torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
-          singletonTorchlets.put(torchletName, component);
-        }
-        return component;
-      }
+      return processTorchletProviderDefinition(
+          torchletName, definition.getTorchletProviderDefinition().get());
     }
 
     throw new TorchletInstantiationException(
         String.format("Torchlet %s is not found.", torchletName));
+  }
+
+  private Object processTorchletProviderDefinition(
+      String torchletName, TorchletProviderDefinition torchletProviderDefinition) {
+    // If a singleton instance exists, return it.
+    if (singletonTorchlets.containsKey(torchletName)
+        && torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
+      return singletonTorchlets.get(torchletName);
+    } else {
+      // Else, instantiate a new instance.
+      Object component = instantiateTorchletProvider(torchletProviderDefinition);
+      // If the scope is SINGLETON, also save this instance for future requests.
+      if (torchletProviderDefinition.getScope() == TorchScopeValue.SINGLETON) {
+        singletonTorchlets.put(torchletName, component);
+      }
+      return component;
+    }
+  }
+
+  private Object processTorchletDefinition(
+      String torchletName, TorchletDefinition torchletDefinition) {
+    // If a singleton instance exists, return it.
+    if (singletonTorchlets.containsKey(torchletName)
+        && torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
+      return singletonTorchlets.get(torchletName);
+    } else {
+      // Else, instantiate a new instance.
+      Object component = instantiateTorchlet(torchletDefinition);
+      // If the scope is SINGLETON, also save this instance for future requests.
+      if (torchletDefinition.getScope() == TorchScopeValue.SINGLETON) {
+        singletonTorchlets.put(torchletName, component);
+      }
+      return component;
+    }
   }
 
   private void registerTorchletDefinition(Class<?> aClass) {

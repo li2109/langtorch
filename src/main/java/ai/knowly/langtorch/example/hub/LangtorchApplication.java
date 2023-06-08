@@ -1,10 +1,10 @@
 package ai.knowly.langtorch.example.hub;
 
 import ai.knowly.langtorch.example.hub.service.CombinedService;
-import ai.knowly.langtorch.example.hub.service.OrderService;
 import ai.knowly.langtorch.hub.LangtorchHub;
 import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
+import java.util.Optional;
 
 @LangtorchHubApplication
 public class LangtorchApplication {
@@ -13,10 +13,7 @@ public class LangtorchApplication {
         LangtorchHub.create(LangtorchHubConfig.builder().setVerbose(true).build())
             .run(LangtorchApplication.class);
 
-    Object torchlet1 = langtorchHub.getTorchlet(CombinedService.class);
-    Object torchlet2 = langtorchHub.getTorchlet(CombinedService.class);
-
-    System.out.println(langtorchHub.getTorchlet(OrderService.class));
-    System.out.println(langtorchHub.getTorchlet(OrderService.class));
+    Optional<CombinedService> combinedService = langtorchHub.getTorchlet(CombinedService.class);
+    combinedService.ifPresent(service -> service.test());
   }
 }

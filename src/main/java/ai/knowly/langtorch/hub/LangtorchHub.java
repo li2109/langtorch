@@ -1,6 +1,7 @@
 package ai.knowly.langtorch.hub;
 
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
+import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
@@ -22,11 +23,13 @@ public class LangtorchHub {
     return this;
   }
 
-  public Object getTorchlet(String name) {
-    return langtorchContext.getTorchlet(name);
+  @SuppressWarnings("unchecked")
+  public <T> Optional<T> getTorchlet(String name) {
+    return Optional.ofNullable((T) langtorchContext.getTorchlet(name));
   }
 
-  public Object getTorchlet(Class<?> clazz) {
-    return langtorchContext.getTorchlet(clazz);
+  @SuppressWarnings("unchecked")
+  public <T> Optional<T> getTorchlet(Class<?> clazz) {
+    return Optional.ofNullable((T) langtorchContext.getTorchlet(clazz));
   }
 }

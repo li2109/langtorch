@@ -1,25 +1,25 @@
 package ai.knowly.langtorch.hub;
 
-import ai.knowly.langtorch.hub.schema.TorchContextConfig;
+import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 
 /** LangtorchHub is the entry point for the Langtorch framework. */
 public class LangtorchHub {
-  private final TorchContext torchContext;
+  private final LangtorchContext langtorchContext;
 
-  public LangtorchHub(TorchContextConfig torchContextConfig) {
-    this.torchContext = new TorchContext(torchContextConfig);
+  public LangtorchHub(LangtorchHubConfig langtorchHubConfig) {
+    this.langtorchContext = new LangtorchContext(langtorchHubConfig);
   }
 
   public LangtorchHub run(Class<?> clazz) {
-    torchContext.init(clazz);
+    langtorchContext.init(clazz);
     return this;
   }
 
   public Object getTorchlet(String name) {
-    return torchContext.getTorchlet(name);
+    return langtorchContext.getTorchlet(name);
   }
 
   public Object getTorchlet(Class<?> clazz) {
-    return torchContext.getTorchlet(clazz);
+    return langtorchContext.getTorchlet(clazz);
   }
 }

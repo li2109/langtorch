@@ -1,8 +1,8 @@
 package ai.knowly.langtorch.hub.testclass;
 
-import ai.knowly.langtorch.hub.annotation.TorchHub;
+import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
 
-@TorchHub("ai.knowly.langtorch.hub.testclass")
+@LangtorchHubApplication("ai.knowly.langtorch.hub.testclass")
 public class TorchHubClass {
   // Your implementation here.
 }

@@ -6,6 +6,6 @@ import lombok.Data;
 
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class TorchContextConfig {
+public class LangtorchHubConfig {
   @Default private boolean verbose = false;
 }

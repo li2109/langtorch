@@ -2,7 +2,7 @@ package ai.knowly.langtorch.hub;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtorch.hub.schema.TorchContextConfig;
+import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.testclass.TorchHubClass;
 import ai.knowly.langtorch.hub.testclass.TorchletClass;
@@ -11,13 +11,13 @@ import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 
-class TorchContextTest {
-  private TorchContext torchContext;
+class LangtorchContextTest {
+  private LangtorchContext langtorchContext;
 
   @BeforeEach
   void setup() {
-    TorchContextConfig config = TorchContextConfig.builder().setVerbose(false).build();
-    torchContext = new TorchContext(config);
+    LangtorchHubConfig config = LangtorchHubConfig.builder().setVerbose(false).build();
+    langtorchContext = new LangtorchContext(config);
   }
 
   @Test
@@ -27,7 +27,7 @@ class TorchContextTest {
 
     // Act and Assert.
     try {
-      torchContext.init(nonTorchHubClass);
+      langtorchContext.init(nonTorchHubClass);
       Assertions.fail("Expected RequiredAnnotationNotFoundException");
     } catch (AnnotationNotFoundException e) {
       assertThat(e.getMessage()).contains("is not annotated with @TorchHub");
@@ -41,7 +41,7 @@ class TorchContextTest {
 
     // Act and Assert.
     try {
-      torchContext.getTorchlet(nonTorchletClass);
+      langtorchContext.getTorchlet(nonTorchletClass);
       Assertions.fail("Expected RuntimeException");
     } catch (RuntimeException e) {
       assertThat(e.getMessage()).contains("is not annotated with @Torchlet");
@@ -55,7 +55,7 @@ class TorchContextTest {
 
     // Act and Assert.
     try {
-      torchContext.getTorchlet(nonDefinedTorchlet);
+      langtorchContext.getTorchlet(nonDefinedTorchlet);
       Assertions.fail("Expected RuntimeException");
     } catch (RuntimeException e) {
       assertThat(e.getMessage()).contains("is not found in the context");
@@ -67,11 +67,11 @@ class TorchContextTest {
     // Assuming TorchletClass is a singleton Torchlet class
 
     // Arrange.
-    torchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
+    langtorchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
 
     // Act
-    Object torchlet1 = torchContext.getTorchlet(TorchletClass.class);
-    Object torchlet2 = torchContext.getTorchlet(TorchletClass.class);
+    Object torchlet1 = langtorchContext.getTorchlet(TorchletClass.class);
+    Object torchlet2 = langtorchContext.getTorchlet(TorchletClass.class);
 
     // Assert
     assertThat(torchlet1).isSameInstanceAs(torchlet2);
@@ -82,11 +82,11 @@ class TorchContextTest {
     // Assuming TorchletClassPrototype is a prototype Torchlet class
 
     // Arrange.
-    torchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
+    langtorchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
 
     // Act
-    Object torchlet1 = torchContext.getTorchlet(TorchletClassPrototype.class);
-    Object torchlet2 = torchContext.getTorchlet(TorchletClassPrototype.class);
+    Object torchlet1 = langtorchContext.getTorchlet(TorchletClassPrototype.class);
+    Object torchlet2 = langtorchContext.getTorchlet(TorchletClassPrototype.class);
 
     // Assert
     assertThat(torchlet1).isNotSameInstanceAs(torchlet2);

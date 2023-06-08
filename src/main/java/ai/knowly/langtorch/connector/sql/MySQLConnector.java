@@ -29,7 +29,7 @@ public class MySQLConnector implements Connector<Records> {
   public Optional<Records> read() {
     Optional<Connection> newConnection = openConnection(readOption);
     if (!newConnection.isPresent()) {
-      logger.atSevere().log("Error opening a connection to database");
+      logger.atSevere().log("Fail to open connection to MySQL Database");
       return Optional.empty();
     }
 
@@ -55,8 +55,8 @@ public class MySQLConnector implements Connector<Records> {
                 readOption.getConnectionDetail().get().getUser().get(),
                 readOption.getConnectionDetail().get().getPassword().get()));
       } catch (SQLException e) {
-        logger.atSevere().withCause(e).log("Error opening a connection to database");
-        throw new SQLExecutionException("Error opening a connection to database", e);
+        logger.atSevere().withCause(e).log("Fail to establish a new connection to database");
+        throw new SQLExecutionException("Fail to establish a new connection to database", e);
       }
     }
     return Optional.empty();

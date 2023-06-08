@@ -14,6 +14,6 @@ public class LangtorchApplication {
             .run(LangtorchApplication.class);
 
     Optional<CombinedService> combinedService = langtorchHub.getTorchlet(CombinedService.class);
-    combinedService.ifPresent(service -> service.test());
+    combinedService.ifPresent(CombinedService::test);
   }
 }

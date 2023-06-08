@@ -1,12 +1,16 @@
 package ai.knowly.langtorch.utils.graph;
 
 import java.util.*;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
+/** Topological sort of DAG. */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class TopologicalSorter {
   public static List<String> topologicalSort(Map<String, List<String>> graph) {
     Map<String, Integer> inDegree = new HashMap<>();
     Queue<String> queue = new LinkedList<>();
-    Stack<String> stack = new Stack<>();
+    Deque<String> stack = new ArrayDeque<>();
     List<String> result = new ArrayList<>();
 
     // Initialize in-degrees
@@ -40,7 +44,7 @@ public class TopologicalSorter {
 
     // Check if a topological sort is possible
     if (stack.size() != inDegree.size()) {
-      throw new RuntimeException(
+      throw new DAGViolationException(
           "The graph has at least one cycle, so a topological sort is not possible.");
     }
 

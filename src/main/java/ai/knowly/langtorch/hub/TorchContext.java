@@ -11,7 +11,7 @@ import ai.knowly.langtorch.hub.domain.TorchScope;
 import ai.knowly.langtorch.hub.domain.TorchScopeValue;
 import ai.knowly.langtorch.hub.domain.TorchletDefinition;
 import ai.knowly.langtorch.hub.domain.TorchletDefinition.TorchletDefinitionBuilder;
-import ai.knowly.langtorch.hub.exception.RequiredAnnotationNotFoundException;
+import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.flogger.FluentLogger;
@@ -239,7 +239,7 @@ public class TorchContext {
     // Searching for @TorchHub annotation.
     TorchHub torchHubAnnotation = tochHubClass.getAnnotation(TorchHub.class);
     if (torchHubAnnotation == null) {
-      throw new RequiredAnnotationNotFoundException(
+      throw new AnnotationNotFoundException(
           String.format(
               "Class %s is not annotated with @TorchHub.", tochHubClass.getCanonicalName()));
     }

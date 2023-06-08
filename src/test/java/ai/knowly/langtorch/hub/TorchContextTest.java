@@ -3,7 +3,7 @@ package ai.knowly.langtorch.hub;
 import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.hub.domain.TorchContextConfig;
-import ai.knowly.langtorch.hub.exception.RequiredAnnotationNotFoundException;
+import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.testclass.TorchHubClass;
 import ai.knowly.langtorch.hub.testclass.TorchletClass;
 import ai.knowly.langtorch.hub.testclass.TorchletClassPrototype;
@@ -29,7 +29,7 @@ class TorchContextTest {
     try {
       torchContext.init(nonTorchHubClass);
       Assertions.fail("Expected RequiredAnnotationNotFoundException");
-    } catch (RequiredAnnotationNotFoundException e) {
+    } catch (AnnotationNotFoundException e) {
       assertThat(e.getMessage()).contains("is not annotated with @TorchHub");
     }
   }

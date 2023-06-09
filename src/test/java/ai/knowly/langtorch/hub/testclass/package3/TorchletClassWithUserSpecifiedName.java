@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.hub.testclass;
+package ai.knowly.langtorch.hub.testclass.package3;
 
 import ai.knowly.langtorch.hub.annotation.Torchlet;
 

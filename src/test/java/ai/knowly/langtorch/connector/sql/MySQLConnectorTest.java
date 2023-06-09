@@ -1,7 +1,6 @@
 package ai.knowly.langtorch.connector.sql;
 
 import static com.google.common.truth.Truth.assertThat;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
@@ -83,14 +82,15 @@ class MySQLConnectorTest {
   }
 
   @Test
-  void testRead_SQLException() {
-    MySQLConnector loader =
+  void testRead_emptyRecord() {
+    MySQLConnector connector =
         MySQLConnector.create(
             SQLConnectorOption.builder()
                 .setQuery("SELECT * FROM non_existent_table")
                 .setConnection(conn)
                 .build());
 
-    assertThrows(RuntimeException.class, () -> loader.read());
+    Optional<Records> records = connector.read();
+    assertThat(records.isPresent()).isFalse();
   }
 }

@@ -38,7 +38,7 @@ public class MySQLConnector implements Connector<Records> {
       return Optional.ofNullable(transform(resultSet));
     } catch (SQLException e) {
       logger.atSevere().withCause(e).log("Error executing query in the MySQL Database");
-      throw new SQLExecutionException("Error executing query in the MySQL Database", e);
+      return Optional.empty();
     }
   }
 

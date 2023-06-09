@@ -158,7 +158,7 @@ class LangtorchContextTest {
   }
 
   @Test
-  void getFieldfromFieldInjectionAndConstructorInjectionWithNamed() {
+  void getFieldFromFieldInjectionAndConstructorInjectionWithNamed() {
     // Arrange.
     langtorchContext.init(TorchHubClass6.class);
 

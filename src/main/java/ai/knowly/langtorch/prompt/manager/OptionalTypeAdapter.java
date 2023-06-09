@@ -14,43 +14,43 @@ import java.util.Optional;
 
 public class OptionalTypeAdapter<T> extends TypeAdapter<Optional<T>> {
 
-    public static final TypeAdapterFactory FACTORY = new TypeAdapterFactory() {
+  public static final TypeAdapterFactory FACTORY =
+      new TypeAdapterFactory() {
         @SuppressWarnings("unchecked")
         @Override
         public <T> TypeAdapter<T> create(Gson gson, TypeToken<T> typeToken) {
-            Class<T> rawType = (Class<T>) typeToken.getRawType();
-            if (rawType != Optional.class) {
-                return null;
-            }
-            final Type[] typeArgs = ((ParameterizedType) typeToken.getType()).getActualTypeArguments();
-            TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(typeArgs[0]));
-            return (TypeAdapter<T>) new OptionalTypeAdapter<>(adapter);
+          Class<T> rawType = (Class<T>) typeToken.getRawType();
+          if (rawType != Optional.class) {
+            return null;
+          }
+          final Type[] typeArgs =
+              ((ParameterizedType) typeToken.getType()).getActualTypeArguments();
+          TypeAdapter<?> adapter = gson.getAdapter(TypeToken.get(typeArgs[0]));
+          return (TypeAdapter<T>) new OptionalTypeAdapter<>(adapter);
         }
-    };
-    private final TypeAdapter<T> delegate;
+      };
+  private final TypeAdapter<T> delegate;
 
-    public OptionalTypeAdapter(TypeAdapter<T> delegate) {
-        this.delegate = delegate;
-    }
+  public OptionalTypeAdapter(TypeAdapter<T> delegate) {
+    this.delegate = delegate;
+  }
 
-    @Override
-    public Optional<T> read(JsonReader in) throws IOException {
-        if (in.peek() == JsonToken.NULL) {
-            in.nextNull();
-            return Optional.empty();
-        }
-        T value = delegate.read(in);
-        return Optional.ofNullable(value);
+  @Override
+  public Optional<T> read(JsonReader in) throws IOException {
+    if (in.peek() == JsonToken.NULL) {
+      in.nextNull();
+      return Optional.empty();
     }
+    T value = delegate.read(in);
+    return Optional.ofNullable(value);
+  }
 
-    @Override
-    public void write(JsonWriter out, Optional<T> value) throws IOException {
-        if (value.isPresent()) {
-            delegate.write(out, value.get());
-        } else {
-            out.nullValue();
-        }
+  @Override
+  public void write(JsonWriter out, Optional<T> value) throws IOException {
+    if (value.isPresent()) {
+      delegate.write(out, value.get());
+    } else {
+      out.nullValue();
     }
+  }
 }
-
-

@@ -3,7 +3,7 @@ package ai.knowly.langtorch.hub.testclass.package6;
 import ai.knowly.langtorch.hub.annotation.Inject;
 import ai.knowly.langtorch.hub.annotation.Named;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
-import ai.knowly.langtorch.hub.testclass.package6.torchletProvider.TakeoutService6;
+import ai.knowly.langtorch.hub.testclass.package6.torchletProvider6.TakeoutService6;
 
 @Torchlet
 public class CombinedService6 {

@@ -1,6 +1,7 @@
 package ai.knowly.langtorch.hub;
 
 import static ai.knowly.langtorch.utils.graph.TopologicalSorter.topologicalSort;
+import static ai.knowly.langtorch.utils.reflection.ContextUtil.setAccessible;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.hub.annotation.Inject;
@@ -12,6 +13,7 @@ import ai.knowly.langtorch.hub.annotation.TorchletProvider;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.exception.ClassInstantiationException;
 import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
+import ai.knowly.langtorch.hub.exception.TorchletAlreadyExistsException;
 import ai.knowly.langtorch.hub.exception.TorchletDefinitionNotFoundException;
 import ai.knowly.langtorch.hub.exception.TorchletInstantiationException;
 import ai.knowly.langtorch.hub.schema.Definition;
@@ -30,7 +32,6 @@ import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
-import java.lang.reflect.Modifier;
 import java.lang.reflect.Parameter;
 import java.net.URL;
 import java.util.ArrayList;
@@ -201,11 +202,11 @@ public class LangtorchContext {
           torchletProviderDefinition.setScope(TorchScopeValue.SINGLETON);
         }
         String torchletName = generateTorchletFromProvider(method);
-        //        if (componentDefinitions.containsKey(torchletName)) {
-        //          logger.atWarning().log("Torchlet %s already exists ", torchletName);
-        //          throw new TorchletAlreadyExistsException(
-        //              String.format("Torchlet %s already exists ", torchletName));
-        //        }
+        if (componentDefinitions.containsKey(torchletName)) {
+          logger.atWarning().log("Torchlet %s already exists ", torchletName);
+          throw new TorchletAlreadyExistsException(
+              String.format("Torchlet %s already exists ", torchletName));
+        }
         componentDefinitions.put(
             torchletName,
             Definition.builder()
@@ -222,8 +223,7 @@ public class LangtorchContext {
   }
 
   private void registerSingletonTorchlets() {
-    List<String> strings = topologicalSort(dependencyGraph);
-    strings.stream()
+    topologicalSort(dependencyGraph).stream()
         .map(componentDefinitions::get)
         .forEach(
             definition -> {
@@ -279,7 +279,8 @@ public class LangtorchContext {
 
   private Object instantiateTorchlet(TorchletDefinition torchletDefinition) {
     Class<?> clazz = torchletDefinition.getClazz();
-    ImmutableList<Constructor<?>> injectableConstructors = getInjectableConstructor(clazz);
+    ImmutableList<Constructor<?>> injectableConstructors =
+        getConstructorWithInjectAnnotation(clazz);
 
     try {
       Object instance;
@@ -304,9 +305,7 @@ public class LangtorchContext {
           String dependencyName = generateTorchletName(field);
           Object dependencyInstance = getTorchlet(dependencyName);
           // Allows us to set private fields.
-          if (!Modifier.isPublic(field.getModifiers())) {
-            field.setAccessible(true);
-          }
+          setAccessible(field);
           field.set(instance, dependencyInstance);
         }
       }
@@ -405,11 +404,6 @@ public class LangtorchContext {
 
   private void registerTorchletDefinition(Field field) {
     String torchletName = generateTorchletName(field);
-    //    if (componentDefinitions.containsKey(torchletName)) {
-    //      logger.atWarning().log("Torchlet %s already exists ", torchletName);
-    //      throw new TorchletAlreadyExistsException(
-    //          String.format("Torchlet %s already exists ", torchletName));
-    //    }
     this.componentDefinitions.put(
         torchletName,
         Definition.builder().setTorchletDefinition(createTorchletDefinition(field)).build());
@@ -422,7 +416,7 @@ public class LangtorchContext {
 
   private void updateDependencyGraph(Class<?> aClass) {
     String torchletName = generateTorchletName(aClass);
-    ImmutableList<Constructor<?>> constructors = getInjectableConstructor(aClass);
+    ImmutableList<Constructor<?>> constructors = getConstructorWithInjectAnnotation(aClass);
 
     List<String> dependencies = new ArrayList<>();
     if (!constructors.isEmpty()) {
@@ -439,7 +433,7 @@ public class LangtorchContext {
     }
   }
 
-  private ImmutableList<Constructor<?>> getInjectableConstructor(Class<?> aClass) {
+  private ImmutableList<Constructor<?>> getConstructorWithInjectAnnotation(Class<?> aClass) {
     // Getting all constructors with @TorchInject annotation.
     ImmutableList<Constructor<?>> constructors =
         Arrays.stream(aClass.getConstructors())
@@ -458,7 +452,7 @@ public class LangtorchContext {
   }
 
   private String getToScanPackageName(Class<?> tochHubClass) {
-    // Searching for @TorchHub annotation.
+    // Searching for @LangtorchHubApplication annotation.
     LangtorchHubApplication torchHubAnnotation =
         tochHubClass.getAnnotation(LangtorchHubApplication.class);
     if (torchHubAnnotation == null) {

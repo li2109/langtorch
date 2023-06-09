@@ -3,6 +3,7 @@ package ai.knowly.langtorch.hub;
 import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
+import ai.knowly.langtorch.hub.exception.TorchletAlreadyExistsException;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.testclass.package1.OrderService1;
 import ai.knowly.langtorch.hub.testclass.package1.TorchHubClass1;
@@ -18,7 +19,9 @@ import ai.knowly.langtorch.hub.testclass.package5.CombinedService5;
 import ai.knowly.langtorch.hub.testclass.package5.TorchHubClass5;
 import ai.knowly.langtorch.hub.testclass.package6.CombinedService6;
 import ai.knowly.langtorch.hub.testclass.package6.TorchHubClass6;
-import ai.knowly.langtorch.hub.testclass.package6.torchletProvider.TakeoutService6;
+import ai.knowly.langtorch.hub.testclass.package6.torchletProvider6.TakeoutService6;
+import ai.knowly.langtorch.hub.testclass.package7.TorchHubClass7;
+import ai.knowly.langtorch.hub.testclass.package8.TorchHubClass8;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -40,7 +43,6 @@ class LangtorchContextTest {
     // Act and Assert.
     try {
       langtorchContext.init(nonTorchHubClass);
-      Assertions.fail("Expected RequiredAnnotationNotFoundException");
     } catch (AnnotationNotFoundException e) {
       assertThat(e.getMessage()).contains("is not annotated with @TorchHub");
     }
@@ -54,7 +56,6 @@ class LangtorchContextTest {
     // Act and Assert.
     try {
       langtorchContext.getTorchlet(nonTorchletClass);
-      Assertions.fail("Expected RuntimeException");
     } catch (RuntimeException e) {
       assertThat(e.getMessage()).contains("is not found in the context");
     }
@@ -179,5 +180,25 @@ class LangtorchContextTest {
         .isNotSameInstanceAs(combinedService.getTakeoutService6FromField());
     assertThat(takeoutService6a1).isSameInstanceAs(takeoutService6a2);
     assertThat(takeoutService6b1).isSameInstanceAs(takeoutService6b2);
+  }
+
+  @Test
+  void multipleTorchletWithSameName_fromTorchletProvider() {
+    // Act and Assert.
+    try {
+      langtorchContext.init(TorchHubClass7.class);
+    } catch (TorchletAlreadyExistsException e) {
+      assertThat(e.getMessage()).contains("Torchlet takeout-service-7 already exists");
+    }
+  }
+
+  @Test
+  void multipleTorchletWithSameName_fromTorchletAnnotation() {
+    // Act and Assert.
+    try {
+      langtorchContext.init(TorchHubClass8.class);
+    } catch (TorchletAlreadyExistsException e) {
+      assertThat(e.getMessage()).contains("Torchlet takeout-service-7 already exists");
+    }
   }
 }

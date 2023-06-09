@@ -4,7 +4,7 @@ import ai.knowly.langtorch.hub.annotation.Provides;
 import ai.knowly.langtorch.hub.annotation.TorchletProvider;
 
 @TorchletProvider
-public class torchletProvider {
+public class torchletProvider6 {
 
   @Provides(value = "takeout-service-6-a")
   public TakeoutService6 provideTakeoutService6a() {

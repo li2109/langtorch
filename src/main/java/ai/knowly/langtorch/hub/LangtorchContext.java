@@ -62,8 +62,7 @@ public class LangtorchContext {
   }
 
   public void init(Class<?> tochHubClass) {
-    String toScanPackageName = getToScanPackageName(tochHubClass);
-    torchletScanner.scanPackage(toScanPackageName).forEach(this::registerDefinition);
+    torchletScanner.scan(tochHubClass).forEach(this::registerDefinition);
     registerSingletonTorchlets();
   }
 

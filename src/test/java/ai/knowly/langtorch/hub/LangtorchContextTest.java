@@ -171,9 +171,9 @@ class LangtorchContextTest {
         (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
 
     TakeoutService6 takeoutService6b1 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-b");
     TakeoutService6 takeoutService6b2 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-b");
 
     // Assert.
     assertThat(combinedService.getTakeoutService6FromConstructor())

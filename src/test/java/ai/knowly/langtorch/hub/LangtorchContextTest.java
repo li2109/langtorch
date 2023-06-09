@@ -16,6 +16,9 @@ import ai.knowly.langtorch.hub.testclass.package4.CombinedService4;
 import ai.knowly.langtorch.hub.testclass.package4.TorchHubClass4;
 import ai.knowly.langtorch.hub.testclass.package5.CombinedService5;
 import ai.knowly.langtorch.hub.testclass.package5.TorchHubClass5;
+import ai.knowly.langtorch.hub.testclass.package6.CombinedService6;
+import ai.knowly.langtorch.hub.testclass.package6.TorchHubClass6;
+import ai.knowly.langtorch.hub.testclass.package6.torchletProvider.TakeoutService6;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -151,5 +154,30 @@ class LangtorchContextTest {
     // Assert.
     assertThat(combinedService.getTakeoutService5FromConstructor())
         .isNotSameInstanceAs(combinedService.getTakeoutService5FromField());
+  }
+
+  @Test
+  void getFieldfromFieldInjectionAndConstructorInjectionWithNamed() {
+    // Arrange.
+    langtorchContext.init(TorchHubClass6.class);
+
+    // Act.
+    CombinedService6 combinedService =
+        (CombinedService6) langtorchContext.getTorchlet(CombinedService6.class);
+    TakeoutService6 takeoutService6a1 =
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+    TakeoutService6 takeoutService6a2 =
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+
+    TakeoutService6 takeoutService6b1 =
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+    TakeoutService6 takeoutService6b2 =
+        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+
+    // Assert.
+    assertThat(combinedService.getTakeoutService6FromConstructor())
+        .isNotSameInstanceAs(combinedService.getTakeoutService6FromField());
+    assertThat(takeoutService6a1).isSameInstanceAs(takeoutService6a2);
+    assertThat(takeoutService6b1).isSameInstanceAs(takeoutService6b2);
   }
 }

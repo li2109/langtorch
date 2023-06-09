@@ -4,12 +4,18 @@ import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
-import ai.knowly.langtorch.hub.testclass.OrderService;
-import ai.knowly.langtorch.hub.testclass.TakeoutService;
-import ai.knowly.langtorch.hub.testclass.TorchHubClass;
-import ai.knowly.langtorch.hub.testclass.TorchletClass;
-import ai.knowly.langtorch.hub.testclass.TorchletClassPrototype;
-import ai.knowly.langtorch.hub.testclass.TorchletClassWithUserSpecifiedName;
+import ai.knowly.langtorch.hub.testclass.package1.OrderService1;
+import ai.knowly.langtorch.hub.testclass.package1.TorchHubClass1;
+import ai.knowly.langtorch.hub.testclass.package1.TorchletClass1;
+import ai.knowly.langtorch.hub.testclass.package2.TakeoutService2;
+import ai.knowly.langtorch.hub.testclass.package2.TorchHubClass2;
+import ai.knowly.langtorch.hub.testclass.package2.TorchletClassPrototype2;
+import ai.knowly.langtorch.hub.testclass.package3.TorchHubClass3;
+import ai.knowly.langtorch.hub.testclass.package3.TorchletClassWithUserSpecifiedName;
+import ai.knowly.langtorch.hub.testclass.package4.CombinedService4;
+import ai.knowly.langtorch.hub.testclass.package4.TorchHubClass4;
+import ai.knowly.langtorch.hub.testclass.package5.CombinedService5;
+import ai.knowly.langtorch.hub.testclass.package5.TorchHubClass5;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -70,13 +76,13 @@ class LangtorchContextTest {
     // Assuming TorchletClass is a singleton Torchlet class
 
     // Arrange.
-    langtorchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
+    langtorchContext.init(TorchHubClass1.class); // Suppose TorchHubClass is your hub class
 
     // Act.
-    Object torchlet1 = langtorchContext.getTorchlet(TorchletClass.class);
-    Object torchlet2 = langtorchContext.getTorchlet(TorchletClass.class);
-    Object torchlet3 = langtorchContext.getTorchlet(OrderService.class);
-    Object torchlet4 = langtorchContext.getTorchlet(OrderService.class);
+    Object torchlet1 = langtorchContext.getTorchlet(TorchletClass1.class);
+    Object torchlet2 = langtorchContext.getTorchlet(TorchletClass1.class);
+    Object torchlet3 = langtorchContext.getTorchlet(OrderService1.class);
+    Object torchlet4 = langtorchContext.getTorchlet(OrderService1.class);
 
     // Assert.
     assertThat(torchlet1).isSameInstanceAs(torchlet2);
@@ -88,13 +94,13 @@ class LangtorchContextTest {
     // Assuming TorchletClassPrototype is a prototype Torchlet class
 
     // Arrange.
-    langtorchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
+    langtorchContext.init(TorchHubClass2.class); // Suppose TorchHubClass is your hub class
 
     // Act.
-    Object torchlet1 = langtorchContext.getTorchlet(TorchletClassPrototype.class);
-    Object torchlet2 = langtorchContext.getTorchlet(TorchletClassPrototype.class);
-    Object torchlet3 = langtorchContext.getTorchlet(TakeoutService.class);
-    Object torchlet4 = langtorchContext.getTorchlet(TakeoutService.class);
+    Object torchlet1 = langtorchContext.getTorchlet(TorchletClassPrototype2.class);
+    Object torchlet2 = langtorchContext.getTorchlet(TorchletClassPrototype2.class);
+    Object torchlet3 = langtorchContext.getTorchlet(TakeoutService2.class);
+    Object torchlet4 = langtorchContext.getTorchlet(TakeoutService2.class);
 
     // Assert.
     assertThat(torchlet1).isNotSameInstanceAs(torchlet2);
@@ -106,12 +112,44 @@ class LangtorchContextTest {
     // Assuming TorchletClassPrototype is a prototype Torchlet class
 
     // Arrange.
-    langtorchContext.init(TorchHubClass.class); // Suppose TorchHubClass is your hub class
+    langtorchContext.init(TorchHubClass3.class); // Suppose TorchHubClass is your hub class
 
     // Act.
     Object torchlet1 = langtorchContext.getTorchlet("torchlet-class-with-user-specified-name");
 
     // Assert.
     assertThat(torchlet1).isInstanceOf(TorchletClassWithUserSpecifiedName.class);
+  }
+
+  @Test
+  void getSingletonFieldsFromFieldInjectionAndConstructorInjection() {
+    // Assuming TorchletClassPrototype is a prototype Torchlet class
+
+    // Arrange.
+    langtorchContext.init(TorchHubClass4.class); // Suppose TorchHubClass is your hub class
+
+    // Act.
+    CombinedService4 combinedService =
+        (CombinedService4) langtorchContext.getTorchlet(CombinedService4.class);
+
+    // Assert.
+    assertThat(combinedService.getTakeoutService4FromField())
+        .isSameInstanceAs(combinedService.getTakeoutService4FromConstructor());
+  }
+
+  @Test
+  void getPrototypeFieldsFromFieldInjectionAndConstructorInjection() {
+    // Assuming TorchletClassPrototype is a prototype Torchlet class
+
+    // Arrange.
+    langtorchContext.init(TorchHubClass5.class); // Suppose TorchHubClass is your hub class
+
+    // Act.
+    CombinedService5 combinedService =
+        (CombinedService5) langtorchContext.getTorchlet(CombinedService5.class);
+
+    // Assert.
+    assertThat(combinedService.getTakeoutService5FromConstructor())
+        .isNotSameInstanceAs(combinedService.getTakeoutService5FromField());
   }
 }

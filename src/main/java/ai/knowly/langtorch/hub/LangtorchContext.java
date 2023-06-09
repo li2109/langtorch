@@ -11,6 +11,7 @@ import ai.knowly.langtorch.hub.annotation.TorchletProvider;
 import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.exception.ClassInstantiationException;
 import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
+import ai.knowly.langtorch.hub.exception.TorchletAlreadyExistsException;
 import ai.knowly.langtorch.hub.exception.TorchletDefinitionNotFoundException;
 import ai.knowly.langtorch.hub.exception.TorchletInstantiationException;
 import ai.knowly.langtorch.hub.schema.Definition;
@@ -27,6 +28,7 @@ import com.google.common.flogger.FluentLogger;
 import com.google.mu.util.Optionals;
 import java.io.File;
 import java.lang.reflect.Constructor;
+import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.net.URL;
 import java.util.ArrayList;
@@ -132,6 +134,15 @@ public class LangtorchContext {
         logger.atInfo().log(String.format("Found Torchlet Class: %s", aClass.getName()) + "\n");
       }
       registerTorchletDefinition(aClass);
+
+      for (Field f : aClass.getDeclaredFields()) {
+        if (f.isAnnotationPresent(Inject.class)) {
+          if (verbose) {
+            logger.atInfo().log(String.format("Found Inject Field: %s", f.getName()) + "\n");
+          }
+          registerTorchletDefinition(f.getType());
+        }
+      }
       return;
     }
     // Register the class with the TorchletProvider annotation.
@@ -156,6 +167,11 @@ public class LangtorchContext {
           torchletProviderDefinition.setScope(TorchScopeValue.SINGLETON);
         }
         String torchletName = generateTorchletFromProvider(method);
+        //        if (componentDefinitions.containsKey(torchletName)) {
+        //          logger.atWarning().log("Torchlet %s already exists ", torchletName);
+        //          throw new TorchletAlreadyExistsException(
+        //              String.format("Torchlet %s already exists ", torchletName));
+        //        }
         componentDefinitions.put(
             torchletName,
             Definition.builder()
@@ -231,9 +247,10 @@ public class LangtorchContext {
     ImmutableList<Constructor<?>> injectableConstructors = getInjectableConstructor(clazz);
 
     try {
+      Object instance;
       if (injectableConstructors.isEmpty()) {
         // Default constructor
-        return clazz.getDeclaredConstructor().newInstance();
+        instance = clazz.getDeclaredConstructor().newInstance();
       } else {
         // Constructor with dependencies
         Constructor<?> injectableConstructor = Iterables.getOnlyElement(injectableConstructors);
@@ -243,9 +260,19 @@ public class LangtorchContext {
           String dependencyName = generateTorchletName(parameterTypes[i]);
           parameters[i] = getTorchlet(dependencyName);
         }
-        return injectableConstructor.newInstance(parameters);
+        instance = injectableConstructor.newInstance(parameters);
       }
 
+      // Handle field injection
+      for (Field field : clazz.getDeclaredFields()) {
+        if (field.isAnnotationPresent(Inject.class)) {
+          String dependencyName = generateTorchletName(field.getType());
+          Object dependencyInstance = getTorchlet(dependencyName);
+          field.setAccessible(true); // Allows us to set private fields.
+          field.set(instance, dependencyInstance);
+        }
+      }
+      return instance;
     } catch (Exception e) {
       logger.atSevere().log("Error instantiating class %s: %s", clazz.getName(), e.getMessage());
       throw new TorchletInstantiationException(e);
@@ -323,6 +350,11 @@ public class LangtorchContext {
 
   private void registerTorchletDefinition(Class<?> aClass) {
     String torchletName = generateTorchletName(aClass);
+//    if (componentDefinitions.containsKey(torchletName)) {
+//      logger.atWarning().log("Torchlet %s already exists ", torchletName);
+//      throw new TorchletAlreadyExistsException(
+//          String.format("Torchlet %s already exists ", torchletName));
+//    }
     this.componentDefinitions.put(
         torchletName,
         Definition.builder().setTorchletDefinition(createTorchletDefinition(aClass)).build());

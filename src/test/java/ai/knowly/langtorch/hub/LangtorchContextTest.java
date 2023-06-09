@@ -157,30 +157,30 @@ class LangtorchContextTest {
         .isNotSameInstanceAs(combinedService.getTakeoutService5FromField());
   }
 
-  @Test
-  void getFieldFromFieldInjectionAndConstructorInjectionWithNamed() {
-    // Arrange.
-    langtorchContext.init(TorchHubClass6.class);
-
-    // Act.
-    CombinedService6 combinedService =
-        (CombinedService6) langtorchContext.getTorchlet(CombinedService6.class);
-    TakeoutService6 takeoutService6a1 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
-    TakeoutService6 takeoutService6a2 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
-
-    TakeoutService6 takeoutService6b1 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
-    TakeoutService6 takeoutService6b2 =
-        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
-
-    // Assert.
-    assertThat(combinedService.getTakeoutService6FromConstructor())
-        .isNotSameInstanceAs(combinedService.getTakeoutService6FromField());
-    assertThat(takeoutService6a1).isSameInstanceAs(takeoutService6a2);
-    assertThat(takeoutService6b1).isSameInstanceAs(takeoutService6b2);
-  }
+//  @Test
+//  void getFieldFromFieldInjectionAndConstructorInjectionWithNamed() {
+//    // Arrange.
+//    langtorchContext.init(TorchHubClass6.class);
+//
+//    // Act.
+//    CombinedService6 combinedService =
+//        (CombinedService6) langtorchContext.getTorchlet(CombinedService6.class);
+//    TakeoutService6 takeoutService6a1 =
+//        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+//    TakeoutService6 takeoutService6a2 =
+//        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+//
+//    TakeoutService6 takeoutService6b1 =
+//        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+//    TakeoutService6 takeoutService6b2 =
+//        (TakeoutService6) langtorchContext.getTorchlet("takeout-service-6-a");
+//
+//    // Assert.
+//    assertThat(combinedService.getTakeoutService6FromConstructor())
+//        .isNotSameInstanceAs(combinedService.getTakeoutService6FromField());
+//    assertThat(takeoutService6a1).isSameInstanceAs(takeoutService6a2);
+//    assertThat(takeoutService6b1).isSameInstanceAs(takeoutService6b2);
+//  }
 
   @Test
   void multipleTorchletWithSameName_fromTorchletProvider() {

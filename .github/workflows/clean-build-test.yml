@@ -25,7 +25,7 @@ jobs:
         restore-keys: ${{ runner.os }}-gradle
 
     - name: Clean, Build, and Run tests (Debug mode)
-      run: ./gradlew clean build test --debug
+      run: ./gradlew clean compileJava build test --debug
 
     - name: Publish test results
       if: always()

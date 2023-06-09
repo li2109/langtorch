@@ -28,12 +28,10 @@ import com.google.common.collect.ImmutableList;
 import com.google.common.collect.Iterables;
 import com.google.common.flogger.FluentLogger;
 import com.google.mu.util.Optionals;
-import java.io.File;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
-import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -44,21 +42,16 @@ public class LangtorchContext {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final boolean verbose;
-
-  private final ConcurrentHashMap<String, Object> singletonTorchlets;
-  private final ConcurrentHashMap<String, Definition> componentDefinitions;
-  private final ConcurrentHashMap<String, List<String>> dependencyGraph;
+  private final ConcurrentHashMap<String, Object> singletonTorchlets = new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, Definition> componentDefinitions =
+      new ConcurrentHashMap<>();
+  private final ConcurrentHashMap<String, List<String>> dependencyGraph = new ConcurrentHashMap<>();
+  private final TorchletScanner torchletScanner;
 
   protected LangtorchContext(LangtorchHubConfig langtorchHubConfig) {
-    // Deconstruct the config.
     this.verbose = langtorchHubConfig.isVerbose();
-
-    // Initialize the context.
-    this.singletonTorchlets = new ConcurrentHashMap<>();
-    this.componentDefinitions = new ConcurrentHashMap<>();
-    this.dependencyGraph = new ConcurrentHashMap<>();
-
-    logVerboseInfo("TorchContext Object constructed.\n");
+    this.torchletScanner = new TorchletScanner(this.getClass().getClassLoader());
+    logVerboseInfo("TorchContext Object constructed.");
   }
 
   private static String generateTorchletFromProvider(Method method) {
@@ -69,71 +62,38 @@ public class LangtorchContext {
   }
 
   public void init(Class<?> tochHubClass) {
-    // Get the package name to scan.
     String toScanPackageName = getToScanPackageName(tochHubClass);
-    // Scan the package and register the torchlet definitions.
-    scanPackageAndRegisterTorchletDefinitions(toScanPackageName);
-    // Create the singleton torchlets from the definitions.
+    torchletScanner.scanPackage(toScanPackageName).forEach(this::registerDefinition);
     registerSingletonTorchlets();
   }
 
-  private void scanPackageAndRegisterTorchletDefinitions(String packageName) {
-    ClassLoader classLoader = LangtorchContext.class.getClassLoader();
-    URL resource = classLoader.getResource(packageNameToPath(packageName));
-    File directory = new File(resource.getFile());
-    scanDirectory(directory, packageName, classLoader);
-  }
-
-  private void scanDirectory(File directory, String packageName, ClassLoader classLoader) {
-    File[] files = directory.listFiles();
-    if (files != null) {
-      for (File file : files) {
-        if (file.isDirectory()) {
-          scanDirectory(file, String.format("%s.%s", packageName, file.getName()), classLoader);
-        } else {
-          registerDefinition(packageName, classLoader, file);
-        }
-      }
-    }
-  }
-
-  private void registerDefinition(String packageName, ClassLoader classLoader, File file) {
-    String className = file.getName().replace(".class", "");
-    Class<?> aClass;
-    try {
-      aClass = classLoader.loadClass(packageName + "." + className);
-    } catch (ClassNotFoundException e) {
-      logger.atWarning().log("Class not found: %s.%s and fail to load.", packageName, className);
-      return;
-    }
-    // Only register the class with the Torchlet annotation.
+  private void registerDefinition(Class<?> aClass) {
     if (aClass.isAnnotationPresent(Torchlet.class)) {
       registerTorchletWithAnnotation(aClass);
-      return;
-    }
-    // Register the class with the TorchletProvider annotation.
-    if (aClass.isAnnotationPresent(TorchletProvider.class)) {
-
-      logVerboseInfo(String.format("Found TorchletProvider Class: %s", aClass.getName()) + "\n");
-
+    } else if (aClass.isAnnotationPresent(TorchletProvider.class)) {
+      logVerboseInfo("Found TorchletProvider Class: %s", aClass.getName());
       registerTorchletProviderDefinition(aClass);
     }
   }
 
   private void registerTorchletWithAnnotation(Class<?> aClass) {
-
-    logVerboseInfo(String.format("Found Torchlet Class: %s", aClass.getName()) + "\n");
-
+    logVerboseInfo("Found Torchlet Class: %s", aClass.getName());
     registerTorchletDefinition(aClass);
-
-    for (Field f : aClass.getDeclaredFields()) {
-      if (f.isAnnotationPresent(Inject.class)) {
-
-        logVerboseInfo(String.format("Found Inject Field: %s", f.getName()) + "\n");
-
-        registerTorchletDefinition(f);
+    for (Field field : aClass.getDeclaredFields()) {
+      if (field.isAnnotationPresent(Inject.class)) {
+        logVerboseInfo("Found Inject Field: %s", field.getName());
+        registerFieldDefinition(field);
       }
     }
+  }
+
+  private void registerFieldDefinition(Field field) {
+    String torchletName = generateTorchletName(field);
+    this.componentDefinitions.put(
+        torchletName,
+        Definition.builder().setTorchletDefinition(createTorchletDefinition(field)).build());
+    logVerboseInfo("Created torchlet definition: %s", torchletName);
+    this.dependencyGraph.put(torchletName, new ArrayList<>());
   }
 
   private void registerTorchletProviderDefinition(Class<?> aClass) {
@@ -296,9 +256,9 @@ public class LangtorchContext {
         String.format("Torchlet %s is not found.", torchletName));
   }
 
-  private void logVerboseInfo(String message, Object... arg) {
+  private void logVerboseInfo(String message, Object... args) {
     if (verbose) {
-      logger.atInfo().log(message, arg);
+      logger.atInfo().log(message, args);
     }
   }
 
@@ -347,17 +307,6 @@ public class LangtorchContext {
     updateDependencyGraph(aClass);
   }
 
-  private void registerTorchletDefinition(Field field) {
-    String torchletName = generateTorchletName(field);
-    this.componentDefinitions.put(
-        torchletName,
-        Definition.builder().setTorchletDefinition(createTorchletDefinition(field)).build());
-
-    logVerboseInfo("Created torchlet definition: %s\n", torchletName);
-
-    this.dependencyGraph.put(torchletName, new ArrayList<>());
-  }
-
   private void updateDependencyGraph(Class<?> aClass) {
     String torchletName = generateTorchletName(aClass);
     ImmutableList<Constructor<?>> constructors = getConstructorWithInjectAnnotation(aClass);
@@ -388,10 +337,6 @@ public class LangtorchContext {
           "Multiple constructors with @TorchInject annotation.");
     }
     return constructors;
-  }
-
-  private String packageNameToPath(String packageName) {
-    return packageName.replace('.', File.separatorChar);
   }
 
   private String getToScanPackageName(Class<?> tochHubClass) {

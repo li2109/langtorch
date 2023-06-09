@@ -1,12 +1,13 @@
 package ai.knowly.langtorch.hub;
 
+import static ai.knowly.langtorch.hub.TorchletDefinitionFactory.createTorchletDefinition;
+import static ai.knowly.langtorch.hub.TorchletNameGenerator.generateTorchletName;
 import static ai.knowly.langtorch.utils.graph.TopologicalSorter.topologicalSort;
 import static ai.knowly.langtorch.utils.reflection.ContextUtil.setAccessible;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.hub.annotation.Inject;
 import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
-import ai.knowly.langtorch.hub.annotation.Named;
 import ai.knowly.langtorch.hub.annotation.Provides;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
 import ai.knowly.langtorch.hub.annotation.TorchletProvider;
@@ -21,7 +22,6 @@ import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.schema.TorchScope;
 import ai.knowly.langtorch.hub.schema.TorchScopeValue;
 import ai.knowly.langtorch.hub.schema.TorchletDefinition;
-import ai.knowly.langtorch.hub.schema.TorchletDefinition.TorchletDefinitionBuilder;
 import ai.knowly.langtorch.hub.schema.TorchletProviderDefinition;
 import ai.knowly.langtorch.hub.schema.TorchletProviderDefinition.TorchletProviderDefinitionBuilder;
 import com.google.common.collect.ImmutableList;
@@ -61,61 +61,6 @@ public class LangtorchContext {
     if (verbose) {
       logger.atInfo().log("TorchContext Object constructed.\n");
     }
-  }
-
-  // Create a torchlet definition from a class.
-  private static TorchletDefinition createTorchletDefinition(Class<?> aClass) {
-    TorchletDefinitionBuilder torchletDef = TorchletDefinition.builder();
-    torchletDef.setClazz(aClass);
-    if (aClass.isAnnotationPresent(TorchScope.class)) {
-      TorchScopeValue value = aClass.getDeclaredAnnotation(TorchScope.class).value();
-      torchletDef.setScope(value);
-    } else {
-      torchletDef.setScope(TorchScopeValue.SINGLETON);
-    }
-    return torchletDef.build();
-  }
-
-  private static TorchletDefinition createTorchletDefinition(Field field) {
-    TorchletDefinitionBuilder torchletDef = TorchletDefinition.builder();
-    torchletDef.setClazz(field.getType());
-    if (field.isAnnotationPresent(TorchScope.class)) {
-      TorchScopeValue value = field.getDeclaredAnnotation(TorchScope.class).value();
-      torchletDef.setScope(value);
-    } else {
-      torchletDef.setScope(TorchScopeValue.SINGLETON);
-    }
-    return torchletDef.build();
-  }
-
-  private static String generateTorchletName(Class<?> aClass) {
-    boolean hasTorchletAnnotationValue =
-        aClass.isAnnotationPresent(Torchlet.class)
-            && !aClass.getDeclaredAnnotation(Torchlet.class).value().isEmpty();
-    if (hasTorchletAnnotationValue) {
-      return aClass.getDeclaredAnnotation(Torchlet.class).value();
-    }
-    return aClass.getName();
-  }
-
-  private static String generateTorchletName(Parameter parameter) {
-    boolean hasNamedAnnotationValue =
-        parameter.isAnnotationPresent(Named.class)
-            && !parameter.getDeclaredAnnotation(Named.class).value().isEmpty();
-    if (hasNamedAnnotationValue) {
-      return parameter.getDeclaredAnnotation(Named.class).value();
-    }
-    return parameter.getType().getName();
-  }
-
-  private static String generateTorchletName(Field field) {
-    boolean hasNamedAnnotationValue =
-        field.isAnnotationPresent(Named.class)
-            && !field.getDeclaredAnnotation(Named.class).value().isEmpty();
-    if (hasNamedAnnotationValue) {
-      return field.getDeclaredAnnotation(Named.class).value();
-    }
-    return field.getType().getName();
   }
 
   private static String generateTorchletFromProvider(Method method) {

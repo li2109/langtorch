@@ -5,8 +5,10 @@ import ai.knowly.langtorch.hub.annotation.Torchlet;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import java.lang.reflect.Parameter;
+import lombok.AllArgsConstructor;
 
 /** Generates a name for a Torchlet. */
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class TorchletNameGenerator {
   public static String generateTorchletName(AnnotatedElement element) {
     if (element instanceof Class<?>) {

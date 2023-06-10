@@ -7,11 +7,9 @@ import static ai.knowly.langtorch.utils.reflection.ContextUtil.setAccessible;
 import static com.google.common.collect.ImmutableList.toImmutableList;
 
 import ai.knowly.langtorch.hub.annotation.Inject;
-import ai.knowly.langtorch.hub.annotation.LangtorchHubApplication;
 import ai.knowly.langtorch.hub.annotation.Provides;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
 import ai.knowly.langtorch.hub.annotation.TorchletProvider;
-import ai.knowly.langtorch.hub.exception.AnnotationNotFoundException;
 import ai.knowly.langtorch.hub.exception.ClassInstantiationException;
 import ai.knowly.langtorch.hub.exception.MultipleConstructorInjectionException;
 import ai.knowly.langtorch.hub.exception.TorchletAlreadyExistsException;
@@ -336,24 +334,5 @@ public class LangtorchContext {
           "Multiple constructors with @TorchInject annotation.");
     }
     return constructors;
-  }
-
-  private String getToScanPackageName(Class<?> tochHubClass) {
-    // Searching for @LangtorchHubApplication annotation.
-    LangtorchHubApplication torchHubAnnotation =
-        tochHubClass.getAnnotation(LangtorchHubApplication.class);
-    if (torchHubAnnotation == null) {
-      throw new AnnotationNotFoundException(
-          String.format(
-              "Class %s is not annotated with @TorchHub.", tochHubClass.getCanonicalName()));
-    }
-    // Get the package name from the torch hub annotation.
-    // If empty, use the package name of the torch hub class.
-    String packageName = torchHubAnnotation.value();
-    if (packageName.isEmpty()) {
-      packageName = tochHubClass.getPackage().getName();
-    }
-    logVerboseInfo(String.format("Scanning package: %s", packageName) + "\n");
-    return packageName;
   }
 }

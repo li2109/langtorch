@@ -25,11 +25,11 @@ public class LangtorchHub {
 
   @SuppressWarnings("unchecked")
   public <T> Optional<T> getTorchlet(String name) {
-    return Optional.ofNullable((T) langtorchContext.getTorchlet(name));
+    return Optional.ofNullable((T) langtorchContext.getTorchletByName(name));
   }
 
   @SuppressWarnings("unchecked")
   public <T> Optional<T> getTorchlet(Class<?> clazz) {
-    return Optional.ofNullable((T) langtorchContext.getTorchlet(clazz));
+    return Optional.ofNullable((T) langtorchContext.getTorchletByType(clazz));
   }
 }

@@ -8,8 +8,8 @@ import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
 import lombok.AllArgsConstructor;
 
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 /** Factory for creating TorchletDefinition from AnnotatedElement. */
+@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class TorchletDefinitionFactory {
   public static TorchletDefinition createTorchletDefinition(AnnotatedElement element) {
     TorchletDefinitionBuilder torchletDef = TorchletDefinition.builder();

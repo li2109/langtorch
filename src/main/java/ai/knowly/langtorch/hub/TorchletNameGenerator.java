@@ -1,9 +1,12 @@
 package ai.knowly.langtorch.hub;
 
 import ai.knowly.langtorch.hub.annotation.Named;
+import ai.knowly.langtorch.hub.annotation.Provides;
 import ai.knowly.langtorch.hub.annotation.Torchlet;
+import com.google.mu.util.Optionals;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Field;
+import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import lombok.AllArgsConstructor;
 
@@ -17,6 +20,8 @@ public class TorchletNameGenerator {
       return generateTorchletName((Field) element);
     } else if (element instanceof Parameter) {
       return generateTorchletName((Parameter) element);
+    } else if (element instanceof Method) {
+      return generateTorchletFromProvider((Method) element);
     } else {
       throw new IllegalArgumentException(
           "Unsupported AnnotatedElement type: " + element.getClass());
@@ -51,5 +56,12 @@ public class TorchletNameGenerator {
       return field.getDeclaredAnnotation(Named.class).value();
     }
     return field.getType().getName();
+  }
+
+  private static String generateTorchletFromProvider(Method method) {
+    return Optionals.optional(
+            !method.getDeclaredAnnotation(Provides.class).value().isEmpty(),
+            method.getDeclaredAnnotation(Provides.class).value())
+        .orElse(method.getReturnType().getName());
   }
 }

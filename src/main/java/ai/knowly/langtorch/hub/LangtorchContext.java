@@ -164,89 +164,102 @@ public class LangtorchContext {
     Class<?> clazz = torchletDefinition.getClazz();
     ImmutableList<Constructor<?>> injectableConstructors =
         getConstructorWithInjectAnnotation(clazz);
-
     try {
-      Object instance;
-      if (injectableConstructors.isEmpty()) {
-        // Default constructor
-        instance = clazz.getDeclaredConstructor().newInstance();
-      } else {
-        // Constructor with dependencies
-        Constructor<?> injectableConstructor = Iterables.getOnlyElement(injectableConstructors);
-        Parameter[] parameters = injectableConstructor.getParameters();
-        Object[] parameterInstances = new Object[parameters.length];
-        for (int i = 0; i < parameters.length; i++) {
-          Parameter parameter = parameters[i];
-          Optional<String> namedAnnotationValue = getNamedAnnotationValue(parameter);
-          // Handle named dependency(by name)
-          if (namedAnnotationValue.isPresent() && !namedAnnotationValue.get().isEmpty()) {
-            String dependencyName = namedAnnotationValue.get();
-            Optional<Definition> definition =
-                torchletDefinitionRegistry.getTorchletDefinition(dependencyName);
-
-            if (!definition.isPresent()) {
-              logger.atSevere().log(
-                  "Error instantiating class %s: Torchlet %s does not exist",
-                  clazz.getName(), dependencyName);
-              throw new TorchletInstantiationException(
-                  String.format(
-                      "Error instantiating class %s: Torchlet %s does not exist",
-                      clazz.getName(), dependencyName));
-            }
-            parameterInstances[i] =
-                torchletSingletonRegistry
-                    .getTorchletSingletonByName(dependencyName)
-                    .orElseGet(() -> instantiateFromDefinition(definition.get()));
-            continue;
-          }
-          // Handle unnamed dependency (by class)
-          Optional<Definition> definition =
-              torchletDefinitionRegistry.getTorchletDefinition(parameter);
-          if (!definition.isPresent()) {
-            throw new TorchletInstantiationException(
-                String.format("Error instantiating class %s", clazz.getName()));
-          }
-          Set<Object> torchletSingletonByType =
-              torchletSingletonRegistry.getTorchletSingletonByType(parameter.getType());
-          if (torchletSingletonByType.size() > 1) {
-            throw new TorchletInstantiationException(
-                String.format(
-                    "Error instantiating class %s: More than one instance of %s found",
-                    clazz.getName(), parameter.getType().getName()));
-          }
-          if (torchletSingletonByType.size() == 1) {
-            parameterInstances[i] = Iterables.getOnlyElement(torchletSingletonByType);
-            continue;
-          }
-          parameterInstances[i] = instantiateFromDefinition(definition.get());
-        }
-        instance = injectableConstructor.newInstance(parameterInstances);
-      }
-
-      // Handle field injection
-      for (Field field : clazz.getDeclaredFields()) {
-        if (field.isAnnotationPresent(Inject.class)) {
-          if (field.isAnnotationPresent(Named.class)
-              && !field.getAnnotation(Named.class).value().isEmpty()) {
-            String dependencyName = field.getAnnotation(Named.class).value();
-            Optional<Object> torchletSingletonByName =
-                torchletSingletonRegistry.getTorchletSingletonByName(dependencyName);
-            if (torchletSingletonByName.isPresent()) {
-              setAccessible(field);
-              field.set(instance, torchletSingletonByName.get());
-            }
-          } else {
-            Object dependencyInstance = getTorchletByType(field.getType());
-            // Allows us to set private fields.
-            setAccessible(field);
-            field.set(instance, dependencyInstance);
-          }
-        }
-      }
+      Object instance = createInstance(clazz, injectableConstructors);
+      injectFields(instance, clazz);
       return instance;
     } catch (Exception e) {
-      logger.atSevere().log("Error instantiating class %s: %s", clazz.getName(), e.getMessage());
+      logger.atSevere().log("Error instantiating class %s:%s", clazz.getName(), e.getMessage());
       throw new TorchletInstantiationException(e);
+    }
+  }
+
+  private Object createInstance(
+      Class<?> clazz, ImmutableList<Constructor<?>> injectableConstructors) throws Exception {
+    if (injectableConstructors.isEmpty()) {
+      return clazz.getDeclaredConstructor().newInstance();
+    } else {
+      Constructor<?> injectableConstructor = Iterables.getOnlyElement(injectableConstructors);
+      Parameter[] parameters = injectableConstructor.getParameters();
+      Object[] parameterInstances = createParameterInstances(parameters, clazz);
+      return injectableConstructor.newInstance(parameterInstances);
+    }
+  }
+
+  private Object[] createParameterInstances(Parameter[] parameters, Class<?> clazz)
+      throws TorchletInstantiationException {
+    Object[] parameterInstances = new Object[parameters.length];
+    for (int i = 0; i < parameters.length; i++) {
+      Parameter parameter = parameters[i];
+      parameterInstances[i] = getParameterInstance(parameter, clazz);
+    }
+    return parameterInstances;
+  }
+
+  private Object getParameterInstance(Parameter parameter, Class<?> clazz) {
+    Optional<String> namedAnnotationValue = getNamedAnnotationValue(parameter);
+    if (namedAnnotationValue.isPresent() && !namedAnnotationValue.get().isEmpty()) {
+      return getTorchletInstanceByName(namedAnnotationValue.get(), clazz);
+    } else {
+      return getTorchletInstanceByType(parameter, clazz);
+    }
+  }
+
+  private Object getTorchletInstanceByName(String dependencyName, Class<?> clazz) {
+    Optional<Definition> definition =
+        torchletDefinitionRegistry.getTorchletDefinition(dependencyName);
+    if (!definition.isPresent()) {
+      logger.atSevere().log(
+          "Error instantiating class %s:Torchlet %s does not exist",
+          clazz.getName(), dependencyName);
+      throw new TorchletInstantiationException(
+          String.format(
+              "Error instantiating class %s:Torchlet %s does not exist",
+              clazz.getName(), dependencyName));
+    }
+    return torchletSingletonRegistry
+        .getTorchletSingletonByName(dependencyName)
+        .orElseGet(() -> instantiateFromDefinition(definition.get()));
+  }
+
+  private Object getTorchletInstanceByType(Parameter parameter, Class<?> clazz) {
+    Optional<Definition> definition = torchletDefinitionRegistry.getTorchletDefinition(parameter);
+    if (!definition.isPresent()) {
+      throw new TorchletInstantiationException(
+          String.format("Error instantiating class %s", clazz.getName()));
+    }
+    Set<Object> torchletSingletonByType =
+        torchletSingletonRegistry.getTorchletSingletonByType(parameter.getType());
+    if (torchletSingletonByType.size() > 1) {
+      throw new TorchletInstantiationException(
+          String.format(
+              "Error instantiating class %s:More than one instance of %s found",
+              clazz.getName(), parameter.getType().getName()));
+    }
+    if (torchletSingletonByType.size() == 1) {
+      return Iterables.getOnlyElement(torchletSingletonByType);
+    }
+    return instantiateFromDefinition(definition.get());
+  }
+
+  private void injectFields(Object instance, Class<?> clazz) throws IllegalAccessException {
+    for (Field field : clazz.getDeclaredFields()) {
+      if (field.isAnnotationPresent(Inject.class)) {
+        if (field.isAnnotationPresent(Named.class)
+            && !field.getAnnotation(Named.class).value().isEmpty()) {
+          String dependencyName = field.getAnnotation(Named.class).value();
+          Optional<Object> torchletSingletonByName =
+              torchletSingletonRegistry.getTorchletSingletonByName(dependencyName);
+          if (torchletSingletonByName.isPresent()) {
+            setAccessible(field);
+            field.set(instance, torchletSingletonByName.get());
+          }
+        } else {
+          Object dependencyInstance = getTorchletByType(field.getType());
+          setAccessible(field);
+          field.set(instance, dependencyInstance);
+        }
+      }
     }
   }
 

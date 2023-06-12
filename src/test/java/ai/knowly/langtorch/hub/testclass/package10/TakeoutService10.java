@@ -6,4 +6,4 @@ import ai.knowly.langtorch.hub.schema.TorchScopeValue;
 
 @Torchlet
 @TorchScope(value = TorchScopeValue.SINGLETON)
-public class TakeoutService10{}
+public class TakeoutService10 {}

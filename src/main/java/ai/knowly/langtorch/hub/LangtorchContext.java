@@ -26,6 +26,7 @@ import com.google.common.flogger.FluentLogger;
 import java.lang.reflect.AnnotatedElement;
 import java.lang.reflect.Constructor;
 import java.lang.reflect.Field;
+import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
 import java.lang.reflect.Parameter;
 import java.util.ArrayList;
@@ -175,7 +176,11 @@ public class LangtorchContext {
   }
 
   private Object createInstance(
-      Class<?> clazz, ImmutableList<Constructor<?>> injectableConstructors) throws Exception {
+      Class<?> clazz, ImmutableList<Constructor<?>> injectableConstructors)
+      throws NoSuchMethodException,
+          InvocationTargetException,
+          InstantiationException,
+          IllegalAccessException {
     if (injectableConstructors.isEmpty()) {
       return clazz.getDeclaredConstructor().newInstance();
     } else {

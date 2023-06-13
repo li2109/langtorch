@@ -4,7 +4,7 @@ import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtorch.preprocessing.parser.Parser;
-import ai.knowly.langtorch.processor.module.Processor;
+import ai.knowly.langtorch.processor.Processor;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import ai.knowly.langtorch.store.memory.Memory;

@@ -4,7 +4,7 @@ import ai.knowly.langtorch.llm.cohere.CohereApiService;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateRequest;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.processor.ProcessorExecutionException;
-import ai.knowly.langtorch.processor.module.Processor;
+import ai.knowly.langtorch.processor.Processor;
 import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;

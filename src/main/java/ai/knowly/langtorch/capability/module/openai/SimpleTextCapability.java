@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.capability.module.openai;
 
 import ai.knowly.langtorch.capability.modality.text.TextCompletionTextLLMCapability;
-import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessor;
+import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtorch.preprocessing.parser.SingleTextToStringParser;
 import ai.knowly.langtorch.preprocessing.parser.StringToSingleTextParser;
 

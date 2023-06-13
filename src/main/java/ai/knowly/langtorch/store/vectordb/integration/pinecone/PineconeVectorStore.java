@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
-import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
-import ai.knowly.langtorch.processor.module.openai.embeddings.OpenAIEmbeddingsProcessor;
+import ai.knowly.langtorch.processor.EmbeddingsProcessor;
+import ai.knowly.langtorch.processor.openai.embeddings.OpenAIEmbeddingsProcessor;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.io.DomainDocument;

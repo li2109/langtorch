@@ -5,7 +5,7 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
-import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessor;
+import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessor;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;

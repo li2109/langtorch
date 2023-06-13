@@ -22,7 +22,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CohereAPIService {
+public class CohereApiService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.cohere.ai/";
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
@@ -38,7 +38,7 @@ public class CohereAPIService {
    *
    * @param token Cohere token string
    */
-  public CohereAPIService(final String token) {
+  public CohereApiService(final String token) {
     this(token, DEFAULT_TIMEOUT);
   }
 
@@ -48,11 +48,11 @@ public class CohereAPIService {
    * @param token Cohere token string
    * @param timeout http read timeout, Duration.ZERO means no timeout
    */
-  public CohereAPIService(final String token, final Duration timeout) {
+  public CohereApiService(final String token, final Duration timeout) {
     this(buildApi(token, timeout));
   }
 
-  public CohereAPIService(final CohereApi api) {
+  public CohereApiService(final CohereApi api) {
     this.api = api;
   }
 

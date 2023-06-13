@@ -33,7 +33,7 @@ public class TorchletDefinitionRegistry {
   }
 
   public static ImmutableList<Constructor<?>> getConstructorWithInjectAnnotation(Class<?> aClass) {
-    // Getting all constructors with @TorchInject annotation.
+    // Getting all constructors with @Inject annotation.
     ImmutableList<Constructor<?>> constructors =
         Arrays.stream(aClass.getConstructors())
             .filter(c -> c.isAnnotationPresent(Inject.class))
@@ -41,7 +41,7 @@ public class TorchletDefinitionRegistry {
 
     if (constructors.size() > 1) {
       throw new MultipleConstructorInjectionException(
-          "Multiple constructors with @TorchInject annotation.");
+          "Multiple constructors with @Inject annotation.");
     }
     return constructors;
   }

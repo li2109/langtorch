@@ -6,6 +6,9 @@ import java.util.Optional;
 
 @AutoValue
 public abstract class OpenAIEmbeddingsProcessorConfig implements ProcessorConfig {
+  public static OpenAIEmbeddingsProcessorConfig getDefaultInstance() {
+    return builder().build();
+  }
 
   public static OpenAIEmbeddingsProcessorConfig.Builder builder() {
     return new AutoValue_OpenAIEmbeddingsProcessorConfig.Builder();

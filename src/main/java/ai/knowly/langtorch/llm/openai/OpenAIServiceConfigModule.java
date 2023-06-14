@@ -1,0 +1,17 @@
+package ai.knowly.langtorch.llm.openai;
+
+import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
+import ai.knowly.langtorch.utils.Environment;
+import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
+import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+
+/** Provides the OpenAI service configuration. */
+public class OpenAIServiceConfigModule extends AbstractModule {
+  @Provides
+  public OpenAIServiceConfig provideOpenAIServiceConfig() {
+    return OpenAIServiceConfig.builder()
+        .setApiKey(OpenAIKeyUtil.getKey(Environment.PRODUCTION))
+        .build();
+  }
+}

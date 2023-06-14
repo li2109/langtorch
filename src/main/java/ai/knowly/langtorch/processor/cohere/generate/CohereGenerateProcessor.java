@@ -12,7 +12,7 @@ import javax.inject.Inject;
 
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-/** Processor for Cohere.ai text generation service.*/
+/** Processor for Cohere.ai text generation service. */
 public class CohereGenerateProcessor implements Processor<SingleText, SingleText> {
 
   private final CohereApiService cohereApiService;

@@ -51,16 +51,17 @@ class CohereGenerateProcessorTest {
 
   @Test
   void runAsync() throws Exception {
-// Arrage.
+    // Arrage.
     Generation generation = new Generation();
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();
     generateResponse.setGenerations(ImmutableList.of(generation));
     when(CohereApiService.generateAsync(any()))
         .thenReturn(Futures.immediateFuture(generateResponse));
-    
+
     // Act.
-    ListenableFuture<SingleText> actualOutput = cohereGenerateProcessor.runAsync(SingleText.of("ice cream"));
+    ListenableFuture<SingleText> actualOutput =
+        cohereGenerateProcessor.runAsync(SingleText.of("ice cream"));
 
     // Assert.
     assertEquals("This ice cream is sweet and delicious", actualOutput.get().getText());

@@ -5,8 +5,6 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
-import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessor;
-import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessorConfig;
 import ai.knowly.langtorch.schema.text.SingleText;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import com.google.inject.testing.fieldbinder.Bind;

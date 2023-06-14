@@ -16,44 +16,44 @@ import javax.inject.Inject;
 
 /** Embeddings processor for OpenAI. */
 public class OpenAIEmbeddingProcessor implements EmbeddingProcessor {
-    private final OpenAIService openAIService;
-    private final OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig;
+  private final OpenAIService openAIService;
+  private final OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig;
 
-    @Inject
-    public OpenAIEmbeddingProcessor(
-            OpenAIService openAiApi, OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
-        this.openAIService = openAiApi;
-        this.openAIEmbeddingsProcessorConfig = openAIEmbeddingsProcessorConfig;
-    }
+  @Inject
+  public OpenAIEmbeddingProcessor(
+      OpenAIService openAiApi, OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
+    this.openAIService = openAiApi;
+    this.openAIEmbeddingsProcessorConfig = openAIEmbeddingsProcessorConfig;
+  }
 
-    @Override
-    public EmbeddingOutput run(EmbeddingInput inputData) {
-        EmbeddingResult embeddingResult =
-                openAIService.createEmbeddings(
-                        OpenAIEmbeddingsProcessorRequestConverter.convert(
-                                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
-        return EmbeddingOutput.of(
+  @Override
+  public EmbeddingOutput run(EmbeddingInput inputData) {
+    EmbeddingResult embeddingResult =
+        openAIService.createEmbeddings(
+            OpenAIEmbeddingsProcessorRequestConverter.convert(
+                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
+    return EmbeddingOutput.of(
+        EmbeddingType.OPEN_AI,
+        embeddingResult.getData().stream()
+            .map(embedding -> Embedding.of(embedding.getValue()))
+            .collect(toImmutableList()));
+  }
+
+  @Override
+  public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
+    ListenableFuture<EmbeddingResult> embeddingResult =
+        openAIService.createEmbeddingsAsync(
+            OpenAIEmbeddingsProcessorRequestConverter.convert(
+                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
+
+    return Futures.transform(
+        embeddingResult,
+        result ->
+            EmbeddingOutput.of(
                 EmbeddingType.OPEN_AI,
-                embeddingResult.getData().stream()
-                        .map(embedding -> Embedding.of(embedding.getValue()))
-                        .collect(toImmutableList()));
-    }
-
-    @Override
-    public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
-        ListenableFuture<EmbeddingResult> embeddingResult =
-                openAIService.createEmbeddingsAsync(
-                        OpenAIEmbeddingsProcessorRequestConverter.convert(
-                                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
-
-        return Futures.transform(
-                embeddingResult,
-                result ->
-                        EmbeddingOutput.of(
-                                EmbeddingType.OPEN_AI,
-                                result.getData().stream()
-                                        .map(embedding -> Embedding.of(embedding.getValue()))
-                                        .collect(toImmutableList())),
-                directExecutor());
-    }
+                result.getData().stream()
+                    .map(embedding -> Embedding.of(embedding.getValue()))
+                    .collect(toImmutableList())),
+        directExecutor());
+  }
 }

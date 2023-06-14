@@ -3,8 +3,6 @@ package ai.knowly.langtorch.processor.openai.text;
 import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
-import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessorConfig;
-import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessorRequestConverter;
 import com.google.common.collect.ImmutableMap;
 import java.util.Arrays;
 import org.junit.jupiter.api.BeforeEach;

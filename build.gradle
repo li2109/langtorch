@@ -141,7 +141,7 @@ dependencies {
     implementation 'org.yaml:snakeyaml:1.33'
     // H2 in-memory database
     testImplementation 'com.h2database:h2:1.4.200'
-    // Guice dependency injection
+    // Guice dependency injection testing utilities
     testImplementation 'com.google.inject.extensions:guice-testlib:5.1.0'
 }
 

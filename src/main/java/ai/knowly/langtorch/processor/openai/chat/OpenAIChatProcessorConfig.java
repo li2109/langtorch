@@ -13,9 +13,17 @@ import java.util.Optional;
 // Configuration class for OpenAIChatProcessor with various options
 @AutoValue
 public abstract class OpenAIChatProcessorConfig implements ProcessorConfig {
-  // Factory method to create a new builder instance with default settings
+  private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
+  private static final int DEFAULT_MAX_TOKEN = 2048;
+
+  public static OpenAIChatProcessorConfig getDefaultInstance() {
+    return builder().build();
+  }
+
   public static Builder builder() {
     return new AutoValue_OpenAIChatProcessorConfig.Builder()
+        .setModel(DEFAULT_MODEL)
+        .setMaxTokens(DEFAULT_MAX_TOKEN)
         .setStop(new ArrayList<>())
         .setLogitBias(new HashMap<>());
   }

@@ -1,5 +1,7 @@
 package ai.knowly.langtorch.connector.sql;
 
+import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
+
 import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 import java.sql.Connection;
@@ -8,21 +10,17 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
-
-/** MySQL connector. */
-import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
-
-import lombok.AllArgsConstructor;
+import javax.inject.Inject;
 import lombok.NonNull;
 
 /** MySQL loader. */
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class MySQLConnector implements Connector<Records> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-  @NonNull private SQLConnectorOption readOption;
+  private final SQLConnectorOption readOption;
 
-  public static MySQLConnector create(SQLConnectorOption readOption) {
-    return new MySQLConnector(readOption);
+  @Inject
+  public MySQLConnector(@NonNull SQLConnectorOption readOption) {
+    this.readOption = readOption;
   }
 
   @Override

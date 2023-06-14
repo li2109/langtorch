@@ -3,62 +3,49 @@ package ai.knowly.langtorch.capability.modality.text;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.preprocessing.parser.Parser;
-import ai.knowly.langtorch.processor.Processor;
+import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.Optional;
+import javax.inject.Inject;
 
 public class TextCompletionTextLLMCapability<I, O>
     implements TextLLMCapability<I, SingleText, SingleText, O> {
+
   private final Processor<SingleText, SingleText> processor;
+  private final Parsers<I, SingleText, SingleText, O> parsers;
 
-  private Optional<Parser<I, SingleText>> inputParser;
-  private Optional<Parser<SingleText, O>> outputParser;
-
-  public TextCompletionTextLLMCapability(Processor<SingleText, SingleText> processor) {
+  @Inject
+  public TextCompletionTextLLMCapability(
+      Processor<SingleText, SingleText> processor, Parsers<I, SingleText, SingleText, O> parsers) {
     this.processor = processor;
-    this.inputParser = Optional.empty();
-    this.outputParser = Optional.empty();
-  }
-
-  public static <I, O> TextCompletionTextLLMCapability<I, O> of(
-      Processor<SingleText, SingleText> processor) {
-    return new TextCompletionTextLLMCapability<>(processor);
-  }
-
-  public TextCompletionTextLLMCapability<I, O> withInputParser(Parser<I, SingleText> inputParser) {
-    this.inputParser = Optional.of(inputParser);
-    return this;
-  }
-
-  public TextCompletionTextLLMCapability<I, O> withOutputParser(
-      Parser<SingleText, O> outputParser) {
-    this.outputParser = Optional.of(outputParser);
-    return this;
+    this.parsers = parsers;
   }
 
   @Override
   public SingleText preProcess(I inputData) {
     if (inputData instanceof SingleText) {
       return (SingleText) inputData;
-    } else if (inputParser.isPresent()) {
-      return inputParser.get().parse(inputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Input data is not a SingleText and no input parser is present.");
     }
+
+    return parsers
+        .getInputParser()
+        .map(parser -> parser.parse(inputData))
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Input data is not a SingleText and no input parser is present."));
   }
 
   @Override
   public O postProcess(SingleText outputData) {
-    if (outputParser.isPresent()) {
-      return outputParser.get().parse(outputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Output data type is not SingleText and no output parser is present.");
-    }
+    return parsers
+        .getOutputParser()
+        .map(parser -> parser.parse(outputData))
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Output data is not a SingleText and no output parser is present."));
   }
 
   @Override

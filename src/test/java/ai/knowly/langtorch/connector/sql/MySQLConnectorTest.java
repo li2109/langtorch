@@ -35,7 +35,7 @@ class MySQLConnectorTest {
   @Test
   void testRead() {
     MySQLConnector loader =
-        MySQLConnector.create(
+        new MySQLConnector(
             SQLConnectorOption.builder()
                 .setQuery("SELECT * FROM test_table WHERE id = 1")
                 .setConnection(conn)
@@ -51,7 +51,7 @@ class MySQLConnectorTest {
   @Test
   void testRead_NoResult() {
     MySQLConnector loader =
-        MySQLConnector.create(
+        new MySQLConnector(
             SQLConnectorOption.builder()
                 .setQuery("SELECT * FROM test_table WHERE id = 2")
                 .setConnection(conn)
@@ -69,7 +69,7 @@ class MySQLConnectorTest {
     stmt.execute("INSERT INTO test_table(id, name) VALUES(3, 'Test3')");
 
     MySQLConnector loader =
-        MySQLConnector.create(
+        new MySQLConnector(
             SQLConnectorOption.builder()
                 .setQuery("SELECT * FROM test_table")
                 .setConnection(conn)
@@ -84,7 +84,7 @@ class MySQLConnectorTest {
   @Test
   void testRead_emptyRecord() {
     MySQLConnector connector =
-        MySQLConnector.create(
+        new MySQLConnector(
             SQLConnectorOption.builder()
                 .setQuery("SELECT * FROM non_existent_table")
                 .setConnection(conn)

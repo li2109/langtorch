@@ -12,7 +12,7 @@ final class PDFConnectorTest {
     // Arrange.
     // Act.
     Optional<String> actualContent =
-        PDFConnector.create(
+        new PDFConnector(
                 PDFConnectorOption.builder().setFilePath("src/test/resources/test.pdf").build())
             .read();
 

@@ -14,7 +14,7 @@ class SpreadSheetLoaderTest {
 
     // Act.
     Optional<String> result =
-        SpreadSheetConnector.create(
+        new SpreadSheetConnector(
                 SpreadSheetConnectorOption.builder().setFilePath(testFilePath).build())
             .read();
 
@@ -38,7 +38,7 @@ class SpreadSheetLoaderTest {
 
     // Act.
     Optional<String> result =
-        SpreadSheetConnector.create(
+        new SpreadSheetConnector(
                 SpreadSheetConnectorOption.builder()
                     .setSeparatorForEachLine("\n\n")
                     .setFilePath(testFilePath)

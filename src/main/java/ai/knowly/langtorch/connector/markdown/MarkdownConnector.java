@@ -7,17 +7,17 @@ import java.nio.charset.StandardCharsets;
 import java.nio.file.Files;
 import java.nio.file.Paths;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import javax.inject.Inject;
 import lombok.NonNull;
 
 /** Implementation of DocumentConnector for Md files. */
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class MarkdownConnector implements Connector<String> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-  @NonNull private MarkdownConnectorOption readOption;
+  private final MarkdownConnectorOption readOption;
 
-  public static MarkdownConnector create(MarkdownConnectorOption readOption) {
-    return new MarkdownConnector(readOption);
+  @Inject
+  public MarkdownConnector(@NonNull MarkdownConnectorOption readOption) {
+    this.readOption = readOption;
   }
 
   @Override

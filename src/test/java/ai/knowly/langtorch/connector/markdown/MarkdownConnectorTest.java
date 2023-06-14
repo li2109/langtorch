@@ -7,7 +7,6 @@ import java.util.Optional;
 import org.junit.jupiter.api.Test;
 
 class MarkdownConnectorTest {
-
   @Test
   void testMdNotExist() {
     // Arrange.
@@ -18,7 +17,7 @@ class MarkdownConnectorTest {
         assertThrows(
             MarkdownReadException.class,
             () ->
-                MarkdownConnector.create(
+                new MarkdownConnector(
                         MarkdownConnectorOption.builder().setFilePath(testFilePath).build())
                     .read());
 
@@ -33,8 +32,7 @@ class MarkdownConnectorTest {
 
     // Act.
     Optional<String> result =
-        MarkdownConnector.create(
-                MarkdownConnectorOption.builder().setFilePath(testFilePath).build())
+        new MarkdownConnector(MarkdownConnectorOption.builder().setFilePath(testFilePath).build())
             .read();
 
     // Assert.

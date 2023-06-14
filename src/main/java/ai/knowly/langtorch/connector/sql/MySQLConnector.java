@@ -12,17 +12,18 @@ import java.util.Optional;
 /** MySQL connector. */
 import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
 
+import javax.inject.Inject;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 /** MySQL loader. */
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class MySQLConnector implements Connector<Records> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-  @NonNull private SQLConnectorOption readOption;
+  private final SQLConnectorOption readOption;
 
-  public static MySQLConnector create(SQLConnectorOption readOption) {
-    return new MySQLConnector(readOption);
+  @Inject
+  public MySQLConnector(@NonNull SQLConnectorOption readOption) {
+    this.readOption = readOption;
   }
 
   @Override

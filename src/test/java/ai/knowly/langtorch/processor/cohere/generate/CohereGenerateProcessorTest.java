@@ -35,38 +35,34 @@ class CohereGenerateProcessorTest {
 
   @Test
   void run() {
-    // Prepare
+    // Arrange.
     Generation generation = new Generation();
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();
     generateResponse.setGenerations(ImmutableList.of(generation));
     when(CohereApiService.generate(any())).thenReturn(generateResponse);
 
-    SingleText input = SingleText.of("ice cream");
+    // Act.
+    SingleText actualOutput = cohereGenerateProcessor.run(SingleText.of("ice cream"));
 
-    // Act
-    SingleText actualOutput = cohereGenerateProcessor.run(input);
-
-    // Assert
+    // Assert.
     assertEquals("This ice cream is sweet and delicious", actualOutput.getText());
   }
 
   @Test
   void runAsync() throws Exception {
-    // Prepare
+// Arrage.
     Generation generation = new Generation();
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();
     generateResponse.setGenerations(ImmutableList.of(generation));
     when(CohereApiService.generateAsync(any()))
         .thenReturn(Futures.immediateFuture(generateResponse));
+    
+    // Act.
+    ListenableFuture<SingleText> actualOutput = cohereGenerateProcessor.runAsync(SingleText.of("ice cream"));
 
-    SingleText input = SingleText.of("ice cream");
-
-    // Act
-    ListenableFuture<SingleText> actualOutput = cohereGenerateProcessor.runAsync(input);
-
-    // Assert
+    // Assert.
     assertEquals("This ice cream is sweet and delicious", actualOutput.get().getText());
   }
 }

@@ -14,7 +14,7 @@ import static ai.knowly.langtorch.llm.cohere.CohereApiService.buildApi;
 public final class CohereProcessorModule extends AbstractModule {
   private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
 
-  private static FluentLogger logger = FluentLogger.forEnclosingClass();
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Provides
   public CohereApiService providesCohereAPI() {

@@ -4,7 +4,7 @@ import static ai.knowly.langtorch.example.ExampleUtils.readInputUntilEXIT;
 
 import ai.knowly.langtorch.capability.integration.openai.SimpleChatCapability;
 import ai.knowly.langtorch.llm.openai.OpenAIServiceConfigWithExplicitAPIKeyModule;
-import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessorConfig;
+import ai.knowly.langtorch.processor.openai.chat.OpenAIChatProcessorConfig;
 import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import com.google.common.flogger.FluentLogger;
 import com.google.inject.AbstractModule;

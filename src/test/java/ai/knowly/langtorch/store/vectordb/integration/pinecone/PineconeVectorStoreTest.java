@@ -3,7 +3,7 @@ package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.emptyList;
 
-import ai.knowly.langtorch.processor.module.EmbeddingProcessor;
+import ai.knowly.langtorch.processor.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;

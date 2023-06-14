@@ -4,7 +4,7 @@ import ai.knowly.langtorch.capability.graph.CapabilityGraph;
 import ai.knowly.langtorch.capability.graph.NodeAdapter;
 import ai.knowly.langtorch.capability.integration.openai.SimpleTextCapability;
 import ai.knowly.langtorch.llm.openai.OpenAIServiceConfigWithImplicitAPIKeyModule;
-import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessorConfig;
+import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessorConfig;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.flogger.FluentLogger;

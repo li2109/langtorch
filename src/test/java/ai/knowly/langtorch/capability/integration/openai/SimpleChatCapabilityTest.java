@@ -5,8 +5,8 @@ import static org.mockito.Matchers.any;
 import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
-import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessor;
-import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessorConfig;
+import ai.knowly.langtorch.processor.openai.chat.OpenAIChatProcessor;
+import ai.knowly.langtorch.processor.openai.chat.OpenAIChatProcessorConfig;
 import ai.knowly.langtorch.schema.chat.AssistantMessage;
 import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;

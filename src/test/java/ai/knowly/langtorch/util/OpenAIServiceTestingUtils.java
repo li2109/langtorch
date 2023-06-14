@@ -7,7 +7,7 @@ import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionC
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.Embedding;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
-import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
+import ai.knowly.langtorch.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.utils.Environment;
 import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import com.google.common.collect.ImmutableList;

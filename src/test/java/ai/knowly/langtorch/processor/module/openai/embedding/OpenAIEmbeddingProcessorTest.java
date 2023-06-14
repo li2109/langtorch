@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.openai.embedding;
+package ai.knowly.langtorch.processor.openai.embedding;
 
 import static ai.knowly.langtorch.schema.embeddings.EmbeddingType.OPEN_AI;
 import static com.google.common.truth.Truth.assertThat;

@@ -48,7 +48,7 @@ public class OpenAIEmbeddingProcessor implements EmbeddingProcessor {
 
     return Futures.transform(
         embeddingResult,
-        (result) ->
+        result ->
             EmbeddingOutput.of(
                 EmbeddingType.OPEN_AI,
                 result.getData().stream()

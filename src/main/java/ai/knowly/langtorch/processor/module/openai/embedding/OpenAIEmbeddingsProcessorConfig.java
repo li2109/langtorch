@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.openai.embeddings;
+package ai.knowly.langtorch.processor.module.openai.embedding;
 
 import ai.knowly.langtorch.processor.module.ProcessorConfig;
 import com.google.auto.value.AutoValue;

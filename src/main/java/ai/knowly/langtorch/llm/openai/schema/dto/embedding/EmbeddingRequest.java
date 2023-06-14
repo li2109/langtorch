@@ -14,11 +14,11 @@ import lombok.*;
 @Data
 public class EmbeddingRequest {
 
-  /** The name of the model to use. Required if using the new v1/embeddings endpoint. */
+  /** The name of the model to use. Required if using the new v1/embedding endpoint. */
   String model;
 
   /**
-   * Input text to get embeddings for, encoded as a string or array of tokens. To get embeddings for
+   * Input text to get embedding for, encoded as a string or array of tokens. To get embedding for
    * multiple inputs in a single request, pass an array of strings or array of token arrays. Each
    * input must not exceed 2048 tokens in length.
    *

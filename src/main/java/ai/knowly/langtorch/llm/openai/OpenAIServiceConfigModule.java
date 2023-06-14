@@ -8,6 +8,8 @@ import com.google.inject.Provides;
 
 /** Provides the OpenAI service configuration. */
 public class OpenAIServiceConfigModule extends AbstractModule {
+
+  // Get the OpenAI key from the environment variables and provide it to the OpenAI service.
   @Provides
   public OpenAIServiceConfig provideOpenAIServiceConfig() {
     return OpenAIServiceConfig.builder()

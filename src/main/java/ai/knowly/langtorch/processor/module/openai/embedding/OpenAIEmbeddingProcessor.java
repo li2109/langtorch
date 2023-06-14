@@ -1,6 +1,7 @@
 package ai.knowly.langtorch.processor.module.openai.embedding;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
@@ -9,6 +10,7 @@ import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import javax.inject.Inject;
 
@@ -39,7 +41,19 @@ public class OpenAIEmbeddingProcessor implements EmbeddingProcessor {
 
   @Override
   public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
-    // TODO: Implement async
-    throw new UnsupportedOperationException("Not implemented yet");
+    ListenableFuture<EmbeddingResult> embeddingResult =
+        openAIService.createEmbeddingsAsync(
+            OpenAIEmbeddingsProcessorRequestConverter.convert(
+                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
+
+    return Futures.transform(
+        embeddingResult,
+        (result) ->
+            EmbeddingOutput.of(
+                EmbeddingType.OPEN_AI,
+                result.getData().stream()
+                    .map(embedding -> Embedding.of(embedding.getValue()))
+                    .collect(toImmutableList())),
+        directExecutor());
   }
 }

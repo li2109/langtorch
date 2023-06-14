@@ -37,10 +37,6 @@ public class PineconeVectorStore implements VectorStore {
 
   /** Adds the specified documents to the Pinecone vector store database. */
   public UpsertResponse addDocuments(List<DomainDocument> documents) {
-    if (documents.isEmpty()) {
-      return null;
-    }
-
     return addVectors(
         documents.stream()
             .map(this::createVector)

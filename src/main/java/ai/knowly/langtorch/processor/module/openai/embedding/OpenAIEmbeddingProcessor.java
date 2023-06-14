@@ -15,7 +15,6 @@ import javax.inject.Inject;
 /** Embeddings processor for OpenAI. */
 public class OpenAIEmbeddingProcessor implements EmbeddingProcessor {
   private final OpenAIService openAIService;
-
   private final OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig;
 
   @Inject

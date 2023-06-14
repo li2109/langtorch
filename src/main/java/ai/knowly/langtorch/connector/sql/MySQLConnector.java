@@ -1,5 +1,7 @@
 package ai.knowly.langtorch.connector.sql;
 
+import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
+
 import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 import java.sql.Connection;
@@ -8,12 +10,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Optional;
-
-/** MySQL connector. */
-import static ai.knowly.langtorch.connector.sql.ResultSetTransform.transform;
-
 import javax.inject.Inject;
-import lombok.AllArgsConstructor;
 import lombok.NonNull;
 
 /** MySQL loader. */

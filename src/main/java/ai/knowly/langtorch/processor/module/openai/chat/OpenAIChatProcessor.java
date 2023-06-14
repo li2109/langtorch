@@ -33,9 +33,8 @@ public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMess
           .setMaxTokens(DEFAULT_MAX_TOKEN)
           .build();
 
-  // Constructor with dependency injection
   @Inject
-  OpenAIChatProcessor(OpenAIService openAIService) {
+  public OpenAIChatProcessor(OpenAIService openAIService) {
     this.openAIService = openAIService;
   }
 

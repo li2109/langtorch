@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessor;
+import ai.knowly.langtorch.processor.module.openai.chat.OpenAIChatProcessorConfig;
 import ai.knowly.langtorch.schema.chat.AssistantMessage;
 import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
@@ -29,7 +30,9 @@ final class SimpleChatCapabilityTest {
     // Act.
     String response =
         new SimpleChatCapability(
-                new OpenAIChatProcessor(openAIService), ConversationMemory.geDefaultInstance())
+                new OpenAIChatProcessor(
+                    openAIService, OpenAIChatProcessorConfig.getDefaultInstance()),
+                ConversationMemory.geDefaultInstance())
             .run("Where is Changsha?");
 
     // Assert.

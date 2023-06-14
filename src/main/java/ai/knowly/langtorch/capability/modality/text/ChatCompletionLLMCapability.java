@@ -3,7 +3,6 @@ package ai.knowly.langtorch.capability.modality.text;
 import static com.google.common.util.concurrent.Futures.immediateFuture;
 import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
-import ai.knowly.langtorch.preprocessing.parser.Parser;
 import ai.knowly.langtorch.processor.module.Processor;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.text.MultiChatMessage;
@@ -12,56 +11,32 @@ import ai.knowly.langtorch.store.memory.conversation.ConversationMemoryContext;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.FluentFuture;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.util.Optional;
+import javax.inject.Inject;
 
+/** Capability for a chat completion language model. */
 public class ChatCompletionLLMCapability<I, O>
     implements TextLLMCapabilityWithMemory<
         I, MultiChatMessage, ChatMessage, O, ChatMessage, ConversationMemoryContext> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   private final Processor<MultiChatMessage, ChatMessage> processor;
-
-  private Optional<Parser<I, MultiChatMessage>> inputParser;
-  private Optional<Parser<ChatMessage, O>> outputParser;
-  private Optional<Memory<ChatMessage, ConversationMemoryContext>> memory;
+  private final Parsers<I, MultiChatMessage, ChatMessage, O> parsers;
+  private final Memory<ChatMessage, ConversationMemoryContext> memory;
   private boolean verbose;
 
+  @Inject
   public ChatCompletionLLMCapability(
       Processor<MultiChatMessage, ChatMessage> processor,
-      Optional<Parser<I, MultiChatMessage>> inputParser,
-      Optional<Parser<ChatMessage, O>> outputParser) {
+      Parsers<I, MultiChatMessage, ChatMessage, O> parsers,
+      Memory<ChatMessage, ConversationMemoryContext> memory) {
     this.processor = processor;
-    this.inputParser = inputParser;
-    this.outputParser = outputParser;
-    this.memory = Optional.empty();
+    this.parsers = parsers;
+    this.memory = memory;
     this.verbose = false;
   }
 
-  public static <I, O> ChatCompletionLLMCapability<I, O> of(
-      Processor<MultiChatMessage, ChatMessage> processor) {
-    return new ChatCompletionLLMCapability<>(processor, Optional.empty(), Optional.empty());
-  }
-
-  protected ChatCompletionLLMCapability<I, O> withInputParser(
-      Parser<I, MultiChatMessage> inputParser) {
-    this.inputParser = Optional.of(inputParser);
-    return this;
-  }
-
-  protected ChatCompletionLLMCapability<I, O> withOutputParser(
-      Parser<ChatMessage, O> outputParser) {
-    this.outputParser = Optional.of(outputParser);
-    return this;
-  }
-
-  protected ChatCompletionLLMCapability<I, O> withMemory(
-      Memory<ChatMessage, ConversationMemoryContext> memory) {
-    this.memory = Optional.of(memory);
-    return this;
-  }
-
-  protected ChatCompletionLLMCapability<I, O> withVerboseMode() {
-    this.verbose = true;
+  protected ChatCompletionLLMCapability<I, O> withVerboseMode(boolean verbose) {
+    this.verbose = verbose;
     return this;
   }
 
@@ -69,27 +44,30 @@ public class ChatCompletionLLMCapability<I, O>
   public MultiChatMessage preProcess(I inputData) {
     if (inputData instanceof MultiChatMessage) {
       return (MultiChatMessage) inputData;
-    } else if (inputParser.isPresent()) {
-      return inputParser.get().parse(inputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Input data is not a MultiChatMessage and no input parser is present.");
     }
-  }
-
-  @Override
-  public Optional<Memory<ChatMessage, ConversationMemoryContext>> getMemory() {
-    return memory;
+    return parsers
+        .getInputParser()
+        .map(parser -> parser.parse(inputData))
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Input data is not a MultiChatMessage and no input parser is present."));
   }
 
   @Override
   public O postProcess(ChatMessage outputData) {
-    if (outputParser.isPresent()) {
-      return outputParser.get().parse(outputData);
-    } else {
-      throw new IllegalArgumentException(
-          "Output data type is not ChatMessage and no output parser is present.");
-    }
+    return parsers
+        .getOutputParser()
+        .map(parser -> parser.parse(outputData))
+        .orElseThrow(
+            () ->
+                new IllegalArgumentException(
+                    "Output data type is not ChatMessage and no output parser is present."));
+  }
+
+  @Override
+  public Memory<ChatMessage, ConversationMemoryContext> getMemory() {
+    return memory;
   }
 
   @Override
@@ -98,26 +76,19 @@ public class ChatCompletionLLMCapability<I, O>
   }
 
   private ChatMessage generateMemorySideEffectResponse(MultiChatMessage multiChatMessage) {
-    memory.ifPresent(
-        m -> {
-          if (verbose) {
-            logger.atInfo().log("Memory before processing: %s", m);
-          }
-        });
+    if (verbose) {
+      logger.atInfo().log("Memory before processing: %s", memory);
+    }
     ChatMessage response = processor.run(getMessageWithMemorySideEffect(multiChatMessage));
     // Adding prompt and response.
-    memory.ifPresent(m -> multiChatMessage.getMessages().forEach(m::add));
-    memory.ifPresent(m -> m.add(response));
+    multiChatMessage.getMessages().forEach(memory::add);
+    memory.add(response);
     return response;
   }
 
   private MultiChatMessage getMessageWithMemorySideEffect(MultiChatMessage message) {
-    if (!memory.isPresent()) {
-      return message;
-    }
-
     // Memory context being empty means that this is the first message in the conversation
-    String memoryContext = memory.get().getMemoryContext().get();
+    String memoryContext = memory.getMemoryContext().get();
     if (memoryContext.isEmpty()) {
       return message;
     }

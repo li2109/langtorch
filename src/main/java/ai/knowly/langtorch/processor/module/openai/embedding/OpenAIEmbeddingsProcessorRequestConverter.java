@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.openai.embeddings;
+package ai.knowly.langtorch.processor.module.openai.embedding;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingRequest;
 import java.util.List;

@@ -6,7 +6,6 @@ import ai.knowly.langtorch.schema.io.Output;
 import ai.knowly.langtorch.store.memory.Memory;
 import ai.knowly.langtorch.store.memory.MemoryContext;
 import ai.knowly.langtorch.store.memory.MemoryValue;
-import java.util.Optional;
 
 /** Interface for a text language model capability with memory. */
 public interface TextLLMCapabilityWithMemory<
@@ -14,7 +13,7 @@ public interface TextLLMCapabilityWithMemory<
     extends Capability<T, R> {
   I preProcess(T inputData);
 
-  Optional<Memory<V, S>> getMemory();
+  Memory<V, S> getMemory();
 
   R postProcess(O outputData);
 }

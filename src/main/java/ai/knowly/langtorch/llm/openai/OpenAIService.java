@@ -33,7 +33,7 @@ import java.net.Proxy;
 import java.time.Duration;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.TimeUnit;
-import lombok.AllArgsConstructor;
+import javax.inject.Inject;
 import okhttp3.*;
 import okhttp3.OkHttpClient.Builder;
 import org.jetbrains.annotations.NotNull;
@@ -42,7 +42,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
+/**
+ * OpenAIService wraps OpenAIApi and provides a synchronous and asynchronous interface to the OpenAI
+ * API.
+ */
 public class OpenAIService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.openai.com/";
@@ -54,36 +57,12 @@ public class OpenAIService {
 
   private final OpenAIApi api;
 
-  /**
-   * Creates a new OpenAiService that wraps OpenAiApi
-   *
-   * @param token OpenAi token string "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-   */
-  public static OpenAIService create(final String token) {
-    return create(OpenAIServiceConfig.builder().setApiKey(token).build());
-  }
-
-  public static OpenAIService create(final OpenAIApi api) {
-    return new OpenAIService(api);
-  }
-
-  public static OpenAIService create(final OpenAIServiceConfig openAIServiceConfig) {
+  @Inject
+  public OpenAIService(final OpenAIServiceConfig openAIServiceConfig) {
     ObjectMapper defaultObjectMapper = defaultObjectMapper();
     OkHttpClient client = buildClient(openAIServiceConfig);
     Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper);
-
-    return new OpenAIService(retrofit.create(OpenAIApi.class));
-  }
-
-  /**
-   * Creates a new OpenAiService that wraps OpenAiApi
-   *
-   * @param token OpenAi token string "sk-XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX"
-   * @param timeout http read timeout, Duration.ZERO means no timeout
-   */
-  public static OpenAIService create(final String token, final Duration timeout) {
-    return create(
-        OpenAIServiceConfig.builder().setApiKey(token).setTimeoutDuration(timeout).build());
+    this.api = retrofit.create(OpenAIApi.class);
   }
 
   /** Calls the Open AI api, returns the response, and parses error messages if the request fails */

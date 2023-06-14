@@ -1,47 +1,29 @@
-package ai.knowly.langtorch.processor.module.openai.embeddings;
+package ai.knowly.langtorch.processor.module.openai.embedding;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
-import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
-import ai.knowly.langtorch.processor.module.openai.OpenAIServiceProvider;
+import ai.knowly.langtorch.processor.module.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
+import javax.inject.Inject;
 
-public class OpenAIEmbeddingsProcessor implements EmbeddingsProcessor {
+/** Embeddings processor for OpenAI. */
+public class OpenAIEmbeddingProcessor implements EmbeddingProcessor {
   private final OpenAIService openAIService;
+  private final OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig;
 
-  private OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig =
-      OpenAIEmbeddingsProcessorConfig.builder().build();
-
-  public OpenAIEmbeddingsProcessor(OpenAIService openAiApi) {
+  @Inject
+  public OpenAIEmbeddingProcessor(
+      OpenAIService openAiApi, OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
     this.openAIService = openAiApi;
-  }
-
-  private OpenAIEmbeddingsProcessor() {
-    this.openAIService = OpenAIServiceProvider.createOpenAIService();
-  }
-
-  public static OpenAIEmbeddingsProcessor create(OpenAIService openAIService) {
-    return new OpenAIEmbeddingsProcessor(openAIService);
-  }
-
-  public static OpenAIEmbeddingsProcessor create(String openAIKey) {
-    return new OpenAIEmbeddingsProcessor(OpenAIServiceProvider.createOpenAIService(openAIKey));
-  }
-
-  public static OpenAIEmbeddingsProcessor create() {
-    return new OpenAIEmbeddingsProcessor();
-  }
-
-  public OpenAIEmbeddingsProcessor withConfig(
-      OpenAIEmbeddingsProcessorConfig openAIEmbeddingsProcessorConfig) {
     this.openAIEmbeddingsProcessorConfig = openAIEmbeddingsProcessorConfig;
-    return this;
   }
 
   @Override
@@ -59,6 +41,19 @@ public class OpenAIEmbeddingsProcessor implements EmbeddingsProcessor {
 
   @Override
   public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
-    return null;
+    ListenableFuture<EmbeddingResult> embeddingResult =
+        openAIService.createEmbeddingsAsync(
+            OpenAIEmbeddingsProcessorRequestConverter.convert(
+                openAIEmbeddingsProcessorConfig, inputData.getModel(), inputData.getInput()));
+
+    return Futures.transform(
+        embeddingResult,
+        result ->
+            EmbeddingOutput.of(
+                EmbeddingType.OPEN_AI,
+                result.getData().stream()
+                    .map(embedding -> Embedding.of(embedding.getValue()))
+                    .collect(toImmutableList())),
+        directExecutor());
   }
 }

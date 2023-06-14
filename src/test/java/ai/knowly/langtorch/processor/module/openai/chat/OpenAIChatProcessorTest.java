@@ -11,6 +11,7 @@ import ai.knowly.langtorch.schema.chat.Role;
 import ai.knowly.langtorch.schema.chat.UserMessage;
 import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
+import com.google.inject.testing.fieldbinder.Bind;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,12 +22,13 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIChatProcessorTest {
-  @Mock private OpenAIService openAIService;
+  @Bind @Mock private OpenAIService openAIService;
   private OpenAIChatProcessor openAIChatProcessor;
 
   @BeforeEach
   public void setUp() {
-    openAIChatProcessor = new OpenAIChatProcessor(openAIService);
+    openAIChatProcessor =
+        new OpenAIChatProcessor(openAIService, OpenAIChatProcessorConfig.getDefaultInstance());
   }
 
   @Test

@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.openai.embeddings;
+package ai.knowly.langtorch.processor.module.openai.embedding;
 
 import ai.knowly.langtorch.processor.module.ProcessorConfig;
 import com.google.auto.value.AutoValue;
@@ -6,6 +6,9 @@ import java.util.Optional;
 
 @AutoValue
 public abstract class OpenAIEmbeddingsProcessorConfig implements ProcessorConfig {
+  public static OpenAIEmbeddingsProcessorConfig getDefaultInstance() {
+    return builder().build();
+  }
 
   public static OpenAIEmbeddingsProcessorConfig.Builder builder() {
     return new AutoValue_OpenAIEmbeddingsProcessorConfig.Builder();

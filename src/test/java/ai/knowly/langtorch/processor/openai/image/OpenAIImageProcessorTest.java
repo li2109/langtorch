@@ -11,9 +11,9 @@ import ai.knowly.langtorch.processor.openai.image.OpenAIImageProcessorConfig;
 import ai.knowly.langtorch.processor.openai.image.OpenAIImageProcessorRequestConverter;
 import ai.knowly.langtorch.schema.image.Images;
 import ai.knowly.langtorch.schema.text.SingleText;
+import com.google.inject.testing.fieldbinder.Bind;
 import java.util.Arrays;
 import java.util.stream.Collectors;
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
@@ -21,19 +21,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAIImageProcessorTest {
-  @Mock private OpenAIService openAIService;
-  private OpenAIImageProcessor openAIImageProcessor;
-
-  @BeforeEach
-  public void setUp() {
-    openAIImageProcessor = new OpenAIImageProcessor(openAIService);
-  }
+  @Mock @Bind private OpenAIService openAIService;
 
   @Test
   void testRun() {
     // Arrange.
     SingleText inputData = SingleText.of("image description");
     OpenAIImageProcessorConfig config = OpenAIImageProcessorConfig.builder().setN(2).build();
+    OpenAIImageProcessor openAIImageProcessor = new OpenAIImageProcessor(openAIService, config);
 
     ImageResult expectedResult = new ImageResult();
     expectedResult.setCreated(123L);
@@ -49,17 +44,15 @@ final class OpenAIImageProcessorTest {
         .thenReturn(expectedResult);
 
     // Act.
-    Images output = openAIImageProcessor.withConfig(config).run(inputData);
+    Images output = openAIImageProcessor.run(inputData);
 
     // Assert.
     assertThat(output.getCreated()).isEqualTo(expectedResult.getCreated());
     assertThat(
             output.getImageData().stream()
-                .map(image -> image.getUrl())
+                .map(ai.knowly.langtorch.schema.image.Image::getUrl)
                 .collect(Collectors.toList()))
         .containsExactlyElementsIn(
-            expectedResult.getData().stream()
-                .map(data -> data.getUrl())
-                .collect(Collectors.toList()));
+            expectedResult.getData().stream().map(Image::getUrl).collect(Collectors.toList()));
   }
 }

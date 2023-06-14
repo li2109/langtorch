@@ -6,7 +6,6 @@ import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtorch.processor.Processor;
-import ai.knowly.langtorch.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.schema.chat.AssistantMessage;
 import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.Role;
@@ -21,47 +20,16 @@ import javax.inject.Inject;
  * OpenAI chat module implementation. Handles chat input and output for the OpenAI Language Model.
  */
 public class OpenAIChatProcessor implements Processor<MultiChatMessage, ChatMessage> {
-  // Logger, default model, and default max tokens for this module
-  private static final String DEFAULT_MODEL = "gpt-3.5-turbo";
-  private static final int DEFAULT_MAX_TOKEN = 2048;
   // OpenAiApi instance used for making requests
   private final OpenAIService openAIService;
   // Configuration for the OpenAI Chat Processor
-  private OpenAIChatProcessorConfig openAIChatProcessorConfig =
-      OpenAIChatProcessorConfig.builder()
-          .setModel(DEFAULT_MODEL)
-          .setMaxTokens(DEFAULT_MAX_TOKEN)
-          .build();
+  private final OpenAIChatProcessorConfig openAIChatProcessorConfig;
 
-  // Constructor with dependency injection
   @Inject
-  OpenAIChatProcessor(OpenAIService openAIService) {
+  public OpenAIChatProcessor(
+      OpenAIService openAIService, OpenAIChatProcessorConfig openAIChatProcessorConfig) {
     this.openAIService = openAIService;
-  }
-
-  // Private constructor used in factory methods
-  private OpenAIChatProcessor() {
-    this.openAIService = OpenAIServiceProvider.createOpenAIService();
-  }
-
-  public static OpenAIChatProcessor create(String openAIKey) {
-    return new OpenAIChatProcessor(OpenAIServiceProvider.createOpenAIService(openAIKey));
-  }
-
-  // Factory method to create a new OpenAIChatProcessor instance
-  public static OpenAIChatProcessor create() {
-    return new OpenAIChatProcessor();
-  }
-
-  // Factory method to create a new OpenAIChatProcessor instance with a given OpenAiApi instance
-  public static OpenAIChatProcessor create(OpenAIService openAIService) {
-    return new OpenAIChatProcessor(openAIService);
-  }
-
-  // Method to set the module configuration
-  public OpenAIChatProcessor withConfig(OpenAIChatProcessorConfig openAIChatProcessorConfig) {
     this.openAIChatProcessorConfig = openAIChatProcessorConfig;
-    return this;
   }
 
   // Method to run the module with the given input and return the output chat message

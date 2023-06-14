@@ -1,13 +1,10 @@
 package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
-import ai.knowly.langtorch.processor.EmbeddingsProcessor;
-import ai.knowly.langtorch.processor.openai.embeddings.OpenAIEmbeddingsProcessor;
+import ai.knowly.langtorch.processor.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
-import ai.knowly.langtorch.store.vectordb.integration.EmbeddingProcessorType;
-import ai.knowly.langtorch.store.vectordb.integration.EmbeddingProcessorTypeNotFound;
 import ai.knowly.langtorch.store.vectordb.integration.VectorStore;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeSimilaritySearchQuery;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeVectorStoreSpec;
@@ -19,55 +16,27 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
 import java.util.*;
 import java.util.stream.Collectors;
-import lombok.AccessLevel;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NonNull;
+import javax.inject.Inject;
 import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * The PineconeVectorStore class is an implementation of the VectorStore interface, which provides
  * integration with the Pinecone service for storing and querying vectors.
  */
-@AllArgsConstructor(access = AccessLevel.PRIVATE)
-@Data
-@Builder(toBuilder = true, setterPrefix = "set")
 public class PineconeVectorStore implements VectorStore {
-
   // Constants
-  private static final String DEFAULT_MODEL = "text-embedding-ada-002";
-  @NonNull private final EmbeddingsProcessor embeddingsProcessor;
+  private final EmbeddingProcessor embeddingProcessor;
   private final PineconeVectorStoreSpec pineconeVectorStoreSpec;
 
-  /** Creates a new instance of PineconeVectorStore based on embedding processor type. */
-  public static PineconeVectorStore of(
-      EmbeddingProcessorType embeddingProcessorType,
-      PineconeVectorStoreSpec pineconeVectorStoreSpec) {
-    Optional<EmbeddingsProcessor> processor;
-    if (embeddingProcessorType == EmbeddingProcessorType.OPENAI) {
-      processor = Optional.of(OpenAIEmbeddingsProcessor.create());
-    } else {
-      throw new EmbeddingProcessorTypeNotFound(
-          String.format(
-              "Embedding processor type %s is not supported.", embeddingProcessorType.name()));
-    }
-
-    return new PineconeVectorStore(processor.get(), pineconeVectorStoreSpec);
-  }
-
-  /** Creates a new instance of PineconeVectorStore with specified embedding processor and spec . */
-  public static PineconeVectorStore of(
-      EmbeddingsProcessor embeddingsProcessor, PineconeVectorStoreSpec pineconeVectorStoreSpec) {
-    return new PineconeVectorStore(embeddingsProcessor, pineconeVectorStoreSpec);
+  @Inject
+  public PineconeVectorStore(
+      EmbeddingProcessor embeddingProcessor, PineconeVectorStoreSpec pineconeVectorStoreSpec) {
+    this.embeddingProcessor = embeddingProcessor;
+    this.pineconeVectorStoreSpec = pineconeVectorStoreSpec;
   }
 
   /** Adds the specified documents to the Pinecone vector store database. */
   public UpsertResponse addDocuments(List<DomainDocument> documents) {
-    if (documents.isEmpty()) {
-      return null;
-    }
-
     return addVectors(
         documents.stream()
             .map(this::createVector)
@@ -90,7 +59,7 @@ public class PineconeVectorStore implements VectorStore {
    */
   private Vector createVector(DomainDocument document) {
     EmbeddingOutput embeddingOutput =
-        embeddingsProcessor.run(
+        embeddingProcessor.run(
             EmbeddingInput.builder()
                 .setModel(pineconeVectorStoreSpec.getModel())
                 .setInput(Collections.singletonList(document.getPageContent()))

@@ -2,10 +2,16 @@ package ai.knowly.langtorch.example;
 
 import ai.knowly.langtorch.capability.graph.CapabilityGraph;
 import ai.knowly.langtorch.capability.graph.NodeAdapter;
-import ai.knowly.langtorch.capability.module.openai.SimpleTextCapability;
+import ai.knowly.langtorch.capability.integration.openai.SimpleTextCapability;
+import ai.knowly.langtorch.llm.openai.OpenAIServiceConfigWithImplicitAPIKeyModule;
+import ai.knowly.langtorch.processor.openai.text.OpenAITextProcessorConfig;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import com.google.common.flogger.FluentLogger;
+import com.google.inject.AbstractModule;
+import com.google.inject.Guice;
+import com.google.inject.Injector;
+import com.google.inject.Provides;
 import java.util.List;
 import java.util.Map;
 import java.util.concurrent.ExecutionException;
@@ -14,7 +20,17 @@ public class SequentialChain {
   public static void main(String[] args) throws ExecutionException, InterruptedException {
     FluentLogger logger = FluentLogger.forEnclosingClass();
 
-    SimpleTextCapability unit = SimpleTextCapability.create();
+    Injector injector =
+        Guice.createInjector(
+            new OpenAIServiceConfigWithImplicitAPIKeyModule(),
+            new AbstractModule() {
+              @Provides
+              OpenAITextProcessorConfig provideOpenAITextProcessorConfig() {
+                return OpenAITextProcessorConfig.getDefaultInstance();
+              }
+            });
+
+    SimpleTextCapability unit = injector.getInstance(SimpleTextCapability.class);
 
     // Graph:
     // A: Generate company name based on the business description
@@ -59,7 +75,7 @@ public class SequentialChain {
     }
 
     @Override
-    public String process(Iterable<String> inputs) throws ExecutionException, InterruptedException {
+    public String process(Iterable<String> inputs) {
       return this.unit.run(
           "Please provide a creative company name based on the business description: "
               + ImmutableList.copyOf(inputs).get(0));

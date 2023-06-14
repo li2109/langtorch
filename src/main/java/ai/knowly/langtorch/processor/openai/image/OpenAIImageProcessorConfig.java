@@ -6,6 +6,11 @@ import java.util.Optional;
 
 @AutoValue
 public abstract class OpenAIImageProcessorConfig implements ProcessorConfig {
+
+  public static OpenAIImageProcessorConfig getDefaultInstance() {
+    return builder().build();
+  }
+
   public static OpenAIImageProcessorConfig.Builder builder() {
     return new AutoValue_OpenAIImageProcessorConfig.Builder();
   }

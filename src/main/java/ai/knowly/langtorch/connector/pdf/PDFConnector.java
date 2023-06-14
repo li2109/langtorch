@@ -5,20 +5,20 @@ import com.google.common.flogger.FluentLogger;
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
-import lombok.AllArgsConstructor;
+import javax.inject.Inject;
 import lombok.Cleanup;
 import lombok.NonNull;
 import org.apache.pdfbox.pdmodel.PDDocument;
 import org.apache.pdfbox.text.PDFTextStripper;
 
 /** Implementation of DocumentConnector for PDF files. */
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class PDFConnector implements Connector<String> {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
-  @NonNull PDFConnectorOption readOption;
+  private final PDFConnectorOption readOption;
 
-  public static PDFConnector create(PDFConnectorOption readOption) {
-    return new PDFConnector(readOption);
+  @Inject
+  public PDFConnector(@NonNull PDFConnectorOption readOption) {
+    this.readOption = readOption;
   }
 
   @Override

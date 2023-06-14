@@ -2,6 +2,7 @@ package ai.knowly.langtorch.processor.openai.text;
 
 import ai.knowly.langtorch.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
+import com.google.common.annotations.VisibleForTesting;
 import com.google.common.collect.ImmutableList;
 import com.google.common.collect.ImmutableMap;
 import java.util.ArrayList;
@@ -13,9 +14,17 @@ import java.util.Optional;
 // Configuration class for OpenAITextProcessor with various options
 @AutoValue
 public abstract class OpenAITextProcessorConfig implements ProcessorConfig {
-  // Factory method to create a new builder instance with default settings
+  @VisibleForTesting static final String DEFAULT_MODEL = "text-davinci-003";
+  private static final int DEFAULT_MAX_TOKENS = 2048;
+
+  public static OpenAITextProcessorConfig getDefaultInstance() {
+    return builder().build();
+  }
+
   public static Builder builder() {
     return new AutoValue_OpenAITextProcessorConfig.Builder()
+        .setModel(DEFAULT_MODEL)
+        .setMaxTokens(DEFAULT_MAX_TOKENS)
         .setLogitBias(new HashMap<>())
         .setStop(new ArrayList<>());
   }

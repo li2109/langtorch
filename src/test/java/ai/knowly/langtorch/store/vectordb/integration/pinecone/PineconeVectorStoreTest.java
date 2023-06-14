@@ -3,7 +3,7 @@ package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.emptyList;
 
-import ai.knowly.langtorch.processor.EmbeddingsProcessor;
+import ai.knowly.langtorch.processor.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
@@ -34,17 +34,17 @@ final class PineconeVectorStoreTest {
 
   private PineconeService pineconeService;
 
-  private EmbeddingsProcessor embeddingsProcessor;
+  private EmbeddingProcessor embeddingProcessor;
 
   @BeforeEach
   void setUp() {
     textKey = "textKey";
     pineconeService = Mockito.mock(PineconeService.class);
-    embeddingsProcessor = Mockito.mock(EmbeddingsProcessor.class);
+    embeddingProcessor = Mockito.mock(EmbeddingProcessor.class);
 
     pineconeVectorStore =
-        PineconeVectorStore.of(
-            embeddingsProcessor,
+        new PineconeVectorStore(
+            embeddingProcessor,
             PineconeVectorStoreSpec.builder()
                 .setPineconeService(pineconeService)
                 .setTextKey(textKey)
@@ -54,7 +54,7 @@ final class PineconeVectorStoreTest {
   @Test
   void testAddDocuments() {
     EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
-    Mockito.when(embeddingsProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
+    Mockito.when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
     UpsertResponse upsertResponse = new UpsertResponse(1);
     Mockito.when(pineconeService.upsert(ArgumentMatchers.any())).thenReturn(upsertResponse);
 

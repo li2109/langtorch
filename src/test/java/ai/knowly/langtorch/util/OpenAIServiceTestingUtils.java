@@ -7,16 +7,16 @@ import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionC
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.Embedding;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
+import ai.knowly.langtorch.processor.openai.OpenAIServiceProvider;
 import ai.knowly.langtorch.utils.Environment;
 import ai.knowly.langtorch.utils.api.key.OpenAIKeyUtil;
 import com.google.common.collect.ImmutableList;
-import java.time.Duration;
 import java.util.ArrayList;
 import java.util.List;
 
 public class OpenAIServiceTestingUtils {
   public static final OpenAIService OPENAI_TESTING_SERVICE =
-      OpenAIService.create(OpenAIKeyUtil.getKey(Environment.TEST), Duration.ofSeconds(60));
+      OpenAIServiceProvider.createOpenAIService(OpenAIKeyUtil.getKey(Environment.TEST));
 
   // ChatCompletion related utils
   public static class ChatCompletion {

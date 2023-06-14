@@ -7,6 +7,7 @@ import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionRequest;
 import ai.knowly.langtorch.schema.text.SingleText;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
+import com.google.inject.testing.fieldbinder.Bind;
 import java.util.HashMap;
 import java.util.concurrent.ExecutionException;
 import org.junit.jupiter.api.BeforeEach;
@@ -17,25 +18,23 @@ import org.mockito.junit.jupiter.MockitoExtension;
 
 @ExtendWith(MockitoExtension.class)
 final class OpenAITextProcessorTest {
-  @Mock private OpenAIService openAIService;
+  @Mock @Bind private OpenAIService openAIService;
   private OpenAITextProcessor openAITextProcessor;
 
   @BeforeEach
   void setUp() {
-    openAITextProcessor = new OpenAITextProcessor(openAIService);
+    openAITextProcessor =
+        new OpenAITextProcessor(
+            openAIService,
+            OpenAITextProcessorConfig.builder()
+                .setMaxTokens(2048)
+                .setSuffix("test-suffix")
+                .build());
   }
 
   @Test
   void testRun() throws ExecutionException, InterruptedException {
     // Arrange.
-    SingleText inputData = SingleText.of("input1");
-    OpenAITextProcessorConfig config =
-        OpenAITextProcessorConfig.builder()
-            .setModel(OpenAITextProcessor.DEFAULT_MODEL)
-            .setMaxTokens(2048)
-            .setSuffix("test-suffix")
-            .build();
-
     when(openAIService.createCompletion(
             CompletionRequest.builder()
                 .model("text-davinci-003")
@@ -48,7 +47,7 @@ final class OpenAITextProcessorTest {
             OpenAIServiceTestingUtils.TextCompletion.createCompletionResult("test-response"));
 
     // Act.
-    SingleText output = openAITextProcessor.withConfig(config).run(inputData);
+    SingleText output = openAITextProcessor.run(SingleText.of("input1"));
 
     // Assert.
     assertThat(output.getText()).isEqualTo("test-response");

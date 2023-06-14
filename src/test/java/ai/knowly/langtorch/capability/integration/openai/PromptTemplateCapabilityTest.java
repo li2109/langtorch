@@ -7,6 +7,7 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessor;
+import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessorConfig;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import com.google.common.collect.ImmutableMap;
@@ -31,7 +32,8 @@ final class PromptTemplateCapabilityTest {
     // Act.
     String response =
         new PromptTemplateTextCapability(
-                OpenAITextProcessor.create(openAIService),
+                new OpenAITextProcessor(
+                    openAIService, OpenAITextProcessorConfig.getDefaultInstance()),
                 PromptTemplate.builder().setTemplate("Create name for {{$area}} company").build())
             .run(ImmutableMap.of("area", "search engine"));
 
@@ -48,7 +50,8 @@ final class PromptTemplateCapabilityTest {
     // Act.
     String response =
         new PromptTemplateTextCapability(
-                OpenAITextProcessor.create(openAIService),
+                new OpenAITextProcessor(
+                    openAIService, OpenAITextProcessorConfig.getDefaultInstance()),
                 PromptTemplate.builder()
                     .setTemplate("Create name for search engine company")
                     .build())
@@ -61,11 +64,12 @@ final class PromptTemplateCapabilityTest {
   @Test
   void promptTemplateWithoutVariable_withInputMap() {
     // Arrange.
-    OpenAITextProcessor openAITextProcessor = OpenAITextProcessor.create(openAIService);
     PromptTemplate promptTemplate =
         PromptTemplate.builder().setTemplate("Create name for search engine company").build();
     PromptTemplateTextCapability promptTemplateTextCapability =
-        new PromptTemplateTextCapability(openAITextProcessor, promptTemplate);
+        new PromptTemplateTextCapability(
+            new OpenAITextProcessor(openAIService, OpenAITextProcessorConfig.getDefaultInstance()),
+            promptTemplate);
     ImmutableMap<String, String> variables = ImmutableMap.of("area", "search engine");
     // Act.
     // Assert.

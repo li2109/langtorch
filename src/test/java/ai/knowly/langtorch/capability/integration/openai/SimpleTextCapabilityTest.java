@@ -6,6 +6,7 @@ import static org.mockito.Mockito.when;
 
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessor;
+import ai.knowly.langtorch.processor.module.openai.text.OpenAITextProcessorConfig;
 import ai.knowly.langtorch.util.OpenAIServiceTestingUtils;
 import com.google.inject.testing.fieldbinder.Bind;
 import org.junit.jupiter.api.Test;
@@ -27,7 +28,9 @@ final class SimpleTextCapabilityTest {
 
     // Act.
     String output =
-        new SimpleTextCapability(OpenAITextProcessor.create(openAIService))
+        new SimpleTextCapability(
+                new OpenAITextProcessor(
+                    openAIService, OpenAITextProcessorConfig.getDefaultInstance()))
             .run("Where is Changsha?");
 
     // Assert.

@@ -2,7 +2,7 @@
 //
 //import static ai.knowly.langtorch.example.ExampleUtils.readInputUntilEXIT;
 //
-//import ai.knowly.langtorch.capability.module.openai.SimpleChatCapability;
+//import ai.knowly.langtorch.capability.integration.openai.SimpleChatCapability;
 //import com.google.common.flogger.FluentLogger;
 //import java.io.IOException;
 //

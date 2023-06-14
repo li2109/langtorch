@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.capability.module.openai;
+package ai.knowly.langtorch.capability.integration.openai;
 
 import ai.knowly.langtorch.capability.modality.text.ChatCompletionLLMCapability;
 import ai.knowly.langtorch.capability.modality.text.Parsers;

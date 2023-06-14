@@ -2,7 +2,7 @@
 //
 //import ai.knowly.langtorch.capability.graph.CapabilityGraph;
 //import ai.knowly.langtorch.capability.graph.NodeAdapter;
-//import ai.knowly.langtorch.capability.module.openai.SimpleTextCapability;
+//import ai.knowly.langtorch.capability.integration.openai.SimpleTextCapability;
 //import com.google.common.collect.ImmutableList;
 //import com.google.common.collect.ImmutableMap;
 //import com.google.common.flogger.FluentLogger;

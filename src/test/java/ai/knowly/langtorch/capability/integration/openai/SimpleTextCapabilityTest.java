@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.capability.module.openai;
+package ai.knowly.langtorch.capability.integration.openai;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Matchers.any;

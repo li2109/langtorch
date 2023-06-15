@@ -9,9 +9,11 @@ import java.util.Optional;
 
 @AutoValue
 public abstract class CohereGenerateProcessorConfig implements ProcessorConfig {
+  private static final String DEFAULT_MODEL = "command";
+
   public static Builder builder() {
     return new AutoValue_CohereGenerateProcessorConfig.Builder()
-        .setModel("command")
+        .setModel(DEFAULT_MODEL)
         .setEndSequences(ImmutableList.of())
         .setStopSequences(ImmutableList.of())
         .setLogitBias(ImmutableMap.of());

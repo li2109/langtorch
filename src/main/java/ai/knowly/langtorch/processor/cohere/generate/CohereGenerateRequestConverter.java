@@ -17,6 +17,7 @@ public class CohereGenerateRequestConverter {
         .ifPresent(cohereGenerateRequestBuilder::temperature);
     cohereGenerateProcessorConfig.getP().ifPresent(cohereGenerateRequestBuilder::p);
     cohereGenerateProcessorConfig.getK().ifPresent(cohereGenerateRequestBuilder::k);
+    cohereGenerateProcessorConfig.getPresent().ifPresent(cohereGenerateRequestBuilder::preset);
     cohereGenerateProcessorConfig
         .getNumGenerations()
         .ifPresent(cohereGenerateRequestBuilder::numGenerations);

@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.llm.openai.modules;
+package ai.knowly.langtorch.llm.openai.modules.key;
 
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
 import com.google.inject.AbstractModule;

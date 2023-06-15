@@ -16,6 +16,7 @@ public final class PromptManager {
   private static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(PromptTemplate.class, new PromptTemplateTypeAdapter())
+          .registerTypeAdapterFactory(OptionalTypeAdapter.FACTORY)
           .create();
   private static final String DEFAULT_FILE_NAME = "prompt-manager.json";
 

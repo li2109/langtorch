@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'ai.knowly'
-version '0.0.13'
+version '0.0.14'
 
 sonarqube {
     properties {
@@ -120,7 +120,6 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:2.0.28'
     // Reading CSV
     implementation 'org.apache.commons:commons-csv:1.10.0'
-
     // Apache commons lang
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-collections4:4.4'
@@ -142,6 +141,8 @@ dependencies {
     implementation 'org.yaml:snakeyaml:1.33'
     // H2 in-memory database
     testImplementation 'com.h2database:h2:1.4.200'
+    // Guice dependency injection testing utilities
+    testImplementation 'com.google.inject.extensions:guice-testlib:5.1.0'
 }
 
 test {

@@ -12,13 +12,13 @@ import lombok.Data;
 @Data
 public class EmbeddingResult {
 
-  /** The GPTmodel used for generating embeddings */
+  /** The GPTmodel used for generating embedding */
   String model;
 
   /** The type of object returned, should be "list" */
   String object;
 
-  /** A list of the calculated embeddings */
+  /** A list of the calculated embedding */
   List<Embedding> data;
 
   /** The API usage for this request */

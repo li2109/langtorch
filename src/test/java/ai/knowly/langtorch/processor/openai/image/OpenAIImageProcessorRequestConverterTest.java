@@ -3,8 +3,6 @@ package ai.knowly.langtorch.processor.openai.image;
 import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageRequest;
-import ai.knowly.langtorch.processor.openai.image.OpenAIImageProcessorConfig;
-import ai.knowly.langtorch.processor.openai.image.OpenAIImageProcessorRequestConverter;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 

@@ -1,32 +1,33 @@
 package ai.knowly.langtorch.processor.cohere.generate;
 
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
+
 import ai.knowly.langtorch.llm.cohere.CohereApiService;
-import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateRequest;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
-import ai.knowly.langtorch.processor.ProcessorExecutionException;
 import ai.knowly.langtorch.processor.Processor;
+import ai.knowly.langtorch.processor.ProcessorExecutionException;
 import ai.knowly.langtorch.schema.text.SingleText;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import javax.inject.Inject;
 
-import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
-
 /** Processor for Cohere.ai text generation service.*/
 public class CohereGenerateProcessor implements Processor<SingleText, SingleText> {
 
   private final CohereApiService cohereApiService;
+  private final CohereGenerateProcessorConfig config;
 
   @Inject
-  CohereGenerateProcessor(CohereApiService cohereApiService) {
+  CohereGenerateProcessor(CohereApiService cohereApiService, CohereGenerateProcessorConfig config) {
     this.cohereApiService = cohereApiService;
+    this.config = config;
   }
 
   @Override
   public SingleText run(SingleText inputData) {
     CohereGenerateResponse response =
         cohereApiService.generate(
-            CohereGenerateRequest.builder().prompt(inputData.getText()).build());
+            CohereGenerateRequestConverter.convert(inputData.getText(), config));
     if (response.getGenerations().isEmpty()) {
       throw new ProcessorExecutionException("Receive empty generations from cohere.ai.");
     }
@@ -37,7 +38,7 @@ public class CohereGenerateProcessor implements Processor<SingleText, SingleText
   public ListenableFuture<SingleText> runAsync(SingleText inputData) {
     ListenableFuture<CohereGenerateResponse> responseFuture =
         cohereApiService.generateAsync(
-            CohereGenerateRequest.builder().prompt(inputData.getText()).build());
+            CohereGenerateRequestConverter.convert(inputData.getText(), config));
     return Futures.transform(
         responseFuture,
         response -> {

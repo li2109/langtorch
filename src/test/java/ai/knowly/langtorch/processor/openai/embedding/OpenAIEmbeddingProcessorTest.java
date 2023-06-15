@@ -8,6 +8,8 @@ import static org.mockito.Mockito.when;
 import ai.knowly.langtorch.llm.openai.OpenAIService;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.Embedding;
 import ai.knowly.langtorch.llm.openai.schema.dto.embedding.EmbeddingResult;
+import ai.knowly.langtorch.processor.openai.embedding.OpenAIEmbeddingProcessor;
+import ai.knowly.langtorch.processor.openai.embedding.OpenAIEmbeddingsProcessorConfig;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingInput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import com.google.common.collect.ImmutableList;

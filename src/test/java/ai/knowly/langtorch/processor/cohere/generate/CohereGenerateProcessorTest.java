@@ -1,5 +1,9 @@
 package ai.knowly.langtorch.processor.cohere.generate;
 
+import static org.junit.jupiter.api.Assertions.*;
+import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.Mockito.when;
+
 import ai.knowly.langtorch.llm.cohere.CohereApiService;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.llm.cohere.schema.Generation;
@@ -10,21 +14,20 @@ import com.google.common.util.concurrent.ListenableFuture;
 import com.google.inject.Guice;
 import com.google.inject.testing.fieldbinder.Bind;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
+import javax.inject.Inject;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
-import javax.inject.Inject;
-
-import static org.junit.jupiter.api.Assertions.*;
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
-class CohereGenerateProcessorTest {
+final class CohereGenerateProcessorTest {
 
   @Mock @Bind private CohereApiService CohereApiService;
+
+  @Bind
+  private CohereGenerateProcessorConfig config = CohereGenerateProcessorConfig.builder().build();
 
   @Inject private CohereGenerateProcessor cohereGenerateProcessor;
 
@@ -51,7 +54,7 @@ class CohereGenerateProcessorTest {
 
   @Test
   void runAsync() throws Exception {
-// Arrage.
+    // Arrage.
     Generation generation = new Generation();
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();

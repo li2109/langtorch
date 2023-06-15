@@ -14,12 +14,19 @@ public class TestingSettingUtils {
   private static final String OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST =
       "test.unit-test.live-traffic.llm-service.openai";
 
+  private static final String MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST =
+          "test.unit-test.live-traffic.llm-service.minimax";
+
   public static boolean enablePineconeVectorStoreLiveTrafficTest() {
     return readBooleanSetting(PINECONE_VECTOR_STORE_LIVE_TRAFFIC_TEST);
   }
 
   public static boolean enableOpenAILLMServiceLiveTrafficTest() {
     return readBooleanSetting(OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST);
+  }
+
+  public static boolean enableMiniMaxLLMServiceLiveTrafficTest() {
+    return readBooleanSetting(MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST);
   }
 
   public static ImmutableMap<String, Object> getTestingSetting() {

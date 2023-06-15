@@ -14,20 +14,14 @@ import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 import java.io.IOException;
 
-public class SimpleChatBotWithExplicitKey {
+public class SimpleChatBotWithImplicitKey {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   public static void main(String[] args) throws IOException {
-    String openAIKey = "YOUR_OPENAI_API_KEY";
-
     LangtorchHub langtorchHub =
         new LangtorchHub(
             LangtorchHubConfig.builder()
-                .setOpenAIKeyConfig(
-                    OpenAIKeyConfig.builder()
-                        .setReadFromEnvFile(false)
-                        .setOpenAiApiKey(openAIKey)
-                        .build())
+                .setOpenAIKeyConfig(OpenAIKeyConfig.builder().setReadFromEnvFile(true).build())
                 .build(),
             ImmutableList.of(
                 new AbstractModule() {

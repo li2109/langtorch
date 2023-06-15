@@ -28,7 +28,7 @@ public interface OpenAIApi {
   @POST("/v1/edits")
   ListenableFuture<EditResult> createEdit(@Body EditRequest request);
 
-  @POST("/v1/embedding")
+  @POST("/v1/embeddings")
   ListenableFuture<EmbeddingResult> createEmbeddings(@Body EmbeddingRequest request);
 
   @POST("/v1/images/generations")

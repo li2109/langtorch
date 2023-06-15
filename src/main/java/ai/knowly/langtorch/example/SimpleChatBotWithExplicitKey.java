@@ -23,7 +23,7 @@ public class SimpleChatBotWithExplicitKey {
     LangtorchHub langtorchHub =
         new LangtorchHub(
             LangtorchHubConfig.builder()
-                .setOpenAIConfig(
+                .setOpenAIKeyConfig(
                     OpenAIKeyConfig.builder()
                         .setReadFromEnvFile(false)
                         .setOpenAiApiKey(openAIKey)

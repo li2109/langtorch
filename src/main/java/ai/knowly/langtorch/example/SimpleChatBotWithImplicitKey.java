@@ -21,7 +21,7 @@ public class SimpleChatBotWithImplicitKey {
     LangtorchHub langtorchHub =
         new LangtorchHub(
             LangtorchHubConfig.builder()
-                .setOpenAIConfig(OpenAIKeyConfig.builder().setReadFromEnvFile(true).build())
+                .setOpenAIKeyConfig(OpenAIKeyConfig.builder().setReadFromEnvFile(true).build())
                 .build(),
             ImmutableList.of(
                 new AbstractModule() {

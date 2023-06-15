@@ -24,7 +24,7 @@ public final class CohereProcessorModule extends AbstractModule {
   }
 
   @Provides
-  public CohereGenerateProcessorConfig providesCohereGenerateProcessorConfig(){
+  public CohereGenerateProcessorConfig providesCohereGenerateProcessorConfig() {
     return CohereGenerateProcessorConfig.builder().build();
   }
 }

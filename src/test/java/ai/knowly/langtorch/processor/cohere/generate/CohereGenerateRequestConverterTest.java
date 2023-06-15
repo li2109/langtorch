@@ -8,8 +8,8 @@ import org.junit.jupiter.api.Test;
 
 final class CohereGenerateRequestConverterTest {
 
-    @Test
-    void convert(){
+  @Test
+  void convert() {
     // Arrange.
     CohereGenerateProcessorConfig config =
         CohereGenerateProcessorConfig.builder()

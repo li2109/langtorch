@@ -1,7 +1,7 @@
 package ai.knowly.langtorch.llm.openai;
 
-import ai.knowly.langtorch.llm.openai.schema.OpenAIApiExecutionException;
-import ai.knowly.langtorch.llm.openai.schema.OpenAIServiceInterruptedException;
+import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIApiExecutionException;
+import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIServiceInterruptedException;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIProxyConfig.ProxyType;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
 import ai.knowly.langtorch.llm.openai.schema.dto.OpenAIError;

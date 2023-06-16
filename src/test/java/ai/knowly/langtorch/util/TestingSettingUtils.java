@@ -15,7 +15,10 @@ public class TestingSettingUtils {
       "test.unit-test.live-traffic.llm-service.openai";
 
   private static final String MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST =
-          "test.unit-test.live-traffic.llm-service.minimax";
+      "test.unit-test.live-traffic.llm-service.minimax";
+
+  private static final String COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST =
+      "test.unit-test.live-traffic.llm-service.cohere";
 
   public static boolean enablePineconeVectorStoreLiveTrafficTest() {
     return readBooleanSetting(PINECONE_VECTOR_STORE_LIVE_TRAFFIC_TEST);
@@ -27,6 +30,10 @@ public class TestingSettingUtils {
 
   public static boolean enableMiniMaxLLMServiceLiveTrafficTest() {
     return readBooleanSetting(MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST);
+  }
+
+  public static boolean enableCohereLLMServiceLiveTrafficTest() {
+    return readBooleanSetting(COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST);
   }
 
   public static ImmutableMap<String, Object> getTestingSetting() {
@@ -52,7 +59,9 @@ public class TestingSettingUtils {
   private static boolean readBooleanSetting(String settingName) {
     ImmutableMap<String, Object> nestedValueMap = getTestingSetting();
     Object value = getNestedValue(nestedValueMap, Splitter.on(".").split(settingName));
-    assert value != null;
+    if (value == null) {
+      return false;
+    }
     return (boolean) value;
   }
 }

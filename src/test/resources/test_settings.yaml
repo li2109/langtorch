@@ -6,5 +6,6 @@ test:
       llm-service:
         openai: false
         minimax: false
+        cohere: false
       vector-store-service:
         pinecone: false

@@ -100,7 +100,8 @@ public class ChatCompletionLLMCapability<I, O>
                     ChatMessage.of(
                         String.format(
                             "%s%nBelow is my query:%n%s", memoryContext, chatMessage.toString()),
-                        chatMessage.getRole()))
+                        chatMessage.getRole(),
+                        ""))
             .collect(MultiChatMessage.toMultiChatMessage());
 
     if (verbose) {

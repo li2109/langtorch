@@ -6,7 +6,7 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
 import ai.knowly.langtorch.store.vectordb.integration.VectorStore;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeSimilaritySearchQuery;
+import ai.knowly.langtorch.store.vectordb.integration.schema.SimilaritySearchQuery;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeVectorStoreSpec;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.Vector;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.Match;
@@ -35,20 +35,32 @@ public class PineconeVectorStore implements VectorStore {
     this.pineconeVectorStoreSpec = pineconeVectorStoreSpec;
   }
 
-  /** Adds the specified documents to the Pinecone vector store database. */
-  public UpsertResponse addDocuments(List<DomainDocument> documents) {
+  /** Adds the specified documents to the Pinecone vector store database.
+   *
+   * @return true if documents added successfully, otherwise false
+   */
+  @Override
+  public boolean addDocuments(List<DomainDocument> documents) {
+    if (documents.isEmpty()) {
+      throw new IllegalStateException("Attempted to add an empty list");
+    }
+
     return addVectors(
         documents.stream()
             .map(this::createVector)
             .collect(Collectors.toCollection(ArrayList::new)));
   }
 
-  /** Adds a list of vectors to the Pinecone vector store database. */
-  private UpsertResponse addVectors(List<Vector> vectors) {
+  /** Adds a list of vectors to the Pinecone vector store database.
+   *
+   * @return true if vectors added successfully, otherwise false
+   */
+  private boolean addVectors(List<Vector> vectors) {
     UpsertRequest.UpsertRequestBuilder upsertRequestBuilder =
         UpsertRequest.builder().setVectors(vectors);
     this.pineconeVectorStoreSpec.getNamespace().ifPresent(upsertRequestBuilder::setNamespace);
-    return this.pineconeVectorStoreSpec.getPineconeService().upsert(upsertRequestBuilder.build());
+    UpsertResponse response = this.pineconeVectorStoreSpec.getPineconeService().upsert(upsertRequestBuilder.build());
+    return response.getUpsertedCount() == vectors.size();
   }
 
   /**
@@ -75,15 +87,16 @@ public class PineconeVectorStore implements VectorStore {
    * Performs a similarity search using a vector query and returns a list of pairs containing the
    * schema documents and their corresponding similarity scores.
    */
+  @Override
   public List<Pair<DomainDocument, Double>> similaritySearchVectorWithScore(
-      PineconeSimilaritySearchQuery pineconeSimilaritySearchQuery) {
+      SimilaritySearchQuery similaritySearchQuery) {
 
     QueryRequest.QueryRequestBuilder requestBuilder =
         QueryRequest.builder()
             .setIncludeMetadata(true)
-            .setTopK(pineconeSimilaritySearchQuery.getK())
-            .setVector(pineconeSimilaritySearchQuery.getQuery())
-            .setFilter(pineconeSimilaritySearchQuery.getFilter());
+            .setTopK(similaritySearchQuery.getTopK())
+            .setVector(similaritySearchQuery.getQuery())
+            .setFilter(similaritySearchQuery.getFilter());
 
     pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
     QueryResponse response =

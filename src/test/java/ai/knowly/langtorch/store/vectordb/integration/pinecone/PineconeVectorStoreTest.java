@@ -2,6 +2,7 @@ package ai.knowly.langtorch.store.vectordb.integration.pinecone;
 
 import static com.google.common.truth.Truth.assertThat;
 import static java.util.Collections.emptyList;
+import static org.junit.jupiter.api.Assertions.assertThrows;
 
 import ai.knowly.langtorch.processor.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.Embedding;
@@ -9,7 +10,7 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
-import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeSimilaritySearchQuery;
+import ai.knowly.langtorch.store.vectordb.integration.schema.SimilaritySearchQuery;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.PineconeVectorStoreSpec;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.SparseValues;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.Match;
@@ -28,12 +29,11 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 final class PineconeVectorStoreTest {
 
+  private static final int DOCUMENT_COUNT = 3;
+
   private String textKey;
-
   private PineconeVectorStore pineconeVectorStore;
-
   private PineconeService pineconeService;
-
   private EmbeddingProcessor embeddingProcessor;
 
   @BeforeEach
@@ -55,22 +55,22 @@ final class PineconeVectorStoreTest {
   void testAddDocuments() {
     EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
     Mockito.when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
-    UpsertResponse upsertResponse = new UpsertResponse(1);
+    UpsertResponse upsertResponse = new UpsertResponse(DOCUMENT_COUNT);
     Mockito.when(pineconeService.upsert(ArgumentMatchers.any())).thenReturn(upsertResponse);
 
     // Act.
-    UpsertResponse response = pineconeVectorStore.addDocuments(getDocuments());
+    boolean isSuccessful = pineconeVectorStore.addDocuments(getDocuments());
     // Assert.
-    assertThat(response).isNotNull();
-    assertThat(response.getUpsertedCount()).isEqualTo(1);
+    assertThat(isSuccessful).isEqualTo(true);
   }
 
   @Test
   void testAddDocumentsEmpty() {
     // Act.
-    UpsertResponse response = pineconeVectorStore.addDocuments(emptyList());
-    // Assert.
-    assertThat(response).isNull();
+    Exception exception = assertThrows(IllegalStateException.class, () -> pineconeVectorStore.addDocuments(emptyList()));
+    String expectedMessage = "Attempted to add an empty list";
+    //Assert.
+    assertThat(exception.getMessage()).isEqualTo(expectedMessage);
   }
 
   @Test
@@ -92,7 +92,7 @@ final class PineconeVectorStoreTest {
     // Act.
     List<Pair<DomainDocument, Double>> result =
         pineconeVectorStore.similaritySearchVectorWithScore(
-            PineconeSimilaritySearchQuery.builder().setQuery(emptyList()).setK(0L).build());
+            SimilaritySearchQuery.builder().setQuery(emptyList()).setTopK(0L).build());
     // Assert.
     assertThat(result).isNotEmpty();
     assertThat(result.get(0).getLeft().getPageContent()).isEqualTo(content);
@@ -106,14 +106,14 @@ final class PineconeVectorStoreTest {
     // Act.
     List<Pair<DomainDocument, Double>> result =
         pineconeVectorStore.similaritySearchVectorWithScore(
-            PineconeSimilaritySearchQuery.builder().setQuery(emptyList()).setK(0L).build());
+            SimilaritySearchQuery.builder().setQuery(emptyList()).setTopK(0L).build());
     // Assert.
     assertThat(result).isEmpty();
   }
 
   private List<DomainDocument> getDocuments() {
     ArrayList<DomainDocument> documents = new ArrayList<>();
-    for (int i = 0; i < 3; i++) {
+    for (int i = 0; i < DOCUMENT_COUNT; i++) {
       DomainDocument document =
           DomainDocument.builder()
               .setId(UUID.randomUUID().toString())

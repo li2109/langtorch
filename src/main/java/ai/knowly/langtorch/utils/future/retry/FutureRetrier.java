@@ -2,6 +2,7 @@ package ai.knowly.langtorch.utils.future.retry;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
+import ai.knowly.langtorch.llm.openai.schema.config.RetryConfig;
 import ai.knowly.langtorch.utils.future.retry.strategy.BackoffStrategy;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;
@@ -10,6 +11,7 @@ import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
+import com.google.inject.Inject;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.ScheduledFuture;
 
@@ -19,10 +21,23 @@ public final class FutureRetrier {
 
   private final ScheduledExecutorService executor;
   private final BackoffStrategy backoffStrategy;
+  private final RetryConfig retryConfig;
 
-  public FutureRetrier(ScheduledExecutorService executor, BackoffStrategy backoffStrategy) {
+  @Inject
+  public FutureRetrier(
+      ScheduledExecutorService executor, BackoffStrategy backoffStrategy, RetryConfig retryConfig) {
     this.executor = executor;
     this.backoffStrategy = backoffStrategy;
+    this.retryConfig = retryConfig;
+  }
+
+  public <T> ListenableFuture<T> runWithRetries(
+      Supplier<ListenableFuture<T>> futureSupplier, Predicate<T> successCondition) {
+    return runWithRetries(
+        futureSupplier,
+        retryConfig.getMaxRetries(),
+        retryConfig.getRetryIntervalMillis(),
+        successCondition);
   }
 
   public <T> ListenableFuture<T> runWithRetries(

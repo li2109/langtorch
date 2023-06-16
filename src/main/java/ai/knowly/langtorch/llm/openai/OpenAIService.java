@@ -2,7 +2,6 @@ package ai.knowly.langtorch.llm.openai;
 
 import ai.knowly.langtorch.llm.openai.schema.OpenAIApiExecutionException;
 import ai.knowly.langtorch.llm.openai.schema.OpenAIServiceInterruptedException;
-import ai.knowly.langtorch.llm.openai.schema.config.OpenAIProxyConfig;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIProxyConfig.ProxyType;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
 import ai.knowly.langtorch.llm.openai.schema.dto.OpenAIError;
@@ -21,21 +20,30 @@ import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageVariationReque
 import ai.knowly.langtorch.llm.openai.schema.dto.image.ImageResult;
 import ai.knowly.langtorch.llm.openai.schema.dto.moderation.ModerationRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.moderation.ModerationResult;
-import com.fasterxml.jackson.annotation.JsonInclude;
+import ai.knowly.langtorch.utils.future.retry.FutureRetrier;
+import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
+import java.io.File;
 import java.io.IOException;
 import java.net.InetSocketAddress;
 import java.net.Proxy;
-import java.time.Duration;
+import java.net.Proxy.Type;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executor;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import javax.inject.Inject;
-import okhttp3.*;
+import okhttp3.ConnectionPool;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.OkHttpClient;
 import okhttp3.OkHttpClient.Builder;
+import okhttp3.RequestBody;
 import org.jetbrains.annotations.NotNull;
 import retrofit2.HttpException;
 import retrofit2.Retrofit;
@@ -56,12 +64,22 @@ public class OpenAIService {
   private static final MediaType IMAGE_MEDIA_TYPE = MediaType.parse(IMAGE);
 
   private final OpenAIApi api;
+  private final FutureRetrier futureRetrier;
+  private final Executor executor;
+  private final ScheduledExecutorService scheduledExecutor;
 
   @Inject
   public OpenAIService(final OpenAIServiceConfig openAIServiceConfig) {
     ObjectMapper defaultObjectMapper = defaultObjectMapper();
     OkHttpClient client = buildClient(openAIServiceConfig);
     Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper);
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    executor = Executors.newCachedThreadPool();
+    this.futureRetrier =
+        new FutureRetrier(
+            scheduledExecutor,
+            openAIServiceConfig.backoffStrategy(),
+            openAIServiceConfig.retryConfig());
     this.api = retrofit.create(OpenAIApi.class);
   }
 
@@ -92,19 +110,10 @@ public class OpenAIService {
     }
   }
 
-  public static OpenAIApi buildApi(String token, Duration timeout) {
-    ObjectMapper mapper = defaultObjectMapper();
-    OkHttpClient client =
-        buildClient(
-            OpenAIServiceConfig.builder().setApiKey(token).setTimeoutDuration(timeout).build());
-    Retrofit retrofit = defaultRetrofit(client, mapper);
-    return retrofit.create(OpenAIApi.class);
-  }
-
   public static ObjectMapper defaultObjectMapper() {
     ObjectMapper mapper = new ObjectMapper();
     mapper.configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
-    mapper.setSerializationInclusion(JsonInclude.Include.NON_NULL);
+    mapper.setSerializationInclusion(Include.NON_NULL);
     mapper.setPropertyNamingStrategy(PropertyNamingStrategy.SNAKE_CASE);
     return mapper;
   }
@@ -136,11 +145,11 @@ public class OpenAIService {
         .build();
   }
 
-  private static Proxy.Type convertProxyEnum(ProxyType proxyType) {
-    if (proxyType == OpenAIProxyConfig.ProxyType.HTTP) {
-      return Proxy.Type.HTTP;
-    } else if (proxyType == OpenAIProxyConfig.ProxyType.SOCKS) {
-      return Proxy.Type.SOCKS;
+  private static Type convertProxyEnum(ProxyType proxyType) {
+    if (proxyType == ProxyType.HTTP) {
+      return Type.HTTP;
+    } else if (proxyType == ProxyType.SOCKS) {
+      return Type.SOCKS;
     } else {
       throw new IllegalArgumentException("Unknown proxy type: " + proxyType);
     }
@@ -158,68 +167,70 @@ public class OpenAIService {
   }
 
   public CompletionResult createCompletion(CompletionRequest request) {
-    return execute(api.createCompletion(request));
+    return execute(
+        futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true));
   }
 
   public ListenableFuture<CompletionResult> createCompletionAsync(CompletionRequest request) {
-    return api.createCompletion(request);
+    return futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true);
   }
 
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
-    return execute(api.createChatCompletion(request));
+    return execute(
+        futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true));
   }
 
   public ListenableFuture<ChatCompletionResult> createChatCompletionAsync(
       ChatCompletionRequest request) {
-    return api.createChatCompletion(request);
+    return futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true);
   }
 
   public EditResult createEdit(EditRequest request) {
-    return execute(api.createEdit(request));
+    return execute(futureRetrier.runWithRetries(() -> api.createEdit(request), result -> true));
   }
 
   public ListenableFuture<EditResult> createEditAsync(EditRequest request) {
-    return api.createEdit(request);
+    return futureRetrier.runWithRetries(() -> api.createEdit(request), result -> true);
   }
 
   public EmbeddingResult createEmbeddings(EmbeddingRequest request) {
-    return execute(api.createEmbeddings(request));
+    return execute(
+        futureRetrier.runWithRetries(() -> api.createEmbeddings(request), result -> true));
   }
 
   public ListenableFuture<EmbeddingResult> createEmbeddingsAsync(EmbeddingRequest request) {
-    return api.createEmbeddings(request);
+    return futureRetrier.runWithRetries(() -> api.createEmbeddings(request), result -> true);
   }
 
   public ImageResult createImage(CreateImageRequest request) {
-    return execute(api.createImage(request));
+    return execute(futureRetrier.runWithRetries(() -> api.createImage(request), result -> true));
   }
 
   public ListenableFuture<ImageResult> createImageAsync(CreateImageRequest request) {
-    return api.createImage(request);
+    return futureRetrier.runWithRetries(() -> api.createImage(request), result -> true);
   }
 
   public ImageResult createImageEdit(
       CreateImageEditRequest request, String imagePath, String maskPath) {
-    java.io.File image = new java.io.File(imagePath);
-    java.io.File mask = null;
+    File image = new File(imagePath);
+    File mask = null;
     if (maskPath != null) {
-      mask = new java.io.File(maskPath);
+      mask = new File(maskPath);
     }
     return createImageEdit(request, image, mask);
   }
 
   public ListenableFuture<ImageResult> createImageEditAsync(
       CreateImageEditRequest request, String imagePath, String maskPath) {
-    java.io.File image = new java.io.File(imagePath);
-    java.io.File mask = null;
+    File image = new File(imagePath);
+    File mask = null;
     if (maskPath != null) {
-      mask = new java.io.File(maskPath);
+      mask = new File(maskPath);
     }
     return createImageEditAsync(request, image, mask);
   }
 
-  public ImageResult createImageEdit(
-      CreateImageEditRequest request, java.io.File image, java.io.File mask) {
+  public ImageResult createImageEdit(CreateImageEditRequest request, File image, File mask) {
     RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder = getMultipartBodyDefaultBuilder(request, imageBody);
@@ -233,11 +244,12 @@ public class OpenAIService {
       builder.addFormDataPart("mask", "mask", maskBody);
     }
 
-    return execute(api.createImageEdit(builder.build()));
+    return execute(
+        futureRetrier.runWithRetries(() -> api.createImageEdit(builder.build()), result -> true));
   }
 
   public ListenableFuture<ImageResult> createImageEditAsync(
-      CreateImageEditRequest request, java.io.File image, java.io.File mask) {
+      CreateImageEditRequest request, File image, File mask) {
     RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder = getMultipartBodyDefaultBuilder(request, imageBody);
@@ -250,22 +262,21 @@ public class OpenAIService {
       RequestBody maskBody = RequestBody.create(mask, IMAGE_MEDIA_TYPE);
       builder.addFormDataPart("mask", "mask", maskBody);
     }
-
-    return api.createImageEdit(builder.build());
+    return futureRetrier.runWithRetries(() -> api.createImageEdit(builder.build()), result -> true);
   }
 
   public ImageResult createImageVariation(CreateImageVariationRequest request, String imagePath) {
-    java.io.File image = new java.io.File(imagePath);
+    File image = new File(imagePath);
     return createImageVariation(request, image);
   }
 
   public ListenableFuture<ImageResult> createImageVariationAsync(
       CreateImageVariationRequest request, String imagePath) {
-    java.io.File image = new java.io.File(imagePath);
+    File image = new File(imagePath);
     return createImageVariationAsync(request, image);
   }
 
-  public ImageResult createImageVariation(CreateImageVariationRequest request, java.io.File image) {
+  public ImageResult createImageVariation(CreateImageVariationRequest request, File image) {
     RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder =
@@ -279,11 +290,13 @@ public class OpenAIService {
       builder.addFormDataPart("n", request.getN().toString());
     }
 
-    return execute(api.createImageVariation(builder.build()));
+    return execute(
+        futureRetrier.runWithRetries(
+            () -> api.createImageVariation(builder.build()), result -> true));
   }
 
   public ListenableFuture<ImageResult> createImageVariationAsync(
-      CreateImageVariationRequest request, java.io.File image) {
+      CreateImageVariationRequest request, File image) {
     RequestBody imageBody = RequestBody.create(image, IMAGE_MEDIA_TYPE);
 
     MultipartBody.Builder builder =
@@ -297,14 +310,16 @@ public class OpenAIService {
       builder.addFormDataPart("n", request.getN().toString());
     }
 
-    return api.createImageVariation(builder.build());
+    return futureRetrier.runWithRetries(
+        () -> api.createImageVariation(builder.build()), result -> true);
   }
 
   public ModerationResult createModeration(ModerationRequest request) {
-    return execute(api.createModeration(request));
+    return execute(
+        futureRetrier.runWithRetries(() -> api.createModeration(request), result -> true));
   }
 
   public ListenableFuture<ModerationResult> createModerationAsync(ModerationRequest request) {
-    return api.createModeration(request);
+    return futureRetrier.runWithRetries(() -> api.createModeration(request), result -> true);
   }
 }

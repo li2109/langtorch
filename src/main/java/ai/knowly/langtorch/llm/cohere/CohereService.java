@@ -12,6 +12,7 @@ import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.inject.Inject;
 import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
@@ -26,7 +27,7 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.gson.GsonConverterFactory;
 
-public class CohereApiService {
+public class CohereService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.cohere.ai/";
   private static final Gson gson =
@@ -39,7 +40,8 @@ public class CohereApiService {
   private final ScheduledExecutorService scheduledExecutor;
 
   /** Creates a new CohereAPIService that wraps CohereApi */
-  public CohereApiService(CohereServiceConfig config) {
+  @Inject
+  public CohereService(CohereServiceConfig config) {
     this.api = buildApi(config);
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
     this.futureRetrier =

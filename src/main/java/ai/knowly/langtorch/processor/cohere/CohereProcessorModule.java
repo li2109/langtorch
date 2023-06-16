@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.cohere;
 
-import ai.knowly.langtorch.llm.cohere.CohereApiService;
+import ai.knowly.langtorch.llm.cohere.CohereService;
 import ai.knowly.langtorch.llm.cohere.schema.config.CohereServiceConfig;
 import ai.knowly.langtorch.processor.cohere.generate.CohereGenerateProcessorConfig;
 import ai.knowly.langtorch.utils.Environment;
@@ -13,10 +13,10 @@ public final class CohereProcessorModule extends AbstractModule {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
   @Provides
-  public CohereApiService providesCohereAPI() {
-    return new CohereApiService(
+  public CohereService providesCohereAPI() {
+    return new CohereService(
         CohereServiceConfig.builder()
-            .setApiKey(CohereKeyUtil.getApiKey(logger, Environment.PRODUCTION))
+            .setApiKey(CohereKeyUtil.getKey(logger, Environment.PRODUCTION))
             .build());
   }
 

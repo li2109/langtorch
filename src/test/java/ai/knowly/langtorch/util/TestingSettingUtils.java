@@ -14,12 +14,19 @@ public class TestingSettingUtils {
   private static final String OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST =
       "test.unit-test.live-traffic.llm-service.openai";
 
+  private static final String COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST =
+      "test.unit-test.live-traffic.llm-service.cohere";
+
   public static boolean enablePineconeVectorStoreLiveTrafficTest() {
     return readBooleanSetting(PINECONE_VECTOR_STORE_LIVE_TRAFFIC_TEST);
   }
 
   public static boolean enableOpenAILLMServiceLiveTrafficTest() {
     return readBooleanSetting(OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST);
+  }
+
+  public static boolean enableCohereLLMServiceLiveTrafficTest() {
+    return readBooleanSetting(COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST);
   }
 
   public static ImmutableMap<String, Object> getTestingSetting() {

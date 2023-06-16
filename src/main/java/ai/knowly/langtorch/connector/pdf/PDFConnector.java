@@ -3,6 +3,7 @@ package ai.knowly.langtorch.connector.pdf;
 import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -24,11 +25,23 @@ public class PDFConnector implements Connector<String> {
   @Override
   public Optional<String> read() {
     try {
-      @Cleanup PDDocument document = PDDocument.load(new File(readOption.getFilePath()));
+      PDDocument selectedDocument;
+      if (readOption.getBytes().isPresent()) {
+        selectedDocument = PDDocument.load(readOption.getBytes().get());
+      }else if (readOption.getFilePath().isPresent()) {
+        selectedDocument = PDDocument.load(new File(readOption.getFilePath().get()));
+      } else {
+        throw new PDFConnectorOptionNotFoundException();
+      }
+
+      @Cleanup PDDocument document = selectedDocument;
+
       PDFTextStripper pdfStripper = new PDFTextStripper();
       return Optional.of(pdfStripper.getText(document));
     } catch (IOException e) {
       logger.atSevere().withCause(e).log("Error reading PDF file.");
+    } catch (PDFConnectorOptionNotFoundException e) {
+      logger.atSevere().withCause(e).log("No read option provided");
     }
     return Optional.empty();
   }

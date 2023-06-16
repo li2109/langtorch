@@ -235,9 +235,9 @@ public class PGVectorStore implements VectorStore {
             int parameterIndex,
             PreparedStatement insertStmt
     ) throws SQLException {
-        if (!values.getMetadata().isPresent()) return parameterIndex;
-        Map<String, String> metadata = values.getMetadata().get().getValue();
-        for (Map.Entry<String, String> entry : metadata.entrySet()) {
+        Optional<Metadata> metadata = values.getMetadata();
+        if (!metadata.isPresent()) return parameterIndex;
+        for (Map.Entry<String, String> entry : metadata.get().getValue().entrySet()) {
             for (int j = 0; j < METADATA_COLUMN_COUNT; j++) {
                 switch (j) {
                     case METADATA_INDEX_ID:
@@ -293,20 +293,25 @@ public class PGVectorStore implements VectorStore {
     }
 
     private void saveValueToMetadataIfPresent(DomainDocument document, String key, String value) {
-        if (key == null) return;
-        Map<String, String> metadata = document.getMetadata().get().getValue();
-        metadata.put(key, value);
+        Optional<Metadata> metadata = document.getMetadata();
+
+        if (!metadata.isPresent() || key == null) return;
+
+        metadata.get().getValue().put(key, value);
     }
 
     private Pair<DomainDocument, Double> getDocumentWithScoreWithPageContent(
             Pair<DomainDocument, Double> documentWithScore,
-            String textKey,
+            String key,
             String value
     ) {
-        if (textKey == null) return documentWithScore;
-        boolean hasTextKey = pgVectorStoreSpec.getTextKey().isPresent();
-        boolean isTextKey = textKey.equals(pgVectorStoreSpec.getTextKey().get());
-        if (!hasTextKey || !isTextKey) return documentWithScore;
+        if (key == null) return documentWithScore;
+        Optional<String> textKey = pgVectorStoreSpec.getTextKey();
+
+        if (!textKey.isPresent()) return documentWithScore;
+
+        boolean isTextKey = key.equals(textKey.get());
+        if (!isTextKey) return documentWithScore;
 
         DomainDocument document = documentWithScore.getLeft().toBuilder()
                 .setPageContent(value)

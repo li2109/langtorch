@@ -6,7 +6,7 @@ import com.google.common.util.concurrent.ListenableFuture;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
-public interface CohereApi {
+public interface CohereAIApi {
   @POST("/v1/generate")
   ListenableFuture<CohereGenerateResponse> generate(@Body CohereGenerateRequest request);
 }

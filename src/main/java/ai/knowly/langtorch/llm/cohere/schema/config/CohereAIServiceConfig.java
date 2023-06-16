@@ -7,9 +7,9 @@ import com.google.auto.value.AutoValue;
 import java.time.Duration;
 
 @AutoValue
-public abstract class CohereServiceConfig {
+public abstract class CohereAIServiceConfig {
   public static Builder builder() {
-    return new AutoValue_CohereServiceConfig.Builder()
+    return new AutoValue_CohereAIServiceConfig.Builder()
         .setTimeoutDuration(Duration.ofSeconds(10))
         .setRetryConfig(RetryConfig.getDefaultInstance())
         .setBackoffStrategy(new ExponentialBackoffStrategy());
@@ -33,6 +33,6 @@ public abstract class CohereServiceConfig {
 
     public abstract Builder setRetryConfig(RetryConfig newRetryConfig);
 
-    public abstract CohereServiceConfig build();
+    public abstract CohereAIServiceConfig build();
   }
 }

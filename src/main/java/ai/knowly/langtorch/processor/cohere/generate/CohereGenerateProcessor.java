@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.processor.cohere.generate;
 
-import ai.knowly.langtorch.llm.cohere.CohereService;
+import ai.knowly.langtorch.llm.cohere.CohereAIService;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateRequest;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.processor.ProcessorExecutionException;
@@ -15,17 +15,17 @@ import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 /** Processor for Cohere.ai text generation service. */
 public class CohereGenerateProcessor implements Processor<SingleText, SingleText> {
 
-  private final CohereService cohereService;
+  private final CohereAIService cohereAIService;
 
   @Inject
-  CohereGenerateProcessor(CohereService cohereService) {
-    this.cohereService = cohereService;
+  CohereGenerateProcessor(CohereAIService cohereAIService) {
+    this.cohereAIService = cohereAIService;
   }
 
   @Override
   public SingleText run(SingleText inputData) {
     CohereGenerateResponse response =
-        cohereService.generate(
+        cohereAIService.generate(
             CohereGenerateRequest.builder().prompt(inputData.getText()).build());
     if (response.getGenerations().isEmpty()) {
       throw new ProcessorExecutionException("Receive empty generations from cohere.ai.");
@@ -36,7 +36,7 @@ public class CohereGenerateProcessor implements Processor<SingleText, SingleText
   @Override
   public ListenableFuture<SingleText> runAsync(SingleText inputData) {
     ListenableFuture<CohereGenerateResponse> responseFuture =
-        cohereService.generateAsync(
+        cohereAIService.generateAsync(
             CohereGenerateRequest.builder().prompt(inputData.getText()).build());
     return Futures.transform(
         responseFuture,

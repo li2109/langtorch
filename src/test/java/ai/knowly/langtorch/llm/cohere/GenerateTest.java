@@ -13,7 +13,7 @@ import org.junit.jupiter.api.condition.EnabledIf;
 
 @EnabledIf("ai.knowly.langtorch.util.TestingSettingUtils#enableCohereLLMServiceLiveTrafficTest")
 class GenerateTest {
-  @Inject private CohereService service;
+  @Inject private CohereAIService service;
 
   @BeforeEach
   void setUp() {

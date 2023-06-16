@@ -12,15 +12,15 @@ public class CohereKeyUtil {
 
   private CohereKeyUtil() {}
 
-  public static String getApiKey(Environment environment) {
-    return getApiKey(Optional.empty(), environment);
+  public static String getKey(Environment environment) {
+    return getKey(Optional.empty(), environment);
   }
 
-  public static String getApiKey(FluentLogger logger, Environment environment) {
-    return getApiKey(Optional.ofNullable(logger), environment);
+  public static String getKey(FluentLogger logger, Environment environment) {
+    return getKey(Optional.ofNullable(logger), environment);
   }
 
-  private static String getApiKey(Optional<FluentLogger> logger, Environment environment) {
+  private static String getKey(Optional<FluentLogger> logger, Environment environment) {
     String endpointFromEnv = getKeyFromEnv(KeyType.COHERE_API_KEY, environment);
     logger.ifPresent(l -> logPartialApiKey(l, KeyType.COHERE_API_KEY.name(), endpointFromEnv));
     return endpointFromEnv;

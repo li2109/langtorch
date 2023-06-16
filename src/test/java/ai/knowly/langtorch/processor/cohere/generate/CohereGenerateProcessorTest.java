@@ -4,7 +4,7 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.Mockito.when;
 
-import ai.knowly.langtorch.llm.cohere.CohereApiService;
+import ai.knowly.langtorch.llm.cohere.CohereAIService;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.llm.cohere.schema.Generation;
 import ai.knowly.langtorch.schema.text.SingleText;
@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
 @ExtendWith(MockitoExtension.class)
 final class CohereGenerateProcessorTest {
 
-  @Mock @Bind private CohereApiService CohereApiService;
+  @Mock @Bind private CohereAIService CohereAIService;
 
   @Bind
   private CohereGenerateProcessorConfig config = CohereGenerateProcessorConfig.builder().build();
@@ -43,7 +43,7 @@ final class CohereGenerateProcessorTest {
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();
     generateResponse.setGenerations(ImmutableList.of(generation));
-    when(CohereApiService.generate(any())).thenReturn(generateResponse);
+    when(CohereAIService.generate(any())).thenReturn(generateResponse);
 
     // Act.
     SingleText actualOutput = cohereGenerateProcessor.run(SingleText.of("ice cream"));
@@ -59,7 +59,7 @@ final class CohereGenerateProcessorTest {
     generation.setText("This ice cream is sweet and delicious");
     CohereGenerateResponse generateResponse = new CohereGenerateResponse();
     generateResponse.setGenerations(ImmutableList.of(generation));
-    when(CohereApiService.generateAsync(any()))
+    when(CohereAIService.generateAsync(any()))
         .thenReturn(Futures.immediateFuture(generateResponse));
 
     // Act.

@@ -4,7 +4,6 @@ import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
 import ai.knowly.langtorch.utils.future.retry.strategy.BackoffStrategy;
 import com.google.common.base.Predicate;
-import com.google.common.base.Supplier;
 import com.google.common.util.concurrent.FutureCallback;
 import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
@@ -12,12 +11,10 @@ import com.google.common.util.concurrent.MoreExecutors;
 import com.google.common.util.concurrent.SettableFuture;
 import com.google.inject.Inject;
 import java.util.concurrent.ScheduledExecutorService;
-import java.util.concurrent.ScheduledFuture;
+import java.util.function.Supplier;
 
 /** A utility class for retrying a {@link ListenableFuture} until a success condition is met. */
 public final class FutureRetrier {
-  static int RUN_FOREVER = Integer.MIN_VALUE;
-
   private final ScheduledExecutorService executor;
   private final BackoffStrategy backoffStrategy;
   private final RetryConfig retryConfig;
@@ -110,21 +107,18 @@ public final class FutureRetrier {
       Predicate<T> successCondition,
       Throwable t,
       int retryCount) {
-    if (retries == RUN_FOREVER || retries > 0) {
-      ScheduledFuture<?> unused =
-          executor.schedule(
-              () -> {
-                int newRetriesCount = retries == RUN_FOREVER ? RUN_FOREVER : retries - 1;
-                runWithRetriesInternal(
-                    future,
-                    futureSupplier,
-                    newRetriesCount,
-                    delayInMillis,
-                    successCondition,
-                    retryCount + 1);
-              },
-              backoffStrategy.getDelayMillis(retryCount, delayInMillis),
-              MILLISECONDS);
+    if (retries > 0) {
+      executor.schedule(
+          () ->
+              runWithRetriesInternal(
+                  future,
+                  futureSupplier,
+                  retries - 1,
+                  delayInMillis,
+                  successCondition,
+                  retryCount + 1),
+          backoffStrategy.getDelayMillis(retryCount, delayInMillis),
+          MILLISECONDS);
     } else {
       future.setException(t);
     }

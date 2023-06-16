@@ -5,7 +5,9 @@ import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateRequest;
 import ai.knowly.langtorch.llm.cohere.schema.CohereGenerateResponse;
 import ai.knowly.langtorch.llm.cohere.schema.CohereHttpException;
 import ai.knowly.langtorch.llm.cohere.schema.CohereInterruptedException;
+import ai.knowly.langtorch.llm.cohere.schema.config.CohereServiceConfig;
 import ai.knowly.langtorch.llm.cohere.serialization.CohereGenerateRequestAdapter;
+import ai.knowly.langtorch.utils.future.retry.FutureRetrier;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
 import com.google.gson.Gson;
@@ -14,6 +16,8 @@ import java.io.IOException;
 import java.time.Duration;
 import java.util.Objects;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
@@ -25,35 +29,21 @@ import retrofit2.converter.gson.GsonConverterFactory;
 public class CohereApiService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.cohere.ai/";
-  private static final Duration DEFAULT_TIMEOUT = Duration.ofSeconds(10);
   private static final Gson gson =
       new GsonBuilder()
           .registerTypeAdapter(CohereGenerateRequest.class, new CohereGenerateRequestAdapter())
           .create();
 
   private final CohereApi api;
+  private final FutureRetrier futureRetrier;
+  private final ScheduledExecutorService scheduledExecutor;
 
-  /**
-   * Creates a new CohereAPIService that wraps CohereApi
-   *
-   * @param token Cohere token string
-   */
-  public CohereApiService(final String token) {
-    this(token, DEFAULT_TIMEOUT);
-  }
-
-  /**
-   * Creates a new CohereAPIService that wraps CohereApi
-   *
-   * @param token Cohere token string
-   * @param timeout http read timeout, Duration.ZERO means no timeout
-   */
-  public CohereApiService(final String token, final Duration timeout) {
-    this(buildApi(token, timeout));
-  }
-
-  public CohereApiService(final CohereApi api) {
-    this.api = api;
+  /** Creates a new CohereAPIService that wraps CohereApi */
+  public CohereApiService(CohereServiceConfig config) {
+    this.api = buildApi(config);
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    this.futureRetrier =
+        new FutureRetrier(scheduledExecutor, config.backoffStrategy(), config.retryConfig());
   }
 
   public static <T> T execute(ListenableFuture<T> apiCall) {
@@ -82,9 +72,9 @@ public class CohereApiService {
     }
   }
 
-  public static CohereApi buildApi(String token, Duration timeout) {
-    Objects.requireNonNull(token, "OpenAI token required");
-    OkHttpClient client = defaultClient(token, timeout);
+  public static CohereApi buildApi(CohereServiceConfig config) {
+    Objects.requireNonNull(config.apiKey(), "Cohere token required");
+    OkHttpClient client = defaultClient(config.apiKey(), config.timeoutDuration());
     Retrofit retrofit = defaultRetrofit(client, gson);
     return retrofit.create(CohereApi.class);
   }
@@ -107,10 +97,10 @@ public class CohereApiService {
   }
 
   public CohereGenerateResponse generate(CohereGenerateRequest request) {
-    return execute(api.generate(request));
+    return execute(futureRetrier.runWithRetries(() -> api.generate(request), response -> true));
   }
 
   public ListenableFuture<CohereGenerateResponse> generateAsync(CohereGenerateRequest request) {
-    return api.generate(request);
+    return futureRetrier.runWithRetries(() -> api.generate(request), response -> true);
   }
 }

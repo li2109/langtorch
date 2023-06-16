@@ -3,7 +3,7 @@ package ai.knowly.langtorch.util.future.retry;
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.Mockito.*;
 
-import ai.knowly.langtorch.llm.openai.schema.config.RetryConfig;
+import ai.knowly.langtorch.utils.future.retry.RetryConfig;
 import ai.knowly.langtorch.utils.future.retry.FutureRetrier;
 import ai.knowly.langtorch.utils.future.retry.strategy.BackoffStrategy;
 import com.google.common.base.Predicate;

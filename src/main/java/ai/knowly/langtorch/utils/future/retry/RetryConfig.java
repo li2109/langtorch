@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.llm.openai.schema.config;
+package ai.knowly.langtorch.utils.future.retry;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;

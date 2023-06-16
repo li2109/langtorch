@@ -2,7 +2,6 @@ package ai.knowly.langtorch.utils.future.retry;
 
 import static java.util.concurrent.TimeUnit.MILLISECONDS;
 
-import ai.knowly.langtorch.llm.openai.schema.config.RetryConfig;
 import ai.knowly.langtorch.utils.future.retry.strategy.BackoffStrategy;
 import com.google.common.base.Predicate;
 import com.google.common.base.Supplier;

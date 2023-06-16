@@ -33,7 +33,6 @@ import java.net.InetSocketAddress;
 import java.net.Proxy;
 import java.net.Proxy.Type;
 import java.util.concurrent.ExecutionException;
-import java.util.concurrent.Executor;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
@@ -65,7 +64,7 @@ public class OpenAIService {
 
   private final OpenAIApi api;
   private final FutureRetrier futureRetrier;
-  private final Executor executor;
+
   private final ScheduledExecutorService scheduledExecutor;
 
   @Inject
@@ -74,7 +73,6 @@ public class OpenAIService {
     OkHttpClient client = buildClient(openAIServiceConfig);
     Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper);
     scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
-    executor = Executors.newCachedThreadPool();
     this.futureRetrier =
         new FutureRetrier(
             scheduledExecutor,

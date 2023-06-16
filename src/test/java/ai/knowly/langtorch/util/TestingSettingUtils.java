@@ -52,7 +52,9 @@ public class TestingSettingUtils {
   private static boolean readBooleanSetting(String settingName) {
     ImmutableMap<String, Object> nestedValueMap = getTestingSetting();
     Object value = getNestedValue(nestedValueMap, Splitter.on(".").split(settingName));
-    assert value != null;
+    if (value == null) {
+      return false;
+    }
     return (boolean) value;
   }
 }

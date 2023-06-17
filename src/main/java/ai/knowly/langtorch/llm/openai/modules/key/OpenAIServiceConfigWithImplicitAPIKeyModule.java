@@ -11,12 +11,13 @@ import com.google.inject.Provides;
  * configuration.
  */
 public class OpenAIServiceConfigWithImplicitAPIKeyModule extends AbstractModule {
-  
+
   /**
    * This function provides an OpenAIServiceConfig object with an API key set based on the current
    * environment.
-   * 
-   * @return An instance of the `OpenAIServiceConfig` class is being returned with the API key read from the environment variable.
+   *
+   * @return An instance of the `OpenAIServiceConfig` class is being returned with the API key read
+   *     from the environment variable.
    */
   @Provides
   public OpenAIServiceConfig provideOpenAIServiceConfig() {

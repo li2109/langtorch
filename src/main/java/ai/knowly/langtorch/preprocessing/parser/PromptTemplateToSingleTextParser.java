@@ -4,8 +4,8 @@ import ai.knowly.langtorch.schema.text.SingleText;
 import ai.knowly.langtorch.prompt.template.PromptTemplate;
 
 /**
- * The PromptTemplateToSingleTextParser class that converts a PromptTemplate object
- * into a SingleText object by using the format method of the input.
+ * The PromptTemplateToSingleTextParser class that converts a PromptTemplate object into a
+ * SingleText object by using the format method of the input.
  */
 public class PromptTemplateToSingleTextParser implements Parser<PromptTemplate, SingleText> {
 

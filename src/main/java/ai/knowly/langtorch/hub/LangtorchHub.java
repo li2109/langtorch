@@ -1,5 +1,7 @@
 package ai.knowly.langtorch.hub;
 
+import ai.knowly.langtorch.hub.module.token.OpenAITokenModule;
+import ai.knowly.langtorch.hub.module.token.TokenUsage;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.schema.OpenAIKeyConfig;
 import ai.knowly.langtorch.llm.openai.modules.key.OpenAIServiceConfigWithExplicitAPIKeyModule;
@@ -15,6 +17,7 @@ public class LangtorchHub {
 
   public LangtorchHub(LangtorchHubConfig config, ImmutableList<AbstractModule> extraModules) {
     ImmutableList.Builder<AbstractModule> moduleBuilder = ImmutableList.builder();
+    moduleBuilder.add(new OpenAITokenModule());
     moduleBuilder.addAll(extraModules);
 
     // If the OpenAI config is present, add the OpenAI module to the module builder.
@@ -39,5 +42,9 @@ public class LangtorchHub {
 
   public <T> T getInstance(Class<T> clazz) {
     return injector.getInstance(clazz);
+  }
+
+  public TokenUsage getTokenUsage() {
+    return injector.getInstance(TokenUsage.class);
   }
 }

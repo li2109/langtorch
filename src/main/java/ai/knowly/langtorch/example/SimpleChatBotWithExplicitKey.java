@@ -4,6 +4,7 @@ import static ai.knowly.langtorch.example.ExampleUtils.readInputUntilEXIT;
 
 import ai.knowly.langtorch.capability.integration.openai.SimpleChatCapability;
 import ai.knowly.langtorch.hub.LangtorchHub;
+import ai.knowly.langtorch.hub.module.token.TokenUsage;
 import ai.knowly.langtorch.hub.schema.LangtorchHubConfig;
 import ai.knowly.langtorch.hub.schema.OpenAIKeyConfig;
 import ai.knowly.langtorch.processor.openai.chat.OpenAIChatProcessorConfig;
@@ -44,5 +45,9 @@ public class SimpleChatBotWithExplicitKey {
 
     SimpleChatCapability chatBot = langtorchHub.getInstance(SimpleChatCapability.class);
     readInputUntilEXIT(logger, chatBot);
+    TokenUsage tokenUsage = langtorchHub.getTokenUsage();
+    logger.atInfo().log(
+        "Prompt token usage: %s, Completion token usage: %s",
+        tokenUsage.getPromptTokenUsage(), tokenUsage.getCompletionTokenUsage());
   }
 }

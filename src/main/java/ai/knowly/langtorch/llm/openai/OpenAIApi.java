@@ -17,6 +17,8 @@ import okhttp3.RequestBody;
 import retrofit2.http.Body;
 import retrofit2.http.POST;
 
+// This is a Java interface defining methods for making API requests to the OpenAI API. Each method
+// corresponds to a specific endpoint in the API and takes a request object as a parameter.
 public interface OpenAIApi {
 
   @POST("/v1/completions")

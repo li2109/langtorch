@@ -1,7 +1,6 @@
 package ai.knowly.langtorch.llm.openai;
 
-import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIApiExecutionException;
-import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIServiceInterruptedException;
+import ai.knowly.langtorch.hub.module.token.EnableOpenAITokenRecord;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIProxyConfig.ProxyType;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
 import ai.knowly.langtorch.llm.openai.schema.dto.OpenAIError;
@@ -20,6 +19,8 @@ import ai.knowly.langtorch.llm.openai.schema.dto.image.CreateImageVariationReque
 import ai.knowly.langtorch.llm.openai.schema.dto.image.ImageResult;
 import ai.knowly.langtorch.llm.openai.schema.dto.moderation.ModerationRequest;
 import ai.knowly.langtorch.llm.openai.schema.dto.moderation.ModerationResult;
+import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIApiExecutionException;
+import ai.knowly.langtorch.llm.openai.schema.exception.OpenAIServiceInterruptedException;
 import ai.knowly.langtorch.utils.future.retry.FutureRetrier;
 import com.fasterxml.jackson.annotation.JsonInclude.Include;
 import com.fasterxml.jackson.databind.DeserializationFeature;
@@ -165,26 +166,26 @@ public class OpenAIService {
   }
 
   public CompletionResult createCompletion(CompletionRequest request) {
-    return execute(
-        futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true));
+    return execute(createCompletionAsync(request));
   }
 
+  @EnableOpenAITokenRecord
   public ListenableFuture<CompletionResult> createCompletionAsync(CompletionRequest request) {
     return futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true);
   }
 
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
-    return execute(
-        futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true));
+    return execute(createChatCompletionAsync(request));
   }
 
+  @EnableOpenAITokenRecord
   public ListenableFuture<ChatCompletionResult> createChatCompletionAsync(
       ChatCompletionRequest request) {
     return futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true);
   }
 
   public EditResult createEdit(EditRequest request) {
-    return execute(futureRetrier.runWithRetries(() -> api.createEdit(request), result -> true));
+    return execute(createEditAsync(request));
   }
 
   public ListenableFuture<EditResult> createEditAsync(EditRequest request) {
@@ -192,8 +193,7 @@ public class OpenAIService {
   }
 
   public EmbeddingResult createEmbeddings(EmbeddingRequest request) {
-    return execute(
-        futureRetrier.runWithRetries(() -> api.createEmbeddings(request), result -> true));
+    return execute(createEmbeddingsAsync(request));
   }
 
   public ListenableFuture<EmbeddingResult> createEmbeddingsAsync(EmbeddingRequest request) {
@@ -201,7 +201,7 @@ public class OpenAIService {
   }
 
   public ImageResult createImage(CreateImageRequest request) {
-    return execute(futureRetrier.runWithRetries(() -> api.createImage(request), result -> true));
+    return execute(createImageAsync(request));
   }
 
   public ListenableFuture<ImageResult> createImageAsync(CreateImageRequest request) {

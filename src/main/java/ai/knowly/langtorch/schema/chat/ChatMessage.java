@@ -6,7 +6,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 public class ChatMessage extends Message implements MemoryValue {
   private final Role role;
-  private final String name;
+  private String name;
 
   @JsonCreator
   public ChatMessage(
@@ -16,6 +16,10 @@ public class ChatMessage extends Message implements MemoryValue {
     super(content);
     this.role = role;
     this.name = name;
+  }
+
+  public static ChatMessage of(String content, Role role) {
+    return new ChatMessage(content, role, null);
   }
 
   public static ChatMessage of(String content, Role role, String name) {

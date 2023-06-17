@@ -6,6 +6,6 @@ public final class UserMessage {
   private UserMessage() {}
 
   public static ChatMessage of(String content) {
-    return new ChatMessage(content, Role.USER, "");
+    return new ChatMessage(content, Role.USER, null);
   }
 }

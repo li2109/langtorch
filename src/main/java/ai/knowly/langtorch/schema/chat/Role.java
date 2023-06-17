@@ -9,7 +9,8 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 public enum Role {
   SYSTEM("system"),
   USER("user"),
-  ASSISTANT("assistant");
+  ASSISTANT("assistant"),
+  FUNCTION("function");
 
   @JsonValue
   @JsonSerialize(using = ToStringSerializer.class)

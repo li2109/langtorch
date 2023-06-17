@@ -2,7 +2,7 @@ package ai.knowly.langtorch.connector.youtube;
 
 import org.junit.Test;
 
-public class YoutubeConnectorTest {
+public class YoutubeLoaderTest {
 
   @Test
   void testVerifyYoutubeAPIKeyTimeout(){

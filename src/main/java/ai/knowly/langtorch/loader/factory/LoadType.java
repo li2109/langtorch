@@ -4,4 +4,5 @@ public enum LoadType {
   PDF,
   SPREADSHEET,
   SQL,
+  YOUTUBE,
 }

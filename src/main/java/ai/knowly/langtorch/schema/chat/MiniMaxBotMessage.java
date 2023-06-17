@@ -7,6 +7,6 @@ public class MiniMaxBotMessage {
   private MiniMaxBotMessage() {}
 
   public static ChatMessage of(String content) {
-    return new ChatMessage(content, Role.MINIMAX_BOT);
+    return new ChatMessage(content, Role.MINIMAX_BOT, null);
   }
 }

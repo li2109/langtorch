@@ -1,6 +1,6 @@
 package ai.knowly.langtorch.llm.minimax;
 
-import static org.junit.jupiter.api.Assertions.*;
+import static com.google.common.truth.Truth.assertThat;
 
 import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionRequest;
 import ai.knowly.langtorch.schema.chat.Role;
@@ -37,6 +37,6 @@ class ChatCompletionTest {
         ChatCompletionRequest.builder().setModel("abab5-chat").setMessages(messages).build();
 
     String reply = service.createChatCompletion(chatCompletionRequest).getReply();
-    assertNotNull(reply);
+    assertThat(reply).isNotEmpty();
   }
 }

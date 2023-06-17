@@ -7,6 +7,6 @@ public class MiniMaxUserMessage {
   private MiniMaxUserMessage() {}
 
   public static ChatMessage of(String content) {
-    return new ChatMessage(content, Role.MINIMAX_USER);
+    return new ChatMessage(content, Role.MINIMAX_USER, null);
   }
 }

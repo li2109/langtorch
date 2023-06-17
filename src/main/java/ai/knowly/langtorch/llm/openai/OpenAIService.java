@@ -50,9 +50,10 @@ import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
+
 /**
- * OpenAIService wraps OpenAIApi and provides a synchronous and asynchronous interface to the OpenAI
- * API.
+ * The OpenAIService provides methods for calling the OpenAI API and
+ * handling errors.
  */
 public class OpenAIService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();

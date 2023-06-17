@@ -8,6 +8,10 @@ import com.knuddels.jtokkit.api.ModelType;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 
+/**
+ * The class Encodings contains a static map of OpenAI models and their corresponding encodings
+ * obtained from a default encoding registry.
+ */
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Encodings {
   private static final EncodingRegistry registry =

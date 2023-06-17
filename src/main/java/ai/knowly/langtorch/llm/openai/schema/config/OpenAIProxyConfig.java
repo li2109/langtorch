@@ -2,6 +2,9 @@ package ai.knowly.langtorch.llm.openai.schema.config;
 
 import com.google.auto.value.AutoValue;
 
+/**
+ * This is a Java class for configuring a proxy with options for HTTP or SOCKS proxy types.
+ */
 @AutoValue
 public abstract class OpenAIProxyConfig {
   public static Builder builder() {

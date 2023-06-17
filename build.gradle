@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'ai.knowly'
-version '0.0.13'
+version '0.0.14'
 
 sonarqube {
     properties {
@@ -130,6 +130,8 @@ dependencies {
     implementation 'com.google.apis:google-api-services-youtube:v3-rev20210915-1.32.1'
 
 
+    // Tiktoken java implementation: https://github.com/openai/tiktoken
+    implementation 'com.knuddels:jtokkit:0.5.0'
 }
 
 // Testing related dependencies
@@ -147,6 +149,8 @@ dependencies {
     implementation 'org.yaml:snakeyaml:1.33'
     // H2 in-memory database
     testImplementation 'com.h2database:h2:1.4.200'
+    // Guice dependency injection testing utilities
+    testImplementation 'com.google.inject.extensions:guice-testlib:5.1.0'
 }
 
 test {

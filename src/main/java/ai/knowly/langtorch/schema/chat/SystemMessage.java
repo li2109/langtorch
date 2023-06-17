@@ -6,6 +6,6 @@ public final class SystemMessage {
   private SystemMessage() {}
 
   public static ChatMessage of(String content) {
-    return new ChatMessage(content, Role.SYSTEM);
+    return new ChatMessage(content, Role.SYSTEM, null);
   }
 }

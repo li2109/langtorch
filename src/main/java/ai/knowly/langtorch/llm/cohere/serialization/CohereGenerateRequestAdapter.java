@@ -17,33 +17,33 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
     out.beginObject();
     out.name("prompt").value(value.prompt());
     out.name("model").value(value.model());
-    out.name("numGenerations").value(value.numGenerations());
-    out.name("maxTokens").value(value.maxTokens());
+    out.name("num_generations").value(value.numGenerations());
+    out.name("max_tokens").value(value.maxTokens());
     if (value.preset() != null && !value.preset().isEmpty()) {
       out.name("preset").value(value.preset());
     }
     out.name("temperature").value(value.temperature());
     out.name("k").value(value.k());
     out.name("p").value(value.p());
-    out.name("frequencyPenalty").value(value.frequencyPenalty());
-    out.name("presencePenalty").value(value.presencePenalty());
+    out.name("frequency_penalty").value(value.frequencyPenalty());
+    out.name("presence_penalty").value(value.presencePenalty());
     if (value.endSequences() != null && !value.endSequences().isEmpty()) {
-      out.name("endSequences").beginArray();
+      out.name("end_sequences").beginArray();
       for (String endSequence : value.endSequences()) {
         out.value(endSequence);
       }
       out.endArray();
     }
     if (value.stopSequences() != null && !value.stopSequences().isEmpty()) {
-      out.name("stopSequences").beginArray();
+      out.name("stop_sequences").beginArray();
       for (String stopSequence : value.stopSequences()) {
         out.value(stopSequence);
       }
       out.endArray();
     }
-    out.name("returnLikelihoods").value(value.returnLikelihoods());
+    out.name("return_likelihoods").value(value.returnLikelihoods());
     if (value.logitBias() != null && !value.logitBias().entrySet().isEmpty()) {
-      out.name("logitBias").beginObject();
+      out.name("logit_bias").beginObject();
       for (Map.Entry<String, Float> entry : value.logitBias().entrySet()) {
         out.name(entry.getKey()).value(entry.getValue());
       }
@@ -71,10 +71,10 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
         case "model":
           builder.model(in.nextString());
           break;
-        case "numGenerations":
+        case "num_generations":
           builder.numGenerations(in.nextInt());
           break;
-        case "maxTokens":
+        case "max_tokens":
           builder.maxTokens(in.nextInt());
           break;
         case "preset":
@@ -89,13 +89,13 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
         case "p":
           builder.p(in.nextDouble());
           break;
-        case "frequencyPenalty":
+        case "frequency_penalty":
           builder.frequencyPenalty(in.nextDouble());
           break;
-        case "presencePenalty":
+        case "presence_penalty":
           builder.presencePenalty(in.nextDouble());
           break;
-        case "endSequences":
+        case "end_sequences":
           List<String> endSequences = new ArrayList<>();
           in.beginArray();
           while (in.hasNext()) {
@@ -104,7 +104,7 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
           in.endArray();
           builder.endSequences(endSequences);
           break;
-        case "stopSequences":
+        case "stop_sequences":
           List<String> stopSequences = new ArrayList<>();
           in.beginArray();
           while (in.hasNext()) {
@@ -113,10 +113,10 @@ public class CohereGenerateRequestAdapter extends TypeAdapter<CohereGenerateRequ
           in.endArray();
           builder.stopSequences(stopSequences);
           break;
-        case "returnLikelihoods":
+        case "return_likelihoods":
           builder.returnLikelihoods(in.nextString());
           break;
-        case "logitBias":
+        case "logit_bias":
           Map<String, Float> logitBias = new HashMap<>();
           in.beginObject();
           while (in.hasNext()) {

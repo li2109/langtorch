@@ -11,8 +11,11 @@ import lombok.Data;
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
 public class ConversationMemory implements Memory<ChatMessage, ConversationMemoryContext> {
-
   @Builder.Default private List<ChatMessage> chatMessages = new ArrayList<>();
+
+  public static ConversationMemory geDefaultInstance() {
+    return ConversationMemory.builder().build();
+  }
 
   @Override
   public void add(ChatMessage value) {

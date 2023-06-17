@@ -5,8 +5,14 @@ import ai.knowly.langtorch.schema.chat.ChatMessage;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
 import java.util.Objects;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
-/** Tokenizer for OpenAI models. */
+/**
+ * Tokenizer for OpenAI models. It's currently not used as it's provided by OpenAI rest response.
+ * Will need this when we support streaming response.
+ */
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OpenAITokenizer {
   private static final ImmutableList<OpenAIModel> GPT_3_MODELS =
       ImmutableList.of(

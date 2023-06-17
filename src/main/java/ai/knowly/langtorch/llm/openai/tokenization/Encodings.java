@@ -5,7 +5,10 @@ import com.google.common.collect.ImmutableMap;
 import com.knuddels.jtokkit.api.Encoding;
 import com.knuddels.jtokkit.api.EncodingRegistry;
 import com.knuddels.jtokkit.api.ModelType;
+import lombok.AccessLevel;
+import lombok.AllArgsConstructor;
 
+@AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class Encodings {
   private static final EncodingRegistry registry =
       com.knuddels.jtokkit.Encodings.newDefaultEncodingRegistry();

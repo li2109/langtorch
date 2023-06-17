@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.minimax.schema.dto.completion;
 
+import ai.knowly.langtorch.llm.minimax.schema.dto.BaseResp;
 import ai.knowly.langtorch.schema.io.Input;
 import ai.knowly.langtorch.schema.io.Output;
 import ai.knowly.langtorch.store.memory.MemoryValue;
@@ -44,7 +45,6 @@ public class ChatCompletionResult {
   /** Usage of tokens */
   private Usage usage;
 
-  /** Error status codes and details */
   private BaseResp baseResp;
 
   @Data
@@ -94,17 +94,4 @@ public class ChatCompletionResult {
     private Long totalTokens;
   }
 
-  @Data
-  public static class BaseResp {
-
-    /**
-     * Status code 1000, unknown error 1001, timeout 1002, triggering current limit 1004,
-     * authentication failure 1008, balance less than 1013, internal service error 1027, serious
-     * violation of output content 2013, abnormal input format information
-     */
-    private Long statusCode;
-
-    /** Error details */
-    private String statusMsg;
-  }
 }

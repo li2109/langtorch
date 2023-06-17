@@ -1,24 +1,32 @@
-package ai.knowly.langtorch.processor.module.minimax.chat;
+package ai.knowly.langtorch.processor.minimax.chat;
 
 import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionRequest;
-import ai.knowly.langtorch.processor.module.ProcessorConfig;
+import ai.knowly.langtorch.processor.ProcessorConfig;
 import com.google.auto.value.AutoValue;
 import java.util.Optional;
 
 /**
+ * Configuration class for MiniMaxChatProcessor with various options
+ *
  * @author maxiao
  * @date 2023/06/08
  */
 @AutoValue
 public abstract class MiniMaxChatProcessorConfig implements ProcessorConfig {
+  private static final String DEFAULT_MODEL = "abab5-chat";
 
-  // Factory method to create a new builder instance with default settings
-  public static Builder builder() {
-    return new AutoValue_MiniMaxChatProcessorConfig.Builder();
+  public static MiniMaxChatProcessorConfig getDefaultInstance() {
+    return builder().build();
   }
 
+  public static Builder builder() {
+    return new AutoValue_MiniMaxChatProcessorConfig.Builder().setModel(DEFAULT_MODEL);
+  }
+
+  // Method to create a builder from the current instance
   public abstract Builder toBuilder();
 
+  // Abstract methods for configuration properties
   public abstract String getModel();
 
   public abstract Optional<Boolean> getWithEmotion();
@@ -43,9 +51,10 @@ public abstract class MiniMaxChatProcessorConfig implements ProcessorConfig {
 
   public abstract Optional<Boolean> getSkipInfoMask();
 
+  // Builder class for constructing MiniMaxChatProcessorConfig instances
   @AutoValue.Builder
   public abstract static class Builder {
-
+    // Builder methods for setting configuration properties
     public abstract Builder setModel(String model);
 
     public abstract Builder setWithEmotion(Boolean withEmotion);
@@ -70,6 +79,7 @@ public abstract class MiniMaxChatProcessorConfig implements ProcessorConfig {
 
     public abstract Builder setSkipInfoMask(Boolean skipInfoMask);
 
+    // Method to build an instance of MiniMaxChatProcessorConfig
     public abstract MiniMaxChatProcessorConfig build();
   }
 }

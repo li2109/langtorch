@@ -1,45 +1,26 @@
-package ai.knowly.langtorch.processor.module.minimax.embeddings;
+package ai.knowly.langtorch.processor.minimax.embeddings;
 
 import static com.google.common.collect.ImmutableList.toImmutableList;
+import static com.google.common.util.concurrent.MoreExecutors.directExecutor;
 
 import ai.knowly.langtorch.llm.minimax.MiniMaxService;
 import ai.knowly.langtorch.llm.minimax.schema.dto.embedding.EmbeddingResult;
-import ai.knowly.langtorch.processor.module.EmbeddingsProcessor;
-import ai.knowly.langtorch.processor.module.minimax.MiniMaxServiceProvider;
+import ai.knowly.langtorch.processor.EmbeddingProcessor;
 import ai.knowly.langtorch.schema.embeddings.*;
+import com.google.common.util.concurrent.Futures;
 import com.google.common.util.concurrent.ListenableFuture;
 
-public class MiniMaxEmbeddingsProcessor implements EmbeddingsProcessor {
+public class MiniMaxEmbeddingsProcessor implements EmbeddingProcessor {
+
   private final MiniMaxService miniMaxService;
 
-  private MiniMaxEmbeddingsProcessorConfig miniMaxEmbeddingsProcessorConfig =
-      MiniMaxEmbeddingsProcessorConfig.builder().build();
+  private final MiniMaxEmbeddingsProcessorConfig miniMaxEmbeddingsProcessorConfig;
 
-  public MiniMaxEmbeddingsProcessor(MiniMaxService miniMaxService) {
+  public MiniMaxEmbeddingsProcessor(
+      MiniMaxService miniMaxService,
+      MiniMaxEmbeddingsProcessorConfig miniMaxEmbeddingsProcessorConfig) {
     this.miniMaxService = miniMaxService;
-  }
-
-  private MiniMaxEmbeddingsProcessor() {
-    this.miniMaxService = MiniMaxServiceProvider.createMiniMaxService();
-  }
-
-  public static MiniMaxEmbeddingsProcessor create(MiniMaxService MiniMaxService) {
-    return new MiniMaxEmbeddingsProcessor(MiniMaxService);
-  }
-
-  public static MiniMaxEmbeddingsProcessor create(String groupId, String apiKey) {
-    return new MiniMaxEmbeddingsProcessor(
-        MiniMaxServiceProvider.createMiniMaxService(groupId, apiKey));
-  }
-
-  public static MiniMaxEmbeddingsProcessor create() {
-    return new MiniMaxEmbeddingsProcessor();
-  }
-
-  public MiniMaxEmbeddingsProcessor withConfig(
-      MiniMaxEmbeddingsProcessorConfig MiniMaxEmbeddingsProcessorConfig) {
-    this.miniMaxEmbeddingsProcessorConfig = MiniMaxEmbeddingsProcessorConfig;
-    return this;
+    this.miniMaxEmbeddingsProcessorConfig = miniMaxEmbeddingsProcessorConfig;
   }
 
   @Override
@@ -50,7 +31,7 @@ public class MiniMaxEmbeddingsProcessor implements EmbeddingsProcessor {
                 miniMaxEmbeddingsProcessorConfig,
                 inputData.getModel(),
                 inputData.getInput(),
-                "db"));
+                MiniMaxEmbeddingTypeScene.DB.toString()));
     return EmbeddingOutput.of(
         EmbeddingType.MINI_MAX,
         embeddingResult.getVectors().stream()
@@ -60,6 +41,24 @@ public class MiniMaxEmbeddingsProcessor implements EmbeddingsProcessor {
 
   @Override
   public ListenableFuture<EmbeddingOutput> runAsync(EmbeddingInput inputData) {
-    return null;
+    ListenableFuture<EmbeddingResult> embeddingResult =
+        miniMaxService.createEmbeddingsAsync(
+            MiniMaxEmbeddingsProcessorRequestConverter.convert(
+                miniMaxEmbeddingsProcessorConfig,
+                inputData.getModel(),
+                inputData.getInput(),
+                MiniMaxEmbeddingTypeScene.DB.toString()));
+
+    return Futures.transform(
+        embeddingResult,
+        result -> {
+          miniMaxService.checkResp(result.getBaseResp());
+          return EmbeddingOutput.of(
+              EmbeddingType.MINI_MAX,
+              result.getVectors().stream()
+                  .map(embedding -> Embedding.ofFloatVector(embedding))
+                  .collect(toImmutableList()));
+        },
+        directExecutor());
   }
 }

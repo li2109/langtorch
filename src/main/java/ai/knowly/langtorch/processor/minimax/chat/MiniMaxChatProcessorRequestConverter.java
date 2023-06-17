@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.minimax.chat;
+package ai.knowly.langtorch.processor.minimax.chat;
 
 import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionRequest;
 import ai.knowly.langtorch.schema.text.MultiChatMessage;
@@ -6,6 +6,9 @@ import java.util.List;
 import java.util.stream.Collectors;
 
 /**
+ * Converter class to convert MiniMaxChatProcessorConfig and a list of chat messages to a
+ * ChatCompletionRequest
+ *
  * @author maxiao
  * @date 2023/06/08
  */
@@ -13,6 +16,8 @@ public class MiniMaxChatProcessorRequestConverter {
 
   private MiniMaxChatProcessorRequestConverter() {}
 
+  // Method to convert MiniMaxChatProcessorConfig and a list of chat messages
+  // to a ChatCompletionRequest
   public static ChatCompletionRequest convert(
       MiniMaxChatProcessorConfig miniMaxChatProcessorConfig, MultiChatMessage messages) {
 

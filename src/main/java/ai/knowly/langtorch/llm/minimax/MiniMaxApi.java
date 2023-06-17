@@ -9,7 +9,7 @@ import retrofit2.http.Body;
 import retrofit2.http.POST;
 
 /**
- * doc link: https://api.minimax.chat/document/guides?id=6433f37194878d408fc8294b
+ * doc link: https://api.minimax.chat/document/guides
  *
  * @author maxiao
  * @date 2023/06/07

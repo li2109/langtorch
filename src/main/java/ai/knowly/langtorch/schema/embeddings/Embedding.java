@@ -1,7 +1,8 @@
 package ai.knowly.langtorch.schema.embeddings;
 
-import ai.knowly.langtorch.schema.io.Output;
+import static java.util.Collections.emptyList;
 
+import ai.knowly.langtorch.schema.io.Output;
 import java.util.List;
 
 public class Embedding implements Output {
@@ -16,11 +17,11 @@ public class Embedding implements Output {
   }
 
   public static Embedding of(List<Double> vector) {
-    return new Embedding(vector, null);
+    return new Embedding(vector, emptyList());
   }
 
   public static Embedding ofFloatVector(List<Float> floatVector) {
-    return new Embedding(null, floatVector);
+    return new Embedding(emptyList(), floatVector);
   }
 
   public List<Double> getVector() {

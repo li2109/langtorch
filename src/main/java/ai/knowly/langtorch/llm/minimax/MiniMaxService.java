@@ -1,80 +1,63 @@
 package ai.knowly.langtorch.llm.minimax;
 
+import ai.knowly.langtorch.llm.minimax.schema.MiniMaxApiBusinessErrorException;
 import ai.knowly.langtorch.llm.minimax.schema.MiniMaxApiExecutionException;
 import ai.knowly.langtorch.llm.minimax.schema.MiniMaxApiServiceInterruptedException;
 import ai.knowly.langtorch.llm.minimax.schema.config.MiniMaxServiceConfig;
+import ai.knowly.langtorch.llm.minimax.schema.dto.BaseResp;
 import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionRequest;
 import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionResult;
 import ai.knowly.langtorch.llm.minimax.schema.dto.embedding.EmbeddingRequest;
 import ai.knowly.langtorch.llm.minimax.schema.dto.embedding.EmbeddingResult;
+import ai.knowly.langtorch.utils.future.retry.FutureRetrier;
 import com.fasterxml.jackson.annotation.JsonInclude;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategy;
 import com.google.common.flogger.FluentLogger;
 import com.google.common.util.concurrent.ListenableFuture;
-import java.time.Duration;
+import com.google.inject.Inject;
+import java.io.IOException;
 import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
+import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
-import lombok.AllArgsConstructor;
 import okhttp3.ConnectionPool;
 import okhttp3.OkHttpClient;
+import retrofit2.HttpException;
 import retrofit2.Retrofit;
 import retrofit2.adapter.guava.GuavaCallAdapterFactory;
 import retrofit2.converter.jackson.JacksonConverterFactory;
 
 /**
+ * MiniMaxService wraps MiniMaxApi and provides a synchronous and asynchronous interface to the
+ * MiniMax API
+ *
  * @author maxiao
  * @date 2023/06/07
  */
-@AllArgsConstructor(access = lombok.AccessLevel.PRIVATE)
 public class MiniMaxService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.minimax.chat";
+  private static final ObjectMapper mapper = defaultObjectMapper();
 
-  private final MiniMaxApi miniMaxApi;
+  private final MiniMaxApi api;
+  private final FutureRetrier futureRetrier;
 
-  public static MiniMaxService create(final MiniMaxApi api) {
-    return new MiniMaxService(api);
-  }
+  private final ScheduledExecutorService scheduledExecutor;
 
-  public static MiniMaxService create(final MiniMaxServiceConfig miniMaxServiceConfig) {
+  @Inject
+  public MiniMaxService(final MiniMaxServiceConfig miniMaxServiceConfig) {
     ObjectMapper defaultObjectMapper = defaultObjectMapper();
     OkHttpClient client = buildClient(miniMaxServiceConfig);
     Retrofit retrofit = defaultRetrofit(client, defaultObjectMapper);
-
-    return new MiniMaxService(retrofit.create(MiniMaxApi.class));
-  }
-
-  /**
-   * Creates a new MiniMaxService that wraps MiniMaxApi
-   *
-   * @param groupId minimax group_id string
-   * @param apiKey minimax api_key string
-   * @param timeout http read timeout, Duration.ZERO means no timeout
-   * @return
-   */
-  public static MiniMaxService create(
-      final String groupId, final String apiKey, final Duration timeout) {
-    return create(
-        MiniMaxServiceConfig.builder()
-            .setGroupId(groupId)
-            .setApiKey(apiKey)
-            .setTimeoutDuration(timeout)
-            .build());
-  }
-
-  public static MiniMaxApi buildApi(String groupId, String apiKey, Duration timeout) {
-    ObjectMapper mapper = defaultObjectMapper();
-    OkHttpClient client =
-        buildClient(
-            MiniMaxServiceConfig.builder()
-                .setGroupId(groupId)
-                .setApiKey(apiKey)
-                .setTimeoutDuration(timeout)
-                .build());
-    Retrofit retrofit = defaultRetrofit(client, mapper);
-    return retrofit.create(MiniMaxApi.class);
+    scheduledExecutor = Executors.newSingleThreadScheduledExecutor();
+    this.futureRetrier =
+        new FutureRetrier(
+            scheduledExecutor,
+            miniMaxServiceConfig.backoffStrategy(),
+            miniMaxServiceConfig.retryConfig());
+    this.api = retrofit.create(MiniMaxApi.class);
   }
 
   public static Retrofit defaultRetrofit(OkHttpClient client, ObjectMapper mapper) {
@@ -107,20 +90,36 @@ public class MiniMaxService {
   }
 
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
-    return execute(miniMaxApi.createChatCompletion(request));
+    ChatCompletionResult chatCompletionResult =
+        execute(
+            futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true));
+
+    checkResp(chatCompletionResult.getBaseResp());
+    return chatCompletionResult;
   }
 
   public ListenableFuture<ChatCompletionResult> createChatCompletionAsync(
       ChatCompletionRequest request) {
-    return miniMaxApi.createChatCompletion(request);
+    return futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true);
   }
 
   public EmbeddingResult createEmbeddings(EmbeddingRequest request) {
-    return execute(miniMaxApi.createEmbeddings(request));
+    EmbeddingResult embeddingResult =
+        execute(futureRetrier.runWithRetries(() -> api.createEmbeddings(request), result -> true));
+
+    checkResp(embeddingResult.getBaseResp());
+    return embeddingResult;
   }
 
   public ListenableFuture<EmbeddingResult> createEmbeddingsAsync(EmbeddingRequest request) {
-    return miniMaxApi.createEmbeddings(request);
+    return futureRetrier.runWithRetries(() -> api.createEmbeddings(request), result -> true);
+  }
+
+  /** Throw exception messages if the request fails */
+  public void checkResp(BaseResp baseResp) {
+    if (baseResp.getStatusCode() != 0) {
+      throw new MiniMaxApiBusinessErrorException(baseResp.getStatusCode(), baseResp.getStatusMsg());
+    }
   }
 
   /**
@@ -137,6 +136,16 @@ public class MiniMaxService {
       throw new MiniMaxApiServiceInterruptedException(e);
 
     } catch (ExecutionException e) {
+      if (e.getCause() instanceof HttpException) {
+        HttpException httpException = (HttpException) e.getCause();
+        try {
+          String errorBody = httpException.response().errorBody().string();
+          logger.atSevere().log("HTTP Error: %s", errorBody);
+        } catch (IOException ioException) {
+          logger.atSevere().withCause(ioException).log("Error while reading errorBody");
+        }
+      }
+
       throw new MiniMaxApiExecutionException(e);
     }
   }

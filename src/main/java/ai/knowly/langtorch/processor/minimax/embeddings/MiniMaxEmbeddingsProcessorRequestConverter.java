@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.minimax.embeddings;
+package ai.knowly.langtorch.processor.minimax.embeddings;
 
 import ai.knowly.langtorch.llm.minimax.schema.dto.embedding.EmbeddingRequest;
 import java.util.List;

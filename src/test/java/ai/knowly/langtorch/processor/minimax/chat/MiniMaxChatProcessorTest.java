@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.processor.module.minimax.chat;
+package ai.knowly.langtorch.processor.minimax.chat;
 
 import static com.google.common.truth.Truth.assertThat;
 import static org.mockito.ArgumentMatchers.any;
@@ -9,6 +9,7 @@ import ai.knowly.langtorch.llm.minimax.schema.dto.completion.ChatCompletionReque
 import ai.knowly.langtorch.schema.chat.*;
 import ai.knowly.langtorch.schema.text.MultiChatMessage;
 import ai.knowly.langtorch.util.MiniMaxServiceTestingUtils;
+import com.google.inject.testing.fieldbinder.Bind;
 import java.util.Arrays;
 import java.util.List;
 import org.junit.jupiter.api.BeforeEach;
@@ -23,12 +24,14 @@ import org.mockito.junit.jupiter.MockitoExtension;
  */
 @ExtendWith(MockitoExtension.class)
 final class MiniMaxChatProcessorTest {
-  @Mock private MiniMaxService miniMaxService;
+
+  @Bind @Mock private MiniMaxService miniMaxService;
   private MiniMaxChatProcessor miniMaxChatProcessor;
 
   @BeforeEach
   public void setUp() {
-    miniMaxChatProcessor = new MiniMaxChatProcessor(miniMaxService);
+    miniMaxChatProcessor =
+        new MiniMaxChatProcessor(miniMaxService, MiniMaxChatProcessorConfig.getDefaultInstance());
   }
 
   @Test

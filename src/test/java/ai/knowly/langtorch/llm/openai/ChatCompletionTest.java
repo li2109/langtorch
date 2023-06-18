@@ -9,17 +9,14 @@ import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionR
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.ChatCompletionResult;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.Function;
 import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.Parameters;
-import ai.knowly.langtorch.schema.chat.ChatMessage;
 import ai.knowly.langtorch.schema.chat.SystemMessage;
 import ai.knowly.langtorch.schema.chat.UserMessage;
 import com.google.common.collect.ImmutableList;
+import com.google.common.collect.ImmutableMap;
 import com.google.inject.Guice;
 import com.google.inject.Inject;
 import com.google.inject.testing.fieldbinder.BoundFieldModule;
-import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledIf;
@@ -40,19 +37,21 @@ class ChatCompletionTest {
 
   @Test
   void createChatCompletion() {
-    final List<ChatMessage> messages = new ArrayList<>();
-    messages.add(SystemMessage.of("You are a dog and will speak as such."));
-
+    // Arrange.
     ChatCompletionRequest chatCompletionRequest =
         ChatCompletionRequest.builder()
             .setModel("gpt-3.5-turbo")
-            .setMessages(messages)
+            .setMessages(
+                ImmutableList.of(SystemMessage.of("You are a dog and will speak as such.")))
             .setN(3)
             .setMaxTokens(50)
             .setLogitBias(new HashMap<>())
             .build();
 
+    // Act.
     ChatCompletionResult result = service.createChatCompletion(chatCompletionRequest);
+
+    // Assert.
     assertThat(result.getChoices().size()).isEqualTo(3);
     assertThat(result.getUsage().getCompletionTokens())
         .isEqualTo(tokenUsage.getCompletionTokenUsage().get());
@@ -62,23 +61,11 @@ class ChatCompletionTest {
 
   @Test
   void createChatCompletion_testFunctionCall() {
-    final List<ChatMessage> messages = new ArrayList<>();
-    messages.add(UserMessage.of("What's the weather like in Boston?"));
-
-    Map<String, String> locationMap = new HashMap<>();
-    locationMap.put("type", "string");
-    locationMap.put("description", "The city and state, e.g. San Francisco, CA");
-    Map<String, Object> unitMap = new HashMap<>();
-    unitMap.put("type", "string");
-    unitMap.put("enum", ImmutableList.of("celsius", "fahrenheit"));
-    Map<String, Object> propertiesMap = new HashMap<>();
-    propertiesMap.put("location", locationMap);
-    propertiesMap.put("unit", unitMap);
-
+    // Arrange.
     ChatCompletionRequest chatCompletionRequest =
         ChatCompletionRequest.builder()
             .setModel("gpt-3.5-turbo-0613")
-            .setMessages(messages)
+            .setMessages(ImmutableList.of(UserMessage.of("What's the weather like in Boston?")))
             .setFunctions(
                 ImmutableList.of(
                     Function.builder()
@@ -87,7 +74,25 @@ class ChatCompletionTest {
                         .setParameters(
                             Parameters.builder()
                                 .setRequired(ImmutableList.of("location"))
-                                .setProperties(propertiesMap)
+                                .setProperties(
+                                    ImmutableMap.<String, Object>builder()
+                                        .put(
+                                            "location",
+                                            ImmutableMap.builder()
+                                                .put("type", "string")
+                                                .put(
+                                                    "description",
+                                                    "The city and state, e.g. San Francisco, CA")
+                                                .build())
+                                        .put(
+                                            "unit",
+                                            ImmutableMap.builder()
+                                                .put("type", "string")
+                                                .put(
+                                                    "enum",
+                                                    ImmutableList.of("celsius", "fahrenheit"))
+                                                .build())
+                                        .build())
                                 .setType("object")
                                 .build())
                         .build()))
@@ -97,9 +102,60 @@ class ChatCompletionTest {
             .setLogitBias(new HashMap<>())
             .build();
 
+    // Act.
     ChatCompletionResult result = service.createChatCompletion(chatCompletionRequest);
+
+    // Assert.
     assertThat(result.getChoices().size()).isEqualTo(1);
     assertThat(result.getChoices().get(0).getFinishReason()).isEqualTo("function_call");
+    assertThat(result.getChoices().get(0).getMessage().getFunctionCall()).isNotNull();
+  }
+
+  @Test
+  void createChatCompletion_testFunctionCallWithSql() {
+    // Arrange.
+    ChatCompletionRequest chatCompletionRequest =
+        ChatCompletionRequest.builder()
+            .setModel("gpt-3.5-turbo-0613")
+            .setMessages(
+                ImmutableList.of(
+                    SystemMessage.of(
+                        "Answer user questions by generating SQL queries against the Chinook Music Database."),
+                    UserMessage.of("Hi, who are the top 5 artists by number of tracks?")))
+            .setFunctions(
+                ImmutableList.of(
+                    Function.builder()
+                        .setName("ask_database")
+                        .setDescription(
+                            "Use this function to answer user questions about music. Output should be a fully formed SQL query.")
+                        .setParameters(
+                            Parameters.builder()
+                                .setType("object")
+                                .setProperties(
+                                    ImmutableMap.<String, Object>builder()
+                                        .put(
+                                            "query",
+                                            ImmutableMap.builder()
+                                                .put("type", "string")
+                                                .put(
+                                                    "description",
+                                                    "SQL query extracting info to answer the user's question.\\nSQL should be written using this database schema:\\n{database_schema_string}\\nThe query should be returned in plain text, not in JSON.\\n")
+                                                .build())
+                                        .build())
+                                .setRequired(ImmutableList.of("query"))
+                                .build())
+                        .build()))
+            .setFunctionCall("auto")
+            .setN(1)
+            .setMaxTokens(50)
+            .setLogitBias(new HashMap<>())
+            .build();
+
+    // Act.
+    ChatCompletionResult result = service.createChatCompletion(chatCompletionRequest);
+
+    // Assert.
+    assertThat(result.getChoices().size()).isEqualTo(1);
     assertThat(result.getChoices().get(0).getMessage().getFunctionCall()).isNotNull();
   }
 }

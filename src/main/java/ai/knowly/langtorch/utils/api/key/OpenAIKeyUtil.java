@@ -7,7 +7,7 @@ import ai.knowly.langtorch.utils.Environment;
 import com.google.common.flogger.FluentLogger;
 import java.util.Optional;
 
-/** Get Pinecone key from .env file */
+/** Get OpenAI key from .env file */
 public class OpenAIKeyUtil {
   private OpenAIKeyUtil() {}
 

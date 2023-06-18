@@ -1,4 +1,5 @@
 package ai.knowly.langtorch.schema.chat;
+
 /**
  * @author maxiao
  * @date 2023/06/13

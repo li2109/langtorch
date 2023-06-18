@@ -1,4 +1,5 @@
 package ai.knowly.langtorch.llm.minimax.schema;
+
 /**
  * @author maxiao
  * @date 2023/06/08

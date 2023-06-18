@@ -1,4 +1,5 @@
 package ai.knowly.langtorch.schema.embeddings;
+
 /**
  * @author maxiao
  * @date 2023/06/17

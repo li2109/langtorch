@@ -4,6 +4,7 @@ import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 import javax.inject.Inject;

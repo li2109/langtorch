@@ -14,6 +14,9 @@ public class TestingSettingUtils {
   private static final String OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST =
       "test.unit-test.live-traffic.llm-service.openai";
 
+  private static final String MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST =
+      "test.unit-test.live-traffic.llm-service.minimax";
+
   private static final String COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST =
       "test.unit-test.live-traffic.llm-service.cohere";
 
@@ -23,6 +26,10 @@ public class TestingSettingUtils {
 
   public static boolean enableOpenAILLMServiceLiveTrafficTest() {
     return readBooleanSetting(OPENAI_LLM_SERVICE_LIVE_TRAFFIC_TEST);
+  }
+
+  public static boolean enableMiniMaxLLMServiceLiveTrafficTest() {
+    return readBooleanSetting(MINIMAX_LLM_SERVICE_LIVE_TRAFFIC_TEST);
   }
 
   public static boolean enableCohereLLMServiceLiveTrafficTest() {

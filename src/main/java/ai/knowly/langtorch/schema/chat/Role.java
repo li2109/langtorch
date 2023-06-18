@@ -7,10 +7,13 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 
 /** A enum for the role of a message. */
 public enum Role {
+  /** openai role */
   SYSTEM("system"),
   USER("user"),
   ASSISTANT("assistant"),
-  FUNCTION("function");
+  FUNCTION("function"),
+  MINIMAX_USER("USER"),
+  MINIMAX_BOT("BOT");
 
   @JsonValue
   @JsonSerialize(using = ToStringSerializer.class)
@@ -23,7 +26,7 @@ public enum Role {
   @JsonCreator
   public static Role fromString(String value) {
     for (Role role : Role.values()) {
-      if (role.value.equalsIgnoreCase(value)) {
+      if (role.value.equals(value)) {
         return role;
       }
     }

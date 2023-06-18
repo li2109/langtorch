@@ -40,7 +40,7 @@ public class MiniMaxChatCompletionLLMCapability<I, O>
   }
 
   protected MiniMaxChatCompletionLLMCapability<I, O> withVerboseMode(boolean verbose) {
-    this.verbose = true;
+    this.verbose = verbose;
     return this;
   }
 

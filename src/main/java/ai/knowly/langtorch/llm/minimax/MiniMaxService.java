@@ -39,7 +39,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class MiniMaxService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api.minimax.chat";
-  private static final ObjectMapper mapper = defaultObjectMapper();
 
   private final MiniMaxApi api;
   private final FutureRetrier futureRetrier;

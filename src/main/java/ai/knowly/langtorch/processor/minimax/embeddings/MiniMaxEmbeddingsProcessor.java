@@ -28,14 +28,13 @@ public class MiniMaxEmbeddingsProcessor implements EmbeddingProcessor {
     EmbeddingResult embeddingResult =
         miniMaxService.createEmbeddings(
             MiniMaxEmbeddingsProcessorRequestConverter.convert(
-                miniMaxEmbeddingsProcessorConfig,
                 inputData.getModel(),
                 inputData.getInput(),
                 MiniMaxEmbeddingTypeScene.DB.toString()));
     return EmbeddingOutput.of(
         EmbeddingType.MINI_MAX,
         embeddingResult.getVectors().stream()
-            .map(embedding -> Embedding.ofFloatVector(embedding))
+            .map(Embedding::ofFloatVector)
             .collect(toImmutableList()));
   }
 
@@ -44,7 +43,6 @@ public class MiniMaxEmbeddingsProcessor implements EmbeddingProcessor {
     ListenableFuture<EmbeddingResult> embeddingResult =
         miniMaxService.createEmbeddingsAsync(
             MiniMaxEmbeddingsProcessorRequestConverter.convert(
-                miniMaxEmbeddingsProcessorConfig,
                 inputData.getModel(),
                 inputData.getInput(),
                 MiniMaxEmbeddingTypeScene.DB.toString()));
@@ -56,7 +54,7 @@ public class MiniMaxEmbeddingsProcessor implements EmbeddingProcessor {
           return EmbeddingOutput.of(
               EmbeddingType.MINI_MAX,
               result.getVectors().stream()
-                  .map(embedding -> Embedding.ofFloatVector(embedding))
+                  .map(Embedding::ofFloatVector)
                   .collect(toImmutableList()));
         },
         directExecutor());

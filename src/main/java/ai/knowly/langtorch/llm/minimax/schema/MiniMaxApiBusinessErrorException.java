@@ -5,7 +5,7 @@ package ai.knowly.langtorch.llm.minimax.schema;
  */
 public class MiniMaxApiBusinessErrorException extends RuntimeException {
 
-  private final Long statusCode;
+  final Long statusCode;
 
   public MiniMaxApiBusinessErrorException(Long statusCode, String statusMessage) {
     super(statusMessage);

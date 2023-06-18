@@ -6,11 +6,7 @@ import java.util.List;
 public final class MiniMaxEmbeddingsProcessorRequestConverter {
   private MiniMaxEmbeddingsProcessorRequestConverter() {}
 
-  public static EmbeddingRequest convert(
-      MiniMaxEmbeddingsProcessorConfig MiniMaxEmbeddingsProcessorConfig,
-      String model,
-      List<String> texts,
-      String type) {
+  public static EmbeddingRequest convert(String model, List<String> texts, String type) {
 
     EmbeddingRequest embeddingRequest = new EmbeddingRequest();
 

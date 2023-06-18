@@ -17,7 +17,7 @@ import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
  */
 public class SimpleChatCapability extends MiniMaxChatCompletionLLMCapability<String, String> {
 
-  private SimpleChatCapability(
+  public SimpleChatCapability(
       MiniMaxChatProcessor miniMaxChatProcessor, ConversationMemory memory) {
     super(
         miniMaxChatProcessor,

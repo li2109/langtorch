@@ -24,7 +24,7 @@ import org.mockito.junit.jupiter.MockitoExtension;
  * @date 2023/06/17
  */
 @ExtendWith(MockitoExtension.class)
-public class MiniMaxEmbeddingProcessorTest {
+class MiniMaxEmbeddingProcessorTest {
 
   @Bind @Mock private MiniMaxService miniMaxService;
   private ai.knowly.langtorch.processor.minimax.embeddings.MiniMaxEmbeddingsProcessor

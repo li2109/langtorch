@@ -12,16 +12,16 @@ import org.junit.jupiter.api.Test;
 
 final class PDFConnectorTest {
   @Test
-  void testPDFConnector() throws IOException {
+  void testPDFConnector() {
     // Arrange.
     // Act.
     Optional<String> actualContent =
         new PDFConnector(
-                PDFConnectorOption.builder().setFilePath(Optional.of("src/test/resources/test.pdf")).build())
+                PDFConnectorOption.builder().setFilePath("src/test/resources/test.pdf").build())
             .read();
 
     // Assert.
-    assertThat(actualContent.get().trim())
+    assertThat(actualContent.orElse("").trim())
         .isEqualTo(
             "This is a test PDF document. \n"
                 + "If you can read this, you have Adobe Acrobat Reader installed on your"
@@ -37,7 +37,7 @@ final class PDFConnectorTest {
       byte[] byteArray = Files.readAllBytes(path);
       Optional<String> actualContent =
               new PDFConnector(
-                      PDFConnectorOption.builder().setBytes(Optional.of(byteArray)).build())
+                      PDFConnectorOption.builder().setFileBytes(byteArray).build())
                       .read();
 
       // Assert.

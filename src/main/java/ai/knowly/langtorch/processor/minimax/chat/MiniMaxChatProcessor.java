@@ -42,7 +42,7 @@ public class MiniMaxChatProcessor implements Processor<MultiChatMessage, ChatMes
         miniMaxService.createChatCompletion(chatCompletionRequest);
     List<ChatCompletionResult.Choices> choices = chatCompletion.getChoices();
     ChatCompletionResult.Choices choicesResult = choices.get(0);
-    return ChatMessage.of(choicesResult.getText(), Role.MINIMAX_BOT);
+    return MiniMaxBotMessage.of(choicesResult.getText());
   }
 
   @Override
@@ -58,7 +58,7 @@ public class MiniMaxChatProcessor implements Processor<MultiChatMessage, ChatMes
 
               List<ChatCompletionResult.Choices> choices = chatCompletion.getChoices();
               ChatCompletionResult.Choices choicesResult = choices.get(0);
-              return ChatMessage.of(choicesResult.getText(), Role.MINIMAX_BOT);
+              return MiniMaxBotMessage.of(choicesResult.getText());
             },
             directExecutor());
   }

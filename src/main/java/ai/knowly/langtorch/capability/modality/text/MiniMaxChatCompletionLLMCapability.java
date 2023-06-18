@@ -56,7 +56,7 @@ public class MiniMaxChatCompletionLLMCapability<I, O>
     ChatMessage response = processor.run(getMessageWithMemorySideEffect(multiChatMessage));
     // Adding prompt and response.
     multiChatMessage.getMessages().forEach(memory::add);
-    ChatMessage message = ChatMessage.of(response.getContent(), response.getRole());
+    ChatMessage message = new ChatMessage(response.getContent(), response.getRole(), null, null);
     memory.add(message);
     return message;
   }
@@ -72,10 +72,12 @@ public class MiniMaxChatCompletionLLMCapability<I, O>
         message.getMessages().stream()
             .map(
                 chatMessage ->
-                    ChatMessage.of(
+                    new ChatMessage(
                         String.format(
                             "%s%nBelow is my query:%n%s", memoryContext, chatMessage.toString()),
-                        chatMessage.getRole()))
+                        chatMessage.getRole(),
+                        null,
+                        null))
             .collect(MultiChatMessage.toMultiChatMessage());
 
     if (verbose) {

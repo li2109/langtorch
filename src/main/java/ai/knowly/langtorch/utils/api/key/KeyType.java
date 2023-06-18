@@ -6,4 +6,5 @@ public enum KeyType {
   MINIMAX_API_KEY,
   PINECONE_API_KEY,
   COHERE_API_KEY,
+  HUGGINGFACE_API_KEY,
 }

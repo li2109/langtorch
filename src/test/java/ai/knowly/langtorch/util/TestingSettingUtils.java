@@ -20,6 +20,9 @@ public class TestingSettingUtils {
   private static final String COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST =
       "test.unit-test.live-traffic.llm-service.cohere";
 
+  private static final String HuggingFace_LLM_SERVICE_LIVE_TRAFFIC_TEST =
+      "test.unit-test.live-traffic.llm-service.huggingface";
+
   public static boolean enablePineconeVectorStoreLiveTrafficTest() {
     return readBooleanSetting(PINECONE_VECTOR_STORE_LIVE_TRAFFIC_TEST);
   }
@@ -34,6 +37,10 @@ public class TestingSettingUtils {
 
   public static boolean enableCohereLLMServiceLiveTrafficTest() {
     return readBooleanSetting(COHERE_LLM_SERVICE_LIVE_TRAFFIC_TEST);
+  }
+
+  public static boolean enableHuggingFaceLLMServiceLiveTrafficTest() {
+    return readBooleanSetting(HuggingFace_LLM_SERVICE_LIVE_TRAFFIC_TEST);
   }
 
   public static ImmutableMap<String, Object> getTestingSetting() {

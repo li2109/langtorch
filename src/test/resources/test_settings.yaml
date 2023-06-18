@@ -7,5 +7,6 @@ test:
         openai: false
         minimax: false
         cohere: false
+        huggingface: false
       vector-store-service:
         pinecone: false

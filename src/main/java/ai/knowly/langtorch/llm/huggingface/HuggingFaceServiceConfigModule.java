@@ -6,6 +6,7 @@ import ai.knowly.langtorch.utils.api.key.HuggingFaceKeyUtil;
 import com.google.inject.AbstractModule;
 import com.google.inject.Provides;
 
+/** Provides the HuggingFace service configuration. */
 public class HuggingFaceServiceConfigModule extends AbstractModule {
   private final String modelId;
 

@@ -33,7 +33,6 @@ import retrofit2.converter.jackson.JacksonConverterFactory;
 public class HuggingFaceService {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
   private static final String BASE_URL = "https://api-inference.huggingface.co/models/";
-  private static final ObjectMapper mapper = defaultObjectMapper();
 
   private final HuggingFaceApi api;
   private final FutureRetrier futureRetrier;

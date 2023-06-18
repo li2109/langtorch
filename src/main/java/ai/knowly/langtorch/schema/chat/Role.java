@@ -11,11 +11,10 @@ public enum Role {
   SYSTEM("system"),
   USER("user"),
   ASSISTANT("assistant"),
-
+  FUNCTION("function"),
   /** minimax role */
   MINIMAX_USER("USER"),
-  MINIMAX_BOT("BOT"),
-  ;
+  MINIMAX_BOT("BOT");
 
   @JsonValue
   @JsonSerialize(using = ToStringSerializer.class)

@@ -4,7 +4,6 @@ import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
 
 import java.io.File;
-import java.io.FileNotFoundException;
 import java.io.IOException;
 import java.util.Optional;
 import javax.inject.Inject;
@@ -30,14 +29,14 @@ public class PDFConnector implements Connector<String> {
     public Optional<String> read() {
         try {
             PDDocument selectedDocument;
-            Optional<byte[]> bytes = readOption.getBytes();
+            Optional<byte[]> bytes = readOption.getFileBytes();
             Optional<String> filePath = readOption.getFilePath();
             if (bytes.isPresent()) {
                 selectedDocument = PDDocument.load(bytes.get());
             } else if (filePath.isPresent()) {
                 selectedDocument = PDDocument.load(new File(filePath.get()));
             } else {
-                throw new PDFConnectorOptionNotFoundException();
+                throw new PDFConnectorOptionNotFoundException("No suitable read option provided");
             }
 
             @Cleanup PDDocument document = selectedDocument;

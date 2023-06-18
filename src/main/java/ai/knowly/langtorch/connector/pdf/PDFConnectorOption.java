@@ -10,6 +10,14 @@ import java.util.Optional;
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
 public class PDFConnectorOption implements ConnectorOption {
-  @Builder.Default private Optional<String> filePath = Optional.empty();
-  @Builder.Default private Optional<byte[]> bytes = Optional.empty();
+  private String filePath;
+  private byte[] fileBytes;
+
+  public Optional<String> getFilePath() {
+    return Optional.ofNullable(filePath);
+  }
+
+  public Optional<byte[]> getFileBytes() {
+    return Optional.ofNullable(fileBytes);
+  }
 }

@@ -17,7 +17,6 @@ import retrofit2.http.POST;
 import retrofit2.http.Query;
 
 public interface PineconeAPI {
-
   @POST("/vectors/upsert")
   ListenableFuture<UpsertResponse> upsert(@Body UpsertRequest request);
 

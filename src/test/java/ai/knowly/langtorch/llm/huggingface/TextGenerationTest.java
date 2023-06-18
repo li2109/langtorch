@@ -19,7 +19,8 @@ class TextGenerationTest {
 
   @BeforeEach
   void setUp() {
-    Guice.createInjector(new HuggingFaceTestingServiceConfigModule("gpt2"), BoundFieldModule.of(this))
+    Guice.createInjector(
+            new HuggingFaceTestingServiceConfigModule("gpt2"), BoundFieldModule.of(this))
         .injectMembers(this);
   }
 

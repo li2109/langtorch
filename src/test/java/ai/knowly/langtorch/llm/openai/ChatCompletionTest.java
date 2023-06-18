@@ -120,14 +120,16 @@ class ChatCompletionTest {
             .setMessages(
                 ImmutableList.of(
                     SystemMessage.of(
-                        "Answer user questions by generating SQL queries against the Chinook Music Database."),
+                        "Answer user questions by generating SQL queries against the Chinook Music"
+                            + " Database."),
                     UserMessage.of("Hi, who are the top 5 artists by number of tracks?")))
             .setFunctions(
                 ImmutableList.of(
                     Function.builder()
                         .setName("ask_database")
                         .setDescription(
-                            "Use this function to answer user questions about music. Output should be a fully formed SQL query.")
+                            "Use this function to answer user questions about music. Output should"
+                                + " be a fully formed SQL query.")
                         .setParameters(
                             Parameters.builder()
                                 .setType("object")
@@ -139,7 +141,13 @@ class ChatCompletionTest {
                                                 .put("type", "string")
                                                 .put(
                                                     "description",
-                                                    "SQL query extracting info to answer the user's question.\\nSQL should be written using this database schema:\\n{database_schema_string}\\nThe query should be returned in plain text, not in JSON.\\n")
+                                                    "SQL query extracting info to answer the user's"
+                                                        + " question.\\n"
+                                                        + "SQL should be written using this"
+                                                        + " database schema:\\n"
+                                                        + "{database_schema_string}\\n"
+                                                        + "The query should be returned in plain"
+                                                        + " text, not in JSON.\\n")
                                                 .build())
                                         .build())
                                 .setRequired(ImmutableList.of("query"))

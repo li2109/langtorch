@@ -31,6 +31,7 @@ public class ChatCompletionRequest {
    * We generally recommend altering this or top_p but not both.
    */
   Double temperature;
+
   /**
    * An alternative to sampling with temperature, called nucleus sampling, where the model considers
    * the results of the tokens with top_p probability mass. So 0.1 means only the tokens comprising
@@ -39,8 +40,10 @@ public class ChatCompletionRequest {
    */
   @JsonProperty("top_p")
   Double topP;
+
   /** How many chat completion chatCompletionChoices to generate for each input message. */
   Integer n;
+
   /**
    * If set, partial message deltas will be sent, like in ChatGPT. Tokens will be sent as data-only
    * <a
@@ -48,20 +51,24 @@ public class ChatCompletionRequest {
    * events</a> as they become available, with the stream terminated by a data: [DONE] message.
    */
   Boolean stream;
+
   /** Up to 4 sequences where the API will stop generating further tokens. */
   List<String> stop;
+
   /**
    * The maximum number of tokens allowed for the generated answer. By default, the number of tokens
    * the model can return will be (4096 - prompt tokens).
    */
   @JsonProperty("max_tokens")
   Integer maxTokens;
+
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on whether they appear
    * in the text so far, increasing the model's likelihood to talk about new topics.
    */
   @JsonProperty("presence_penalty")
   Double presencePenalty;
+
   /**
    * Number between -2.0 and 2.0. Positive values penalize new tokens based on their existing
    * frequency in the text so far, decreasing the model's likelihood to repeat the same line
@@ -69,6 +76,7 @@ public class ChatCompletionRequest {
    */
   @JsonProperty("frequency_penalty")
   Double frequencyPenalty;
+
   /**
    * Accepts a json object that maps tokens (specified by their token ID in the tokenizer) to an
    * associated bias value from -100 to 100. Mathematically, the bias is added to the logits
@@ -78,6 +86,7 @@ public class ChatCompletionRequest {
    */
   @JsonProperty("logit_bias")
   Map<String, Integer> logitBias;
+
   /**
    * A unique identifier representing your end-user, which will help OpenAI to monitor and detect
    * abuse.

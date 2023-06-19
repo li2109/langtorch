@@ -181,7 +181,7 @@ public class PGVectorStore implements VectorStore {
             vectorValues.add(pgVectorValues);
 
             addVectorParameters(vectorParameters);
-            metadataSize += processMetadata(metadataParameters, id, document.getMetadata());
+            metadataSize += processMetadata(metadataParameters, document.getMetadata());
         }
 
         trimStringBuilder(vectorParameters);
@@ -332,6 +332,10 @@ public class PGVectorStore implements VectorStore {
     }
 
     private double[] getDoubleVectorValues(float[] vectorValues) {
-        return Arrays.copyOf(vectorValues, vectorValues.length);
+        double[] doubles = new double[vectorValues.length];
+        for (int i = 0; i < vectorValues.length; i++) {
+            doubles[i] = vectorValues[i];
+        }
+        return doubles;
     }
 }

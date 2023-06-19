@@ -43,13 +43,13 @@ public final class LangtorchHubModuleRegistry extends AbstractModule {
     if (openAIKeyConfig.isReadFromEnvFile()) {
       return new OpenAIServiceConfigWithImplicitAPIKeyModule();
     }
-    if (!openAIKeyConfig.getOpenAiApiKey().isPresent()) {
-      throw new IllegalArgumentException(
-          "OpenAI API key is not present. Please provide the API key in the config.");
-    } else {
+    if (openAIKeyConfig.getOpenAiApiKey().isPresent()) {
       return new OpenAIServiceConfigWithExplicitAPIKeyModule(
           openAIKeyConfig.getOpenAiApiKey().get());
-      }
+    }
+
+    throw new IllegalArgumentException(
+        "OpenAI API key is not present. Please provide the API key in the config.");
   }
 
   private LangtorchHubModuleRegistry() {

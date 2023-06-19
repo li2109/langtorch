@@ -30,7 +30,7 @@ public class PGVectorService {
             defaultStatement.executeUpdate("CREATE EXTENSION IF NOT EXISTS vector");
         } catch (SQLException e) {
             logger.atSevere().withCause(e).log("Error while initialising PGVectorService");
-            throw new RuntimeException(e);
+            throw new PGVectorSQLException(e);
         }
     }
 

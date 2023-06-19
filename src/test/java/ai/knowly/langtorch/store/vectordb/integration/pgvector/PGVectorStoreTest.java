@@ -67,7 +67,7 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testAddDocuments() throws SQLException {
+    void testAddDocuments() throws SQLException {
         EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
         when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
         when(pgVectorService.prepareStatement(ArgumentMatchers.any())).thenReturn(preparedStatement);
@@ -80,7 +80,7 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testSimilaritySearchVectorWithScoreEuclidean() throws SQLException {
+    void testSimilaritySearchVectorWithScoreEuclidean() throws SQLException {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,
@@ -106,7 +106,7 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testSimilaritySearchVectorWithScoreInnerProduct() throws SQLException {
+    void testSimilaritySearchVectorWithScoreInnerProduct() throws SQLException {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,
@@ -132,7 +132,7 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testSimilaritySearchVectorWithScoreCosine() throws SQLException {
+    void testSimilaritySearchVectorWithScoreCosine() throws SQLException {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,

@@ -202,11 +202,11 @@ public class PGVectorStore implements VectorStore {
         vectorParameters.append("(?, ?), "); // document id and vector
     }
 
-    private int processMetadata(StringBuilder metadataParameters, String id, Optional<Metadata> metadata) {
+    private int processMetadata(StringBuilder metadataParameters, Optional<Metadata> metadata) {
         int metadataSize = 0;
         if (metadata.isPresent()) {
             metadataSize += metadata.get().getValue().size();
-            for (Map.Entry<String, String> entry : metadata.get().getValue().entrySet()) {
+            for (int i = 0; i < metadata.get().getValue().entrySet().size(); i++) {
                 metadataParameters.append("(?, ?, ?, ?), "); // id, key, value, and document id
             }
         }
@@ -263,6 +263,8 @@ public class PGVectorStore implements VectorStore {
                     case METADATA_INDEX_VECTOR_ID:
                         insertStmt.setString(parameterIndex, values.getId());
                         break;
+                    default:
+                        logger.atSevere().log("INVALID COLUM INDEX");
                 }
                 parameterIndex++;
             }
@@ -276,13 +278,10 @@ public class PGVectorStore implements VectorStore {
             PreparedStatement insertStmt
     ) throws SQLException {
         for (int i = 0; i < EMBEDDINGS_COLUMN_COUNT; i++) {
-            switch (i) {
-                case EMBEDDINGS_INDEX_ID:
-                    insertStmt.setString(parameterIndex, values.getId());
-                    break;
-                case EMBEDDINGS_INDEX_VECTOR:
-                    insertStmt.setObject(parameterIndex, new PGvector(values.getValues()));
-                    break;
+            if (i == EMBEDDINGS_INDEX_ID) {
+                insertStmt.setString(parameterIndex, values.getId());
+            } else if (i == EMBEDDINGS_INDEX_VECTOR) {
+                insertStmt.setObject(parameterIndex, new PGvector(values.getValues()));
             }
             parameterIndex++;
         }
@@ -333,10 +332,6 @@ public class PGVectorStore implements VectorStore {
     }
 
     private double[] getDoubleVectorValues(float[] vectorValues) {
-        double[] doubles = new double[vectorValues.length];
-        for (int i = 0; i < vectorValues.length; i++) {
-            doubles[i] = vectorValues[i];
-        }
-        return doubles;
+        return Arrays.copyOf(vectorValues, vectorValues.length);
     }
 }

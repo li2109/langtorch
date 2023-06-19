@@ -8,6 +8,10 @@ import org.jetbrains.annotations.NotNull;
  */
 public class DistanceStrategies {
 
+    // Private constructor to hide the implicit public one
+    private DistanceStrategies() {
+        // Empty constructor
+    }
     @NonNull
     public static DistanceStrategy euclidean() {
         return new EuclideanDistanceStrategy();

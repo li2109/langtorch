@@ -28,7 +28,9 @@ public class SqlCommandProvider {
      * @return The SQL query.
      */
     public String getCreateEmbeddingsTableQuery(int vectorDimensions) {
-        assert vectorDimensions > 0 : "vectorDimensions must be greater than 0, was " + vectorDimensions;
+        if (vectorDimensions <= 0) {
+            throw new IllegalArgumentException("vectorDimensions must be greater than 0, was " + vectorDimensions);
+        }
         String query = "";
         if (overwrite) {
             query += "DROP TABLE IF EXISTS " + getEmbeddingsTableName() + " CASCADE; ";

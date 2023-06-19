@@ -1,92 +1,105 @@
 package ai.knowly.langtorch.connector.youtube;
 
 import ai.knowly.langtorch.connector.Connector;
-import com.github.kiulian.downloader.Config;
-import com.github.kiulian.downloader.YoutubeDownloader;
-import com.github.kiulian.downloader.downloader.request.RequestSubtitlesInfo;
-import com.github.kiulian.downloader.downloader.request.RequestVideoInfo;
-import com.github.kiulian.downloader.downloader.response.Response;
-import com.github.kiulian.downloader.model.subtitles.SubtitlesInfo;
-import com.github.kiulian.downloader.model.videos.VideoInfo;
-import com.google.api.services.youtube.YouTube;
 import com.google.common.flogger.FluentLogger;
-import java.io.ByteArrayOutputStream;
+import java.io.BufferedReader;
+import java.io.File;
+import java.io.FileReader;
 import java.io.IOException;
-import java.nio.charset.StandardCharsets;
-import java.util.List;
-import java.util.Objects;
+import java.io.InputStreamReader;
 import java.util.Optional;
+import javax.inject.Inject;
+import lombok.NonNull;
+import org.jetbrains.annotations.Nullable;
 
 public class YoutubeConnector implements Connector<String> {
 
-  FluentLogger logger = FluentLogger.forEnclosingClass();
-  private Optional<YouTube> youtubeService;
+  private static final FluentLogger logger = FluentLogger.forEnclosingClass();
 
+  private final YoutubeConnectorOption readOption;
 
-
-  private YoutubeConnector(YouTube youtubeService) {
-    this.youtubeService = Optional.of(youtubeService);
+  @Inject
+  public YoutubeConnector(@NonNull YoutubeConnectorOption readOption) {
+    this.readOption = readOption;
   }
 
-  ;
 
-  private YoutubeConnector() {
-    this.youtubeService = Optional.empty();
+  public static String downloadSubtitlesThenReturnFilePath(String url, String outputDirectory)
+      throws IOException, InterruptedException, YoutubeReadException {
+    // using ProcessBuilder execute yt-dlp
+    ProcessBuilder processBuilder = new ProcessBuilder("yt-dlp", "--write-auto-subs",
+        "--skip-download",
+        "--output", outputDirectory, url);
+    Process process = processBuilder.start();
+    // get the file name
+    String subtitleFileName = getSubtitleFileNameAndOutputLog(process);
+
+    int exitCode = process.waitFor();
+    if (exitCode != 0) {
+      throw new YoutubeReadException("yt-dlp command failed with exit code: " + exitCode);
+    }
+    return subtitleFileName;
   }
 
-  ;
+  @Nullable
+  private static String getSubtitleFileNameAndOutputLog(Process process) throws IOException {
+    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
+    String line;
+    String subtitleFileName = null;
+    StringBuilder log = new StringBuilder();
 
-
-  public static YoutubeConnector create() {
-    return new YoutubeConnector();
+    while ((line = reader.readLine()) != null) {
+      log.append(line).append(System.lineSeparator());
+      // check the file name
+      if (line.startsWith("[info] Writing video subtitles to:")) {
+        subtitleFileName = line.substring("[info] Writing video subtitles to:".length()).trim();
+      }
+    }
+    logger.atInfo().log(log.toString());
+    return subtitleFileName;
   }
 
-  public static YoutubeConnector create(YouTube youtubeService) {
-    return new YoutubeConnector(youtubeService);
-  }
-
-  public static void download(){
-    String directory = "/Users/sjx/disk/test";
-    String videoUrl = "https://www.youtube.com/watch?v=51QO4pavK3A";
-    YoutubeDownloader downloader = new YoutubeDownloader();
-    Config config = downloader.getConfig();
-    config.setMaxRetries(5);
-    Response<VideoInfo> response = downloader.getVideoInfo(new RequestVideoInfo("GWGbOjlJDkU"));
-    VideoInfo data = response.data();
-//    Response<List<SubtitlesInfo>> response1 = downloader
-//        .getSubtitlesInfo(new RequestSubtitlesInfo("DFdOcVpRhWI"));
-//    List<SubtitlesInfo> data1 = response1.data();
-    System.out.println(data.toString());
-//    Response<List<SubtitlesInfo>> response = downloader.getSubtitlesInfo(new RequestSubtitlesInfo("DFdOcVpRhWI"));
-//    List<SubtitlesInfo> subtitlesInfo = response.data();
-//    System.out.println(subtitlesInfo.toString());
-
-//
-//    ByteArrayOutputStream susStream = new ByteArrayOutputStream();
-//    //接收异常结果流
-//    ByteArrayOutputStream errStream = new ByteArrayOutputStream();
-//    CommandLine commandLine = CommandLine.parse(command);
-//    DefaultExecutor exec =new DefaultExecutor();
-
-//    ExecuteWatchdog watchdog = new ExecuteWatchdog(10000);
-//    exec.setWatchdog(watchdog);
-//
-//    PumpStreamHandler streamHandler = new PumpStreamHandler(susStream, errStream);
-//    exec.setStreamHandler(streamHandler);
-
-  }
 
   @Override
-  public Optional<String> read() throws IOException {
+  public Optional<String> read() {
+    String subtitlesFilePath = null;
+    try {
+      subtitlesFilePath = downloadSubtitlesThenReturnFilePath(readOption.getUrl(),
+          readOption.getOutputDirectory());
+      String subtitles = readSubtitlesFile(subtitlesFilePath);
+      if (!subtitles.isEmpty()) {
+        return Optional.of(readSubtitlesFile(subtitlesFilePath));
+      }
+    } catch (YoutubeReadException e) {
+      logger.atSevere().withCause(e).log("yt-dlp command failed.");
+    } catch (InterruptedException e) {
+      e.printStackTrace();
+    } catch (IOException e) {
+      logger.atSevere().withCause(e).log("Error reading YouTube.");
+    } finally {
+      deleteSubtitlesFile(subtitlesFilePath);
+    }
+    return Optional.empty();
 
-//     Define and execute the API request
-    YouTube.Captions.Download request = youtubeService.get().captions().download("");
-    ByteArrayOutputStream outputStream = new ByteArrayOutputStream();
-    request.getMediaHttpDownloader();
-    request.executeMediaAndDownloadTo(outputStream);
+  }
 
-    // Get the subtitles as a string
-    return Optional.of(outputStream.toString(StandardCharsets.UTF_8.name()));
+  private void deleteSubtitlesFile(String subtitlesFilePath) {
+    if (subtitlesFilePath != null) {
+      File file = new File(subtitlesFilePath);
+      if (file.exists()) {
+        file.delete();
+      }
+    }
+  }
+
+  private String readSubtitlesFile(String subtitlesFilePath) throws IOException {
+    BufferedReader reader = new BufferedReader(new FileReader(subtitlesFilePath));
+    StringBuilder sb = new StringBuilder();
+    String line;
+    while ((line = reader.readLine()) != null) {
+      sb.append(line).append("\n");
+    }
+    return sb.toString();
   }
 
 }

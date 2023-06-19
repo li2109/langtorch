@@ -7,7 +7,7 @@ import lombok.AllArgsConstructor;
 public class InnerProductDistanceStrategy implements DistanceStrategy {
 
     @Override
-    public String getValue() {
+    public String getSyntax() {
         return "<#>";
     }
 

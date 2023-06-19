@@ -6,13 +6,13 @@ import ai.knowly.langtorch.schema.embeddings.EmbeddingOutput;
 import ai.knowly.langtorch.schema.embeddings.EmbeddingType;
 import ai.knowly.langtorch.schema.io.DomainDocument;
 import ai.knowly.langtorch.schema.io.Metadata;
+import ai.knowly.langtorch.store.vectordb.PGVectorStore;
 import ai.knowly.langtorch.store.vectordb.integration.pgvector.schema.PGVectorStoreSpec;
-import ai.knowly.langtorch.store.vectordb.integration.pgvector.schema.distance.DistanceStrategy;
+import ai.knowly.langtorch.store.vectordb.integration.pgvector.schema.distance.DistanceStrategies;
 import ai.knowly.langtorch.store.vectordb.integration.schema.SimilaritySearchQuery;
 import com.google.common.collect.ImmutableMap;
 import com.pgvector.PGvector;
 import kotlin.Triple;
-import org.apache.commons.lang3.tuple.Pair;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -29,8 +29,6 @@ import java.util.List;
 import java.util.UUID;
 
 import static com.google.common.truth.Truth.assertThat;
-import static java.util.Collections.emptyList;
-import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.when;
 
 @ExtendWith(MockitoExtension.class)
@@ -49,7 +47,7 @@ final class PGVectorStoreTest {
     private PreparedStatement preparedStatement;
 
     @BeforeEach
-    void setUp() {
+    void setUp() throws SQLException {
         textKey = "text_key";
         embeddingProcessor = Mockito.mock(EmbeddingProcessor.class);
         pgVectorService = Mockito.mock(PGVectorService.class);
@@ -57,13 +55,15 @@ final class PGVectorStoreTest {
 
         pgVectorStoreSpec = PGVectorStoreSpec.builder()
                 .setTextKey(textKey)
-                .setPgVectorService(pgVectorService)
-                .setDistanceStrategy(DistanceStrategy.euclidean())
                 .setDatabaseName("test")
                 .setVectorDimensions(3)
                 .build();
 
-        pgVectorStore = new PGVectorStore(embeddingProcessor, pgVectorStoreSpec);
+        pgVectorStore =
+                new PGVectorStore(
+                        embeddingProcessor,
+                        pgVectorStoreSpec, pgVectorService,
+                        DistanceStrategies.cosine(), true);
     }
 
     @Test
@@ -80,20 +80,11 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testAddDocumentsEmpty() {
-        // Act.
-        Exception exception = assertThrows(IllegalStateException.class, () -> pgVectorStore.addDocuments(emptyList()));
-        String expectedMessage = "Attempted to add an empty list";
-        //Assert.
-        assertThat(exception.getMessage()).isEqualTo(expectedMessage);
-    }
-
-    @Test
     public void testSimilaritySearchVectorWithScoreEuclidean() throws SQLException {
-        pgVectorStoreSpec = pgVectorStoreSpec.toBuilder()
-                .setDistanceStrategy(DistanceStrategy.euclidean())
-                .build();
-        pgVectorStore = new PGVectorStore(embeddingProcessor, pgVectorStoreSpec);
+        pgVectorStore = new PGVectorStore(
+                embeddingProcessor,
+                pgVectorStoreSpec, pgVectorService,
+                DistanceStrategies.euclidean(), true);
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();
@@ -101,12 +92,12 @@ final class PGVectorStoreTest {
         String secondPageContent = queryData.getSecond();
 
         // Act.
-        List<Pair<DomainDocument, Double>> documentsWithScores = pgVectorStore.similaritySearchVectorWithScore(query);
+        List<DomainDocument> documentsWithScores = pgVectorStore.similaritySearch(query);
         // Assert.
-        double firstDocumentScore = documentsWithScores.get(0).getRight();
-        double secondDocumentScore = documentsWithScores.get(1).getRight();
-        String firstDocumentPageContent = documentsWithScores.get(0).getLeft().getPageContent();
-        String secondDocumentPageContent = documentsWithScores.get(1).getLeft().getPageContent();
+        double firstDocumentScore = documentsWithScores.get(0).getSimilarityScore().orElse(-1.0);
+        double secondDocumentScore = documentsWithScores.get(1).getSimilarityScore().orElse(-1.0);
+        String firstDocumentPageContent = documentsWithScores.get(0).getPageContent();
+        String secondDocumentPageContent = documentsWithScores.get(1).getPageContent();
         assertThat(documentsWithScores.size()).isEqualTo(3);
         assertThat(firstDocumentScore).isEqualTo(0);
         assertThat(firstDocumentScore).isLessThan(secondDocumentScore);
@@ -116,10 +107,10 @@ final class PGVectorStoreTest {
 
     @Test
     public void testSimilaritySearchVectorWithScoreInnerProduct() throws SQLException {
-        pgVectorStoreSpec = pgVectorStoreSpec.toBuilder()
-                .setDistanceStrategy(DistanceStrategy.innerProduct())
-                .build();
-        pgVectorStore = new PGVectorStore(embeddingProcessor, pgVectorStoreSpec);
+        pgVectorStore = new PGVectorStore(
+                embeddingProcessor,
+                pgVectorStoreSpec, pgVectorService,
+                DistanceStrategies.innerProduct(), true);
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();
@@ -127,12 +118,12 @@ final class PGVectorStoreTest {
         String secondPageContent = queryData.getSecond();
 
         // Act.
-        List<Pair<DomainDocument, Double>> documentsWithScores = pgVectorStore.similaritySearchVectorWithScore(query);
+        List<DomainDocument> documentsWithScores = pgVectorStore.similaritySearch(query);
         // Assert.
-        double firstDocumentScore = documentsWithScores.get(0).getRight();
-        double secondDocumentScore = documentsWithScores.get(1).getRight();
-        String firstDocumentPageContent = documentsWithScores.get(0).getLeft().getPageContent();
-        String secondDocumentPageContent = documentsWithScores.get(1).getLeft().getPageContent();
+        double firstDocumentScore = documentsWithScores.get(0).getSimilarityScore().orElse(-1.0);
+        double secondDocumentScore = documentsWithScores.get(1).getSimilarityScore().orElse(-1.0);
+        String firstDocumentPageContent = documentsWithScores.get(0).getPageContent();
+        String secondDocumentPageContent = documentsWithScores.get(1).getPageContent();
         assertThat(documentsWithScores.size()).isEqualTo(3);
         assertThat(firstDocumentScore).isEqualTo(3);
         assertThat(firstDocumentScore).isLessThan(secondDocumentScore);
@@ -142,10 +133,10 @@ final class PGVectorStoreTest {
 
     @Test
     public void testSimilaritySearchVectorWithScoreCosine() throws SQLException {
-        pgVectorStoreSpec = pgVectorStoreSpec.toBuilder()
-                .setDistanceStrategy(DistanceStrategy.cosine())
-                .build();
-        pgVectorStore = new PGVectorStore(embeddingProcessor, pgVectorStoreSpec);
+        pgVectorStore = new PGVectorStore(
+                embeddingProcessor,
+                pgVectorStoreSpec, pgVectorService,
+                DistanceStrategies.cosine(), true);
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();
@@ -153,12 +144,12 @@ final class PGVectorStoreTest {
         String secondPageContent = queryData.getSecond();
 
         // Act.
-        List<Pair<DomainDocument, Double>> documentsWithScores = pgVectorStore.similaritySearchVectorWithScore(query);
+        List<DomainDocument> documentsWithScores = pgVectorStore.similaritySearch(query);
         // Assert.
-        double firstDocumentScore = documentsWithScores.get(0).getRight();
-        double secondDocumentScore = documentsWithScores.get(1).getRight();
-        String firstDocumentPageContent = documentsWithScores.get(0).getLeft().getPageContent();
-        String secondDocumentPageContent = documentsWithScores.get(1).getLeft().getPageContent();
+        double firstDocumentScore = documentsWithScores.get(0).getSimilarityScore().orElse(-1.0);
+        double secondDocumentScore = documentsWithScores.get(1).getSimilarityScore().orElse(-1.0);
+        String firstDocumentPageContent = documentsWithScores.get(0).getPageContent();
+        String secondDocumentPageContent = documentsWithScores.get(1).getPageContent();
         assertThat(documentsWithScores.size()).isEqualTo(3);
         assertThat(Math.abs(firstDocumentScore - TOP_VECTOR_VALUE)).isLessThan(Math.abs(secondDocumentScore - TOP_VECTOR_VALUE));
         assertThat(firstDocumentPageContent).isEqualTo(firstPageContent);

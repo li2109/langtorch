@@ -92,4 +92,9 @@ public class ChatCompletionRequest {
    * abuse.
    */
   String user;
+
+  private List<Function> functions;
+
+  @JsonProperty("function_call")
+  private Object functionCall;
 }

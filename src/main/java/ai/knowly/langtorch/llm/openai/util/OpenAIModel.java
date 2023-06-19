@@ -3,6 +3,10 @@ package ai.knowly.langtorch.llm.openai.util;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
+// This is a Java enum class called `OpenAIModel` that defines a list of constants representing
+// different OpenAI models. Each constant has a corresponding `String` value that represents the
+// name
+// of the model.
 @Getter
 @AllArgsConstructor
 public enum OpenAIModel {

@@ -97,10 +97,12 @@ public class ChatCompletionLLMCapability<I, O>
         message.getMessages().stream()
             .map(
                 chatMessage ->
-                    ChatMessage.of(
+                    new ChatMessage(
                         String.format(
                             "%s%nBelow is my query:%n%s", memoryContext, chatMessage.toString()),
-                        chatMessage.getRole()))
+                        chatMessage.getRole(),
+                        null,
+                        null))
             .collect(MultiChatMessage.toMultiChatMessage());
 
     if (verbose) {

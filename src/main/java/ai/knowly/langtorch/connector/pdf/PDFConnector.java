@@ -2,10 +2,12 @@ package ai.knowly.langtorch.connector.pdf;
 
 import ai.knowly.langtorch.connector.Connector;
 import com.google.common.flogger.FluentLogger;
+
 import java.io.File;
 import java.io.IOException;
 import java.util.Optional;
 import javax.inject.Inject;
+
 import lombok.Cleanup;
 import lombok.NonNull;
 import org.apache.pdfbox.pdmodel.PDDocument;
@@ -24,11 +26,25 @@ public class PDFConnector implements Connector<String> {
   @Override
   public Optional<String> read() {
     try {
-      @Cleanup PDDocument document = PDDocument.load(new File(readOption.getFilePath()));
+      PDDocument selectedDocument;
+      Optional<byte[]> bytes = readOption.getFileBytes();
+      Optional<String> filePath = readOption.getFilePath();
+      if (bytes.isPresent()) {
+        selectedDocument = PDDocument.load(bytes.get());
+      } else if (filePath.isPresent()) {
+        selectedDocument = PDDocument.load(new File(filePath.get()));
+      } else {
+        throw new PDFConnectorOptionNotFoundException("No suitable read option provided");
+      }
+
+      @Cleanup PDDocument document = selectedDocument;
+
       PDFTextStripper pdfStripper = new PDFTextStripper();
       return Optional.of(pdfStripper.getText(document));
     } catch (IOException e) {
       logger.atSevere().withCause(e).log("Error reading PDF file.");
+    } catch (PDFConnectorOptionNotFoundException e) {
+      logger.atSevere().withCause(e).log("No read option provided");
     }
     return Optional.empty();
   }

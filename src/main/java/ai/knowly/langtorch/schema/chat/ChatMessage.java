@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.schema.chat;
 
+import ai.knowly.langtorch.llm.openai.schema.dto.completion.chat.FunctionCall;
 import ai.knowly.langtorch.store.memory.MemoryValue;
 import com.fasterxml.jackson.annotation.JsonCreator;
 import com.fasterxml.jackson.annotation.JsonProperty;
@@ -7,23 +8,18 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 public class ChatMessage extends Message implements MemoryValue {
   private final Role role;
   private String name;
+  private FunctionCall functionCall;
 
   @JsonCreator
   public ChatMessage(
       @JsonProperty("content") String content,
       @JsonProperty("role") Role role,
-      @JsonProperty("name") String name) {
+      @JsonProperty("name") String name,
+      @JsonProperty("function_call") FunctionCall functionCall) {
     super(content);
     this.role = role;
     this.name = name;
-  }
-
-  public static ChatMessage of(String content, Role role) {
-    return new ChatMessage(content, role, null);
-  }
-
-  public static ChatMessage of(String content, Role role, String name) {
-    return new ChatMessage(content, role, name);
+    this.functionCall = functionCall;
   }
 
   public Role getRole() {
@@ -32,6 +28,10 @@ public class ChatMessage extends Message implements MemoryValue {
 
   public String getName() {
     return name;
+  }
+
+  public FunctionCall getFunctionCall() {
+    return functionCall;
   }
 
   @Override

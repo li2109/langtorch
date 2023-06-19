@@ -5,6 +5,8 @@ test:
     live-traffic:
       llm-service:
         openai: false
+        minimax: false
         cohere: false
+        huggingface: false
       vector-store-service:
         pinecone: false

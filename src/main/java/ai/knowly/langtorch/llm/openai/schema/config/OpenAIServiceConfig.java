@@ -7,6 +7,10 @@ import com.google.auto.value.AutoValue;
 import java.time.Duration;
 import java.util.Optional;
 
+/**
+ * The OpenAIServiceConfig class is an AutoValue class with a builder pattern that contains various
+ * configurations for an OpenAI service.
+ */
 @AutoValue
 public abstract class OpenAIServiceConfig {
   public static Builder builder() {

@@ -9,6 +9,7 @@ import ai.knowly.langtorch.store.memory.conversation.ConversationMemory;
 import com.google.inject.AbstractModule;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 public final class LangtorchHubModuleRegistry extends AbstractModule {
   private final List<AbstractModule> modules;
@@ -43,13 +44,13 @@ public final class LangtorchHubModuleRegistry extends AbstractModule {
     if (openAIKeyConfig.isReadFromEnvFile()) {
       return new OpenAIServiceConfigWithImplicitAPIKeyModule();
     }
-    if (!openAIKeyConfig.getOpenAiApiKey().isPresent()) {
-      throw new IllegalArgumentException(
-          "OpenAI API key is not present. Please provide the API key in the config.");
-    } else {
-      return new OpenAIServiceConfigWithExplicitAPIKeyModule(
-          openAIKeyConfig.getOpenAiApiKey().get());
-      }
+    Optional<String> config = openAIKeyConfig.getOpenAiApiKey();
+    if (config.isPresent()) {
+      return new OpenAIServiceConfigWithExplicitAPIKeyModule(config.get());
+    }
+
+    throw new IllegalArgumentException(
+        "OpenAI API key is not present. Please provide the API key in the config.");
   }
 
   private LangtorchHubModuleRegistry() {

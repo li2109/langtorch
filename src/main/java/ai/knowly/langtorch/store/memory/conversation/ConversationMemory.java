@@ -13,7 +13,7 @@ import lombok.Data;
 public class ConversationMemory implements Memory<ChatMessage, ConversationMemoryContext> {
   @Builder.Default private List<ChatMessage> chatMessages = new ArrayList<>();
 
-  public static ConversationMemory geDefaultInstance() {
+  public static ConversationMemory getDefaultInstance() {
     return ConversationMemory.builder().build();
   }
 

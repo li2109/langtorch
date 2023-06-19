@@ -32,7 +32,7 @@ final class SimpleChatCapabilityTest {
         new SimpleChatCapability(
                 new OpenAIChatProcessor(
                     openAIService, OpenAIChatProcessorConfig.getDefaultInstance()),
-                ConversationMemory.geDefaultInstance())
+                ConversationMemory.getDefaultInstance())
             .run("Where is Changsha?");
 
     // Assert.

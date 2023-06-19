@@ -1,27 +1,21 @@
 package ai.knowly.langtorch.connector.youtube;
 
-import static ai.knowly.langtorch.loader.youtube.YoutubeProvider.getService;
+import static ai.knowly.langtorch.connector.youtube.YoutubeProvider.getService;
 import static com.google.common.truth.Truth.assertThat;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
-import ai.knowly.langtorch.loader.markdown.MarkdownLoader;
-import ai.knowly.langtorch.loader.youtube.YoutubeProvider;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.googleapis.javanet.GoogleNetHttpTransport;
 import com.google.api.client.http.javanet.NetHttpTransport;
-import com.google.api.client.util.Sleeper;
 import com.google.api.services.youtube.YouTube;
 import com.google.api.services.youtube.model.CaptionListResponse;
 import java.io.ByteArrayOutputStream;
-import java.io.FileOutputStream;
 import java.io.IOException;
-import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.CompletionException;
-import java.util.concurrent.Future;
 import java.util.concurrent.TimeoutException;
 import org.junit.jupiter.api.Test;
 

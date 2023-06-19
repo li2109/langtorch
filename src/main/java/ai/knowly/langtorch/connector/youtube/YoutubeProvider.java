@@ -1,7 +1,6 @@
-package ai.knowly.langtorch.loader.youtube;
+package ai.knowly.langtorch.connector.youtube;
 
 import ai.knowly.langtorch.utils.Environment;
-import ai.knowly.langtorch.utils.api.key.ApiKeyEnvUtils;
 import ai.knowly.langtorch.utils.api.key.GoogleSecretUtil;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.java6.auth.oauth2.AuthorizationCodeInstalledApp;
@@ -21,14 +20,12 @@ import java.nio.charset.StandardCharsets;
 import java.security.GeneralSecurityException;
 import java.util.Arrays;
 import java.util.Collection;
-import java.util.Optional;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ScheduledExecutorService;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.TimeoutException;
-import javax.swing.text.html.Option;
 
 public class YoutubeProvider {
   FluentLogger logger = FluentLogger.forEnclosingClass();

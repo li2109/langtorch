@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.connector;
 
+import java.io.IOException;
 import java.util.Optional;
 
 /** Connector for loading data from a source. */
@@ -10,5 +11,5 @@ public interface Connector<T> {
    *
    * @return The loaded data.
    */
-  Optional<T> read();
+  Optional<T> read() throws IOException;
 }

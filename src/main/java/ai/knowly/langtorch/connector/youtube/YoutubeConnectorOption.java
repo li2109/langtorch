@@ -1,12 +1,12 @@
-package ai.knowly.langtorch.loader.youtube;
+package ai.knowly.langtorch.connector.youtube;
 
-import ai.knowly.langtorch.loader.LoadOption;
+import ai.knowly.langtorch.connector.ConnectorOption;
 import lombok.Builder;
 import lombok.Data;
 
 /** Implementation of ReadOption for Youtube. */
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
-public class YoutubeLoadOption implements LoadOption {
+public class YoutubeConnectorOption implements ConnectorOption {
   private String link;
 }

@@ -17,7 +17,6 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert
 import java.util.*;
 import java.util.stream.Collectors;
 import javax.inject.Inject;
-import org.apache.commons.lang3.tuple.Pair;
 
 /**
  * The PineconeVectorStore class is an implementation of the VectorStore interface, which provides
@@ -41,9 +40,7 @@ public class PineconeVectorStore implements VectorStore {
    */
   @Override
   public boolean addDocuments(List<DomainDocument> documents) {
-    if (documents.isEmpty()) {
-      throw new IllegalStateException("Attempted to add an empty list");
-    }
+    if (documents.isEmpty()) return true;
 
     return addVectors(
         documents.stream()
@@ -88,7 +85,7 @@ public class PineconeVectorStore implements VectorStore {
    * schema documents and their corresponding similarity scores.
    */
   @Override
-  public List<Pair<DomainDocument, Double>> similaritySearchVectorWithScore(
+  public List<DomainDocument> similaritySearch(
       SimilaritySearchQuery similaritySearchQuery) {
 
     QueryRequest.QueryRequestBuilder requestBuilder =
@@ -102,7 +99,7 @@ public class PineconeVectorStore implements VectorStore {
     QueryResponse response =
         pineconeVectorStoreSpec.getPineconeService().query(requestBuilder.build());
 
-    List<Pair<DomainDocument, Double>> result = new ArrayList<>();
+    List<DomainDocument> result = new ArrayList<>();
 
     // create mapping of PineCone metadata to schema meta data
     if (response.getMatches() != null) {
@@ -117,13 +114,13 @@ public class PineconeVectorStore implements VectorStore {
 
         if (match.getScore() != null) {
           result.add(
-              Pair.of(
                   DomainDocument.builder()
-                      .setPageContent(
-                          metadata.getValue().get(this.pineconeVectorStoreSpec.getTextKey().get()))
-                      .setMetadata(metadata)
-                      .build(),
-                  match.getScore()));
+                          .setPageContent(
+                                  metadata.getValue().get(this.pineconeVectorStoreSpec.getTextKey().get()))
+                          .setMetadata(metadata)
+                          .setSimilarityScore(Optional.of(match.getScore()))
+                          .build()
+          );
         }
       }
     }

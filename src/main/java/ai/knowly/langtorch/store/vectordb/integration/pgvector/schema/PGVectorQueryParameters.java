@@ -4,6 +4,9 @@ import lombok.*;
 
 import java.util.List;
 
+/**
+ * Represents the query parameters for executing a PGVector query.
+ */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, setterPrefix = "set")

@@ -90,13 +90,13 @@ final class PineconeVectorStoreTest {
     Mockito.when(pineconeService.query(ArgumentMatchers.any())).thenReturn(queryResponse);
 
     // Act.
-    List<Pair<DomainDocument, Double>> result =
-        pineconeVectorStore.similaritySearchVectorWithScore(
+    List<DomainDocument> result =
+        pineconeVectorStore.similaritySearch(
             SimilaritySearchQuery.builder().setQuery(emptyList()).setTopK(0L).build());
     // Assert.
     assertThat(result).isNotEmpty();
-    assertThat(result.get(0).getLeft().getPageContent()).isEqualTo(content);
-    assertThat(result.get(0).getRight()).isEqualTo(score);
+    assertThat(result.get(0).getPageContent()).isEqualTo(content);
+    assertThat(result.get(0).getSimilarityScore().orElse(-1.0)).isEqualTo(score);
   }
 
   @Test
@@ -104,8 +104,8 @@ final class PineconeVectorStoreTest {
     QueryResponse queryResponse = new QueryResponse(null, null);
     Mockito.when(pineconeService.query(ArgumentMatchers.any())).thenReturn(queryResponse);
     // Act.
-    List<Pair<DomainDocument, Double>> result =
-        pineconeVectorStore.similaritySearchVectorWithScore(
+    List<DomainDocument> result =
+        pineconeVectorStore.similaritySearch(
             SimilaritySearchQuery.builder().setQuery(emptyList()).setTopK(0L).build());
     // Assert.
     assertThat(result).isEmpty();

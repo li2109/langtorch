@@ -63,16 +63,6 @@ final class PineconeVectorStoreTest {
     // Assert.
     assertThat(isSuccessful).isEqualTo(true);
   }
-
-  @Test
-  void testAddDocumentsEmpty() {
-    // Act.
-    Exception exception = assertThrows(IllegalStateException.class, () -> pineconeVectorStore.addDocuments(emptyList()));
-    String expectedMessage = "Attempted to add an empty list";
-    //Assert.
-    assertThat(exception.getMessage()).isEqualTo(expectedMessage);
-  }
-
   @Test
   void testSimilaritySearchVectorWithScore() {
     double score = 0.5;

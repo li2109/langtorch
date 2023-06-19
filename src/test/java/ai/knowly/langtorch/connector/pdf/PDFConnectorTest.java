@@ -2,7 +2,6 @@ package ai.knowly.langtorch.connector.pdf;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
@@ -36,16 +35,14 @@ final class PDFConnectorTest {
     if (Files.exists(path)) {
       byte[] byteArray = Files.readAllBytes(path);
       Optional<String> actualContent =
-              new PDFConnector(
-                      PDFConnectorOption.builder().setFileBytes(byteArray).build())
-                      .read();
+          new PDFConnector(PDFConnectorOption.builder().setFileBytes(byteArray).build()).read();
 
       // Assert.
       assertThat(actualContent.get().trim())
-              .isEqualTo(
-                      "This is a test PDF document. \n"
-                              + "If you can read this, you have Adobe Acrobat Reader installed on your"
-                              + " computer.");
+          .isEqualTo(
+              "This is a test PDF document. \n"
+                  + "If you can read this, you have Adobe Acrobat Reader installed on your"
+                  + " computer.");
     }
   }
 }

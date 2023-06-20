@@ -77,6 +77,7 @@ public class YoutubeConnector implements Connector<String> {
       logger.atSevere().withCause(e).log("yt-dlp command failed.");
     } catch (InterruptedException | IOException e) {
       logger.atSevere().withCause(e).log("Error reading YouTube.");
+      Thread.currentThread().interrupt();
     } finally {
       deleteSubtitlesFile(subtitlesFilePath);
     }
@@ -87,20 +88,23 @@ public class YoutubeConnector implements Connector<String> {
   private void deleteSubtitlesFile(String subtitlesFilePath) {
     if (subtitlesFilePath != null) {
       File file = new File(subtitlesFilePath);
-      if (file.exists()) {
-        file.delete();
+      boolean deleted = file.delete();
+      if (!deleted) {
+        logger.atWarning().log("Failed to delete subtitles file: " + subtitlesFilePath);
       }
     }
   }
 
   private String readSubtitlesFile(String subtitlesFilePath) throws IOException {
-    BufferedReader reader = new BufferedReader(new FileReader(subtitlesFilePath));
     StringBuilder sb = new StringBuilder();
-    String line;
-    while ((line = reader.readLine()) != null) {
-      sb.append(line).append("\n");
+    try (BufferedReader reader = new BufferedReader(new FileReader(subtitlesFilePath))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        sb.append(line).append("\n");
+      }
     }
     return sb.toString();
   }
+
 
 }

@@ -43,18 +43,21 @@ public class YoutubeConnector implements Connector<String> {
 
   @Nullable
   private static String getSubtitleFileNameAndOutputLog(Process process) throws IOException {
-    BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()));
-    String line;
-    String subtitleFileName = null;
     StringBuilder log = new StringBuilder();
+    String subtitleFileName = null;
 
-    while ((line = reader.readLine()) != null) {
-      log.append(line).append(System.lineSeparator());
-      // check the file name
-      if (line.startsWith("[info] Writing video subtitles to:")) {
-        subtitleFileName = line.substring("[info] Writing video subtitles to:".length()).trim();
+    try (BufferedReader reader = new BufferedReader(new InputStreamReader(process.getInputStream()))) {
+      String line;
+      while ((line = reader.readLine()) != null) {
+        log.append(line).append(System.lineSeparator());
+
+        // check the file name
+        if (line.startsWith("[info] Writing video subtitles to:")) {
+          subtitleFileName = line.substring("[info] Writing video subtitles to:".length()).trim();
+        }
       }
     }
+
     logger.atInfo().log(log.toString());
     return subtitleFileName;
   }
@@ -72,9 +75,7 @@ public class YoutubeConnector implements Connector<String> {
       }
     } catch (YoutubeReadException e) {
       logger.atSevere().withCause(e).log("yt-dlp command failed.");
-    } catch (InterruptedException e) {
-      e.printStackTrace();
-    } catch (IOException e) {
+    } catch (InterruptedException | IOException e) {
       logger.atSevere().withCause(e).log("Error reading YouTube.");
     } finally {
       deleteSubtitlesFile(subtitlesFilePath);

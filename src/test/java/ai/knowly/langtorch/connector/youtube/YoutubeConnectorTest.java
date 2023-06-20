@@ -13,34 +13,8 @@ public class YoutubeConnectorTest {
   private final String WRONG_DESTINATION_PATH ="/not_exist/%(title)s.%(ext)s";
 
   private final String CORRECT_URL ="https://www.youtube.com/watch?v=1emA1EFsPMM";
-  private final String CORRECT_DESTINATION_PATH ="/Users/sjx/disk/test/%(title)s.%(ext)s";
+  private final String CORRECT_DESTINATION_PATH ="src/test/resources/%(title)s.%(ext)s";
 
-  @Test
-  public void testUsingWrongUrl() {
-    // Arrange.
-
-    // Act.
-    Optional<String> result = new YoutubeConnector(
-        YoutubeConnectorOption.builder().setOutputDirectory(CORRECT_DESTINATION_PATH).setUrl(WRONG_URL).build()).read();
-
-    // Assert.
-    assertThat(result)
-        .isEqualTo(Optional.empty());
-  }
-
-  @Test
-  public void testDestinationPathNotExist() {
-    // Arrange.
-
-    // Act.
-    Optional<String> result = new YoutubeConnector(
-        YoutubeConnectorOption.builder().setOutputDirectory(WRONG_DESTINATION_PATH).setUrl(
-            CORRECT_URL).build()).read();
-
-    // Assert.
-    assertThat(result)
-        .isEqualTo(Optional.empty());
-  }
   @Test
   public void testReadSubtitle() {
     // Arrange.
@@ -189,6 +163,34 @@ public class YoutubeConnectorTest {
                 + "All the glamour in this world blooms from loneliness.\n"
                 + "\n");
   }
+
+  @Test
+  public void testUsingWrongUrl() {
+    // Arrange.
+
+    // Act.
+    Optional<String> result = new YoutubeConnector(
+        YoutubeConnectorOption.builder().setOutputDirectory(CORRECT_DESTINATION_PATH).setUrl(WRONG_URL).build()).read();
+
+    // Assert.
+    assertThat(result)
+        .isEqualTo(Optional.empty());
+  }
+
+  @Test
+  public void testDestinationPathNotExist() {
+    // Arrange.
+
+    // Act.
+    Optional<String> result = new YoutubeConnector(
+        YoutubeConnectorOption.builder().setOutputDirectory(WRONG_DESTINATION_PATH).setUrl(
+            CORRECT_URL).build()).read();
+
+    // Assert.
+    assertThat(result)
+        .isEqualTo(Optional.empty());
+  }
+
 
 
 

@@ -17,6 +17,7 @@ public class PGVectorStoreSpec {
     @NonNull private final String databaseName;
     private final String textKey;
     private final int vectorDimensions;
+    private final boolean overwriteExistingTables;
     public Optional<String> getTextKey() {
         return Optional.ofNullable(textKey);
     }

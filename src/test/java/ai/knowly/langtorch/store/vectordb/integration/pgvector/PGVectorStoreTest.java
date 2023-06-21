@@ -63,7 +63,7 @@ final class PGVectorStoreTest {
                 new PGVectorStore(
                         embeddingProcessor,
                         pgVectorStoreSpec, pgVectorService,
-                        DistanceStrategies.cosine(), true);
+                        DistanceStrategies.cosine());
     }
 
     @Test
@@ -84,7 +84,7 @@ final class PGVectorStoreTest {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,
-                DistanceStrategies.euclidean(), true);
+                DistanceStrategies.euclidean());
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();
@@ -110,7 +110,7 @@ final class PGVectorStoreTest {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,
-                DistanceStrategies.innerProduct(), true);
+                DistanceStrategies.innerProduct());
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();
@@ -136,7 +136,7 @@ final class PGVectorStoreTest {
         pgVectorStore = new PGVectorStore(
                 embeddingProcessor,
                 pgVectorStoreSpec, pgVectorService,
-                DistanceStrategies.cosine(), true);
+                DistanceStrategies.cosine());
 
         Triple<String, String, SimilaritySearchQuery> queryData = prepareSimilaritySearchQuery();
         SimilaritySearchQuery query = queryData.getThird();

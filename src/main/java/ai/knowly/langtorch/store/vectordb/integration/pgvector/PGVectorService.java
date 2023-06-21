@@ -12,6 +12,7 @@ import java.sql.*;
  */
 public class PGVectorService {
 
+    private static final String CREATE_VECTOR_EXTENSION_QUERY = "CREATE EXTENSION IF NOT EXISTS vector";
     private static final FluentLogger logger = FluentLogger.forEnclosingClass();
     private final Connection connection;
     private final Statement defaultStatement;
@@ -27,7 +28,7 @@ public class PGVectorService {
         try {
             PGvector.addVectorType(connection);
             defaultStatement = connection.createStatement();
-            defaultStatement.executeUpdate("CREATE EXTENSION IF NOT EXISTS vector");
+            defaultStatement.executeUpdate(CREATE_VECTOR_EXTENSION_QUERY);
         } catch (SQLException e) {
             logger.atSevere().withCause(e).log("Error while initialising PGVectorService");
             throw new PGVectorSQLException(e);

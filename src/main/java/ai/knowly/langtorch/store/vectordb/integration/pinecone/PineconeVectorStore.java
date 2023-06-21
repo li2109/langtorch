@@ -14,8 +14,9 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.query.QueryResponse;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertRequest;
 import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert.UpsertResponse;
+import com.google.common.collect.ImmutableList;
+
 import java.util.*;
-import java.util.stream.Collectors;
 import javax.inject.Inject;
 
 /**
@@ -45,7 +46,7 @@ public class PineconeVectorStore implements VectorStore {
     return addVectors(
         documents.stream()
             .map(this::createVector)
-            .collect(Collectors.toCollection(ArrayList::new)));
+            .collect(ImmutableList.toImmutableList()));
   }
 
   /** Adds a list of vectors to the Pinecone vector store database.

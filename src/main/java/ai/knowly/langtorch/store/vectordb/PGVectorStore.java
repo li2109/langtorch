@@ -50,13 +50,12 @@ public class PGVectorStore implements VectorStore {
     public PGVectorStore(@NonNull EmbeddingProcessor embeddingsProcessor,
                          PGVectorStoreSpec pgVectorStoreSpec,
                          @NonNull PGVectorService pgVectorService,
-                         DistanceStrategy distanceStrategy,
-                         boolean shouldOverWriteDatabase) throws SQLException {
+                         DistanceStrategy distanceStrategy) throws SQLException {
         this.distanceStrategy = distanceStrategy;
         this.pgVectorService = pgVectorService;
         this.embeddingsProcessor = embeddingsProcessor;
         this.pgVectorStoreSpec = pgVectorStoreSpec;
-        sqlCommandProvider = new SqlCommandProvider(pgVectorStoreSpec.getDatabaseName(), shouldOverWriteDatabase);
+        sqlCommandProvider = new SqlCommandProvider(pgVectorStoreSpec.getDatabaseName(), pgVectorStoreSpec.isOverwriteExistingTables());
         createNecessaryTables();
     }
 
@@ -73,7 +72,9 @@ public class PGVectorStore implements VectorStore {
      */
     @Override
     public boolean addDocuments(List<DomainDocument> documents) {
-        if (documents.isEmpty()) return true;
+        if (documents.isEmpty()) {
+            return true;
+        }
         PGVectorQueryParameters pgVectorQueryParameters = getVectorQueryParameters(documents);
         List<PGVectorValues> vectorValues = pgVectorQueryParameters.getVectorValues();
 
@@ -177,10 +178,9 @@ public class PGVectorStore implements VectorStore {
             List<Double> vector = createVector(document);
             String id = document.getId().orElse(UUID.randomUUID().toString());
 
-            PGVectorValues pgVectorValues = buildPGVectorValues(id, vector, document.getMetadata());
-            vectorValues.add(pgVectorValues);
+            vectorValues.add(buildPGVectorValues(id, vector, document.getMetadata()));
 
-            addVectorParameters(vectorParameters);
+            vectorParameters.append(getVectorParameters());
             metadataSize += processMetadata(metadataParameters, document.getMetadata());
         }
 
@@ -194,21 +194,22 @@ public class PGVectorStore implements VectorStore {
         return PGVectorValues.builder()
                 .setId(id)
                 .setValues(getFloatVectorValues(vector))
-                .setMetadata(metadata)
+                .setMetadata(metadata.orElse(Metadata.builder().build()))
                 .build();
     }
 
-    private void addVectorParameters(StringBuilder vectorParameters) {
-        vectorParameters.append("(?, ?), "); // document id and vector
+    private String getVectorParameters() {
+        return "(?, ?), "; // document id and vector
     }
 
     private int processMetadata(StringBuilder metadataParameters, Optional<Metadata> metadata) {
         int metadataSize = 0;
-        if (metadata.isPresent()) {
-            metadataSize += metadata.get().getValue().size();
-            for (int i = 0; i < metadata.get().getValue().entrySet().size(); i++) {
-                metadataParameters.append("(?, ?, ?, ?), "); // id, key, value, and document id
-            }
+        if (!metadata.isPresent()) {
+            return metadataSize;
+        }
+        metadataSize += metadata.get().getValue().size();
+        for (int i = 0; i < metadata.get().getValue().entrySet().size(); i++) {
+            metadataParameters.append("(?, ?, ?, ?), "); // id, key, value, and document id
         }
         return metadataSize;
     }
@@ -245,9 +246,7 @@ public class PGVectorStore implements VectorStore {
             int parameterIndex,
             PreparedStatement insertStmt
     ) throws SQLException {
-        Optional<Metadata> metadata = values.getMetadata();
-        if (!metadata.isPresent()) return parameterIndex;
-        for (Map.Entry<String, String> entry : metadata.get().getValue().entrySet()) {
+        for (Map.Entry<String, String> entry : values.getMetadata().getValue().entrySet()) {
             for (int j = 0; j < METADATA_COLUMN_COUNT; j++) {
                 switch (j) {
                     case METADATA_INDEX_ID:

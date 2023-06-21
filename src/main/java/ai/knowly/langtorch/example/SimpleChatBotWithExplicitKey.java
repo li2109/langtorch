@@ -16,8 +16,7 @@ public class SimpleChatBotWithExplicitKey {
   public static void main(String[] args) throws IOException {
     String openAIKey = "YOUR_OPENAI_API_KEY";
     LangtorchHubModuleRegistry registry = LangtorchHubModuleRegistry.create();
-    registry.registerOpenAiModule(
-        OpenAIKeyConfig.builder().setReadFromEnvFile(false).setOpenAiApiKey(openAIKey).build());
+    registry.registerOpenAiModule(OpenAIKeyConfig.createOpenConfigWithApiKey(openAIKey));
     LangtorchHub langtorchHub = new LangtorchHub(registry);
 
     SimpleChatCapability chatBot = langtorchHub.getInstance(SimpleChatCapability.class);

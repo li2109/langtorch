@@ -4,10 +4,13 @@ import ai.knowly.langtorch.hub.module.token.TokenUsage;
 import com.google.inject.Guice;
 import com.google.inject.Injector;
 
+import javax.inject.Inject;
+
 /** LangtorchHub is the entry point for the Langtorch library. */
 public class LangtorchHub {
   private final Injector injector;
 
+  @Inject
   public LangtorchHub(LangtorchHubModuleRegistry registry) {
     this.injector = Guice.createInjector(registry.getModules());
   }

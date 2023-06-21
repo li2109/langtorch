@@ -41,10 +41,10 @@ public final class LangtorchHubModuleRegistry extends AbstractModule {
   }
 
   private AbstractModule getOpenAIModule(OpenAIKeyConfig openAIKeyConfig) {
+    Optional<String> config = openAIKeyConfig.getOpenAiApiKey();
     if (openAIKeyConfig.isReadFromEnvFile()) {
       return new OpenAIServiceConfigWithImplicitAPIKeyModule();
     }
-    Optional<String> config = openAIKeyConfig.getOpenAiApiKey();
     if (config.isPresent()) {
       return new OpenAIServiceConfigWithExplicitAPIKeyModule(config.get());
     }

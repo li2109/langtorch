@@ -3,11 +3,9 @@ package ai.knowly.langtorch.hub.schema;
 import java.util.Optional;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
-import lombok.Builder;
 import lombok.Data;
 
 @Data
-@Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 public class OpenAIKeyConfig {
   private String openAiApiKey;
@@ -18,4 +16,11 @@ public class OpenAIKeyConfig {
   public Optional<String> getOpenAiApiKey() {
     return Optional.ofNullable(openAiApiKey);
   }
+
+  public static OpenAIKeyConfig createOpenConfigReadFromEnv(){
+    return new OpenAIKeyConfig(null, true);
+  }
+
+  public static OpenAIKeyConfig createOpenConfigWithApiKey(String apiKey){
+    return new OpenAIKeyConfig(apiKey, false);  }
 }

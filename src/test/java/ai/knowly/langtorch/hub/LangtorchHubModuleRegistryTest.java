@@ -19,7 +19,7 @@ class LangtorchHubModuleRegistryTest {
   @Test
   void registerOpenAiModule_fromApiKey() {
     LangtorchHubModuleRegistry registry = LangtorchHubModuleRegistry.create();
-    registry.registerOpenAiModule(OpenAIKeyConfig.builder().setOpenAiApiKey(OPEN_AI_KEY).build());
+    registry.registerOpenAiModule(OpenAIKeyConfig.createOpenConfigWithApiKey(OPEN_AI_KEY));
 
     assertThat(registry.getModules().stream().map(Object::getClass).collect(Collectors.toList()))
         .containsAtLeast(

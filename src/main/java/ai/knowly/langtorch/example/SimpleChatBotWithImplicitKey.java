@@ -15,7 +15,7 @@ public class SimpleChatBotWithImplicitKey {
 
   public static void main(String[] args) throws IOException {
     LangtorchHubModuleRegistry registry = LangtorchHubModuleRegistry.create();
-    registry.registerOpenAiModule(OpenAIKeyConfig.builder().setReadFromEnvFile(true).build());
+    registry.registerOpenAiModule(OpenAIKeyConfig.createOpenConfigReadFromEnv());
     LangtorchHub langtorchHub = new LangtorchHub(registry);
 
     SimpleChatCapability chatBot = langtorchHub.getInstance(SimpleChatCapability.class);

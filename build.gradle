@@ -6,7 +6,7 @@ plugins {
 }
 
 group 'ai.knowly'
-version '0.0.16'
+version '0.0.17'
 
 sonarqube {
     properties {

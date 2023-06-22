@@ -23,9 +23,7 @@ public final class LangtorchHubModuleRegistry extends AbstractModule {
     return modules;
   }
 
-  /**
-   * Registers Open Ai related modules in langtorch hub.
-   */
+  /** Registers Open Ai related modules in langtorch hub. */
   public void registerOpenAiModule(OpenAIKeyConfig config) {
     modules.add(new OpenAITokenModule());
     modules.add(getOpenAIModule(config));

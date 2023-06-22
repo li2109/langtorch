@@ -17,10 +17,11 @@ public class OpenAIKeyConfig {
     return Optional.ofNullable(openAiApiKey);
   }
 
-  public static OpenAIKeyConfig createOpenConfigReadFromEnv(){
+  public static OpenAIKeyConfig createOpenConfigReadFromEnv() {
     return new OpenAIKeyConfig(null, true);
   }
 
-  public static OpenAIKeyConfig createOpenConfigWithApiKey(String apiKey){
-    return new OpenAIKeyConfig(apiKey, false);  }
+  public static OpenAIKeyConfig createOpenConfigWithApiKey(String apiKey) {
+    return new OpenAIKeyConfig(apiKey, false);
+  }
 }

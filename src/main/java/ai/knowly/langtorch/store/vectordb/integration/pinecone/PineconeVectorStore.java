@@ -19,13 +19,11 @@ import ai.knowly.langtorch.store.vectordb.integration.pinecone.schema.dto.upsert
 import com.google.common.collect.ImmutableList;
 
 import ai.knowly.langtorch.store.vectordb.integration.schema.SimilaritySearchQuery;
-import com.google.common.collect.ImmutableList;
 import com.google.common.flogger.FluentLogger;
 import lombok.NonNull;
 
 import javax.inject.Inject;
 import java.util.*;
-import javax.inject.Inject;
 import java.util.concurrent.*;
 
 /**
@@ -154,17 +152,17 @@ public class PineconeVectorStore implements VectorStore {
     if (!this.executorService.isPresent()) {
       this.executorService = Optional.of(Executors.newFixedThreadPool(16));
     }
-    ExecutorService executorService = this.executorService.get();
+    ExecutorService localExecutorService = this.executorService.get();
     int responseCount = 0;
 
-    CompletionService<UpdateResponse> updateCompletionService = new ExecutorCompletionService<>(executorService);
+    CompletionService<UpdateResponse> updateCompletionService = new ExecutorCompletionService<>(localExecutorService);
     submitDocumentUpdateRequests(updateCompletionService, documents);
 
     while (responseCount < documents.size()) {
       try {
         updateCompletionService.take().get(UPDATE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         responseCount++;
-      } catch (Throwable e) {
+      } catch (Exception e) {
         logger.atSevere().withCause(e).log("Failed to update documents at document: " + documents.get(responseCount));
         return false;
       }
@@ -209,7 +207,7 @@ public class PineconeVectorStore implements VectorStore {
     pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
     try {
       pineconeService.delete(requestBuilder.build());
-    } catch (Throwable e) {
+    } catch (Exception e) {
       logger.atSevere().withCause(e).log("Failed to delete documents");
       return false;
     }

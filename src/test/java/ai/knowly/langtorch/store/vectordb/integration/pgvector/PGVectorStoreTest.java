@@ -156,7 +156,7 @@ final class PGVectorStoreTest {
   }
 
     @Test
-    public void testUpdateDocuments() throws SQLException {
+    void testUpdateDocuments() throws SQLException {
         EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
         when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
         when(pgVectorService.prepareStatement(ArgumentMatchers.any())).thenReturn(preparedStatement);
@@ -169,7 +169,7 @@ final class PGVectorStoreTest {
     }
 
     @Test
-    public void testDeleteDocuments() throws SQLException {
+    void testDeleteDocuments() throws SQLException {
         List<DomainDocument> documents = getDocuments();
         Mockito.when(pgVectorService.executeUpdate(ArgumentMatchers.any())).thenReturn(documents.size());
 

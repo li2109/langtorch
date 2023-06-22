@@ -54,7 +54,7 @@ publishing {
                 url = 'https://github.com/Knowly-ai/langtorch'
                 licenses {
                     license {
-                        name = 'MIT License'
+                        name = 'Apache License 2.0'
                         url = 'https://github.com/Knowly-ai/langtorch/blob/master/LICENSE.md'
                     }
                 }

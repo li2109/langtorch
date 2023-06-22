@@ -120,6 +120,8 @@ dependencies {
     implementation 'org.apache.pdfbox:pdfbox:2.0.28'
     // Reading CSV
     implementation 'org.apache.commons:commons-csv:1.10.0'
+    // PGVector
+    implementation "com.pgvector:pgvector:0.1.2"
     // Apache commons lang
     implementation 'org.apache.commons:commons-lang3:3.0'
     implementation 'org.apache.commons:commons-collections4:4.4'

@@ -1,4 +1,4 @@
-package ai.knowly.langtorch.store.vectordb.integration.pinecone.schema;
+package ai.knowly.langtorch.store.vectordb.integration.schema;
 
 import java.util.HashMap;
 import java.util.List;
@@ -12,8 +12,8 @@ import lombok.NonNull;
 @Data
 @Builder(toBuilder = true, setterPrefix = "set")
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
-public class PineconeSimilaritySearchQuery {
+public class SimilaritySearchQuery {
   @Builder.Default Map<String, String> filter = new HashMap<>();
   @NonNull private List<Double> query;
-  @NonNull private Long k;
+  @NonNull private Long topK;
 }

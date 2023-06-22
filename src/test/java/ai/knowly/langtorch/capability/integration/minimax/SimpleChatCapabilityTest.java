@@ -36,7 +36,7 @@ final class SimpleChatCapabilityTest {
         new SimpleChatCapability(
                 new MiniMaxChatProcessor(
                     miniMaxService, MiniMaxChatProcessorConfig.getDefaultInstance()),
-                ConversationMemory.geDefaultInstance())
+                ConversationMemory.getDefaultInstance())
             .run("Where is Changsha?");
 
     // Assert.

@@ -7,8 +7,9 @@ import java.util.List;
 /** A shared interface for all Vector Store Databases */
 public interface VectorStore {
 
-    //TODO:: add updateDocuments and deleteDocuments methods
+  // TODO:: add updateDocuments and deleteDocuments methods
 
-    boolean addDocuments(List<DomainDocument> documents);
-    List<DomainDocument> similaritySearch(SimilaritySearchQuery similaritySearchQuery);
+  boolean addDocuments(List<DomainDocument> documents);
+
+  List<DomainDocument> similaritySearch(SimilaritySearchQuery similaritySearchQuery);
 }

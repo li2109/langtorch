@@ -35,7 +35,8 @@ public class PineconeVectorStore implements VectorStore {
     this.pineconeVectorStoreSpec = pineconeVectorStoreSpec;
   }
 
-  /** Adds the specified documents to the Pinecone vector store database.
+  /**
+   * Adds the specified documents to the Pinecone vector store database.
    *
    * @return true if documents added successfully, otherwise false
    */
@@ -44,12 +45,11 @@ public class PineconeVectorStore implements VectorStore {
     if (documents.isEmpty()) return true;
 
     return addVectors(
-        documents.stream()
-            .map(this::createVector)
-            .collect(ImmutableList.toImmutableList()));
+        documents.stream().map(this::createVector).collect(ImmutableList.toImmutableList()));
   }
 
-  /** Adds a list of vectors to the Pinecone vector store database.
+  /**
+   * Adds a list of vectors to the Pinecone vector store database.
    *
    * @return true if vectors added successfully, otherwise false
    */
@@ -57,7 +57,8 @@ public class PineconeVectorStore implements VectorStore {
     UpsertRequest.UpsertRequestBuilder upsertRequestBuilder =
         UpsertRequest.builder().setVectors(vectors);
     this.pineconeVectorStoreSpec.getNamespace().ifPresent(upsertRequestBuilder::setNamespace);
-    UpsertResponse response = this.pineconeVectorStoreSpec.getPineconeService().upsert(upsertRequestBuilder.build());
+    UpsertResponse response =
+        this.pineconeVectorStoreSpec.getPineconeService().upsert(upsertRequestBuilder.build());
     return response.getUpsertedCount() == vectors.size();
   }
 
@@ -86,8 +87,7 @@ public class PineconeVectorStore implements VectorStore {
    * schema documents and their corresponding similarity scores.
    */
   @Override
-  public List<DomainDocument> similaritySearch(
-      SimilaritySearchQuery similaritySearchQuery) {
+  public List<DomainDocument> similaritySearch(SimilaritySearchQuery similaritySearchQuery) {
 
     QueryRequest.QueryRequestBuilder requestBuilder =
         QueryRequest.builder()
@@ -115,13 +115,12 @@ public class PineconeVectorStore implements VectorStore {
 
         if (match.getScore() != null) {
           result.add(
-                  DomainDocument.builder()
-                          .setPageContent(
-                                  metadata.getValue().get(this.pineconeVectorStoreSpec.getTextKey().get()))
-                          .setMetadata(metadata)
-                          .setSimilarityScore(Optional.of(match.getScore()))
-                          .build()
-          );
+              DomainDocument.builder()
+                  .setPageContent(
+                      metadata.getValue().get(this.pineconeVectorStoreSpec.getTextKey().get()))
+                  .setMetadata(metadata)
+                  .setSimilarityScore(Optional.of(match.getScore()))
+                  .build());
         }
       }
     }

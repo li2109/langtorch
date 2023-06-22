@@ -4,15 +4,13 @@ import lombok.*;
 
 import java.util.List;
 
-/**
- * Represents the query parameters for executing a PGVector query.
- */
+/** Represents the query parameters for executing a PGVector query. */
 @Data
 @AllArgsConstructor(access = AccessLevel.PRIVATE)
 @Builder(toBuilder = true, setterPrefix = "set")
 public class PGVectorQueryParameters {
-    @NonNull private final List<PGVectorValues> vectorValues;
-    @NonNull private final String vectorParameters;
-    @NonNull private final String metadataParameters;
-    private final int metadataSize;
+  @NonNull private final List<PGVectorValues> vectorValues;
+  @NonNull private final String vectorParameters;
+  @NonNull private final String metadataParameters;
+  private final int metadataSize;
 }

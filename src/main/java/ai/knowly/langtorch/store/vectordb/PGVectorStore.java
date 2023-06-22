@@ -179,6 +179,7 @@ public class PGVectorStore implements VectorStore {
             updateMetadataResult = updateMetadataStmt.executeUpdate();
         } catch (SQLException e) {
             logger.atSevere().withCause(e).log("Failed to update documents");
+            Thread.currentThread().interrupt();
             return false;
         }
 

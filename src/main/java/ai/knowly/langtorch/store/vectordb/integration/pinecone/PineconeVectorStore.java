@@ -164,6 +164,7 @@ public class PineconeVectorStore implements VectorStore {
         responseCount++;
       } catch (Exception e) {
         logger.atSevere().withCause(e).log("Failed to update documents at document: " + documents.get(responseCount));
+        Thread.currentThread().interrupt();
         return false;
       }
     }

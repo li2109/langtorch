@@ -1,10 +1,7 @@
 package ai.knowly.langtorch.store.cache.inmemory.exact;
 
-import ai.knowly.langtorch.schema.io.Input;
-import ai.knowly.langtorch.schema.io.Output;
 import ai.knowly.langtorch.store.cache.Cache;
 import com.google.common.cache.CacheBuilder;
-import com.google.common.cache.LoadingCache;
 import java.util.Optional;
 import javax.inject.Inject;
 

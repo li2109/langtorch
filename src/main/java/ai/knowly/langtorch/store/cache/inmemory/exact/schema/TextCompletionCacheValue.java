@@ -1,6 +1,5 @@
 package ai.knowly.langtorch.store.cache.inmemory.exact.schema;
 
-import ai.knowly.langtorch.llm.openai.schema.dto.completion.CompletionResult;
 import java.util.List;
 import lombok.AllArgsConstructor;
 import lombok.Builder;

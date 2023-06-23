@@ -170,10 +170,7 @@ public class OpenAIService {
   @EnableLLMCache
   @EnableOpenAITokenRecord
   public ListenableFuture<CompletionResult> createCompletionAsync(CompletionRequest request) {
-    return futureRetrier.runWithRetries(() -> {
-      ListenableFuture<CompletionResult> completion = api.createCompletion(request);
-      return completion;
-    }, result -> true);
+    return futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true);
   }
 
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {

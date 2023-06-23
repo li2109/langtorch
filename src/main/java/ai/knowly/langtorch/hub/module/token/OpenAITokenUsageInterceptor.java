@@ -12,6 +12,7 @@ import com.google.inject.Provider;
 import java.util.concurrent.Executors;
 import org.aopalliance.intercept.MethodInterceptor;
 import org.aopalliance.intercept.MethodInvocation;
+import org.jetbrains.annotations.NotNull;
 
 public class OpenAITokenUsageInterceptor implements MethodInterceptor {
   private static final FluentLogger logger = FluentLogger.forEnclosingClass();
@@ -26,52 +27,48 @@ public class OpenAITokenUsageInterceptor implements MethodInterceptor {
   public Object invoke(MethodInvocation invocation) throws Throwable {
     Object result = invocation.proceed();
 
-    if (result instanceof ListenableFuture) {
-      // Create a new SettableFuture to return
-      SettableFuture newFuture = SettableFuture.create();
-      ListenableFuture originalFuture = (ListenableFuture) result;
+    boolean instanceOfListenableFuture = result instanceof ListenableFuture;
 
-      Futures.addCallback(
-          originalFuture,
-          new FutureCallback() {
-            @Override
-            public void onSuccess(Object result) {
-              if (result instanceof ChatCompletionResult) {
-                ChatCompletionResult chatCompletionResult = (ChatCompletionResult) result;
-                tokenUsage
-                    .get()
-                    .getPromptTokenUsage()
-                    .getAndAdd(chatCompletionResult.getUsage().getPromptTokens());
-                tokenUsage
-                    .get()
-                    .getCompletionTokenUsage()
-                    .addAndGet(chatCompletionResult.getUsage().getCompletionTokens());
-              }
-              if (result instanceof CompletionResult) {
-                CompletionResult completionResult = (CompletionResult) result;
-                tokenUsage
-                    .get()
-                    .getPromptTokenUsage()
-                    .getAndAdd(completionResult.getUsage().getPromptTokens());
-                tokenUsage
-                    .get()
-                    .getCompletionTokenUsage()
-                    .addAndGet(completionResult.getUsage().getCompletionTokens());
-              }
-              newFuture.set(result);
-            }
-
-            public void onFailure(Throwable thrown) {
-              logger.atWarning().withCause(thrown).log(
-                  "Failed to add callback in OpenAITokenUsageInterceptor");
-              newFuture.setException(thrown);
-            }
-          },
-          Executors.newCachedThreadPool());
-
-      // Return newFuture instead of the original one
-      return newFuture;
+    if (!instanceOfListenableFuture) {
+      return result;
     }
-    return result;
+
+    // Create a new SettableFuture to return
+    SettableFuture<Object> newFuture = SettableFuture.create();
+
+    Futures.addCallback(
+        (ListenableFuture<?>) result,
+        new FutureCallback<Object>() {
+          @Override
+          public void onSuccess(Object result) {
+            if (result instanceof ChatCompletionResult) {
+              handleChatCompletionTokenCount((ChatCompletionResult) result);
+            }
+            if (result instanceof CompletionResult) {
+              handleCompletionTokenCount((CompletionResult) result);
+            }
+            newFuture.set(result);
+          }
+
+          public void onFailure(@NotNull Throwable thrown) {
+            logger.atWarning().withCause(thrown).log(
+                "Failed to add callback in OpenAITokenUsageInterceptor");
+            newFuture.setException(thrown);
+          }
+        },
+        Executors.newCachedThreadPool());
+
+    // Return newFuture instead of the original one
+    return newFuture;
+  }
+
+  private void handleCompletionTokenCount(CompletionResult result) {
+    tokenUsage.get().getPromptTokenUsage().getAndAdd(result.getUsage().getPromptTokens());
+    tokenUsage.get().getCompletionTokenUsage().addAndGet(result.getUsage().getCompletionTokens());
+  }
+
+  private void handleChatCompletionTokenCount(ChatCompletionResult result) {
+    tokenUsage.get().getPromptTokenUsage().getAndAdd(result.getUsage().getPromptTokens());
+    tokenUsage.get().getCompletionTokenUsage().addAndGet(result.getUsage().getCompletionTokens());
   }
 }

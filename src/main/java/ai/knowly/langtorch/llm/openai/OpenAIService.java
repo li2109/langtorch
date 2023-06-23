@@ -1,5 +1,6 @@
 package ai.knowly.langtorch.llm.openai;
 
+import ai.knowly.langtorch.hub.module.cache.EnableLLMCache;
 import ai.knowly.langtorch.hub.module.token.EnableOpenAITokenRecord;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIProxyConfig.ProxyType;
 import ai.knowly.langtorch.llm.openai.schema.config.OpenAIServiceConfig;
@@ -166,9 +167,13 @@ public class OpenAIService {
     return execute(createCompletionAsync(request));
   }
 
+  @EnableLLMCache
   @EnableOpenAITokenRecord
   public ListenableFuture<CompletionResult> createCompletionAsync(CompletionRequest request) {
-    return futureRetrier.runWithRetries(() -> api.createCompletion(request), result -> true);
+    return futureRetrier.runWithRetries(() -> {
+      ListenableFuture<CompletionResult> completion = api.createCompletion(request);
+      return completion;
+    }, result -> true);
   }
 
   public ChatCompletionResult createChatCompletion(ChatCompletionRequest request) {
@@ -176,6 +181,7 @@ public class OpenAIService {
   }
 
   @EnableOpenAITokenRecord
+  @EnableLLMCache
   public ListenableFuture<ChatCompletionResult> createChatCompletionAsync(
       ChatCompletionRequest request) {
     return futureRetrier.runWithRetries(() -> api.createChatCompletion(request), result -> true);

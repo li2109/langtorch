@@ -44,8 +44,7 @@ public class PineconeVectorStore implements VectorStore {
   public PineconeVectorStore(
       EmbeddingProcessor embeddingProcessor,
       PineconeVectorStoreSpec pineconeVectorStoreSpec,
-      @NonNull PineconeService pineconeService
-  ) {
+      @NonNull PineconeService pineconeService) {
     this.embeddingProcessor = embeddingProcessor;
     this.pineconeVectorStoreSpec = pineconeVectorStoreSpec;
     this.pineconeService = pineconeService;
@@ -63,9 +62,7 @@ public class PineconeVectorStore implements VectorStore {
     }
 
     return addVectors(
-        documents.stream()
-            .map(this::createVector)
-            .collect(ImmutableList.toImmutableList()));
+        documents.stream().map(this::createVector).collect(ImmutableList.toImmutableList()));
   }
 
   /**
@@ -116,8 +113,7 @@ public class PineconeVectorStore implements VectorStore {
             .setFilter(similaritySearchQuery.getFilter());
 
     pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
-    QueryResponse response =
-        pineconeService.query(requestBuilder.build());
+    QueryResponse response = pineconeService.query(requestBuilder.build());
 
     List<DomainDocument> result = new ArrayList<>();
 
@@ -155,7 +151,8 @@ public class PineconeVectorStore implements VectorStore {
     ExecutorService localExecutorService = this.executorService.get();
     int responseCount = 0;
 
-    CompletionService<UpdateResponse> updateCompletionService = new ExecutorCompletionService<>(localExecutorService);
+    CompletionService<UpdateResponse> updateCompletionService =
+        new ExecutorCompletionService<>(localExecutorService);
     submitDocumentUpdateRequests(updateCompletionService, documents);
 
     while (responseCount < documents.size()) {
@@ -163,7 +160,8 @@ public class PineconeVectorStore implements VectorStore {
         updateCompletionService.take().get(UPDATE_TIMEOUT_SECONDS, TimeUnit.SECONDS);
         responseCount++;
       } catch (Exception e) {
-        logger.atSevere().withCause(e).log("Failed to update documents at document: " + documents.get(responseCount));
+        logger.atSevere().withCause(e).log(
+            "Failed to update documents at document: " + documents.get(responseCount));
         Thread.currentThread().interrupt();
         return false;
       }
@@ -173,20 +171,20 @@ public class PineconeVectorStore implements VectorStore {
   }
 
   private void submitDocumentUpdateRequests(
-          CompletionService<UpdateResponse> updateCompletionService,
-          List<DomainDocument> documents
-  ) {
+      CompletionService<UpdateResponse> updateCompletionService, List<DomainDocument> documents) {
     for (DomainDocument document : documents) {
-      updateCompletionService.submit(() -> {
-        UpdateRequest.UpdateRequestBuilder requestBuilder = UpdateRequest.builder();
-        pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
-        Vector vector = createVector(document);
-        requestBuilder.setValues(vector.getValues())
+      updateCompletionService.submit(
+          () -> {
+            UpdateRequest.UpdateRequestBuilder requestBuilder = UpdateRequest.builder();
+            pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
+            Vector vector = createVector(document);
+            requestBuilder
+                .setValues(vector.getValues())
                 .setId(vector.getId())
                 .setSetMetadata(vector.getMetadata())
                 .build();
-        return pineconeService.updateAsync(requestBuilder.build()).get();
-      });
+            return pineconeService.updateAsync(requestBuilder.build()).get();
+          });
     }
   }
 
@@ -203,8 +201,8 @@ public class PineconeVectorStore implements VectorStore {
   public boolean deleteDocumentsByIds(List<String> documentsIds) {
     if (documentsIds.isEmpty()) return false;
 
-    DeleteRequest.DeleteRequestBuilder requestBuilder = DeleteRequest.builder()
-            .setIds(documentsIds);
+    DeleteRequest.DeleteRequestBuilder requestBuilder =
+        DeleteRequest.builder().setIds(documentsIds);
     pineconeVectorStoreSpec.getNamespace().ifPresent(requestBuilder::setNamespace);
     try {
       pineconeService.delete(requestBuilder.build());

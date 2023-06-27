@@ -155,43 +155,44 @@ final class PGVectorStoreTest {
     assertThat(secondDocumentPageContent).isEqualTo(secondPageContent);
   }
 
-    @Test
-    void testUpdateDocuments() throws SQLException {
-        EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
-        when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
-        when(pgVectorService.prepareStatement(ArgumentMatchers.any())).thenReturn(preparedStatement);
-        when(preparedStatement.executeUpdate()).thenReturn(DOCUMENT_COUNT, DOCUMENT_COUNT);
+  @Test
+  void testUpdateDocuments() throws SQLException {
+    EmbeddingOutput embeddingOutput = EmbeddingOutput.of(EmbeddingType.OPEN_AI, getEmbeddings());
+    when(embeddingProcessor.run(ArgumentMatchers.any())).thenReturn(embeddingOutput);
+    when(pgVectorService.prepareStatement(ArgumentMatchers.any())).thenReturn(preparedStatement);
+    when(preparedStatement.executeUpdate()).thenReturn(DOCUMENT_COUNT, DOCUMENT_COUNT);
 
-        // Act.
-        boolean isSuccess = pgVectorStore.updateDocuments(getDocuments());
-        // Assert.
-        assertThat(isSuccess).isTrue();
+    // Act.
+    boolean isSuccess = pgVectorStore.updateDocuments(getDocuments());
+    // Assert.
+    assertThat(isSuccess).isTrue();
+  }
+
+  @Test
+  void testDeleteDocuments() throws SQLException {
+    List<DomainDocument> documents = getDocuments();
+    Mockito.when(pgVectorService.executeUpdate(ArgumentMatchers.any()))
+        .thenReturn(documents.size());
+
+    // Act.
+    boolean isSuccess = pgVectorStore.deleteDocuments(documents);
+    // Assert.
+    assertThat(isSuccess).isTrue();
+  }
+
+  private List<DomainDocument> getDocuments() {
+    ArrayList<DomainDocument> documents = new ArrayList<>();
+    for (int i = 0; i < DOCUMENT_COUNT; i++) {
+      DomainDocument document =
+          DomainDocument.builder()
+              .setId(UUID.randomUUID().toString())
+              .setPageContent("content" + i)
+              .setMetadata(Metadata.builder().setValue(ImmutableMap.of("key", "val")).build())
+              .build();
+      documents.add(document);
     }
-
-    @Test
-    void testDeleteDocuments() throws SQLException {
-        List<DomainDocument> documents = getDocuments();
-        Mockito.when(pgVectorService.executeUpdate(ArgumentMatchers.any())).thenReturn(documents.size());
-
-        // Act.
-        boolean isSuccess = pgVectorStore.deleteDocuments(documents);
-        // Assert.
-        assertThat(isSuccess).isTrue();
-    }
-
-    private List<DomainDocument> getDocuments() {
-        ArrayList<DomainDocument> documents = new ArrayList<>();
-        for (int i = 0; i < DOCUMENT_COUNT; i++) {
-            DomainDocument document =
-                    DomainDocument.builder()
-                            .setId(UUID.randomUUID().toString())
-                            .setPageContent("content" + i)
-                            .setMetadata(Metadata.builder().setValue(ImmutableMap.of("key", "val")).build())
-                            .build();
-            documents.add(document);
-        }
-        return documents;
-    }
+    return documents;
+  }
 
   private List<Embedding> getEmbeddings() {
     ArrayList<Embedding> embeddings = new ArrayList<>();

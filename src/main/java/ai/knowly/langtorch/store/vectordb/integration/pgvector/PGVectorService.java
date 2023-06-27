@@ -19,23 +19,23 @@ public class PGVectorService {
   private final Connection connection;
   private final Statement defaultStatement;
 
-    /**
-     * Constructs a new PGVectorService instance with the provided database connection.
-     *
-     * @param connection the database connection
-     */
-    @Inject
-    public PGVectorService(Connection connection) {
-        this.connection = connection;
-        try {
-            PGvector.addVectorType(connection);
-            defaultStatement = connection.createStatement();
-            defaultStatement.executeUpdate(CREATE_VECTOR_EXTENSION_QUERY);
-        } catch (SQLException e) {
-            logger.atSevere().withCause(e).log("Error while initialising PGVectorService");
-            throw new PGVectorServiceInstantiationException(e);
-        }
+  /**
+   * Constructs a new PGVectorService instance with the provided database connection.
+   *
+   * @param connection the database connection
+   */
+  @Inject
+  public PGVectorService(Connection connection) {
+    this.connection = connection;
+    try {
+      PGvector.addVectorType(connection);
+      defaultStatement = connection.createStatement();
+      defaultStatement.executeUpdate(CREATE_VECTOR_EXTENSION_QUERY);
+    } catch (SQLException e) {
+      logger.atSevere().withCause(e).log("Error while initialising PGVectorService");
+      throw new PGVectorServiceInstantiationException(e);
     }
+  }
 
   /**
    * Executes the given SQL statement and returns the number of affected rows.

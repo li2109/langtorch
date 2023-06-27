@@ -50,10 +50,8 @@ final class PineconeVectorStoreTest {
     pineconeVectorStore =
         new PineconeVectorStore(
             embeddingProcessor,
-            PineconeVectorStoreSpec.builder()
-                .setTextKey(textKey)
-                .build(),
-                pineconeService);
+            PineconeVectorStoreSpec.builder().setTextKey(textKey).build(),
+            pineconeService);
   }
 
   @Test

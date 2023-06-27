@@ -10,5 +10,5 @@ import lombok.*;
 public class PGVectorValues {
   @NonNull private final String id;
   private final float @NonNull [] values;
-  private final Metadata metadata;
+  @NonNull private final Metadata metadata;
 }

@@ -3,6 +3,7 @@ package ai.knowly.langtorch.store.vectordb.integration.pgvector;
 import lombok.AccessLevel;
 import lombok.AllArgsConstructor;
 import lombok.NonNull;
+import java.util.List;
 
 /**
  * This class provides SQL commands for creating and querying the embeddings and metadata tables in
@@ -60,18 +61,14 @@ public class SqlCommandProvider {
     }
     query += "CREATE TABLE IF NOT EXISTS ";
 
-    query +=
-        getMetadataTableName()
-            + " ("
-            + "id TEXT PRIMARY KEY, "
-            + // vectorId + key
-            "key TEXT, "
-            + "value TEXT ,"
-            + "vector_id TEXT ,"
-            + "FOREIGN KEY (vector_id) REFERENCES "
-            + getEmbeddingsTableName()
-            + "(id)"
-            + ")";
+        query += getMetadataTableName() + " (" +
+                "id TEXT PRIMARY KEY, " + // vectorId + key
+                "key TEXT, " +
+                "value TEXT ," +
+                "vector_id TEXT ," +
+                "FOREIGN KEY (vector_id) REFERENCES " + getEmbeddingsTableName() + "(id) " +
+                "ON DELETE CASCADE " +
+                ")";
 
     return query;
   }
@@ -142,9 +139,39 @@ public class SqlCommandProvider {
         + " ? ";
   }
 
-  private String getEmbeddingsTableName() {
-    return databaseName + "_embeddings";
-  }
+    public String getDeleteEmbeddingsByIdQuery(List<String> embeddingIds) {
+        StringBuilder ids = new StringBuilder();
+        ids.append("(");
+        for (String id : embeddingIds) {
+            ids.append("'").append(id).append("'").append(", ");
+        }
+        StringBuilderUtils.trimSqlQueryParameter(ids);
+        ids.append(")");
+        return "DELETE FROM " + getEmbeddingsTableName() + " WHERE id IN " + ids;
+    }
+
+    public String getUpdateEmbeddingsQuery(String parameters) {
+        return "WITH updated(id, embeddings) AS (VALUES " + parameters + ") " +
+                "UPDATE " + getEmbeddingsTableName() + " " +
+                "SET " +
+                "embeddings = updated.embeddings " +
+                "FROM updated " +
+                "WHERE (" + getEmbeddingsTableName() + ".id = updated.id" + ")";
+    }
+
+    public String getUpdateMetadataQuery(String parameters) {
+        return "WITH updated(id, key, value) as (VALUES " + parameters + ") " +
+                "UPDATE " + getMetadataTableName() + " " +
+                "SET " +
+                "key = updated.key, " +
+                "value = updated.value " +
+                "FROM updated " +
+                "WHERE (" + getMetadataTableName() + ".id = updated.id" + ")";
+    }
+
+    private String getEmbeddingsTableName() {
+        return databaseName + "_embeddings";
+    }
 
   private String getMetadataTableName() {
     return getEmbeddingsTableName() + "_metadata";

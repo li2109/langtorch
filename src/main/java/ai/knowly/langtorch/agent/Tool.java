@@ -1,17 +1,10 @@
 package ai.knowly.langtorch.agent;
 
-import java.util.function.Function;
-import lombok.Builder;
-import lombok.Data;
+import com.google.common.util.concurrent.ListenableFuture;
 
-@Data
-@Builder(toBuilder = true, setterPrefix = "set")
-public class Tool<T, R> {
-  private String name;
-  private String description;
-  private Function<T, R> function;
+/** Interface for tool. */
+public interface Tool<T, R> {
+  R run(T inputData);
 
-  public R invoke(T args) {
-    return function.apply(args);
-  }
+  ListenableFuture<R> runAsync(T inputData);
 }

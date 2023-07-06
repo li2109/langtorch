@@ -2,7 +2,6 @@ package ai.knowly.langtorch.tool;
 
 import static com.google.common.truth.Truth.assertThat;
 
-import ai.knowly.langtorch.agent.Search2DMatrixArgs;
 import ai.knowly.langtorch.agent.Tool;
 import com.google.common.collect.ImmutableList;
 import java.util.List;
@@ -13,17 +12,11 @@ final class ToolTest {
   @Test
   void testTool_sum() {
     // Arrange.
-    Function<List<Integer>, Integer> sum = integers -> integers.stream().mapToInt(i -> i).sum();
 
-    Tool<List<Integer>, Integer> tool =
-        Tool.<List<Integer>, Integer>builder()
-            .setName("Calculator")
-            .setDescription("The tool includes everything related to calculator.")
-            .setFunction(sum)
-            .build();
+    Tool<List<Integer>, Integer> tool = new IntegerListAdderTool();
 
     // Act.
-    int result = tool.invoke(ImmutableList.of(1, 2));
+    int result = tool.run(ImmutableList.of(1, 2));
     // Assert.
     assertThat(result).isEqualTo(3);
   }
@@ -32,15 +25,7 @@ final class ToolTest {
   @Test
   void testTool_search2DMatrix() {
     // Arrange.
-    Function<Search2DMatrixArgs, Boolean> func =
-        args -> searchMatrix(args.getMatrix(), args.getTarget());
-
-    Tool<Search2DMatrixArgs, Boolean> tool =
-        Tool.<Search2DMatrixArgs, Boolean>builder()
-            .setName("LeetcodeSolver")
-            .setDescription("Search a target in a 2D matrix.")
-            .setFunction(func)
-            .build();
+    Tool<Search2DMatrixArgs, Boolean> tool = new Search2DMatrixTool();
 
     // Act.
     int[][] twoDArray = {
@@ -48,23 +33,10 @@ final class ToolTest {
       {10, 11, 16, 20},
       {23, 30, 34, 60}
     };
-    boolean result1 =
-        tool.invoke(Search2DMatrixArgs.builder().setMatrix(twoDArray).setTarget(3).build());
-    boolean result2 =
-        tool.invoke(Search2DMatrixArgs.builder().setMatrix(twoDArray).setTarget(66).build());
+    boolean result1 = tool.run(new Search2DMatrixArgs().setMatrix(twoDArray).setTarget(3));
+    boolean result2 = tool.run(new Search2DMatrixArgs().setMatrix(twoDArray).setTarget(66));
     // Assert.
     assertThat(result1).isEqualTo(true);
     assertThat(result2).isEqualTo(false);
-  }
-
-  public boolean searchMatrix(int[][] matrix, int target) {
-    int i = 0;
-    int j = matrix[0].length - 1;
-    while (i < matrix.length && j >= 0) {
-      if (matrix[i][j] == target) return true;
-      else if (matrix[i][j] > target) j--;
-      else i++;
-    }
-    return false;
   }
 }

@@ -2,28 +2,28 @@ package ai.knowly.langtorch.tool;
 
 import static com.google.common.truth.Truth.assertThat;
 
+import ai.knowly.langtorch.agent.Search2DMatrixArgs;
+import ai.knowly.langtorch.agent.Tool;
+import com.google.common.collect.ImmutableList;
+import java.util.List;
+import java.util.function.Function;
 import org.junit.jupiter.api.Test;
 
 final class ToolTest {
   @Test
   void testTool_sum() {
     // Arrange.
-    Function sum =
-        args -> {
-          int a = (int) args[0];
-          int b = (int) args[1];
-          return a + b;
-        };
+    Function<List<Integer>, Integer> sum = integers -> integers.stream().mapToInt(i -> i).sum();
 
-    Tool tool =
-        Tool.builder()
+    Tool<List<Integer>, Integer> tool =
+        Tool.<List<Integer>, Integer>builder()
             .setName("Calculator")
             .setDescription("The tool includes everything related to calculator.")
-            .register("add", sum)
+            .setFunction(sum)
             .build();
 
     // Act.
-    int result = (int) tool.invoke("add", 1, 2);
+    int result = tool.invoke(ImmutableList.of(1, 2));
     // Assert.
     assertThat(result).isEqualTo(3);
   }
@@ -32,13 +32,14 @@ final class ToolTest {
   @Test
   void testTool_search2DMatrix() {
     // Arrange.
-    Function func = args -> searchMatrix((int[][]) args[0], (int) args[1]);
+    Function<Search2DMatrixArgs, Boolean> func =
+        args -> searchMatrix(args.getMatrix(), args.getTarget());
 
-    Tool tool =
-        Tool.builder()
+    Tool<Search2DMatrixArgs, Boolean> tool =
+        Tool.<Search2DMatrixArgs, Boolean>builder()
             .setName("LeetcodeSolver")
             .setDescription("Search a target in a 2D matrix.")
-            .register("search_2d_matrix", func)
+            .setFunction(func)
             .build();
 
     // Act.
@@ -47,8 +48,10 @@ final class ToolTest {
       {10, 11, 16, 20},
       {23, 30, 34, 60}
     };
-    boolean result1 = (boolean) tool.invoke("search_2d_matrix", twoDArray, 3);
-    boolean result2 = (boolean) tool.invoke("search_2d_matrix", twoDArray, 66);
+    boolean result1 =
+        tool.invoke(Search2DMatrixArgs.builder().setMatrix(twoDArray).setTarget(3).build());
+    boolean result2 =
+        tool.invoke(Search2DMatrixArgs.builder().setMatrix(twoDArray).setTarget(66).build());
     // Assert.
     assertThat(result1).isEqualTo(true);
     assertThat(result2).isEqualTo(false);

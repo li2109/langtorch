@@ -131,6 +131,8 @@ dependencies {
 
 // Testing related dependencies
 dependencies {
+    // Lombok
+    testImplementation 'org.projectlombok:lombok:1.18.26'
     // Mocking
     testImplementation 'org.mockito:mockito-core:5.2.0'
     testImplementation 'org.mockito:mockito-junit-jupiter:5.2.0'

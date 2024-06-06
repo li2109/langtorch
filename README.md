@@ -21,11 +21,11 @@ Check out [Maven Central Repo for previous versions](https://central.sonatype.co
 
 ## 📄 Documentation (still working on it)
 
-[Documentation](https://docs.knowly.ai/langtorch/)
+[Documentation](https://knowly-ai.gitbook.io/langtorch/)
 
-[English One Pager](https://docs.knowly.ai/langtorch/eng-langtorch-one-pager) 
+[English One Pager](https://knowly-ai.gitbook.io/langtorch/eng-langtorch-one-pager) 
 
-[中文一页纸](https://docs.knowly.ai/langtorch/zhong-wen-langtorch-one-pager)
+[中文一页纸](https://knowly-ai.gitbook.io/langtorch/zhong-wen-langtorch-one-pager)
 
 
 ##  💫 Community
